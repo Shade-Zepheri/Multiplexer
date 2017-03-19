@@ -1,0 +1,10 @@
+Package: com.shade.quickaccess
+Name: QuickAccess
+Depends: mobilesubstrate, com.shade.multiplexercore
+Version: 0.1
+Architecture: iphoneos-arm
+Description: QuickAccess for Multiplexer.
+Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.quickaccess
+Maintainer: Shade Zepheri <ziroalpha@gmail.com>
+Author: Shade Zepheri <ziroalpha@gmail.com>
+Section: Tweaks

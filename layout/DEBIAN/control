@@ -1,12 +1,12 @@
-Package: org.thebigboss.multiplexer
-Name: Multiplexer
+Package: com.shade.multiplexercore
+Name: Multiplexer Core
 Depends: mobilesubstrate, applist, preferenceloader, com.rpetrich.rocketbootstrap
 Conflicts: cc.tweak.statushud
 Replaces: com.efrederickson.reachapp
 Version: 0.1
 Architecture: iphoneos-arm
-Description: All sorts of multitasking.
-Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.multiplexer
+Description: Main Library for Multiplexer.
+Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.multiplexercore
 Maintainer: Shade Zepheri <ziroalpha@gmail.com>
 Author: Shade Zepheri <ziroalpha@gmail.com>
 Section: Tweaks
