@@ -27,7 +27,6 @@
 
   if ([RABackgrounder.sharedInstance shouldSuspendImmediately:arg2.bundleIdentifier]) {
     BKSProcess *bkProcess = MSHookIvar<BKSProcess*>(arg2, "_bksProcess");
-    //[bkProcess _handleExpirationWarning:nil];
     [arg2 processWillExpire:bkProcess];
   }
 }

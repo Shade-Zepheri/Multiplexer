@@ -29,7 +29,7 @@ CGFloat grabberCenter_Y = -1;
 CGPoint firstLocation = CGPointZero;
 CGFloat grabberCenter_X = 0;
 BOOL showingNC = NO;
-BOOL overrideDisableForStatusBar = NO;
+extern BOOL overrideDisableForStatusBar;
 //CGRect pre_topAppFrame = CGRectZero;
 //CGAffineTransform pre_topAppTransform = CGAffineTransformIdentity;
 UIView *bottomDraggerView = nil;
@@ -496,7 +496,7 @@ CGFloat startingY = -1;
     [app _setDeactivationSettings:deactiveSets];
 
     // Open in window
-    [RADesktopManager.sharedInstance.currentDesktop createAppWindowWithIdentifier:ident animated:YES];
+    [[[%c(RADesktopManager) sharedInstance] currentDesktop] createAppWindowWithIdentifier:ident animated:YES];
   }];
   [(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
 

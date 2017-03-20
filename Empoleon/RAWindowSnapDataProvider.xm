@@ -255,31 +255,3 @@ try_bottom:
 	}
 }
 @end
-
-RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen() {
-	switch (UIApplication.sharedApplication.statusBarOrientation) {
-		case UIInterfaceOrientationPortrait:
-			return RAWindowSnapLocationLeft;
-		case UIInterfaceOrientationLandscapeRight:
-			return RAWindowSnapLocationTop;
-		case UIInterfaceOrientationLandscapeLeft:
-			return RAWindowSnapLocationBottom;
-		case UIInterfaceOrientationPortraitUpsideDown:
-			return RAWindowSnapLocationRight;
-	}
-	return RAWindowSnapLocationLeft;
-}
-
-RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
-	switch (UIApplication.sharedApplication.statusBarOrientation) {
-		case UIInterfaceOrientationPortrait:
-			return RAWindowSnapLocationRight;
-		case UIInterfaceOrientationLandscapeRight:
-			return RAWindowSnapLocationBottom;
-		case UIInterfaceOrientationLandscapeLeft:
-			return RAWindowSnapLocationTop;
-		case UIInterfaceOrientationPortraitUpsideDown:
-			return RAWindowSnapLocationLeft;
-	}
-	return RAWindowSnapLocationRight;
-}

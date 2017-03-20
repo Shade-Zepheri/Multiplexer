@@ -7,7 +7,6 @@ include $(THEOS)/makefiles/common.mk
 
 LIBRARY_NAME = libmultiplexercore
 libmultiplexercore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m) \
-	Empoleon/RADesktopManager.xm \
 	$(wildcard widgets/*.xm) $(wildcard widgets/*.mm) $(wildcard widgets/*.m) \
 	$(wildcard widgets/Core/*.xm) $(wildcard widgets/Core/*.mm) $(wildcard widgets/Core/*.m) \
 	$(wildcard widgets/Reachability/*.xm) $(wildcard widgets/Reachability/*.mm) $(wildcard widgets/Reachability/*.m) \
@@ -21,7 +20,7 @@ libmultiplexercore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard
 
 libmultiplexercore_FRAMEWORKS = UIKit QuartzCore CoreGraphics CoreImage
 libmultiplexercore_PRIVATE_FRAMEWORKS = GraphicsServices BackBoardServices AppSupport IOKit
-libmultiplexercore_LDFLAGS = -lrocketbootstrap -lapplist
+libmultiplexercore_LIBRARIES = rocketbootstrap applist substrate
 libmultiplexercore_INSTALL_PATH = /usr/lib
 
 include $(THEOS_MAKE_PATH)/library.mk

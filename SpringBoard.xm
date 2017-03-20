@@ -18,7 +18,7 @@
 #import "Asphaleia.h"
 #import "RASnapshotProvider.h"
 
-extern BOOL overrideDisableForStatusBar;
+BOOL overrideDisableForStatusBar = NO;
 
 %hook SBUIController
 - (_Bool)clickedMenuButton {
@@ -86,7 +86,7 @@ extern BOOL overrideDisableForStatusBar;
 %hook SpringBoard
 - (void)_performDeferredLaunchWork {
   %orig;
-  [RADesktopManager sharedInstance]; // load desktop (and previous windows!)
+  [%c(RADesktopManager) sharedInstance]; // load desktop (and previous windows!)
 
   // No applications show in the mission control until they have been launched by the user.
   // This prevents always-running apps like Mail or Pebble from perpetually showing in Mission Control.
@@ -118,7 +118,7 @@ extern BOOL overrideDisableForStatusBar;
 		}
 	  for (SBApplication *app in apps) {
       dispatch_async(dispatch_get_main_queue(), ^{
-        [RADesktopManager.sharedInstance removeAppWithIdentifier:app.bundleIdentifier animated:NO forceImmediateUnload:YES];
+        [[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:app.bundleIdentifier animated:NO forceImmediateUnload:YES];
       });
 	  }
 	}

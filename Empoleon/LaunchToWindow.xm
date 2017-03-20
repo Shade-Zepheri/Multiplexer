@@ -3,7 +3,7 @@
 #import "RADesktopManager.h"
 #import "RADesktopWindow.h"
 
-BOOL launchNextOpenIntoWindow = NO;
+extern BOOL launchNextOpenIntoWindow;
 BOOL override = NO;
 BOOL allowOpenApp = NO;
 

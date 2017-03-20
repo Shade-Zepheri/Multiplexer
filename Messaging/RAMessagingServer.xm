@@ -15,7 +15,36 @@
 #import "Multiplexer.h"
 #import "UIAlertController+Window.h"
 
-extern BOOL launchNextOpenIntoWindow;
+BOOL launchNextOpenIntoWindow = NO;
+
+//hack so I can compile
+RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen() {
+	switch (UIApplication.sharedApplication.statusBarOrientation) {
+		case UIInterfaceOrientationPortrait:
+			return RAWindowSnapLocationLeft;
+		case UIInterfaceOrientationLandscapeRight:
+			return RAWindowSnapLocationTop;
+		case UIInterfaceOrientationLandscapeLeft:
+			return RAWindowSnapLocationBottom;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			return RAWindowSnapLocationRight;
+	}
+	return RAWindowSnapLocationLeft;
+}
+
+RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
+	switch (UIApplication.sharedApplication.statusBarOrientation) {
+		case UIInterfaceOrientationPortrait:
+			return RAWindowSnapLocationRight;
+		case UIInterfaceOrientationLandscapeRight:
+			return RAWindowSnapLocationBottom;
+		case UIInterfaceOrientationLandscapeLeft:
+			return RAWindowSnapLocationTop;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			return RAWindowSnapLocationLeft;
+	}
+	return RAWindowSnapLocationRight;
+}
 
 @interface RAMessagingServer () {
 	NSMutableDictionary *asyncHandles;
@@ -112,7 +141,7 @@ extern BOOL launchNextOpenIntoWindow;
 		if (UIApplication.sharedApplication._accessibilityFrontMostApplication) {
 			return nil;
 		}
-		RAWindowBar *window = RADesktopManager.sharedInstance.lastUsedWindow;
+		RAWindowBar *window = [[%c(RADesktopManager) sharedInstance] lastUsedWindow];
 		if (window) {
 			SBApplication *app = window.attachedView.app;
 			if (app.pid) {
@@ -124,9 +153,9 @@ extern BOOL launchNextOpenIntoWindow;
 		}
 	} else if ([identifier isEqual:RAMessagingChangeFrontMostAppMessageName]) {
 		NSString *bundleIdentifier = info[@"bundleIdentifier"];
-		RAWindowBar *window = [RADesktopManager.sharedInstance windowForIdentifier:bundleIdentifier];
+		RAWindowBar *window = [[%c(RADesktopManager) sharedInstance] windowForIdentifier:bundleIdentifier];
 		if (window) {
-			RADesktopManager.sharedInstance.lastUsedWindow = window;
+			[[%c(RADesktopManager) sharedInstance] setLastUsedWindow:window];
 			CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("com.efrederickson.reachapp.frontmostAppDidUpdate"), NULL, (__bridge CFDictionaryRef)@{ @"bundleIdentifier": bundleIdentifier }, YES);
 		}
 	}
@@ -158,32 +187,32 @@ extern BOOL launchNextOpenIntoWindow;
 				  [transaction begin];
 				}];
 				[(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
-				[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:topApp animated:YES];
+				[[[%c(RADesktopManager) sharedInstance] currentDesktop] createAppWindowForSBApplication:topApp animated:YES];
 		  }];
 		}
 	} else if ([identifier isEqual:RAMessagingGoToDesktopOnTheLeftMessageName]) {
-		int newIndex = RADesktopManager.sharedInstance.currentDesktopIndex - 1;
-		BOOL isValid = newIndex >= 0 && newIndex <= RADesktopManager.sharedInstance.numberOfDesktops;
+		int newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] - 1;
+		BOOL isValid = newIndex >= 0 && newIndex <= [[%c(RADesktopManager) sharedInstance] numberOfDesktops];
 		if (isValid) {
-			[RADesktopManager.sharedInstance switchToDesktop:newIndex];
+			[[%c(RADesktopManager) sharedInstance] switchToDesktop:newIndex];
 		}
 	} else if ([identifier isEqual:RAMessagingGoToDesktopOnTheRightMessageName]) {
-		int newIndex = RADesktopManager.sharedInstance.currentDesktopIndex + 1;
-		BOOL isValid = newIndex >= 0 && newIndex < RADesktopManager.sharedInstance.numberOfDesktops;
+		int newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] + 1;
+		BOOL isValid = newIndex >= 0 && newIndex < [[%c(RADesktopManager) sharedInstance] numberOfDesktops];
 		if (isValid)
-			[RADesktopManager.sharedInstance switchToDesktop:newIndex];
+			[[%c(RADesktopManager) sharedInstance] switchToDesktop:newIndex];
 	} else if ([identifier isEqual:RAMessagingAddNewDesktopMessageName]) {
-		[RADesktopManager.sharedInstance addDesktop:YES];
+		[[%c(RADesktopManager) sharedInstance] addDesktop:YES];
 	}
 
-	RAWindowBar *window = RADesktopManager.sharedInstance.lastUsedWindow;
+	RAWindowBar *window = [[%c(RADesktopManager) sharedInstance] lastUsedWindow];
 	if (!window) {
 		return;
 	}
 	if ([identifier isEqual:RAMessagingSnapFrontMostWindowLeftMessageName]) {
-		[RAWindowSnapDataProvider snapWindow:window toLocation:RAWindowSnapLocationGetLeftOfScreen() animated:YES];
+		[%c(RAWindowSnapDataProvider) snapWindow:window toLocation:RAWindowSnapLocationGetLeftOfScreen() animated:YES];
 	} else if ([identifier isEqual:RAMessagingSnapFrontMostWindowRightMessageName]) {
-		[RAWindowSnapDataProvider snapWindow:window toLocation:RAWindowSnapLocationGetRightOfScreen() animated:YES];
+		[%c(RAWindowSnapDataProvider) snapWindow:window toLocation:RAWindowSnapLocationGetRightOfScreen() animated:YES];
 	} else if ([identifier isEqual:RAMessagingMaximizeAppMessageName]) {
 		[window maximize];
 	} else if ([identifier isEqual:RAMessagingCloseAppMessageName]) {
@@ -193,11 +222,12 @@ extern BOOL launchNextOpenIntoWindow;
 
 - (void)alertUser:(NSString*)description {
 #if DEBUG
-	if ([RASettings.sharedInstance debug_showIPCMessages]) {
-		UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER") message:description preferredStyle:UIAlertControllerStyleAlert];
-		[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-		[alert show];
+	if (![RASettings.sharedInstance debug_showIPCMessages]) {
+		return;
 	}
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER") message:description preferredStyle:UIAlertControllerStyleAlert];
+	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+	[alert show];
 #endif
 }
 
@@ -435,7 +465,7 @@ extern BOOL launchNextOpenIntoWindow;
 
 	if (relaunch) {
 		[RAAppKiller killAppWithIdentifier:identifier completion:^{
-			[RADesktopManager.sharedInstance updateWindowSizeForApplication:identifier];
+			[[%c(RADesktopManager) sharedInstance] updateWindowSizeForApplication:identifier];
 		}];
 	}
 }

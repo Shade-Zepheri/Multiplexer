@@ -15,6 +15,8 @@ NSMutableDictionary *oldFrames = [NSMutableDictionary new];
 
 static Class $memorized$UITextEffectsWindow$class;
 
+BOOL allowClosingReachabilityNatively = NO;
+
 %hook UIWindow
 - (void)setFrame:(CGRect)frame {
   if (![self.class isEqual:$memorized$UITextEffectsWindow$class] && [RAMessagingClient.sharedInstance shouldResize]) {
@@ -73,6 +75,20 @@ static Class $memorized$UITextEffectsWindow$class;
 
 %hook UIApplication
 %property (nonatomic, assign) BOOL RA_networkActivity;
+
+- (void)_deactivateReachability {
+  if (!allowClosingReachabilityNatively) {
+    LogDebug(@"[ReachApp] attempting to close reachability but not allowed to.");
+    return;
+  }
+
+  if ([RAMessagingClient.sharedInstance isBeingHosted]) {
+    LogDebug(@"[ReachApp] stopping reachability from closing because hosted");
+    return;
+  }
+  %orig;
+}
+
 - (void)applicationDidResume {
   %orig;
   [RAMessagingClient.sharedInstance requestUpdateFromServer];

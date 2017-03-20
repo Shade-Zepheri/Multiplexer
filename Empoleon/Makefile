@@ -9,7 +9,7 @@ TWEAK_NAME = Empoleon
 Empoleon_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
 Empoleon_FRAMEWORKS = UIKit CoreGraphics
 Empoleon_LIBRARIES = multiplexercore
-Empoleon_LDFLAGS = -L$(THEOS_OBJ_DIR)
+Empoleon_LDFLAGS = -L../.theos/obj/debug/
 
 include $(THEOS_MAKE_PATH)/tweak.mk
 

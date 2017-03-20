@@ -124,7 +124,7 @@
 		view.swipeProvider = provider;
 		view.isSwipeable = YES;
 
-		[[RAReachabilityManager sharedInstance] showAppWithSliderProvider:view];
+		[[%c(RAReachabilityManager) sharedInstance] showAppWithSliderProvider:view];
 	}
 }
 @end

@@ -214,7 +214,7 @@
 		//[desktop.layer performSelectorOnMainThread:@selector(renderInContext:) withObject:(__bridge id)c waitUntilDone:YES]; // Desktop windows
 
 		for (UIView *view in desktop.subviews) { // Application views
-			if (![view isKindOfClass:[RAWindowBar class]]) {
+			if (![view isKindOfClass:[%c(RAWindowBar) class]]) {
 				continue;
 			}
 			RAHostedAppView *hostedView = [((RAWindowBar*)view) attachedView];

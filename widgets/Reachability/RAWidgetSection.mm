@@ -1,5 +1,6 @@
 #import "RAWidgetSection.h"
 #import "RAReachabilityManager.h"
+#import <objc/runtime.h>
 
 @implementation RAWidgetSection
 
@@ -63,7 +64,7 @@
 
 - (void)widgetIconTap:(UITapGestureRecognizer*)gesture {
 	NSInteger widgetIndex = gesture.view.tag;
-	[[RAReachabilityManager sharedInstance] launchWidget:_widgets[widgetIndex]];
+	[[objc_getClass("RAReachabilityManager") sharedInstance] launchWidget:_widgets[widgetIndex]];
 }
 
 - (CGFloat)titleOffset {

@@ -32,5 +32,5 @@ typedef NS_ENUM(NSInteger, RAWindowSnapLocation) {
 + (void)snapWindow:(RAWindowBar*)window toLocation:(RAWindowSnapLocation)location animated:(BOOL)animated completion:(dispatch_block_t)completionBlock;
 @end
 
-RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen();
-RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen();
+extern RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen();
+extern RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen();
