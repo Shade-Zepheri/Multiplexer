@@ -27,8 +27,9 @@
 	{
 		NSString *identifier = [NSBundle mainBundle].bundleIdentifier;
 
-		if (!identifier)
-		  goto ORIGINAL;
+		if (!identifier) {
+			goto ORIGINAL;
+		}
 
 		//LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", arg1, arg2, arg3, arg4, arg5, identifier);
 

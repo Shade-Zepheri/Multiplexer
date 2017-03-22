@@ -1,7 +1,7 @@
-ARCHS = armv7 armv7s arm64
+export TARGET = iphone:9.2
+
 CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IMissionControl/ -IQuickAccess/ -IReachApp/ -ISwipeOver/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/ -O2
 CFLAGS += -fobjc-arc
-TARGET = iphone:9.2
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 

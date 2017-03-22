@@ -85,16 +85,17 @@
 		}
 	} else if ([value isKindOfClass:[NSNumber class]]) {
 		int actualValue = [((NSNumber*)value) intValue]; //TODO: make into switch statement?
-		if (actualValue == 0) {
-			return NSTextAlignmentLeft;
-		} else if (actualValue == 1) {
-			return NSTextAlignmentCenter;
-		} else if (actualValue == 2) {
-			return NSTextAlignmentRight;
-		} else if (actualValue == 3) {
-			return NSTextAlignmentJustified;
-		} else if (actualValue == 4) {
-			return NSTextAlignmentNatural;
+		switch (actualValue) {
+			case 0:
+				return NSTextAlignmentLeft;
+			case 1:
+				return NSTextAlignmentCenter;
+			case 2:
+				return NSTextAlignmentRight;
+			case 3:
+				return NSTextAlignmentJustified;
+			case 4:
+				return NSTextAlignmentNatural;
 		}
 	}
 	return NSTextAlignmentCenter;

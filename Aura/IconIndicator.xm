@@ -294,6 +294,7 @@ inline NSString *getAppNameFromIndicatorName(NSString *indicatorName) {
 	return 4;
 }
 %end
+
 %hook UIStatusBarCustomItem
 - (NSUInteger)leftOrder {
 	if ([self.indicatorName hasPrefix:@"multiplexer-"]) {

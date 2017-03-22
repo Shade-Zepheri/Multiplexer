@@ -1,4 +1,3 @@
-ARCHS = armv7 armv7s arm64
 CFLAGS = -fno-objc-arc -O2
 
 include $(THEOS)/makefiles/common.mk

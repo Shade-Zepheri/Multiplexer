@@ -1,5 +1,3 @@
-ARCHS = armv7 armv7s arm64
-TARGET = iphone:9.2
 CFLAGS = -fobjc-arc -I../ -I../Aura/ -I../Theming/ -I../QuickAccess -Wno-deprecated-declarations -O2
 LDFLAGS = -F$(THEOS)/frameworks
 

@@ -1,4 +1,3 @@
-ARCHS = armv7 armv7s arm64
 CFLAGS = -I../Messaging/ -O2
 #CFLAGS += -fno-objc-arc
 
