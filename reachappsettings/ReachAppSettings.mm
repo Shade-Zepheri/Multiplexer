@@ -113,7 +113,7 @@
               @"detail": @"RAListItemsController",
               @"valuesDataSource": @"getThemeValues:",
               @"titlesDataSource": @"getThemeTitles:",
-              @"enabled": @([self getEnabled])
+              @"enabled": @([self getEnabledForPane:0])
            },
 
            @{ @"footerText": @"Let apps run in the background." },
@@ -122,7 +122,7 @@
                @"label": @"Aura",
                @"detail": @"ReachAppBackgrounderSettingsListController",
                @"icon": @"aura.png",
-               @"enabled": @([self getEnabled])
+               @"enabled": @([self getEnabledForPane:1])
                },
            @{ @"footerText": @"Windowed multitasking." },
            @{
@@ -130,7 +130,7 @@
                @"label": @"Empoleon",
                @"detail": @"ReachAppWindowSettingsListController",
                @"icon": @"empoleon.png",
-               @"enabled": @([self getEnabled])
+               @"enabled": @([self getEnabledForPane:2])
                },
            @{ @"footerText": @"Manage multiple desktops and their windows." },
            @{
@@ -138,7 +138,7 @@
                @"label": @"Mission Control",
                @"detail": @"ReachAppMCSettingsListController",
                @"icon": @"missioncontrol.png",
-               @"enabled": @([self getEnabled])
+               @"enabled": @([self getEnabledForPane:3])
                },
            @{ @"footerText": @"Have an app in Notification Center." },
            @{
@@ -146,7 +146,7 @@
                @"label": @"Quick Access",
                @"detail": @"ReachAppNCAppSettingsListController",
                @"icon": @"quickaccess.png",
-               @"enabled": @([self getEnabled])
+               @"enabled": @([self getEnabledForPane:4])
                },
           @{ @"footerText": @"Use an app in Reachability alongside another." },
            @{
@@ -154,7 +154,7 @@
                @"label": @"Reach App",
                @"detail": @"ReachAppReachabilitySettingsListController",
                @"icon": @"reachapp.png",
-               @"enabled": @([self getEnabled])
+               @"enabled": @([self getEnabledForPane:5])
                },
            @{ @"footerText": @"Access another app simply by swiping in from the right side of the screen." },
            @{
@@ -162,7 +162,7 @@
                @"label": @"Swipe Over",
                @"detail": @"ReachAppSwipeOverSettingsListController",
                @"icon": @"swipeover.png",
-               @"enabled": @([self getEnabled])
+               @"enabled": @([self getEnabledForPane:6])
                },
            @{ @"footerText": [NSString stringWithFormat:@"%@%@",
 #if DEBUG
@@ -268,7 +268,7 @@
   [self reloadSpecifiers];
 }
 
-- (BOOL)getEnabled {
+- (BOOL)getEnabledForPane:(NSInteger)pane {
   CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
   CFArrayRef keyList = CFPreferencesCopyKeyList(appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   if (!keyList) {
@@ -280,7 +280,26 @@
     return YES;
   }
 
-  return ![_settings objectForKey:@"enabled"] ? YES : [_settings[@"enabled"] boolValue];
+  BOOL enabled = ![_settings objectForKey:@"enabled"] ? YES : [_settings[@"enabled"] boolValue];
+
+  if (pane != 0) {
+    switch (pane) {
+      case 1:
+        return enabled && [RASettings isAuraInstalled];
+      case 2:
+        return enabled && [RASettings isEmpoleonInstalled];
+      case 3:
+        return enabled && [RASettings isMissionControlInstalled];
+      case 4:
+        return enabled && [RASettings isQuickAccessInstalled];
+      case 5:
+        return enabled && [RASettings isReachAppInstalled];
+      case 6:
+        return enabled && [RASettings isSwipeOverInstalled];
+    }
+  }
+
+  return enabled;
 }
 
 - (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {

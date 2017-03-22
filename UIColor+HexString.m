@@ -18,7 +18,7 @@
     return hexComponent / 255.0;
 }
 
-+ (UIColor *)RA_colorWithHexString: (NSString *) hexString {
++ (UIColor*)RA_colorWithHexString:(NSString*)hexString {
     if (hexString.length == 0) {
       return nil;
     }
@@ -41,16 +41,16 @@
       }
       case 6: { // #RRGGBB
         alpha = 1.0f;
-        red   = [self RA_colorComponentFrom: colorString start: 0 length: 2];
-        green = [self RA_colorComponentFrom: colorString start: 2 length: 2];
-        blue  = [self RA_colorComponentFrom: colorString start: 4 length: 2];
+        red   = [self RA_colorComponentFrom:colorString start:0 length:2];
+        green = [self RA_colorComponentFrom:colorString start:2 length:2];
+        blue  = [self RA_colorComponentFrom:colorString start:4 length:2];
         break;
       }
       case 8: { // #AARRGGBB
-        alpha = [self RA_colorComponentFrom: colorString start: 0 length: 2];
-        red   = [self RA_colorComponentFrom: colorString start: 2 length: 2];
-        green = [self RA_colorComponentFrom: colorString start: 4 length: 2];
-        blue  = [self RA_colorComponentFrom: colorString start: 6 length: 2];
+        alpha = [self RA_colorComponentFrom:colorString start:0 length:2];
+        red   = [self RA_colorComponentFrom:colorString start:2 length:2];
+        green = [self RA_colorComponentFrom:colorString start:4 length:2];
+        blue  = [self RA_colorComponentFrom:colorString start:6 length:2];
         break;
       }
       default:

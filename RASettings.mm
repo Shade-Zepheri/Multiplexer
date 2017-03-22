@@ -43,6 +43,78 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return installed;
 }
 
++ (BOOL)isAuraInstalled {
+	static BOOL installed = NO;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Aura.dylib"]) {
+			installed = YES;
+	    dlopen("/Library/MobileSubstrate/DynamicLibraries/Aura.dylib", RTLD_LAZY);
+		}
+	});
+	return installed;
+}
+
++ (BOOL)isEmpoleonInstalled {
+	static BOOL installed = NO;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Empoleon.dylib"]) {
+			installed = YES;
+	    dlopen("/Library/MobileSubstrate/DynamicLibraries/Empoleon.dylib", RTLD_LAZY);
+		}
+	});
+	return installed;
+}
+
++ (BOOL)isMissionControlInstalled {
+	static BOOL installed = NO;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/MissionControl.dylib"]) {
+			installed = YES;
+	    dlopen("/Library/MobileSubstrate/DynamicLibraries/MissionControl.dylib", RTLD_LAZY);
+		}
+	});
+	return installed;
+}
+
++ (BOOL)isQuickAccessInstalled {
+	static BOOL installed = NO;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/QuickAccess.dylib"]) {
+			installed = YES;
+	    dlopen("/Library/MobileSubstrate/DynamicLibraries/QuickAccess.dylib", RTLD_LAZY);
+		}
+	});
+	return installed;
+}
+
++ (BOOL)isReachAppInstalled {
+	static BOOL installed = NO;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ReachApp.dylib"]) {
+			installed = YES;
+	    dlopen("/Library/MobileSubstrate/DynamicLibraries/ReachApp.dylib", RTLD_LAZY);
+		}
+	});
+	return installed;
+}
+
++ (BOOL)isSwipeOverInstalled {
+	static BOOL installed = NO;
+	static dispatch_once_t onceToken;
+	dispatch_once(&onceToken, ^{
+		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/SwipeOver.dylib"]) {
+			installed = YES;
+	    dlopen("/Library/MobileSubstrate/DynamicLibraries/SwipeOver.dylib", RTLD_LAZY);
+		}
+	});
+	return installed;
+}
+
 + (instancetype)sharedInstance {
 	SHARED_INSTANCE(RASettings);
 }

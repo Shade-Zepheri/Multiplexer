@@ -8,7 +8,6 @@
 @implementation RAThemeLoader
 + (RATheme*)loadFromFile:(NSString*)baseName {
 	NSString *fullPath = [NSString stringWithFormat:@"%@/Themes/%@.plist",RA_BASE_PATH,[[baseName lastPathComponent] stringByDeletingPathExtension]];
-
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:fullPath];
 	return [RAThemeLoader themeFromDictionary:dict];
 }
@@ -85,7 +84,7 @@
 			return NSTextAlignmentNatural;
 		}
 	} else if ([value isKindOfClass:[NSNumber class]]) {
-		int actualValue = [((NSNumber*)value) intValue];
+		int actualValue = [((NSNumber*)value) intValue]; //TODO: make into switch statement?
 		if (actualValue == 0) {
 			return NSTextAlignmentLeft;
 		} else if (actualValue == 1) {

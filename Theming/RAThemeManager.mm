@@ -22,6 +22,7 @@
 	NSDate *startTime = [NSDate date];
 #endif
 
+
 	currentTheme = nil;
 	[allThemes removeAllObjects];
 	allThemes = [NSMutableDictionary dictionary];

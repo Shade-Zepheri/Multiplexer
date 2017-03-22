@@ -3,6 +3,8 @@ CFLAGS = -I../ -I../Theming/ -O2
 CFLAGS += -fobjc-arc
 TARGET = iphone:9.3
 
+INSTALL_TARGET_PROCESSES = SpringBoard
+
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Aura
@@ -14,6 +16,3 @@ IconIndicator.xm_CFLAGS = -fno-objc-arc
 SpringBoard_UIAppCustomBackgroundModes.xm_CFLAGS = -fno-objc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
-
-after-install::
-	install.exec "killall -9 SpringBoard"

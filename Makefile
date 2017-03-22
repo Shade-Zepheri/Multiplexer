@@ -3,6 +3,8 @@ CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpol
 CFLAGS += -fobjc-arc
 TARGET = iphone:9.2
 
+INSTALL_TARGET_PROCESSES = SpringBoard
+
 include $(THEOS)/makefiles/common.mk
 
 LIBRARY_NAME = libmultiplexercore
@@ -19,23 +21,11 @@ libmultiplexercore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard
 	$(wildcard Debugging/*.xm) $(wildcard Debugging/*.mm) $(wildcard Debugging/*.m)
 
 libmultiplexercore_FRAMEWORKS = UIKit QuartzCore CoreGraphics CoreImage
+libmultiplexercore_EXTRA_FRAMEWORKS = CydiaSubstrate
 libmultiplexercore_PRIVATE_FRAMEWORKS = GraphicsServices BackBoardServices AppSupport IOKit
-libmultiplexercore_LIBRARIES = rocketbootstrap applist substrate
-libmultiplexercore_INSTALL_PATH = /usr/lib
+libmultiplexercore_LIBRARIES = rocketbootstrap applist
+
+SUBPROJECTS = reachappfakephonemode reachappassertiondhooks reachappbackboarddhooks reachappsettings reachappflipswitch reachappfsdaemon
 
 include $(THEOS_MAKE_PATH)/library.mk
-
-after-install::
-	install.exec "killall -9 SpringBoard"
-
-SUBPROJECTS += reachappfakephonemode
-
-SUBPROJECTS += reachappassertiondhooks
-SUBPROJECTS += reachappbackboarddhooks
-
-SUBPROJECTS += reachappsettings
-SUBPROJECTS += reachappflipswitch
-SUBPROJECTS += reachappfsdaemon
-
-
 include $(THEOS_MAKE_PATH)/aggregate.mk

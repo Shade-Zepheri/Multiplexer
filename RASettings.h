@@ -20,6 +20,13 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 + (BOOL)isActivatorInstalled;
 + (BOOL)isLibStatusBarInstalled;
 
++ (BOOL)isAuraInstalled;
++ (BOOL)isEmpoleonInstalled;
++ (BOOL)isMissionControlInstalled;
++ (BOOL)isQuickAccessInstalled;
++ (BOOL)isReachAppInstalled;
++ (BOOL)isSwipeOverInstalled;
+
 - (void)reloadSettings;
 - (void)resetSettings;
 
