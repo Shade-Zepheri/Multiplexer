@@ -102,7 +102,7 @@ void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEvent
 
       float x = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * UIScreen.mainScreen._referenceBounds.size.width;
       float y = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * UIScreen.mainScreen._referenceBounds.size.height;
-      CGPoint location = (CGPoint) { x, y };
+      CGPoint location = CGPointMake(x, y);
 
       UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
 
@@ -113,11 +113,11 @@ void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEvent
         rotatedX = y;
         rotatedY = UIScreen.mainScreen.bounds.size.height - x;
       } else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
-          rotatedX = UIScreen.mainScreen._referenceBounds.size.height - y;
-          rotatedY = x;
+        rotatedX = UIScreen.mainScreen._referenceBounds.size.height - y;
+        rotatedY = x;
       }
 
-      CGPoint rotatedLocation = (CGPoint) { rotatedX, rotatedY };
+      CGPoint rotatedLocation = CGPointMake(rotatedX, rotatedY);
 
       LogInfo(@"[ReachApp] (%f, %d) %@ -> %@", density, isTracking, NSStringFromCGPoint(location), NSStringFromCGPoint(rotatedLocation));
 
@@ -165,36 +165,28 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
     return;
   }
 
-  LogDebug(@"start of ctor");
+  @autoreleasepool {
+    clientCreatePointer clientCreate;
+    void *handle = dlopen(0, 9);
+    *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
+    IOHIDEventSystemClientRef ioHIDEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
+    IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+    IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
 
-  clientCreatePointer clientCreate;
-  void *handle = dlopen(0, 9);
-  *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
-  IOHIDEventSystemClientRef hidEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
-  IOHIDEventSystemClientScheduleWithRunLoop(hidEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-  IOHIDEventSystemClientRegisterEventCallback(hidEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
+    class_addProtocol(%c(Hooks9$SBHandMotionExtractorReplacementByMultiplexer), @protocol(_UIScreenEdgePanRecognizerDelegate));
 
-  LogDebug(@"did iokit stuff")
+    UIRectEdge edgesToWatch[] = { UIRectEdgeBottom, UIRectEdgeLeft, UIRectEdgeRight, UIRectEdgeTop };
+    int edgeCount = sizeof(edgesToWatch) / sizeof(UIRectEdge);
+    gestureRecognizers = [[NSMutableSet alloc] initWithCapacity:edgeCount];
+    for (int i = 0; i < edgeCount; i++) {
+      _UIScreenEdgePanRecognizer *recognizer = [[_UIScreenEdgePanRecognizer alloc] initWithType:2];
+      recognizer.targetEdges = edgesToWatch[i];
+      recognizer.screenBounds = UIScreen.mainScreen._referenceBounds;
+      [gestureRecognizers addObject:recognizer];
+    }
 
-  class_addProtocol(%c(Hooks9$SBHandMotionExtractorReplacementByMultiplexer), @protocol(_UIScreenEdgePanRecognizerDelegate));
+    %init;
 
-  LogDebug(@"added protocol");
-
-  UIRectEdge edgesToWatch[] = { UIRectEdgeBottom, UIRectEdgeLeft, UIRectEdgeRight, UIRectEdgeTop };
-  int edgeCount = sizeof(edgesToWatch) / sizeof(UIRectEdge);
-  gestureRecognizers = [[NSMutableSet alloc] initWithCapacity:edgeCount];
-  for (int i = 0; i < edgeCount; i++) {
-    _UIScreenEdgePanRecognizer *recognizer = [[_UIScreenEdgePanRecognizer alloc] initWithType:2];
-    recognizer.targetEdges = edgesToWatch[i];
-    recognizer.screenBounds = UIScreen.mainScreen._referenceBounds;
-    [gestureRecognizers addObject:recognizer];
+    __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer = [[Hooks9$SBHandMotionExtractorReplacementByMultiplexer alloc] init];
   }
-
-  LogDebug(@"added gestureRecognizers")
-
-  %init;
-
-  LogDebug(@"inited ctor");
-
-  __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer = [[Hooks9$SBHandMotionExtractorReplacementByMultiplexer alloc] init];
 }
