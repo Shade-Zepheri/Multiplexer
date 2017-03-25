@@ -48,24 +48,35 @@ void handle_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEven
 		} else if (key == ALT_KEY || key == ALT_KEY2) {
 			isAltKeyDown = isDown;
 		} else if (isDown && isWindowsKeyDown && isControlKeyDown) {
-			if (key == ARROW_LEFT_KEY) {
-				[center sendMessageName:RAMessagingGoToDesktopOnTheLeftMessageName userInfo:nil];
-			} else if (key == ARROW_RIGHT_KEY) {
-				[center sendMessageName:RAMessagingGoToDesktopOnTheRightMessageName userInfo:nil];
-			} else if (key == BKSPCE_KEY) {
-				[center sendMessageName:RAMessagingDetachCurrentAppMessageName userInfo:nil];
-			} else if (key == D_KEY || key == EQUALS_OR_PLUS_KEY) {
-				[center sendMessageName:RAMessagingAddNewDesktopMessageName userInfo:nil];
+			switch (key) {
+				case ARROW_LEFT_KEY:
+					[center sendMessageName:RAMessagingGoToDesktopOnTheLeftMessageName userInfo:nil];
+					break;
+				case ARROW_RIGHT_KEY:
+					[center sendMessageName:RAMessagingGoToDesktopOnTheRightMessageName userInfo:nil];
+					break;
+				case BKSPCE_KEY:
+					[center sendMessageName:RAMessagingDetachCurrentAppMessageName userInfo:nil];
+					break;
+				case D_KEY:
+				case EQUALS_OR_PLUS_KEY:
+					[center sendMessageName:RAMessagingAddNewDesktopMessageName userInfo:nil];
+					break;
 			}
 		} else if (isDown && isWindowsKeyDown && isAltKeyDown) {
-			if (key == ARROW_LEFT_KEY) {
-				[center sendMessageName:RAMessagingSnapFrontMostWindowLeftMessageName userInfo:nil];
-			} else if (key == ARROW_RIGHT_KEY) {
-				[center sendMessageName:RAMessagingSnapFrontMostWindowRightMessageName userInfo:nil];
-			} else if (key == ARROW_UP_KEY) {
-				[center sendMessageName:RAMessagingMaximizeAppMessageName userInfo:nil];
-			} else if (key == ARROW_DOWN_KEY) {
-				[center sendMessageName:RAMessagingCloseAppMessageName userInfo:nil];
+			switch (key) {
+				case ARROW_LEFT_KEY:
+					[center sendMessageName:RAMessagingSnapFrontMostWindowLeftMessageName userInfo:nil];
+					break;
+				case ARROW_RIGHT_KEY:
+					[center sendMessageName:RAMessagingSnapFrontMostWindowRightMessageName userInfo:nil];
+					break;
+				case ARROW_UP_KEY:
+					[center sendMessageName:RAMessagingMaximizeAppMessageName userInfo:nil];
+					break;
+				case ARROW_DOWN_KEY:
+					[center sendMessageName:RAMessagingCloseAppMessageName userInfo:nil];
+					break;
 			}
 		}
 	}
@@ -75,7 +86,7 @@ void handle_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEven
 
 %hookf(Boolean, "_IOHIDEventSystemOpen", IOHIDEventSystemRef system, IOHIDEventSystemCallback callback, void* target, void* refcon, void* unused) {
 	eventCallback = callback;
-	return %orig;
+	return %orig(system, handle_event, target, refcon, unused);
 }
 
 %hook BKEventFocusManager

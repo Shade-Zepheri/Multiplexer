@@ -27,40 +27,41 @@
 
 - (RAHostedAppView*)viewToTheLeft {
 	if (self.canGoLeft) {
-		NSString *ident = [availableIdentifiers objectAtIndex:currentIndex - 1];
-
-		if (!ident) {
-			return nil;
-		}
-		if ([cachedViews objectForKey:ident]) {
-			return cachedViews[ident];
-		}
-
-		RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
-		[view preloadApp];
-		cachedViews[ident] = view;
-		return view;
+		return nil;
 	}
-	return nil;
+	NSString *ident = [availableIdentifiers objectAtIndex:currentIndex - 1];
+
+	if (!ident) {
+		return nil;
+	}
+	if ([cachedViews objectForKey:ident]) {
+		return cachedViews[ident];
+	}
+
+	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
+	[view preloadApp];
+	cachedViews[ident] = view;
+	return view;
+
 }
 
 - (RAHostedAppView*)viewToTheRight {
 	if (self.canGoRight) {
-		NSString *ident = [availableIdentifiers objectAtIndex:currentIndex + 1];
-
-		if (!ident) {
-			return nil;
-		}
-		if ([cachedViews objectForKey:ident]) {
-			return cachedViews[ident];
-		}
-
-		RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
-		[view preloadApp];
-		cachedViews[ident] = view;
-		return view;
+		return nil;
 	}
-	return nil;
+	NSString *ident = [availableIdentifiers objectAtIndex:currentIndex + 1];
+
+	if (!ident) {
+		return nil;
+	}
+	if ([cachedViews objectForKey:ident]) {
+		return cachedViews[ident];
+	}
+
+	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
+	[view preloadApp];
+	cachedViews[ident] = view;
+	return view;
 }
 
 - (RAHostedAppView*)viewAtCurrentIndex {

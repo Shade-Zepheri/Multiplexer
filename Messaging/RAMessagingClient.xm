@@ -1,4 +1,5 @@
 #import "RAMessagingClient.h"
+#import "UIAlertController+Window.h"
 
 extern const char *__progname;
 extern BOOL allowClosingReachabilityNatively;
@@ -66,7 +67,11 @@ extern BOOL allowClosingReachabilityNatively;
 }
 
 - (void)alertUser:(NSString*)description {
-	LogError(@"%@", description);
+#if DEBUG
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER") message:description preferredStyle:UIAlertControllerStyleAlert];
+	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
+	[alert show];
+#endif
 }
 
 - (void)_requestUpdateFromServerWithTries:(int)tries {

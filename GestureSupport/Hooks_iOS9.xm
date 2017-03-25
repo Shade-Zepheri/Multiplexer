@@ -73,23 +73,25 @@ typedef struct {
 }
 
 - (void)screenEdgePanRecognizerStateDidChange:(_UIScreenEdgePanRecognizer*)screenEdgePanRecognizer {
-  if (screenEdgePanRecognizer.state == UIGestureRecognizerStateBegan) {
-    CGPoint location = MSHookIvar<CGPoint>(screenEdgePanRecognizer, "_lastTouchLocation");
+  if (screenEdgePanRecognizer.state != UIGestureRecognizerStateBegan) {
+    return;
+  }
+  
+  CGPoint location = MSHookIvar<CGPoint>(screenEdgePanRecognizer, "_lastTouchLocation");
 
-    if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
+  if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
+    location.x = UIScreen.mainScreen.bounds.size.width - location.x;
+  } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
       location.x = UIScreen.mainScreen.bounds.size.width - location.x;
-    } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
-        location.x = UIScreen.mainScreen.bounds.size.width - location.x;
-    } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
-      CGFloat t = location.y;
-      location.y = location.x;
-      location.x = t;
-    }
-    LogDebug(@"[ReachApp] _UIScreenEdgePanRecognizer location: %@", NSStringFromCGPoint(location));
-    if ([RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateBegan withPoint:location velocity:screenEdgePanRecognizer.RA_velocity forEdge:screenEdgePanRecognizer.targetEdges]) {
-      currentEdge9 = screenEdgePanRecognizer.targetEdges;
-      BKSHIDServicesCancelTouchesOnMainDisplay(); // This is needed or open apps, etc will still get touch events. For example open settings app + swipeover without this line and you can still scroll up/down through the settings
-    }
+  } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+    CGFloat t = location.y;
+    location.y = location.x;
+    location.x = t;
+  }
+  LogDebug(@"[ReachApp] _UIScreenEdgePanRecognizer location: %@", NSStringFromCGPoint(location));
+  if ([RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateBegan withPoint:location velocity:screenEdgePanRecognizer.RA_velocity forEdge:screenEdgePanRecognizer.targetEdges]) {
+    currentEdge9 = screenEdgePanRecognizer.targetEdges;
+    BKSHIDServicesCancelTouchesOnMainDisplay(); // This is needed or open apps, etc will still get touch events. For example open settings app + swipeover without this line and you can still scroll up/down through the settings
   }
 }
 @end

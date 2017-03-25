@@ -73,7 +73,7 @@ extern BOOL $__IS_SPRINGBOARD;
 
 #define IF_SPRINGBOARD if (IS_SPRINGBOARD)
 #define IF_NOT_SPRINGBOARD if (!IS_SPRINGBOARD)
-#define IF_THIS_PROCESS(x) if ([[x objectForKey:@"bundleIdentifier"] isEqual:NSBundle.mainBundle.bundleIdentifier])
+#define IF_THIS_PROCESS(x) if ([[x objectForKey:@"bundleIdentifier"] isEqual:[NSBundle mainBundle].bundleIdentifier])
 
 // ugh, i got so tired of typing this in by hand, plus it expands method declarations by a LOT.
 #define unsafe_id __unsafe_unretained id
@@ -89,8 +89,8 @@ void BKSHIDServicesCancelTouchesOnMainDisplay();
 }
 #endif
 
-#define RADIANS_TO_DEGREES(radians) ((radians) * (180.0 / M_PI))
-#define DEGREES_TO_RADIANS(radians) ((radians) * (M_PI / 180))
+#define RADIANS_TO_DEGREES(radians) (radians * 180.0 / M_PI)
+#define DEGREES_TO_RADIANS(radians) (radians * M_PI / 180)
 
 void SET_BACKGROUNDED(id settings, BOOL val);
 
