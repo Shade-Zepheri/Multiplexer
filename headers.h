@@ -490,6 +490,7 @@ typedef struct {
 @end
 
 @interface SBWallpaperController
+@property (nonatomic,retain) SBFStaticWallpaperView *homescreenWallpaperView; 
 @property (nonatomic,retain) SBFStaticWallpaperView *sharedWallpaperView;
 +(id) sharedInstance;
 -(void) beginRequiringWithReason:(NSString*)reason;

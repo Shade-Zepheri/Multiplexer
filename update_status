@@ -17,7 +17,6 @@ Bugs:
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch;
 - Invoking keyboard in reachapp closes view (I think reachability dismisses when using KB)
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
-- CC inhibitor not reliable on 9.x+?
 - adding items to SBAppSwitcherModel is broken (fixed now?)
 - SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
 - icons and apps do not show up in RASnapshotProvider

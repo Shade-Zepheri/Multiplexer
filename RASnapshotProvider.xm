@@ -252,7 +252,12 @@
 		return [imageCache objectForKey:key];
 	}
 	//its really that easy elijah (ok maybe i need to resize the image);
-	UIImage *oldImage = [[%c(SBWallpaperController) sharedInstance] sharedWallpaperView].displayedImage;
+	UIImage *oldImage;
+	if ([[%c(SBWallpaperController) sharedInstance] homescreenWallpaperView]) {
+		oldImage = [[%c(SBWallpaperController) sharedInstance] homescreenWallpaperView].displayedImage;
+	} else {
+		oldImage = [[%c(SBWallpaperController) sharedInstance] sharedWallpaperView].displayedImage;
+	}
 	UIImage *image = [RAResourceImageProvider imageWithImage:oldImage scaledToSize:[UIScreen mainScreen].bounds.size];
 
 	if (blurred) {
