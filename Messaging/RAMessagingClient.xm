@@ -143,7 +143,7 @@ extern BOOL allowClosingReachabilityNatively;
 }
 
 - (void)notifyServerWithKeyboardContextId:(unsigned int)cid {
-	NSDictionary *dict = @{ @"contextId": @(cid), @"bundleIdentifier": NSBundle.mainBundle.bundleIdentifier };
+	NSDictionary *dict = @{ @"contextId": @(cid), @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
 	[serverCenter sendMessageName:RAMessagingUpdateKeyboardContextIdMessageName userInfo:dict];
 }
 

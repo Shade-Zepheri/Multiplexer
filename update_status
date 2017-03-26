@@ -6,7 +6,7 @@ SwipeOver: working (replace with native slide over(?))
 Reachability: working (show NC broken in 10.x)
 GestureSupport: fixed
 Backgrounding: working
-KeyboardSupport: hackily fixed but it works now
+KeyboardSupport: broken
 MissionControl: working
 NCApp: working (not tested on ipad);
 assertiond hooks: working
@@ -33,6 +33,8 @@ Things to do/Features to add:
 - 3D Touch actions?
 - (Soon) split all 6 features into seperate tweaks
 - General Code Cleanup/conform to standards, feels to messy RN (at least indents are fine)
+- Convert as much as possible to ARC
+- Optimize scrollviews
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?

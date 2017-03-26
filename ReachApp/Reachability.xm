@@ -79,8 +79,8 @@ BOOL wasEnabled = NO;
 }
 
 - (void)deactivateReachabilityModeForObserver:(unsafe_id)arg1 {
-  //Disable for keyboard here
-  if (overrideDisableForStatusBar || [RAKeyboardStateListener sharedInstance].visible) {
+  //Disable for keyboard here (keyboardsupport's fault since broken)
+  if (overrideDisableForStatusBar) {
     return;
   }
   %orig;
@@ -235,7 +235,8 @@ id SBWorkspace$sharedInstance;
 
 - (void)_disableReachabilityImmediately:(_Bool)arg1 {
   //Disable for keyboard here
-  if (overrideDisableForStatusBar || [RAKeyboardStateListener sharedInstance].visible) {
+  LogDebug(@"overrideDisableForStatusBar: %d", overrideDisableForStatusBar);
+  if (overrideDisableForStatusBar) {
     return;
   }
 
@@ -681,8 +682,6 @@ CGFloat startingY = -1;
 
   [contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
   view = [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
-
-  view.accessibilityHint = bundleIdentifier;
 
   if (draggerView && draggerView.superview == w) {
     [w insertSubview:view belowSubview:draggerView];

@@ -91,7 +91,7 @@ extern int rotationDegsForOrientation(int o);
 
 - (void)createEdgeView {
 	overlayWindow = [[RASwipeOverOverlay alloc] initWithFrame:[UIScreen mainScreen].RA_interfaceOrientedBounds];
-	if (IS_IOS_OR_OLDER(iOS_8_4)) {
+	if (!IS_IOS_OR_NEWER(iOS_9_0)) {
 		[overlayWindow _rotateWindowToOrientation:[UIApplication sharedApplication].statusBarOrientation updateStatusBar:YES duration:0.001 skipCallbacks:NO];
 	}
 	[overlayWindow showEnoughToDarkenUnderlyingApp];

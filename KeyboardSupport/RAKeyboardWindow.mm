@@ -6,18 +6,18 @@
 @implementation RAKeyboardWindow
 - (void)setupForKeyboardAndShow:(NSString*)identifier {
 	self.userInteractionEnabled = YES;
-	self.backgroundColor = UIColor.clearColor;
+	self.backgroundColor = [UIColor clearColor];
 
 	if (kbView) {
 		[self removeKeyboard];
 	}
 
-	kbView = [[RARemoteKeyboardView alloc] initWithFrame:UIScreen.mainScreen.bounds];
+	kbView = [[RARemoteKeyboardView alloc] initWithFrame:[UIScreen mainScreen].bounds];
 	[kbView connectToKeyboardWindowForApp:identifier];
 	[self addSubview:kbView];
 
 	self.windowLevel = 9999;
-	self.frame = UIScreen.mainScreen.bounds;
+	self.frame = [UIScreen mainScreen].bounds;
 	[self makeKeyAndVisible];
 }
 

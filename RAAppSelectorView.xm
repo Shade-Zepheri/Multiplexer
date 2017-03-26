@@ -20,8 +20,8 @@
 	NSInteger numIconsPerLine = 0;
 	CGFloat tmpWidth = 10;
 	while (tmpWidth + fullSize.width <= self.frame.size.width) {
-	  numIconsPerLine++;
-	  tmpWidth += fullSize.width + 20;
+		numIconsPerLine++;
+		tmpWidth += fullSize.width + 20;
 	}
 	padding = (self.frame.size.width - (numIconsPerLine * fullSize.width)) / (numIconsPerLine + 1);
 
@@ -44,34 +44,36 @@
 	}
 
 	for (NSString *str in allApps) {
-		SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
-		SBApplicationIcon *icon = nil;
-		SBIconView *iconView = nil;
-		if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-			icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
-			iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
-		} else {
-			icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
-			iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
-		}
-		if (!iconView || ![icon isKindOfClass:[%c(SBApplicationIcon) class]]) {
-			continue;
-		}
+		@autoreleasepool {
+			SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
+			SBApplicationIcon *icon = nil;
+			SBIconView *iconView = nil;
+			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
+				icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
+				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
+			} else {
+				icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
+				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
+			}
+			if (!iconView || ![icon isKindOfClass:[%c(SBApplicationIcon) class]]) {
+				continue;
+			}
 
-		iconView.frame = CGRectMake(contentSize.width, contentSize.height, iconView.frame.size.width, iconView.frame.size.height);
-		contentSize.width += iconView.frame.size.width + padding;
+			iconView.frame = CGRectMake(contentSize.width, contentSize.height, iconView.frame.size.width, iconView.frame.size.height);
+			contentSize.width += iconView.frame.size.width + padding;
 
-		horizontal++;
-		if (horizontal >= numIconsPerLine) {
-			horizontal = 0;
-			contentSize.width = padding;
-			contentSize.height += iconView.frame.size.height + 10;
+			horizontal++;
+			if (horizontal >= numIconsPerLine) {
+				horizontal = 0;
+				contentSize.width = padding;
+				contentSize.height += iconView.frame.size.height + 10;
+			}
+
+			iconView.restorationIdentifier = app.bundleIdentifier;
+			UITapGestureRecognizer *iconViewTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(appViewItemTap:)];
+			[iconView addGestureRecognizer:iconViewTapGestureRecognizer];
+			[self addSubview:iconView];
 		}
-
-		iconView.restorationIdentifier = app.bundleIdentifier;
-		UITapGestureRecognizer *iconViewTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(appViewItemTap:)];
-		[iconView addGestureRecognizer:iconViewTapGestureRecognizer];
-		[self addSubview:iconView];
 	}
 	contentSize.width = self.frame.size.width;
 	contentSize.height += fullSize.height * 1.5;

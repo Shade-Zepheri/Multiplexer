@@ -5,7 +5,7 @@
 #import "ColorBadges.h"
 #import <Anemone/ANEMSettingsManager.h>
 
-NSMutableDictionary *indicatorStateDict = [[[NSMutableDictionary alloc] init] retain];
+NSMutableDictionary *indicatorStateDict = [[NSMutableDictionary alloc] init];
 #define SET_INFO_(x, y)    indicatorStateDict[x] = [NSNumber numberWithInt:y]
 #define GET_INFO_(x)       [indicatorStateDict[x] intValue]
 #define SET_INFO(y)        if (self.icon && self.icon.application) SET_INFO_(self.icon.application.bundleIdentifier, y);
@@ -76,7 +76,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 
 		UILabel *badge = (UILabel*)[self viewWithTag:9962];
 		if (!badge) {
-			badge = [[[UILabel alloc] init] retain];
+			badge = [[UILabel alloc] init];
 			badge.tag = 9962;
 
 			badge.textAlignment = NSTextAlignmentCenter;
@@ -125,7 +125,6 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 			}
 
 			[self addSubview:badge];
-			[badge release];
 
 			CGPoint overhang = [%c(SBIconBadgeView) _overhang];
 			badge.frame = CGRectMake(-overhang.x, -overhang.y, bgImage.size.width, bgImage.size.height);
@@ -200,7 +199,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 }
 %end
 
-NSMutableDictionary *lsbitems = [[[NSMutableDictionary alloc] init] retain];
+NSMutableDictionary *lsbitems = [[NSMutableDictionary alloc] init];
 
 %hook SBApplication
 %new - (void)RA_addStatusBarIconForSelfIfOneDoesNotExist {

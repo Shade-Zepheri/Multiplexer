@@ -76,7 +76,7 @@ typedef struct {
   if (screenEdgePanRecognizer.state != UIGestureRecognizerStateBegan) {
     return;
   }
-  
+
   CGPoint location = MSHookIvar<CGPoint>(screenEdgePanRecognizer, "_lastTouchLocation");
 
   if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
@@ -163,7 +163,7 @@ void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEvent
 __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
 
 %ctor {
-  if (IS_IOS_OR_OLDER(iOS_8_4) || !IS_SPRINGBOARD) {
+  if (!IS_IOS_OR_NEWER(iOS_9_0) || !IS_SPRINGBOARD) {
     return;
   }
 

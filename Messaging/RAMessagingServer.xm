@@ -479,12 +479,12 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 }
 
 - (void)setKeyboardContextId:(unsigned int)id forIdentifier:(NSString*)identifier {
-	LogDebug(@"[ReachApp] got c id %d", id);
+	LogDebug(@"[ReachApp] got c id %u", id);
 	contextIds[identifier] = @(id);
 }
 
 - (unsigned int)getStoredKeyboardContextIdForApp:(NSString*)identifier {
-	return [contextIds objectForKey:identifier] ? [contextIds[identifier] unsignedIntValue] : 0;
+	return ![contextIds objectForKey:identifier] ? 0 : [contextIds[identifier] unsignedIntValue];
 }
 @end
 

@@ -10,7 +10,6 @@ TWEAK_NAME = Aura
 Aura_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
 Aura_FRAMEWORKS = UIKit CoreGraphics
 Aura_LIBRARIES = applist multiplexercore
-IconIndicator.xm_CFLAGS = -fno-objc-arc
 SpringBoard_UIAppCustomBackgroundModes.xm_CFLAGS = -fno-objc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk

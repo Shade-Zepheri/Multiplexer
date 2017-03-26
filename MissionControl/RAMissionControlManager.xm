@@ -113,7 +113,7 @@ CGRect swappedForOrientation2(CGRect in) {
 	[[%c(RAGestureManager) sharedInstance] ignoreSwipesBeginningInRect:UIScreen.mainScreen.bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
 	[[%c(RARunningAppsProvider) sharedInstance] addTarget:window];
 	[%c(RAOrientationLocker) lockOrientation];
-	if (IS_IOS_OR_OLDER(iOS_10_0)) { //Not required on 10.x, not sure about other versions
+	if (!IS_IOS_OR_NEWER(iOS_10_0)) { //Not required on 10.x, not sure about other versions
 		[[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"RAMissionControlManager"];
 	}
 	self.inhibitDismissalGesture = NO;
@@ -188,7 +188,7 @@ CGRect swappedForOrientation2(CGRect in) {
 
 		// This goes here to prevent the wallpaper from appearing black when dismissing
 		//once again not needed on 10.x but not sure of older versions
-		if (IS_IOS_OR_OLDER(iOS_10_0)) {
+		if (!IS_IOS_OR_NEWER(iOS_10_0)) {
 			[[%c(SBWallpaperController) sharedInstance] endRequiringWithReason:@"RAMissionControlManager"];
 		}
 	};
