@@ -12,7 +12,7 @@ RAKeyboardWindow *keyboardWindow;
 @implementation RASpringBoardKeyboardActivation
 + (instancetype)sharedInstance {
   SHARED_INSTANCE2(RASpringBoardKeyboardActivation,
-    [RARunningAppsProvider.sharedInstance addTarget:self]
+    [[RARunningAppsProvider sharedInstance] addTarget:self]
   );
 }
 
@@ -23,7 +23,7 @@ RAKeyboardWindow *keyboardWindow;
     //return;
   }
 
-  LogDebug(@"[ReachApp] showing kb window %@", identifier);
+  LogDebug(@"[ReachApp] showing kb window (%@)", identifier);
   keyboardWindow = [[RAKeyboardWindow alloc] init];
   overrideDisableForStatusBar = YES;
   [keyboardWindow setupForKeyboardAndShow:identifier];

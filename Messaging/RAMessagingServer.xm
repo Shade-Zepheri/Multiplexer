@@ -138,7 +138,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		BOOL success = [UIApplication.sharedApplication openURL:url];
 		return @{ @"success": @(success) };
 	} else if ([identifier isEqual:RAMessagingGetFrontMostAppInfoMessageName]) {
-		if (UIApplication.sharedApplication._accessibilityFrontMostApplication) {
+		if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
 			return nil;
 		}
 		RAWindowBar *window = [[%c(RADesktopManager) sharedInstance] lastUsedWindow];
@@ -471,11 +471,11 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 }
 
 - (void)receiveShowKeyboardForAppWithIdentifier:(NSString*)identifier {
-	[RASpringBoardKeyboardActivation.sharedInstance showKeyboardForAppWithIdentifier:identifier];
+	[[RASpringBoardKeyboardActivation sharedInstance] showKeyboardForAppWithIdentifier:identifier];
 }
 
 - (void)receiveHideKeyboard {
-	[RASpringBoardKeyboardActivation.sharedInstance hideKeyboard];
+	[[RASpringBoardKeyboardActivation sharedInstance] hideKeyboard];
 }
 
 - (void)setKeyboardContextId:(unsigned int)id forIdentifier:(NSString*)identifier {

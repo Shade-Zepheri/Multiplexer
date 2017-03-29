@@ -235,7 +235,6 @@ id SBWorkspace$sharedInstance;
 
 - (void)_disableReachabilityImmediately:(_Bool)arg1 {
   //Disable for keyboard here
-  LogDebug(@"overrideDisableForStatusBar: %d", overrideDisableForStatusBar);
   if (overrideDisableForStatusBar) {
     return;
   }

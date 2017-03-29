@@ -6,21 +6,24 @@ SwipeOver: working (replace with native slide over(?))
 Reachability: working (show NC broken in 10.x)
 GestureSupport: fixed
 Backgrounding: working
-KeyboardSupport: broken
+KeyboardSupport: semi-working
 MissionControl: working
-NCApp: working (not tested on ipad);
+NCApp: working (misaligned on ipads);
 assertiond hooks: working
-backboardd hooks: unknown
-fake phone mode: working
+backboardd hooks: working
+fake phone mode: semi working
 
 Bugs:
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch;
-- Invoking keyboard in reachapp closes view (I think reachability dismisses when using KB)
+- Invoking keyboard in reachapp closes view
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - adding items to SBAppSwitcherModel is broken (fixed now?)
 - SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
 - icons and apps do not show up in RASnapshotProvider
 - GestureSupport: LandscapeLeft is, once again, broken
+- Rotation wrong when creating windows on iPad
+- SwipeOver whacky on iPads
+- Fake phone mode freezes apps
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps
@@ -31,7 +34,6 @@ Minor Things/Bugs to note:
 
 Things to do/Features to add:
 - 3D Touch actions?
-- (Soon) split all 6 features into seperate tweaks
 - General Code Cleanup/conform to standards, feels to messy RN (at least indents are fine)
 - Convert as much as possible to ARC
 - Optimize scrollviews

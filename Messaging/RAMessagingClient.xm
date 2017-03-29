@@ -93,7 +93,7 @@ extern BOOL allowClosingReachabilityNatively;
 		return;
 	}
 
-	NSDictionary *dict = @{ @"bundleIdentifier": NSBundle.mainBundle.bundleIdentifier };
+	NSDictionary *dict = @{ @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
 	NSDictionary *data = [serverCenter sendMessageAndReceiveReplyName:RAMessagingUpdateAppInfoMessageName userInfo:dict];
 	if (data && [data objectForKey:@"data"]) {
 		RAMessageAppData actualData;
@@ -148,7 +148,7 @@ extern BOOL allowClosingReachabilityNatively;
 }
 
 - (void)notifyServerToShowKeyboard {
-	NSDictionary *dict = @{ @"bundleIdentifier": NSBundle.mainBundle.bundleIdentifier };
+	NSDictionary *dict = @{ @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
 	[serverCenter sendMessageName:RAMessagingShowKeyboardMessageName userInfo:dict];
 }
 
@@ -170,7 +170,7 @@ extern BOOL allowClosingReachabilityNatively;
 }
 
 - (void)notifySpringBoardOfFrontAppChangeToSelf {
-	NSString *ident = NSBundle.mainBundle.bundleIdentifier;
+	NSString *ident = [NSBundle mainBundle].bundleIdentifier;
 	if (!ident) {
 		return;
 	}
@@ -211,7 +211,7 @@ void reloadClientData(CFNotificationCenterRef center, void *observer, CFStringRe
 }
 
 void updateFrontmostApp(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-	RAMessagingClient.sharedInstance.knownFrontmostApp = ((__bridge NSDictionary*)userInfo)[@"bundleIdentifier"];
+	[RAMessagingClient sharedInstance].knownFrontmostApp = ((__bridge NSDictionary*)userInfo)[@"bundleIdentifier"];
 }
 
 %ctor {

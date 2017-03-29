@@ -17,7 +17,7 @@ BOOL isShowing = NO;
 }
 
 - (void)didShow:(NSNotification*)notif {
-  LogDebug(@"[ReachApp] keyboard didShow in app %@", [NSBundle mainBundle].bundleIdentifier);
+  LogDebug(@"[ReachApp] keyboard didShow");
   _visible = YES;
   _size = [[notif.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;
 
@@ -26,7 +26,6 @@ BOOL isShowing = NO;
     [RAMessagingClient.sharedInstance notifyServerOfKeyboardSizeUpdate:_size];
 
     if ([RAMessagingClient.sharedInstance shouldUseExternalKeyboard]) {
-      LogDebug(@"shouldUseExternalKeyboard");
       [RAMessagingClient.sharedInstance notifyServerToShowKeyboard];
       isShowing = YES;
     }
@@ -79,10 +78,30 @@ void externalKeyboardDidHide(CFNotificationCenterRef center, void *observer, CFS
 - (void)activate {
   %orig;
 
-  IF_NOT_SPRINGBOARD {
-    unsigned int contextID = [UITextEffectsWindow sharedTextEffectsWindow]._contextId;
-    LogDebug(@"notifyServerWithKeyboardContextId: %u", contextID);
-    [[RAMessagingClient sharedInstance] notifyServerWithKeyboardContextId:contextID];
+  void (^block)() = ^{
+    IF_NOT_SPRINGBOARD {
+      unsigned int contextID = 0;
+      if (%c(UIRemoteKeyboardWindow) && [UIKeyboard activeKeyboard] && [[UIKeyboard activeKeyboard] window]) {
+        contextID = [[[UIKeyboard activeKeyboard] window] _contextId]; // ((UITextEffectsWindow*)[%c(UIRemoteKeyboardWindow) remoteKeyboardWindowForScreen:UIScreen.mainScreen create:NO])._contextId;
+      } else {
+        contextID = UITextEffectsWindow.sharedTextEffectsWindow._contextId;
+      }
+      [RAMessagingClient.sharedInstance notifyServerWithKeyboardContextId:contextID];
+
+  #if DEBUG && NO
+      assert([[[UIKeyboard activeKeyboard] window] _contextId]);
+      assert(contextID != 0);
+      assert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
+  #endif
+
+      LogDebug(@"[ReachApp] c id %u", contextID);
+    }
+  };
+
+  if (IS_IOS_OR_NEWER(iOS_9_0)) {
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), block);
+  } else {
+    block();
   }
 }
 %end
