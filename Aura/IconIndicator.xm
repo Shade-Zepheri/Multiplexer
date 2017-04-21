@@ -1,7 +1,7 @@
 #import "RABackgrounder.h"
 #import "RASettings.h"
 #import <libstatusbar/LSStatusBarItem.h>
-#import <applist/ALApplicationList.h>
+#import <AppList/ALApplicationList.h>
 #import "ColorBadges.h"
 #import <Anemone/ANEMSettingsManager.h>
 
@@ -181,7 +181,6 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 
 - (void)layoutSubviews {
 	%orig;
-
 	//if ([self viewWithTag:9962] == nil)
 	// this is back in, again, to try to fix "Smartclose badges show randomly in the app switcher for random applications even though I only have one app smart closed"
 	//    [self RA_updateIndicatorView:GET_INFO];

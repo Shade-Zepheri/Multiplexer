@@ -112,9 +112,9 @@ BOOL locationIsInValidArea(CGFloat x) {
             [transaction begin];
 
             // Open in window
-            RAWindowBar *windowBar = [RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:topApp animated:YES];
-            if (!RADesktopManager.sharedInstance.lastUsedWindow) {
-              RADesktopManager.sharedInstance.lastUsedWindow = windowBar;
+            RAWindowBar *windowBar = [[RADesktopManager sharedInstance].currentDesktop createAppWindowForSBApplication:topApp animated:YES];
+            if (![RADesktopManager sharedInstance].lastUsedWindow) {
+              [RADesktopManager sharedInstance].lastUsedWindow = windowBar;
             }
           }];
           [(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
@@ -127,7 +127,9 @@ BOOL locationIsInValidArea(CGFloat x) {
         }];
       } else {
         appView.center = originalCenter;
-        [UIView animateWithDuration:0.2 animations:^{ appView.transform = CGAffineTransformIdentity; } completion:^(BOOL _) {
+        [UIView animateWithDuration:0.2 animations:^{
+          appView.transform = CGAffineTransformIdentity;
+        } completion:^(BOOL _) {
           [[%c(SBWallpaperController) sharedInstance] endRequiringWithReason:@"BeautifulAnimation"];
         }];
       }

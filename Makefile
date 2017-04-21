@@ -1,6 +1,6 @@
 export TARGET = iphone:9.2
 
-CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IMissionControl/ -IQuickAccess/ -IReachApp/ -ISwipeOver/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
+CFLAGS = -fvisibility=default -fvisibility-inlines-hidden -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IMissionControl/ -IQuickAccess/ -IReachApp/ -ISwipeOver/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
 CFLAGS += -fobjc-arc
 
 INSTALL_TARGET_PROCESSES = SpringBoard

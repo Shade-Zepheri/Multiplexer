@@ -147,7 +147,7 @@ id SBWorkspace$sharedInstance;
   return SBWorkspace$sharedInstance;
 }
 
-- (id)init {
+- (instancetype)init {
   SBWorkspace$sharedInstance = %orig;
   return SBWorkspace$sharedInstance;
 }

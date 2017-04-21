@@ -178,7 +178,7 @@
 	[self ignoreSwipesBeginningInRect:r forIdentifier:identifier];
 }
 
--(void) ignoreSwipesBeginningOnSide:(UIRectEdge)side belowYAxis:(NSUInteger)axis forIdentifier:(NSString*)identifier {
+- (void)ignoreSwipesBeginningOnSide:(UIRectEdge)side belowYAxis:(NSUInteger)axis forIdentifier:(NSString*)identifier {
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}

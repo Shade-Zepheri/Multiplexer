@@ -8,6 +8,6 @@
 	BOOL update;
 }
 @property (copy, nonatomic) NSString *identifier;
-@property (retain, nonatomic) CALayerHost *layerHost;
+@property (strong, nonatomic) CALayerHost *layerHost;
 - (void)connectToKeyboardWindowForApp:(NSString*)identifier;
 @end

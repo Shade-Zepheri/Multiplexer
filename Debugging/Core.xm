@@ -31,14 +31,14 @@ Class hook$objc_getClass(const char *name)
 	return cls;
 }*/
 
-%ctor
-{
-	IF_SPRINGBOARD {
+%ctor {
+	IF_NOT_SPRINGBOARD {
 
 		// Causes cycript to not function
 		//MSHookFunction((void*)objc_getClass, (void*)hook$objc_getClass, (void**)&orig$objc_getClass);
 
-		%init;
+		return;
 	}
+	%init;
 	//LogDebug(@"[ReachApp] %s", class_getImageName(orig$objc_getClass("RAMissionControlManager")));
 }

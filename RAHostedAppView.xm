@@ -80,9 +80,9 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   if (startTries > 5) {
     isPreloading = NO;
     LogDebug(@"[ReachApp] maxed out preload attempts for app %@", app.bundleIdentifier);
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Zypen"
-                           message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
-                           preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
+                      message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
+                      preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
                       handler:^(UIAlertAction * action) {}];
     [alert addAction:defaultAction];
@@ -147,7 +147,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     return;
   }
 
-  if ([UIApplication.sharedApplication._accessibilityFrontMostApplication isEqual:app]) {
+  if ([[UIApplication sharedApplication]._accessibilityFrontMostApplication isEqual:app]) {
     isForemostAppLabel = [[UILabel alloc] initWithFrame:self.bounds];
     isForemostAppLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
     isForemostAppLabel.textColor = [UIColor whiteColor];
@@ -384,10 +384,10 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   }
 }
 
-- (void)rotateToOrientation:(UIInterfaceOrientation)o {
-  _orientation = o;
+- (void)rotateToOrientation:(UIInterfaceOrientation)orientation {
+  _orientation = orientation;
 
-  [RAMessagingServer.sharedInstance rotateApp:self.bundleIdentifier toOrientation:o completion:nil];
+  [RAMessagingServer.sharedInstance rotateApp:self.bundleIdentifier toOrientation:orientation completion:nil];
 }
 
 + (void)iPad_iOS83_fixHosting {
