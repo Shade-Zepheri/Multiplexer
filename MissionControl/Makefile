@@ -1,4 +1,4 @@
-CFLAGS = -I../ -I../Theming/ -I../GestureSupport/ -I../Empoleon/ -O2
+CFLAGS = -I../ -I../Theming/ -I../GestureSupport/ -I../Empoleon/
 CFLAGS += -fobjc-arc
 TARGET = iphone:9.3
 

@@ -51,12 +51,14 @@ typedef struct {
 %end
 
 %hook SBHandMotionExtractor
-- (id)init {
-  if ((self = %orig)) {
+- (instancetype)init {
+  self = %orig;
+  if (self) {
     for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
       [recognizer setDelegate:(id<_UIScreenEdgePanRecognizerDelegate>)self];
     }
   }
+  
   return self;
 }
 

@@ -24,7 +24,6 @@
 
 %ctor {
   // We can never be too sure (im pretty sure we can)
-  dlopen("/System/Library/PrivateFrameworks/XPCObjects.framework/XPCObjects", RTLD_LAZY);
   if (IS_IOS_OR_NEWER(iOS_9_0)) {
     void *BSXPCConnectionHasEntitlement = MSFindSymbol(NULL, "_BSXPCConnectionHasEntitlement");
     %init(iOS9andUp);

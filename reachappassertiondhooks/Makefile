@@ -1,4 +1,4 @@
-CFLAGS = -fno-objc-arc -O2
+CFLAGS = -fno-objc-arc
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 

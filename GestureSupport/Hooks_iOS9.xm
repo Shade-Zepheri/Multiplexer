@@ -64,11 +64,13 @@ typedef struct {
 
 @implementation Hooks9$SBHandMotionExtractorReplacementByMultiplexer
 - (instancetype)init {
-  if (self = [super init]) {
+  self = [super init];
+  if (self) {
     for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
       [recognizer setDelegate:(id<_UIScreenEdgePanRecognizerDelegate>)self];
     }
   }
+
   return self;
 }
 
@@ -102,8 +104,8 @@ void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEvent
     if ([children count] == 1) {
       float density = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerDensity);
 
-      float x = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * UIScreen.mainScreen._referenceBounds.size.width;
-      float y = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * UIScreen.mainScreen._referenceBounds.size.height;
+      float x = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
+      float y = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
       CGPoint location = CGPointMake(x, y);
 
       UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
@@ -113,7 +115,7 @@ void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEvent
 
       if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         rotatedX = y;
-        rotatedY = UIScreen.mainScreen.bounds.size.height - x;
+        rotatedY = UIScreen.mainScreen.bounds.size.width - x;
       } else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
         rotatedX = UIScreen.mainScreen._referenceBounds.size.height - y;
         rotatedY = x;

@@ -1,4 +1,4 @@
-CFLAGS = -I../Messaging/ -O2
+CFLAGS = -I../Messaging/
 #CFLAGS += -fno-objc-arc
 
 INSTALL_TARGET_PROCESSES = SpringBoard

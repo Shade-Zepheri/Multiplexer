@@ -9,7 +9,7 @@
 int main(int argc, char **argv, char **envp) {
 	@autoreleasepool {
 		NSString *filePath = @"/var/mobile/Library/.reachapp.uiappexitsonsuspend.wantstochangerootapp";
-	  if (![NSFileManager.defaultManager fileExistsAtPath:filePath]) {
+	  if (![[NSFileManager defaultManager] fileExistsAtPath:filePath]) {
 	    LogError(@"[ReachApp] FS Daemon: plist does not exist");
 	    return 0;
 	  }
@@ -25,7 +25,7 @@ int main(int argc, char **argv, char **envp) {
 	  if (!success) {
 			LogError(@"[ReachApp] FS Daemon: error writing to plist: %@", path);
 		} else {
-			[NSFileManager.defaultManager removeItemAtPath:filePath error:nil];
+			[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 		}
 	}
 	return 0;

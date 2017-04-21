@@ -1,4 +1,4 @@
-CFLAGS = -I../ -I../Theming -O2
+CFLAGS = -I../ -I../Theming
 
 include $(THEOS)/makefiles/common.mk
 

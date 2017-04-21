@@ -1,4 +1,4 @@
-CFLAGS = -fobjc-arc -I../ -I../Aura/ -I../Theming/ -I../QuickAccess -Wno-deprecated-declarations -O2
+CFLAGS = -fobjc-arc -I../ -I../Aura/ -I../Theming/ -I../QuickAccess -Wno-deprecated-declarations
 LDFLAGS = -F$(THEOS)/frameworks
 
 include $(THEOS)/makefiles/common.mk

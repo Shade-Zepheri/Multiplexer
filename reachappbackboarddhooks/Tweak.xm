@@ -1,6 +1,5 @@
 #import <IOKit/hid/IOHIDEventSystem.h>
 #import <IOKit/IOKitLib.h>
-#import <substrate.h>
 #import "RAMessaging.h"
 #import <AppSupport/CPDistributedMessagingCenter.h>
 #import <rocketbootstrap/rocketbootstrap.h>

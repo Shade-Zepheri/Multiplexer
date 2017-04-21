@@ -257,7 +257,7 @@
 
     NSString *msg = [NSString stringWithFormat:@"\n\n%@ %@\nModel: %@\n", [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion, sysInfo];
     [mailViewController setMessageBody:msg isHTML:NO];
-    [mailViewController setToRecipients:@[@"elijahandandrew@gmail.com"]];
+    [mailViewController setToRecipients:@[@"ziroalpha@gmail.com"]];
 
     [self.rootController presentViewController:mailViewController animated:YES completion:nil];
   }
