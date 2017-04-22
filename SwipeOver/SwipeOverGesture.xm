@@ -20,25 +20,26 @@ CGRect adjustFrameForRotation() {
   CGFloat portraitWidth = 30;
   CGFloat portraitHeight = 50;
 
-  CGFloat width = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width;
-  CGFloat height = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height;
+  CGFloat width = CGRectGetWidth([UIScreen mainScreen].RA_interfaceOrientedBounds);
+  CGFloat height = CGRectGetHeight([UIScreen mainScreen].RA_interfaceOrientedBounds);
 
   switch ([[UIApplication.sharedApplication _accessibilityFrontMostApplication] statusBarOrientation]) {
     case UIInterfaceOrientationPortrait: {
       LogDebug(@"[ReachApp] portrait");
-      return (CGRect){ { width - portraitWidth + 5, (height - portraitHeight) / 2 }, { portraitWidth, portraitHeight } };
+      return CGRectMake(width - portraitWidth + 5, (height - portraitHeight) / 2, portraitWidth, portraitHeight);
+
     }
     case UIInterfaceOrientationPortraitUpsideDown: {
       LogDebug(@"[ReachApp] portrait upside down");
-      return (CGRect){ { 0, 0}, { 50, 50 } };
+      return CGRectMake(0, 0, 50, 50);
     }
     case UIInterfaceOrientationLandscapeLeft: {
       LogDebug(@"[ReachApp] landscape left");
-      return (CGRect){ { ((width - portraitWidth) / 2), -(portraitWidth / 2) }, { portraitWidth, portraitHeight } };
+      return CGRectMake((width - portraitWidth) / 2, -(portraitWidth / 2), portraitWidth, portraitHeight);
     }
     case UIInterfaceOrientationLandscapeRight: {
       LogDebug(@"[ReachApp] landscape right");
-      return (CGRect){ { (height - portraitHeight) / 2, width - portraitWidth - 5 }, { portraitWidth, portraitHeight } };
+      return CGRectMake((height - portraitHeight / 2), width - portraitWidth - 5, portraitWidth, portraitHeight);
     }
   }
   return CGRectZero;
@@ -50,13 +51,13 @@ CGPoint adjustCenterForOffscreenSlide(CGPoint center) {
 
   switch ([[UIApplication.sharedApplication _accessibilityFrontMostApplication] statusBarOrientation]) {
     case UIInterfaceOrientationPortrait:
-      return (CGPoint) { center.x + portraitWidth, center.y };
+      return CGPointMake(center.x + portraitWidth, center.y);
     case UIInterfaceOrientationPortraitUpsideDown:
-      return (CGPoint) { center.x - portraitWidth, center.y };
+      return CGPointMake(center.x - portraitWidth, center.y);
     case UIInterfaceOrientationLandscapeLeft:
-      return (CGPoint) { center.x, center.y - portraitWidth };
+      return CGPointMake(center.x, center.y - portraitWidth);
     case UIInterfaceOrientationLandscapeRight:
-      return (CGPoint) { center.x, center.y + portraitWidth };
+      return CGPointMake(center.x, center.y + portraitWidth);
   }
   return CGPointZero;
 }
