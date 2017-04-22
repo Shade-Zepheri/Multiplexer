@@ -107,7 +107,7 @@
 %hook FBSceneManager
 - (void)_noteSceneMovedToForeground:(FBScene*)arg1 {
   if ([arg1.clientProcess isKindOfClass:[%c(FBApplicationProcess) class]]) {
-    [RABackgrounder.sharedInstance removeTemporaryOverrideForIdentifier:arg1.identifier];
+    [[RABackgrounder sharedInstance] removeTemporaryOverrideForIdentifier:arg1.identifier];
   }
 
   %orig;

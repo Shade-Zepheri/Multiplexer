@@ -142,7 +142,7 @@ extern int rotationDegsForOrientation(int o);
 	}
 	view.shouldUseExternalKeyboard = YES;
 	view.allowHidingStatusBar = NO;
-	view.frame = UIScreen.mainScreen._referenceBounds;
+	view.frame = [UIScreen mainScreen]._referenceBounds;
 	view.showSplashscreenInsteadOfSpinner = YES;
 	view.renderWallpaper = YES;
 	[view rotateToOrientation:UIInterfaceOrientationPortrait];

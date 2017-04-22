@@ -490,7 +490,7 @@ typedef struct {
 @end
 
 @interface SBWallpaperController
-@property (nonatomic,retain) SBFStaticWallpaperView *homescreenWallpaperView; 
+@property (nonatomic,retain) SBFStaticWallpaperView *homescreenWallpaperView;
 @property (nonatomic,retain) SBFStaticWallpaperView *sharedWallpaperView;
 +(id) sharedInstance;
 -(void) beginRequiringWithReason:(NSString*)reason;
@@ -812,6 +812,9 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBMainWorkspace : SBWorkspace // replaces SBWorkspace on iOS 9
++ (instancetype)_instanceIfExists;
++ (instancetype)_sharedInstanceWithNilCheckPolicy:(long long)arg1 ;
++ (instancetype)sharedInstance;
 @end
 
 @interface SBDisplayLayout : NSObject {

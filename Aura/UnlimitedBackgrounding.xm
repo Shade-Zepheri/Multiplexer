@@ -10,8 +10,9 @@ BKSProcessAssertion *keepAlive$temp;
   if ([RABackgrounder.sharedInstance hasUnlimitedBackgroundTime:arg1.identifier] && arg2.backgrounded && ![processAssertions objectForKey:arg1.identifier]) {
     SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:arg1.identifier];
 
-    keepAlive$temp = [[%c(BKSProcessAssertion) alloc] initWithPID:[app pid] flags:(BKSProcessAssertionFlagPreventSuspend | BKSProcessAssertionFlagAllowIdleSleep | BKSProcessAssertionFlagPreventThrottleDownCPU | BKSProcessAssertionFlagWantsForegroundResourcePriority) reason:BKSProcessAssertionReasonBackgroundUI name:@"reachapp" withHandler:^{
-      LogInfo(@"ReachApp: %d kept alive: %@", [app pid], [keepAlive$temp valid] ? @"TRUE" : @"FALSE");
+    ProcessAssertionFlags flags = BKSProcessAssertionFlagPreventSuspend | BKSProcessAssertionFlagAllowIdleSleep | BKSProcessAssertionFlagPreventThrottleDownCPU | BKSProcessAssertionFlagWantsForegroundResourcePriority;
+    keepAlive$temp = [[%c(BKSProcessAssertion) alloc] initWithPID:app.pid flags:flags reason:BKSProcessAssertionReasonBackgroundUI name:@"reachapp" withHandler:^{
+      LogInfo(@"ReachApp: %d kept alive: %@", app.pid, keepAlive$temp.valid ? @"TRUE" : @"FALSE");
       if (keepAlive$temp.valid) {
         processAssertions[arg1.identifier] = keepAlive$temp;
       }
@@ -25,7 +26,7 @@ BKSProcessAssertion *keepAlive$temp;
 + (void)load;
 @end
 
-RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundingAppWatcher;
+static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundingAppWatcher;
 
 @implementation RAUnlimitedBackgroundingAppWatcher
 + (void)load {

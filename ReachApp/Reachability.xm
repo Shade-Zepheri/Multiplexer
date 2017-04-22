@@ -658,6 +658,7 @@ CGFloat startingY = -1;
   [RAMessagingServer.sharedInstance forceStatusBarVisibility:YES forApp:app.bundleIdentifier completion:nil];
 
   if (![app pid] || ![app mainScene]) {
+    LogWarn(@"No pid or mainScene; trying again");
     overrideDisableForStatusBar = YES;
     [UIApplication.sharedApplication launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:bundleIdentifier];

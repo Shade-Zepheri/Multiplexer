@@ -172,7 +172,7 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
   @autoreleasepool {
     clientCreatePointer clientCreate;
     void *handle = dlopen(0, 9);
-    *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
+    *(void**)(&clientCreate) = dlsym(handle, "IOHIDEventSystemClientCreate");
     IOHIDEventSystemClientRef ioHIDEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
     IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
