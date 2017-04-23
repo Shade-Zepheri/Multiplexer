@@ -35,7 +35,7 @@ BOOL locationIsInValidArea(CGFloat x) {
   __block CGFloat lastY = 0;
   __block CGPoint originalCenter;
   [[RAGestureManager sharedInstance] addGestureRecognizer:^RAGestureCallbackResult(UIGestureRecognizerState state, CGPoint location, CGPoint velocity) {
-    SBApplication *topApp = [[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+    SBApplication *topApp = [UIApplication sharedApplication]._accessibilityFrontMostApplication;
 
     // Dismiss potential CC
     //[[%c(SBUIController) sharedInstance] _showControlCenterGestureEndedWithLocation:CGPointMake(0, UIScreen.mainScreen.bounds.size.height - 1) velocity:CGPointZero];

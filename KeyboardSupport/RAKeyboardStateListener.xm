@@ -65,11 +65,11 @@ BOOL isShowing = NO;
 }
 @end
 
-void externalKeyboardDidShow(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static inline void externalKeyboardDidShow(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   [RAKeyboardStateListener.sharedInstance _setVisible:YES];
 }
 
-void externalKeyboardDidHide(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   //LogDebug(@"[ReachApp] externalKeyboardDidHide");
   [RAKeyboardStateListener.sharedInstance _setVisible:NO];
 }

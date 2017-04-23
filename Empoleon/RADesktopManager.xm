@@ -179,15 +179,15 @@ BOOL overrideUIWindow = NO;
 */
 
 %hook SpringBoard
--(void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2
-{
+-(void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 {
 	%orig;
 	[RADesktopManager.sharedInstance updateRotationOnClients:arg1];
 }
 %end
 
-%ctor
-{
-	IF_SPRINGBOARD
-		%init;
+%ctor {
+	IF_NOT_SPRINGBOARD {
+		return;
+	}
+	%init;
 }

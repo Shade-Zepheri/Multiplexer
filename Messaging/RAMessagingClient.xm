@@ -206,11 +206,11 @@ extern BOOL allowClosingReachabilityNatively;
 }
 @end
 
-void reloadClientData(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static inline void reloadClientData(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 	[[RAMessagingClient sharedInstance] requestUpdateFromServer];
 }
 
-void updateFrontmostApp(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static inline void updateFrontmostApp(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
 	[RAMessagingClient sharedInstance].knownFrontmostApp = ((__bridge NSDictionary*)userInfo)[@"bundleIdentifier"];
 }
 

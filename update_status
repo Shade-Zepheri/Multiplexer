@@ -24,12 +24,14 @@ Bugs:
 - SwipeOver whacky on iPads
 - Fake phone mode freezes apps
 - Aura breaks calls?
+- Messages crashes due to UIKit hook
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps
 - (some of these are leftover from the original release lol: eg MC lag)
 - Some say it causes serious lag (probably because logs werent disabled/due to MC)?
 - Startup bug still isnt fixed (apparently caused by gesture support?)
+- Fix SwipeOver
 
 Things to do/Features to add:
 - 3D Touch actions?

@@ -235,7 +235,7 @@ BOOL allowClosingReachabilityNatively = NO;
 }
 %end
 
-void reloadSettings(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static inline void reloadSettings(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   [RASettings.sharedInstance reloadSettings];
 }
 
