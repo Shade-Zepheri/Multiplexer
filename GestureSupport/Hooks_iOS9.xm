@@ -115,7 +115,7 @@ void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEvent
 
       if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         rotatedX = y;
-        rotatedY = UIScreen.mainScreen.bounds.size.width - x;
+        rotatedY = UIScreen.mainScreen._referenceBounds.size.width - x;
       } else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
         rotatedX = UIScreen.mainScreen._referenceBounds.size.height - y;
         rotatedY = x;
@@ -185,7 +185,7 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
     for (int i = 0; i < edgeCount; i++) {
       _UIScreenEdgePanRecognizer *recognizer = [[_UIScreenEdgePanRecognizer alloc] initWithType:2];
       recognizer.targetEdges = edgesToWatch[i];
-      recognizer.screenBounds = UIScreen.mainScreen._referenceBounds;
+      recognizer.screenBounds = [UIScreen mainScreen]._referenceBounds;
       [gestureRecognizers addObject:recognizer];
     }
 

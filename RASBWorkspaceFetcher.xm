@@ -3,7 +3,7 @@
 
 // IMPORTANT: DO NOT IMPORT HEADERS.H
 // REASON: HEADERS.H IMPORTS THIS FILE
-// Cant we just use a version check?
+// Cant we just use a version check? (this seems terrible inefficient)
 
 @interface __SBWorkspace__class_impl_dummy : NSObject
 + (id)sharedInstance;

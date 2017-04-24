@@ -7,7 +7,7 @@
 #if DEBUG
 	LogInfo(@"[ReachApp][DRM] Not checking statistics on debug build");
 #else
-	dispatch_async(dispatch_get_main_queue(), ^(void){
+	dispatch_async(dispatch_get_main_queue(), ^{
 		NSString *statsPath = @"/var/mobile/Library/Preferences/.multiplexer.stats_checked";
 		if (![NSFileManager.defaultManager fileExistsAtPath:statsPath]) {
 		  CFStringRef (*$MGCopyAnswer)(CFStringRef);

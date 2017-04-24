@@ -14,7 +14,7 @@
 extern int rotationDegsForOrientation(int o);
 
 //#define SCREEN_WIDTH (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation) ? UIScreen.mainScreen.bounds.size.height : UIScreen.mainScreen.bounds.size.width)
-#define SCREEN_WIDTH (UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width)
+#define SCREEN_WIDTH CGRectGetWidth([UIScreen mainScreen].RA_interfaceOrientedBounds)
 
 @interface RASwipeOverManager () {
 	RASwipeOverOverlay *overlayWindow;
@@ -166,7 +166,7 @@ extern int rotationDegsForOrientation(int o);
 
 		CGFloat scale = 0.1; // MIN(MAX(scale, 0.1), 0.98);
 		view.transform = CGAffineTransformMakeScale(scale, scale);
-		view.center = (CGPoint) { SCREEN_WIDTH - (view.frame.size.width / 2), view.center.y };
+		view.center = CGPointMake(SCREEN_WIDTH - (view.frame.size.width / 2), view.center.y);
 	}
 
 	view.tag = RASWIPEOVER_VIEW_TAG;

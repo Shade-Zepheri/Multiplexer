@@ -121,7 +121,7 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
         grabberView.transform = adjustTransformRotation();
         //[UIWindow.keyWindow addSubview:grabberView]; // The desktop view most likely
-        [[[%c(RAHostManager) systemHostViewForApplication:UIApplication.sharedApplication._accessibilityFrontMostApplication] superview] addSubview:grabberView];
+        [[[%c(RAHostManager) systemHostViewForApplication:[UIApplication sharedApplication]._accessibilityFrontMostApplication] superview] addSubview:grabberView];
 
         static void (^dismisser)() = ^{ // top kek, needs "static" so it's not a local, self-retaining block
           if ([[NSDate date] timeIntervalSinceDate:lastTouch] > 2) {

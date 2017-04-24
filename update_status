@@ -20,11 +20,12 @@ Bugs:
 - adding items to SBAppSwitcherModel is broken (fixed now?)
 - SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
 - icons and apps do not show up in RASnapshotProvider
-- Rotation wrong when creating windows on iPad
 - SwipeOver whacky on iPads
 - Fake phone mode freezes apps
 - Aura breaks calls?
 - Messages crashes due to UIKit hook
+- Windows dont rotate with device
+- Causes crash with QRC
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps
@@ -42,3 +43,4 @@ Things to do/Features to add:
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?
+(_referenceBounds orientation independent, bounds changes with orientation)
