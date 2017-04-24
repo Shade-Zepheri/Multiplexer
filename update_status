@@ -25,7 +25,6 @@ Bugs:
 - Aura breaks calls?
 - Messages crashes due to UIKit hook
 - Windows dont rotate with device
-- Causes crash with QRC
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps

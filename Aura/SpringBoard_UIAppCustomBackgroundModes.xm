@@ -23,7 +23,8 @@
 - (instancetype)initWithPID:(NSInteger)arg1 flags:(NSUInteger)arg2 reason:(NSUInteger)arg3 name:(NSString *)arg4 withHandler:(unsafe_id)arg5 {
 	if (arg3 != BKSProcessAssertionReasonViewServices && // whitelist this to allow share menu to work
 	    ![arg4 isEqualToString:@"Called by iOS6_iCleaner, from unknown method"] && // whitelist iCleaner to prevent crash on open
-	    ![arg4 isEqualToString:@"Called by Filza_main, from -[AppDelegate applicationDidEnterBackground:]"]) // Whitelist filza to prevent iOS hang (?!) Not sure if the springboard hack is still required
+	    ![arg4 isEqualToString:@"Called by Filza_main, from -[AppDelegate applicationDidEnterBackground:]"] && // Whitelist filza to prevent iOS hang (?!) Not sure if the springboard hack is still required
+			![arg4 isEqualToString:@"MobileSMS"])	//Create whitelist for QRC as it inserts a BKSProcessAssertion into a NSMutableDictionary 
 	{
 		NSString *identifier = [NSBundle mainBundle].bundleIdentifier;
 
@@ -31,7 +32,7 @@
 			goto ORIGINAL;
 		}
 
-		//LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", arg1, arg2, arg3, arg4, arg5, identifier);
+		LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", arg1, arg2, arg3, arg4, arg5, identifier);
 
 		if ([RABackgrounder.sharedInstance shouldSuspendImmediately:identifier]) {
 		  if ((arg3 >= BKSProcessAssertionReasonAudio && arg3 <= BKSProcessAssertionReasonVOiP)) { // In most cases arg3 == 4 (finish task)
