@@ -3,6 +3,13 @@
 
 @class RADesktopWindow;
 
+typedef NS_ENUM(NSInteger, RAWindowBarButtonType) {
+	RAWindowBarButtonTypeClose,
+	RAWindowBarButtonTypeMinimize,
+	RAWindowBarButtonTypeMaximize,
+	RAWindowBarButtonTypeRotationLock,
+};
+
 @interface RAWindowBar : UIView <UIGestureRecognizerDelegate> {
 	RAHostedAppView *attachedView;
 }

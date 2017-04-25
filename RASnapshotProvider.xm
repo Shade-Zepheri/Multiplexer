@@ -183,7 +183,7 @@
 		UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, 0);
 		CGContextRef context = UIGraphicsGetCurrentContext();
 
-		[[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"BeautifulAnimation"];
+		//[[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"BeautifulAnimation"];
 
 		ON_MAIN_THREAD(^{
 			[[%c(SBUIController) sharedInstance] restoreContentAndUnscatterIconsAnimated:NO];
@@ -237,7 +237,7 @@
 		UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 		image = [self rotateImageToMatchOrientation:image];
-		[[%c(SBWallpaperController) sharedInstance] endRequiringWithReason:@"BeautifulAnimation"];
+		//[[%c(SBWallpaperController) sharedInstance] endRequiringWithReason:@"BeautifulAnimation"];
 		return image;
 	}
 }

@@ -29,7 +29,7 @@ Bugs:
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps
 - (some of these are leftover from the original release lol: eg MC lag)
-- Some say it causes serious lag (probably because logs werent disabled/due to MC)?
+- Some say it causes serious lag (due to MC)
 - Improve SwipeOver
 
 Things to do/Features to add:

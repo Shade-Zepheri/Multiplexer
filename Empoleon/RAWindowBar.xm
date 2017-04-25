@@ -13,7 +13,7 @@
 @interface RAWindowBarIconInfo : NSObject
 @property (nonatomic) NSInteger alignment;
 @property (nonatomic) NSInteger priority;
-@property (nonatomic, retain) id item;
+@property (assign, nonatomic) RAWindowBarButtonType item;
 @end
 @implementation RAWindowBarIconInfo
 @end
@@ -129,12 +129,6 @@ extern BOOL allowOpenApp;
 		*/
 
 		// This is terribly inefficient.... plz send help
-
-		static id closeItemIdentifier = [[NSObject alloc] init],
-		maxItemIdentifier = [[NSObject alloc] init],
-		minItemIdentifier = [[NSObject alloc] init],
-		rotationItemIdentifier = [[NSObject alloc] init];
-
 		NSMutableArray *infos = [NSMutableArray array];
 
 		NSInteger closeAlignment = THEMED(windowedMultitaskingCloseButtonAlignment);
@@ -150,25 +144,25 @@ extern BOOL allowOpenApp;
 		RAWindowBarIconInfo *tmpItem = [[RAWindowBarIconInfo alloc] init];
 		tmpItem.alignment = closeAlignment;
 		tmpItem.priority = closePriority;
-		tmpItem.item = closeItemIdentifier;
+		tmpItem.item = RAWindowBarButtonTypeClose;
 		[infos addObject:tmpItem];
 
 		tmpItem = [[RAWindowBarIconInfo alloc] init];
 		tmpItem.alignment = maxAlignment;
 		tmpItem.priority = maxPriority;
-		tmpItem.item = maxItemIdentifier;
+		tmpItem.item = RAWindowBarButtonTypeMaximize;
 		[infos addObject:tmpItem];
 
 		tmpItem = [[RAWindowBarIconInfo alloc] init];
 		tmpItem.alignment = minAlignment;
 		tmpItem.priority = minPriority;
-		tmpItem.item = minItemIdentifier;
+		tmpItem.item = RAWindowBarButtonTypeMinimize;
 		[infos addObject:tmpItem];
 
 		tmpItem = [[RAWindowBarIconInfo alloc] init];
 		tmpItem.alignment = rotationAlignment;
 		tmpItem.priority = rotationPriority;
-		tmpItem.item = rotationItemIdentifier;
+		tmpItem.item = RAWindowBarButtonTypeRotationLock;
 		[infos addObject:tmpItem];
 
 		NSMutableArray *leftIconOrder = [NSMutableArray array];
@@ -256,14 +250,19 @@ extern BOOL allowOpenApp;
 
 		for (RAWindowBarIconInfo *item in leftIconOrder) {
 			UIButton *button = nil;
-			if (item.item == closeItemIdentifier) {
-				button = createCloseButton();
-			} else if (item.item == maxItemIdentifier) {
-				button = createMaxButton();
-			} else if (item.item == minItemIdentifier) {
-				button = createMinButton();
-			} else if (item.item == rotationItemIdentifier) {
-				button = createRotationButton();
+			switch (item.item) {
+				case RAWindowBarButtonTypeClose:
+					button = createCloseButton();
+					break;
+				case RAWindowBarButtonTypeMaximize:
+					button = createMaxButton();
+					break;
+				case RAWindowBarButtonTypeMinimize:
+					button = createMinButton();
+					break;
+				case RAWindowBarButtonTypeRotationLock:
+					button = createRotationButton();
+					break;
 			}
 
 			if (button) {
@@ -274,14 +273,19 @@ extern BOOL allowOpenApp;
 
 		for (RAWindowBarIconInfo *item in rightIconOrder) {
 			UIButton *button = nil;
-			if (item.item == closeItemIdentifier) {
-				button = createCloseButton();
-			} else if (item.item == maxItemIdentifier) {
-				button = createMaxButton();
-			} else if (item.item == minItemIdentifier) {
-				button = createMinButton();
-			} else if (item.item == rotationItemIdentifier) {
-				button = createRotationButton();
+			switch (item.item) {
+				case RAWindowBarButtonTypeClose:
+					button = createCloseButton();
+					break;
+				case RAWindowBarButtonTypeMaximize:
+					button = createMaxButton();
+					break;
+				case RAWindowBarButtonTypeMinimize:
+					button = createMinButton();
+					break;
+				case RAWindowBarButtonTypeRotationLock:
+					button = createRotationButton();
+					break;
 			}
 
 			if (button) {
