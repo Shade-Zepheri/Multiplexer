@@ -25,8 +25,6 @@ Bugs:
 - Aura breaks calls? (Some say it fixes itself)
 - Messages crashes due to UIKit hook
 - Windows dont rotate with device
-- Startup bug still isnt fixed (for some reason the runloop triggers the callback very early in the respring that results in a crash due to SpringBoard not being fully loaded.)
-  Fix: Either do a check in the callback or create the callback once SB is loaded
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps

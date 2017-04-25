@@ -159,6 +159,19 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
   }
 }
 
+%hook SpringBoard
+- (void)applicationDidFinishLaunching:(UIApplication *)application {
+  %orig;
+
+  clientCreatePointer clientCreate;
+  void *handle = dlopen(0, 9);
+  *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
+  IOHIDEventSystemClientRef ioHIDEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
+  IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
+  IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
+}
+%end
+
 __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
 
 %ctor {
@@ -167,13 +180,6 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
   }
 
   @autoreleasepool {
-    clientCreatePointer clientCreate;
-    void *handle = dlopen(0, 9);
-    *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
-    IOHIDEventSystemClientRef ioHIDEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
-    IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
-    IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
-
     class_addProtocol(%c(Hooks9$SBHandMotionExtractorReplacementByMultiplexer), @protocol(_UIScreenEdgePanRecognizerDelegate));
 
     UIRectEdge edgesToWatch[] = { UIRectEdgeBottom, UIRectEdgeLeft, UIRectEdgeRight, UIRectEdgeTop };
