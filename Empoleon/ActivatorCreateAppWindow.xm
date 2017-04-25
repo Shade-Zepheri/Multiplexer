@@ -14,7 +14,7 @@ static RAActivatorCreateWindowListener *sharedInstance$RAActivatorCreateWindowLi
 
 @implementation RAActivatorCreateWindowListener
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)levent {
-  SBApplication *topApp = [[UIApplication sharedApplication] _accessibilityFrontMostApplication];
+  SBApplication *topApp = [UIApplication sharedApplication]._accessibilityFrontMostApplication;
   RAIconIndicatorViewInfo indicatorInfo = [[%c(RABackgrounder) sharedInstance] allAggregatedIndicatorInfoForIdentifier:topApp.bundleIdentifier];
 
   // Close app

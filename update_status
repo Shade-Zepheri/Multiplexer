@@ -22,16 +22,17 @@ Bugs:
 - icons and apps do not show up in RASnapshotProvider
 - SwipeOver whacky on iPads
 - Fake phone mode freezes apps
-- Aura breaks calls?
+- Aura breaks calls? (Some say it fixes itself)
 - Messages crashes due to UIKit hook
 - Windows dont rotate with device
+- Startup bug still isnt fixed (for some reason the runloop triggers the callback very early in the respring that results in a crash due to SpringBoard not being fully loaded.)
+  Fix: Either do a check in the callback or create the callback once SB is loaded
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps
 - (some of these are leftover from the original release lol: eg MC lag)
 - Some say it causes serious lag (probably because logs werent disabled/due to MC)?
-- Startup bug still isnt fixed (apparently caused by gesture support?)
-- Fix SwipeOver
+- Improve SwipeOver
 
 Things to do/Features to add:
 - 3D Touch actions?

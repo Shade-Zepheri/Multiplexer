@@ -82,7 +82,7 @@
 }
 
 - (BOOL)isShowingAppSelector {
-	return [[self currentView] isKindOfClass:[%c(RAAppSelectorView) class]];
+	return [self.currentView isKindOfClass:[%c(RAAppSelectorView) class]];
 }
 
 - (void)darkenerViewTap:(UITapGestureRecognizer*)gesture {
@@ -110,7 +110,7 @@
 
 - (void)appSelector:(RAAppSelectorView*)view appWasSelected:(NSString*)bundleIdentifier {
 	grabberView.alpha = 1;
-	[[self currentView] removeFromSuperview];
+	[self.currentView removeFromSuperview];
 	[RASwipeOverManager.sharedInstance showApp:bundleIdentifier];
 }
 

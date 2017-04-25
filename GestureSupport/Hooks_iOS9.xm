@@ -8,10 +8,7 @@
 #include <stdio.h>
 #include <dlfcn.h>
 
-int IOHIDEventSystemClientSetMatching(IOHIDEventSystemClientRef client, CFDictionaryRef match);
-CFArrayRef IOHIDEventSystemClientCopyServices(IOHIDEventSystemClientRef, int);
 typedef struct __IOHIDServiceClient * IOHIDServiceClientRef;
-int IOHIDServiceClientSetProperty(IOHIDServiceClientRef, CFStringRef, CFNumberRef);
 typedef void* (*clientCreatePointer)(const CFAllocatorRef);
 extern "C" void BKSHIDServicesCancelTouchesOnMainDisplay();
 
@@ -98,7 +95,7 @@ typedef struct {
 }
 @end
 
-void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEventRef event) {
+void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEventRef event) {
   if (IOHIDEventGetType(event) == kIOHIDEventTypeDigitizer) {
     NSArray *children = (__bridge NSArray *)IOHIDEventGetChildren(event);
     if ([children count] == 1) {
@@ -172,7 +169,7 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
   @autoreleasepool {
     clientCreatePointer clientCreate;
     void *handle = dlopen(0, 9);
-    *(void**)(&clientCreate) = dlsym(handle, "IOHIDEventSystemClientCreate");
+    *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
     IOHIDEventSystemClientRef ioHIDEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
     IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
     IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
