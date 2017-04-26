@@ -163,8 +163,7 @@ return sharedInstance;
 - (id)initWithFrame:(struct CGRect)arg1;
 @end
 
-@interface SBOrientationLockManager : NSObject
-{
+@interface SBOrientationLockManager : NSObject {
     NSMutableSet *_lockOverrideReasons;
     long long _userLockedOrientation;
 }
@@ -337,6 +336,7 @@ return sharedInstance;
 @end
 
 @interface SBAppSwitcherSnapshotView : UIView
++ (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(long long)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
 - (void)setOrientation:(long long)arg1 orientationBehavior:(int)arg2;
 - (void)_loadSnapshotAsync;
 - (void)_loadZoomUpSnapshotSync;

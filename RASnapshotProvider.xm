@@ -19,6 +19,7 @@
 		[targetQueue waitUntilAllOperationsAreFinished];
 		return result;
 	}*/
+	//TODO: Needs optimization
 	@autoreleasepool {
 		if ([imageCache objectForKey:identifier]) {
 			return [imageCache objectForKey:identifier];
@@ -34,8 +35,7 @@
 				view = [[[%c(SBUIController) sharedInstance] switcherController] performSelector:@selector(_snapshotViewForDisplayItem:) withObject:item];
 				[view setOrientation:orientation orientationBehavior:0];
 			} else {
-				SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
-				view = [[%c(SBAppSwitcherSnapshotView) alloc] initWithDisplayItem:item application:app orientation:orientation preferringDownscaledSnapshot:NO async:NO withQueue:nil];
+				view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:NO withQueue:nil];
 			}
 		});
 
@@ -51,6 +51,7 @@
 		}
 
 		if (!image) {
+			LogWarn(@"no image, trying something else");
 			SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
 
 			if (app && app.mainSceneID) {
@@ -62,7 +63,7 @@
 						UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, 0);
 
 						ON_MAIN_THREAD(^{
-							[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:YES];
+							[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
 						});
 
 						image = UIGraphicsGetImageFromCurrentImageContext();
@@ -102,7 +103,7 @@
 - (void)storeSnapshotOfMissionControl:(UIWindow*)window {
 	UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0);
 
-	[window drawViewHierarchyInRect:window.bounds afterScreenUpdates:YES];
+	[window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO];
 
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
@@ -183,8 +184,6 @@
 		UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, 0);
 		CGContextRef context = UIGraphicsGetCurrentContext();
 
-		//[[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"BeautifulAnimation"];
-
 		ON_MAIN_THREAD(^{
 			[[%c(SBUIController) sharedInstance] restoreContentAndUnscatterIconsAnimated:NO];
 		//});
@@ -237,7 +236,6 @@
 		UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
 		image = [self rotateImageToMatchOrientation:image];
-		//[[%c(SBWallpaperController) sharedInstance] endRequiringWithReason:@"BeautifulAnimation"];
 		return image;
 	}
 }
