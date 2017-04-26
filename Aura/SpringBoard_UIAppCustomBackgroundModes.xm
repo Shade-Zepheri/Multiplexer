@@ -36,20 +36,8 @@
 
 	if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:identifier]) {
 	  if ((arg3 >= BKSProcessAssertionReasonAudio && arg3 <= BKSProcessAssertionReasonVOiP)) { // In most cases arg3 == 4 (finish task)
-	    //NSLog(@"[ReachApp] blocking BKSProcessAssertion");
-
-	    //if (arg5)
-	    //{
-	        //void (^arg5fix)() = arg5;
-	        //arg5fix();
-	        // ^^ causes crashes with share menu
-	    //}
 	    return nil;
 	  }
-	  //else if (arg3 == kProcessAssertionReasonActivation)
-	  //{
-	  //    arg2 = ProcessAssertionFlagAllowIdleSleep;
-	  //}
 	}
 
 ORIGINAL:

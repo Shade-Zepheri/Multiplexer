@@ -335,17 +335,21 @@ return sharedInstance;
 - (long long)terminationReason;
 @end
 
+@class _SBAppSwitcherSnapshotContext;
+
 @interface SBAppSwitcherSnapshotView : UIView
+@property (assign,nonatomic) BOOL shouldTransitionToDefaultPng; 
 + (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(long long)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
 - (void)setOrientation:(long long)arg1 orientationBehavior:(int)arg2;
 - (void)_loadSnapshotAsync;
 - (void)_loadZoomUpSnapshotSync;
 - (void)_loadSnapshotSync;
-- (id)initWithDisplayItem:(id)arg1 application:(id)arg2 orientation:(long long)arg3 preferringDownscaledSnapshot:(_Bool)arg4 async:(_Bool)arg5 withQueue:(id)arg6;
+- (UIImage*)_syncImageFromSnapshot:(id)arg1 ;
+- (instancetype)initWithDisplayItem:(id)arg1 application:(id)arg2 orientation:(long long)arg3 preferringDownscaledSnapshot:(_Bool)arg4 async:(_Bool)arg5 withQueue:(id)arg6;
+- (_SBAppSwitcherSnapshotContext*)_contextForAvailableSnapshotWithLayoutState:(id)arg1 preferringDownscaled:(BOOL)arg2 defaultImageOnly:(BOOL)arg3 ;
 @end
 
-@interface _SBFVibrantSettings : NSObject
-{
+@interface _SBFVibrantSettings : NSObject {
     int _style;
     UIColor *_referenceColor;
     id _legibilitySettings; // _UILegibilitySettings *_legibilitySettings;
@@ -1477,14 +1481,11 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (UIImage *)image;
 @end
 
-@interface _SBAppSwitcherSnapshotContext : NSObject {
-  SBSwitcherSnapshotImageView* _snapshotImageView;
-}
-@property (nonatomic,retain) SBSwitcherSnapshotImageView * snapshotImageView;              //@synthesize snapshotImageView=_snapshotImageView - In the implementation block
-- (SBSwitcherSnapshotImageView *)snapshotImageView;
-- (void)setSnapshotImageView:(SBSwitcherSnapshotImageView *)arg1 ;
-- (CGRect)snapshotReferenceFrame;
-- (void)setSnapshotReferenceFrame:(CGRect)arg1 ;
+@interface XBApplicationSnapshot : NSObject
+@end
+
+@interface _SBAppSwitcherSnapshotContext : NSObject
+@property (nonatomic,retain) XBApplicationSnapshot * snapshot;
 @end
 
 @interface SBMainSwitcherViewController : UIViewController

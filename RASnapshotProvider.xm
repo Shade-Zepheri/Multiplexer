@@ -44,9 +44,10 @@
 				[view performSelectorOnMainThread:@selector(_loadSnapshotSync) withObject:nil waitUntilDone:YES];
 				image = MSHookIvar<UIImageView*>(view, "_snapshotImageView").image;
 			} else {
-				_SBAppSwitcherSnapshotContext *snapshotContext = MSHookIvar<_SBAppSwitcherSnapshotContext*>(view, "_snapshotContext");
-				SBSwitcherSnapshotImageView *snapshotImageView = snapshotContext.snapshotImageView;
-				image = snapshotImageView.image;
+				// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
+				[view shouldTransitionToDefaultPng];
+				_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:0 preferringDownscaled:NO defaultImageOnly:NO];
+				image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
 			}
 		}
 
