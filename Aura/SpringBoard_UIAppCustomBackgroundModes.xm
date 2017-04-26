@@ -32,7 +32,7 @@
 		goto ORIGINAL;
 	}
 
-	LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", arg1, arg2, arg3, arg4, arg5, identifier);
+	//LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", arg1, arg2, arg3, arg4, arg5, identifier);
 
 	if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:identifier]) {
 	  if ((arg3 >= BKSProcessAssertionReasonAudio && arg3 <= BKSProcessAssertionReasonVOiP)) { // In most cases arg3 == 4 (finish task)

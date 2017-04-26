@@ -4,17 +4,18 @@
 
 @implementation RAMissionControlPreviewView
 - (void)generatePreview {
-  [self performSelectorOnMainThread:@selector(setBackgroundColor:) withObject:[[UIColor blackColor] colorWithAlphaComponent:0.5] waitUntilDone:NO];
-  //self.image = [[%c(RASnapshotProvider) sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
-  UIImage *img = [[%c(RASnapshotProvider) sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
-  [self performSelectorOnMainThread:@selector(setImage:) withObject:img waitUntilDone:NO];
-
+  dispatch_async(dispatch_get_main_queue(), ^{
+    self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
+    //self.image = [[%c(RASnapshotProvider) sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
+    UIImage *img = [[%c(RASnapshotProvider) sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
+    self.image = img;
+  });
   //if (!icon)
   //  icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:self.application.bundleIdentifier];
   //if (icon && !iconView)
   //    iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 
-  NSOperationQueue* targetQueue = [NSOperationQueue mainQueue];
+  NSOperationQueue *targetQueue = [NSOperationQueue mainQueue];
   [targetQueue addOperationWithBlock:^{
     if (!icon) {
       if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
@@ -43,8 +44,10 @@
   CGFloat scale = (iconView.frame.size.width - 3.0) / iconView.frame.size.width;
   iconView.transform = CGAffineTransformMakeScale(scale, scale);
 
-  [self performSelectorOnMainThread:@selector(addSubview:) withObject:iconView waitUntilDone:NO];
-  [self performSelectorOnMainThread:@selector(updateIconViewFrame) withObject:nil waitUntilDone:NO];
+  dispatch_sync(dispatch_get_main_queue(), ^{
+    [self addSubview:iconView];
+    [self updateIconViewFrame];
+  });
 }
 
 - (void)generatePreviewAsync {
@@ -57,7 +60,11 @@
   RADesktopWindow *desktop = (RADesktopWindow*)desktop_;
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     UIImage *image = [[%c(RASnapshotProvider) sharedInstance] snapshotForDesktop:desktop];
-    [self performSelectorOnMainThread:@selector(setImage:) withObject:image waitUntilDone:YES];
+
+    dispatch_async(dispatch_get_main_queue(), ^{
+      self.image = image;
+    });
+
     if (completionBlock) {
       completionBlock();
     }

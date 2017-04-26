@@ -92,7 +92,6 @@
 			[desktopScrollView addSubview:preview];
 		}];
 		//preview.image = [[%c(RASnapshotProvider) sharedInstance] snapshotForDesktop:desktop];
-		//fixed lag but need to fix wallpaper;
 		[preview generateDesktopPreviewAsync:desktop completion:desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] ? ^{ [[%c(RADesktopManager) sharedInstance] performSelectorOnMainThread:@selector(hideDesktop) withObject:nil waitUntilDone:NO]; } : (dispatch_block_t)nil];
 
 		if (desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[%c(RASettings) sharedInstance] missionControlDesktopStyle] == 0) {
@@ -436,7 +435,9 @@
 				[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
 					[runningApplications removeObject:app];
 
-					[self performSelectorOnMainThread:@selector(reloadDesktopSection) withObject:nil waitUntilDone:NO];
+					dispatch_async(dispatch_get_main_queue(), ^{
+						[self reloadDesktopSection];
+					});
 					//[self.manager inhibitApplication:app.bundleIdentifier];
 					//[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection) withObject:nil waitUntilDone:YES];
 					//[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
@@ -579,8 +580,10 @@
 		SBApplication *app = realView.application;
 		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
 			[runningApplications removeObject:app];
-			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[[%c(RARunningAppsProvider) sharedInstance] runningApplications] waitUntilDone:YES];
-			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
+				[self reloadOtherAppsSection];
+			});
 		}];
 	}
 }
@@ -593,8 +596,10 @@
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
 		SBApplication *app = realView.application;
 		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
-			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[[%c(RARunningAppsProvider) sharedInstance] runningApplications] waitUntilDone:YES];
-			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
+				[self reloadOtherAppsSection];
+			});
 		}];
 	}
 }
