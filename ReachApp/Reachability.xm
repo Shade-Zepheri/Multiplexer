@@ -657,28 +657,29 @@ CGFloat startingY = -1;
   [RAMessagingServer.sharedInstance rotateApp:app.bundleIdentifier toOrientation:[UIApplication sharedApplication].statusBarOrientation completion:nil];
   [RAMessagingServer.sharedInstance forceStatusBarVisibility:YES forApp:app.bundleIdentifier completion:nil];
 
-  if (![app pid] || ![app mainScene]) {
+  if (!app.pid || !app.mainScene) {
     LogWarn(@"No pid or mainScene; trying again");
     overrideDisableForStatusBar = YES;
-    [UIApplication.sharedApplication launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
+    [[UIApplication sharedApplication] launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:bundleIdentifier];
 
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1.0 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
+    dispatch_after(time, dispatch_get_main_queue(), ^{
       [self RA_launchTopAppWithIdentifier:bundleIdentifier];
       [self updateViewSizes:draggerView.center animate:YES];
     });
     return;
   }
 
-  [RAAppSwitcherModelWrapper addIdentifierToFront:bundleIdentifier];
+  //[RAAppSwitcherModelWrapper addIdentifierToFront:bundleIdentifier];
 
-  FBWindowContextHostManager *contextHostManager = [scene contextHostManager];
+  FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
 
   FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
   SET_BACKGROUNDED(settings, NO);
   [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
 
-  [UIApplication.sharedApplication launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
+  //[UIApplication.sharedApplication launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
 
   [contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
   view = [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];

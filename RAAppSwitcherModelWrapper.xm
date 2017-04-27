@@ -5,7 +5,7 @@
 	SBAppSwitcherModel *model = [%c(SBAppSwitcherModel) sharedInstance];
 	if ([model respondsToSelector:@selector(addToFront:)]) { // iOS 7 + 8
 		SBDisplayLayout *layout = [%c(SBDisplayLayout) fullScreenDisplayLayoutForApplication:app];
-	    [model addToFront:layout];
+	  [model addToFront:layout];
 	} else { // iOS 9
 		SBDisplayItem *layout = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:app.bundleIdentifier];
 		[model addToFront:layout role:2];

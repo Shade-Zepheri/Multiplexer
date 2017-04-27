@@ -15,7 +15,7 @@ fake phone mode: semi working
 
 Bugs:
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch;
-- Invoking keyboard in reachapp closes view
+- Invoking keyboard in reachapp closes view (FIX KeyboardSupport!!)
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - adding items to SBAppSwitcherModel is broken (fixed now?)
 - SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
@@ -23,7 +23,7 @@ Bugs:
 - SwipeOver whacky on iPads
 - Fake phone mode freezes apps
 - Aura breaks calls? (Some say it fixes itself)
-- Messages crashes due to UIKit hook
+- Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - Windows dont rotate with device
 
 Minor Things/Bugs to note:
