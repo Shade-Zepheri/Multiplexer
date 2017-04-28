@@ -50,7 +50,7 @@
       UIMutableApplicationSceneSettings *fakeSettings = [[%c(UIMutableApplicationSceneSettings) alloc] init];
       arg5 = fakeSettings;
     }
-    SET_BACKGROUNDED(arg5, NO);
+    arg5.backgrounded = NO;
   }
   return %orig(arg1, arg2, arg3, arg4, arg5, arg6);
 }
@@ -62,7 +62,7 @@
       UIMutableApplicationSceneSettings *fakeSettings = [[%c(UIMutableApplicationSceneSettings) alloc] init];
       arg4 = fakeSettings;
     }
-    SET_BACKGROUNDED(arg4, NO);
+    arg4.backgrounded = NO;
   }
   return %orig(arg1, arg2, arg3, arg4, arg5);
 }

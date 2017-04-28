@@ -24,19 +24,18 @@
 		[[UIApplication sharedApplication] launchApplicationWithIdentifier:app.bundleIdentifier suspended:YES];
 
 		FBScene *scene = [app mainScene];
-		FBWindowContextHostManager *contextHostManager = [scene contextHostManager];
+		FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
 
 		FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
 		if (!settings) {
 			return nil;
 		}
 
-		SET_BACKGROUNDED(settings, NO);
+		settings.backgrounded = NO;
 		[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
 
 		[contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
-		UIView *hostView = [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
-		return hostView;
+		return [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
 	}
 
 	[RACompatibilitySystem showWarning:@"Unable to find valid method for accessing context host views"];
@@ -50,7 +49,7 @@
 
 	if ([app respondsToSelector:@selector(mainScene)]) {
 	  FBScene *scene = [app mainScene];
-	  return (NSObject*)[scene contextHostManager];
+	  return (NSObject*)scene.contextHostManager;
 	}
 
 	[RACompatibilitySystem showWarning:@"Unable to find valid method for accessing context host view managers"];

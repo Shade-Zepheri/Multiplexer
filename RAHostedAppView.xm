@@ -361,7 +361,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     }
 
     FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
-    SET_BACKGROUNDED(settings, YES);
+    settings.backgrounded = YES;
     [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
     //FBWindowContextHostManager *contextHostManager = [scene contextHostManager];
     didRun = YES;

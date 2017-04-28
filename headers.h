@@ -338,7 +338,7 @@ return sharedInstance;
 @class _SBAppSwitcherSnapshotContext;
 
 @interface SBAppSwitcherSnapshotView : UIView
-@property (assign,nonatomic) BOOL shouldTransitionToDefaultPng; 
+@property (assign,nonatomic) BOOL shouldTransitionToDefaultPng;
 + (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(long long)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
 - (void)setOrientation:(long long)arg1 orientationBehavior:(int)arg2;
 - (void)_loadSnapshotAsync;
@@ -888,8 +888,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property(copy, nonatomic) NSString *identifier; // @synthesize identifier=_identifier;
 @end
 
-@interface FBSSceneSettings : NSObject <NSCopying, NSMutableCopying>
-{
+@interface FBSSceneSettings : NSObject <NSCopying, NSMutableCopying> {
     CGRect _frame;
     CGPoint _contentOffset;
     float _level;
@@ -928,30 +927,26 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (id)initWithSettings:(id)arg1;
 @end
 
-@interface FBSMutableSceneSettings : FBSSceneSettings
-{
-}
+extern NSString* FBSOpenApplicationOptionKeyActivateSuspended;
 
-+ (BOOL)_isMutable;
-- (id)mutableCopyWithZone:(struct _NSZone *)arg1;
-- (id)copyWithZone:(struct _NSZone *)arg1;
-@property(copy, nonatomic) NSArray *occlusions;
-- (id)transientLocalSettings;
-- (id)ignoreOcclusionReasons;
-- (id)otherSettings;
+@interface FBSSystemService ()
+- (void)openApplication:(id)arg1 options:(id)arg2 withResult:(void (^)(void))arg3;
+@end
+
+
+@interface FBSMutableSceneSettings : FBSSceneSettings
 @property(nonatomic, getter=isBackgrounded) BOOL backgrounded;
 @property(nonatomic) int interfaceOrientation;
 @property(nonatomic) float level;
 @property(nonatomic) struct CGPoint contentOffset;
 @property(nonatomic) struct CGRect frame;
-
 @end
 
 @interface UIMutableApplicationSceneSettings : FBSMutableSceneSettings
 @end
 
 @interface FBScene ()
--(FBWindowContextHostManager*) contextHostManager;
+- (FBWindowContextHostManager*)contextHostManager;
 - (void)updateSettings:(id)arg1 withTransitionContext:(id)arg2;
 @end
 

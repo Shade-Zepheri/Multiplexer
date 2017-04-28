@@ -163,20 +163,24 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 }
 
 - (RAIconIndicatorViewInfo)allAggregatedIndicatorInfoForIdentifier:(NSString*)identifier {
-	int info = RAIconIndicatorViewInfoNone;
+	NSInteger info = RAIconIndicatorViewInfoNone;
 
-	if ([self backgroundModeForIdentifier:identifier] == RABackgroundModeNative) {
-		info |= RAIconIndicatorViewInfoNative;
-	} else if ([self backgroundModeForIdentifier:identifier] == RABackgroundModeForcedForeground) {
-		info |= RAIconIndicatorViewInfoForced;
-	} else if ([self shouldSuspendImmediately:identifier]) {
-		info |= RAIconIndicatorViewInfoSuspendImmediately;
-	} else if ([self hasUnlimitedBackgroundTime:identifier]) {
-		info |= RAIconIndicatorViewInfoUnlimitedBackgroundTime;
-	}
-
-	if ([self killProcessOnExit:identifier]) {
-		info |= RAIconIndicatorViewInfoForceDeath;
+	switch ([self backgroundModeForIdentifier:identifier]) {
+		case RABackgroundModeNative:
+			info |= RAIconIndicatorViewInfoNative;
+			break;
+		case RABackgroundModeForcedForeground:
+			info |= RAIconIndicatorViewInfoForced;
+			break;
+		case RABackgroundModeSuspendImmediately:
+			info |= RAIconIndicatorViewInfoSuspendImmediately;
+			break;
+		case RABackgroundModeUnlimitedBackgroundingTime:
+			info |= RAIconIndicatorViewInfoUnlimitedBackgroundTime;
+			break;
+		case RABackgroundModeForceNone:
+			info |= RAIconIndicatorViewInfoForceDeath;
+			break;
 	}
 
 	if ([self preventKillingOfIdentifier:identifier]) {

@@ -212,7 +212,7 @@ id SBWorkspace$sharedInstance;
         if (app && [app pid] && [app mainScene]) {
           FBScene *scene = [app mainScene];
           FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
-          SET_BACKGROUNDED(settings, YES);
+          settings.backgrounded = YES;
           [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
           //MSHookIvar<FBWindowContextHostView*>([app mainScene].contextHostManager, "_hostView").frame = pre_topAppFrame;
           //MSHookIvar<FBWindowContextHostView*>([app mainScene].contextHostManager, "_hostView").transform = pre_topAppTransform;
@@ -647,7 +647,7 @@ CGFloat startingY = -1;
 %new - (void)RA_launchTopAppWithIdentifier:(NSString*)bundleIdentifier {
   UIWindow *w = MSHookIvar<UIWindow*>(self, "_reachabilityEffectWindow");
   SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:lastBundleIdentifier];
-  FBScene *scene = [app mainScene];
+  FBScene *scene = app.mainScene;
   if (!app) {
     return;
   }
@@ -663,23 +663,20 @@ CGFloat startingY = -1;
     [[UIApplication sharedApplication] launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:bundleIdentifier];
 
-    dispatch_time_t time = dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC);
-    dispatch_after(time, dispatch_get_main_queue(), ^{
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
       [self RA_launchTopAppWithIdentifier:bundleIdentifier];
       [self updateViewSizes:draggerView.center animate:YES];
     });
     return;
   }
 
-  //[RAAppSwitcherModelWrapper addIdentifierToFront:bundleIdentifier];
+  [RAAppSwitcherModelWrapper addIdentifierToFront:bundleIdentifier];
 
   FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
 
   FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
-  SET_BACKGROUNDED(settings, NO);
+  settings.backgrounded = NO;
   [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
-
-  //[UIApplication.sharedApplication launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
 
   [contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
   view = [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
