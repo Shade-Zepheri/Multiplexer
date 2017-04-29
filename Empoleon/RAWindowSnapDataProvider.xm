@@ -9,8 +9,8 @@
 	CGRect location = windowBar.frame;
 
 	// Convienence values
-	CGFloat width = UIScreen.mainScreen._referenceBounds.size.width;
-	CGFloat height = UIScreen.mainScreen._referenceBounds.size.height;
+	CGFloat width = CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
+	CGFloat height = CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
 	//CGFloat oneThirdsHeight = height / 4;
 	CGFloat twoThirdsHeight = (height / 4) * 3;
 

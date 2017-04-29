@@ -80,7 +80,7 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
 
   void (^block)() = ^{
     IF_NOT_SPRINGBOARD {
-      unsigned int contextID = 0;
+      NSUInteger contextID = 0;
       if (%c(UIRemoteKeyboardWindow) && [UIKeyboard activeKeyboard] && [[UIKeyboard activeKeyboard] window]) {
         contextID = [[[UIKeyboard activeKeyboard] window] _contextId]; // ((UITextEffectsWindow*)[%c(UIRemoteKeyboardWindow) remoteKeyboardWindowForScreen:UIScreen.mainScreen create:NO])._contextId;
       } else {
@@ -94,7 +94,7 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
       assert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
   #endif
 
-      LogDebug(@"[ReachApp] c id %u", contextID);
+      LogDebug(@"[ReachApp] c id %tu", contextID);
     }
   };
 

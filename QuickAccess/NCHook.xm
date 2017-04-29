@@ -134,7 +134,7 @@ static BOOL hasEnteredPages = NO;
 
 - (UIPageControl*)pageControl {
 	UIPageControl *original = %orig;
-	original.numberOfPages = 3;
+	original.numberOfPages += 1;
 	return original;
 }
 %end

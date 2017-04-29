@@ -31,7 +31,8 @@
 
 @implementation RAMissionControlWindow
 - (instancetype)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+	if (self) {
 		trashIcon = [%c(RAResourceImageProvider) imageForFilename:@"Trash.png"];
 		self.windowLevel = 1000;
 	}

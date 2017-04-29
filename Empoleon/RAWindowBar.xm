@@ -620,8 +620,6 @@ extern BOOL allowOpenApp;
 			[self saveWindowInfo];
 			break;
 		}
-	  default:
-	    break;
 	}
 }
 

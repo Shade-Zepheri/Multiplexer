@@ -14,7 +14,7 @@ BOOL overrideUIWindow = NO;
 }
 
 - (void)addDesktop:(BOOL)switchTo {
-	RADesktopWindow *desktopWindow = [[RADesktopWindow alloc] initWithFrame:UIScreen.mainScreen._referenceBounds];
+	RADesktopWindow *desktopWindow = [[RADesktopWindow alloc] initWithFrame:[UIScreen mainScreen]._referenceBounds];
 
 	[windows addObject:desktopWindow];
 	if (switchTo) {
@@ -179,9 +179,15 @@ BOOL overrideUIWindow = NO;
 */
 
 %hook SpringBoard
--(void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 {
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 {
 	%orig;
 	[RADesktopManager.sharedInstance updateRotationOnClients:arg1];
+}
+
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 logMessage:(id)arg2 {
+	%orig;
+	LogDebug(@"noteInterfaceOrientationChanged");
+	[[RADesktopManager sharedInstance] updateRotationOnClients:arg1];
 }
 %end
 

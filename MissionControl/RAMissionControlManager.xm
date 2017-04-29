@@ -135,7 +135,7 @@ CGRect swappedForOrientation2(CGRect in) {
 		window = nil;
 	}
 
-	window = [[RAMissionControlWindow alloc] initWithFrame:UIScreen.mainScreen.RA_interfaceOrientedBounds];
+	window = [[RAMissionControlWindow alloc] initWithFrame:[UIScreen mainScreen].RA_interfaceOrientedBounds];
 	window.manager = self;
 	[window _rotateWindowToOrientation:UIApplication.sharedApplication.statusBarOrientation updateStatusBar:YES duration:1 skipCallbacks:NO];
 
@@ -153,10 +153,10 @@ CGRect swappedForOrientation2(CGRect in) {
 	[window addSubview:statusBar];
 	[statusBar setOrientation:UIApplication.sharedApplication.statusBarOrientation];
 
-	// DESKTOPS TODO: causes lag
+	// DESKTOPS
 	[self reloadDesktopSection];
 
-	// APPS WITH PANES TODO: also causes minor lag
+	// APPS WITH PANES
 	[self reloadWindowedAppsSection];
 
 	// APPS WITHOUT PANES

@@ -2,7 +2,7 @@
 #import "RADesktopManager.h"
 #import "RAHostedAppView.h"
 
-#define FILE_PATH @"/User/Library/Preferences/com.efrederickson.empoleon.windowstates.plist"
+static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickson.empoleon.windowstates.plist";
 
 @implementation RAWindowStatePreservationSystemManager
 + (instancetype)sharedInstance {
@@ -19,7 +19,7 @@
 
 - (void)saveDesktopInformation:(RADesktopWindow*)desktop {
 	NSUInteger index = [RADesktopManager.sharedInstance.availableDesktops indexOfObject:desktop];
-	NSString *key = [NSString stringWithFormat:@"%lu",(unsigned long)index];
+	NSString *key = [NSString stringWithFormat:@"%tu", index];
 	NSMutableArray *openApps = [NSMutableArray array];
 	for (RAHostedAppView *app in desktop.hostedWindows) {
 		[openApps addObject:app.app.bundleIdentifier];
@@ -31,14 +31,14 @@
 }
 
 - (BOOL)hasDesktopInformationAtIndex:(NSInteger)index {
-	NSString *key = [NSString stringWithFormat:@"%lu",(unsigned long)index];
+	NSString *key = [NSString stringWithFormat:@"%tu", index];
 	return [dict objectForKey:key] != nil;
 }
 
 - (RAPreservedDesktopInformation)desktopInformationForIndex:(NSInteger)index {
 	RAPreservedDesktopInformation info;
 	info.index = index;
-	NSString *key = [NSString stringWithFormat:@"%lu",(unsigned long)index];
+	NSString *key = [NSString stringWithFormat:@"%tu", index];
 
 	NSMutableArray *apps = [NSMutableArray array];
 	for (NSString *ident in dict[key]) {

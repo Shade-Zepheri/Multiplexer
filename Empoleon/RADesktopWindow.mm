@@ -40,7 +40,9 @@
 	}
 	[self addSubview:windowBar];
 	if (animated) {
-		[UIView animateWithDuration:0.5 animations:^{ windowBar.alpha = 1; }];
+		[UIView animateWithDuration:0.5 animations:^{
+			windowBar.alpha = 1;
+		}];
 	}
 
 	if (!self.hidden) {
@@ -220,6 +222,7 @@
 	if (![RAWindowStatePreservationSystemManager.sharedInstance hasDesktopInformationAtIndex:index]) {
 		return;
 	}
+	
 	RAPreservedDesktopInformation info = [RAWindowStatePreservationSystemManager.sharedInstance desktopInformationForIndex:index];
 	for (NSString *bundleIdentifier in info.openApps) {
 		[self createAppWindowWithIdentifier:bundleIdentifier animated:YES];
@@ -245,8 +248,7 @@
 	return 0;
 }
 
--(UIInterfaceOrientation) appOrientationRelativeToThisOrientation:(CGFloat)currentRotation
-{
+- (UIInterfaceOrientation)appOrientationRelativeToThisOrientation:(CGFloat)currentRotation {
 	UIInterfaceOrientation base = [self currentOrientation];
 
 	switch (base) {

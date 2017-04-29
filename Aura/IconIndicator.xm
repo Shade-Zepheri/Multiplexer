@@ -272,7 +272,7 @@ NSMutableDictionary *lsbitems = [[NSMutableDictionary alloc] init];
 
 %group libstatusbar
 @interface RAAppIconStatusBarIconView : UIView
-@property (nonatomic, retain) UIStatusBarItem *item;
+@property (strong, nonatomic) UIStatusBarItem *item;
 @end
 
 @interface UIStatusBarCustomItem : UIStatusBarItem
