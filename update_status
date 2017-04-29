@@ -24,7 +24,6 @@ Bugs:
 - Fake phone mode freezes apps
 - Aura breaks calls? (Some say it fixes itself)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
-- Windows dont rotate with device
 
 Minor Things/Bugs to note:
 - Seems split causes more blackscreens in windowed apps

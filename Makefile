@@ -1,5 +1,10 @@
 export TARGET = iphone:9.2
 
+ifeq ($(IPAD),1)
+export THEOS_DEVICE_IP=192.168.254.1
+export THEOS_DEVICE_PORT=22
+endif
+
 CFLAGS = -flto=thin -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IMissionControl/ -IQuickAccess/ -IReachApp/ -ISwipeOver/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
 CFLAGS += -fobjc-arc
 

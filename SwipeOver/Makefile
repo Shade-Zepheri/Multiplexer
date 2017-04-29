@@ -1,3 +1,8 @@
+ifeq ($(IPAD),1)
+export THEOS_DEVICE_IP=192.168.254.1
+export THEOS_DEVICE_PORT=22
+endif
+
 CFLAGS = -I../ -I../Theming/ -I../GestureSupport/ -I../Empoleon/ -I../Messaging/ -I../KeyboardSupport -I../MissionControl
 CFLAGS += -fobjc-arc
 TARGET = iphone:9.3

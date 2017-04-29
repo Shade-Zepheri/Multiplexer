@@ -184,9 +184,8 @@ BOOL overrideUIWindow = NO;
 	[RADesktopManager.sharedInstance updateRotationOnClients:arg1];
 }
 
-- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 logMessage:(id)arg2 {
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 logMessage:(id)arg3 {
 	%orig;
-	LogDebug(@"noteInterfaceOrientationChanged");
 	[[RADesktopManager sharedInstance] updateRotationOnClients:arg1];
 }
 %end
