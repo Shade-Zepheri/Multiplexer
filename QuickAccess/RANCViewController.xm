@@ -88,7 +88,7 @@ int rotationDegsForOrientation(int o) {
 	if (!appView) {
 		NSString *ident = [RASettings.sharedInstance NCApp];
 		appView = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
-		appView.frame = UIScreen.mainScreen.bounds;
+		appView.frame = [UIScreen mainScreen].bounds;
 		[self.view addSubview:appView];
 
 		[appView preloadApp];
@@ -108,10 +108,10 @@ int rotationDegsForOrientation(int o) {
 
 		// Reset
 		appView.transform = CGAffineTransformIdentity;
-		appView.frame = UIScreen.mainScreen.bounds;
+		appView.frame = [UIScreen mainScreen].bounds;
 
 		appView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(rotationDegsForOrientation(UIApplication.sharedApplication.statusBarOrientation))); // Explicitly, SpringBoard's status bar since the NC is shown in SpringBoard
-		CGFloat scale = self.view.frame.size.height / UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height;
+		CGFloat scale = self.view.frame.size.height / [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height;
 		appView.transform = CGAffineTransformScale(appView.transform, scale, scale);
 
 		// Align vertically
@@ -125,7 +125,7 @@ int rotationDegsForOrientation(int o) {
 
 	if (IS_IOS_BETWEEN(iOS_9_0, iOS_9_3)) { // Must manually place view controller :(
 		CGRect frame = self.view.frame;
-		frame.origin.x = UIScreen.mainScreen.bounds.size.width * 2.0;
+		frame.origin.x = [UIScreen mainScreen].bounds.size.width * 2.0;
 		self.view.frame = frame;
 	}
 }
