@@ -31,8 +31,7 @@
 
 static NSCache *sharedPDFImageCache = nil;
 
-@interface RAPDFImage ()
-{
+@interface RAPDFImage () {
 	NSCache *_imageCache;
 	dispatch_once_t _imageCacheOnceToken;
 }
@@ -44,13 +43,11 @@ static NSCache *sharedPDFImageCache = nil;
 
 @implementation RAPDFImage
 
-+ (instancetype)imageNamed:(NSString *)name
-{
++ (instancetype)imageNamed:(NSString *)name {
 	return [self imageNamed:name inBundle:[NSBundle mainBundle]];
 }
 
-+ (instancetype)imageNamed:(NSString *)name inBundle:(NSBundle *)bundle
-{
++ (instancetype)imageNamed:(NSString *)name inBundle:(NSBundle *)bundle {
 	//	Defaults
 	NSString *pathName = name;
 	NSString *pathType = @"pdf";
@@ -59,13 +56,11 @@ static NSCache *sharedPDFImageCache = nil;
 	const NSUInteger suffixLength = suffix.length;
 
 	//	Enough room for the suffix
-	if (name.length >= suffix.length)
-	{
+	if (name.length >= suffix.length) {
 		const NSRange suffixRange = NSMakeRange(name.length - suffixLength, suffixLength);
 
 		//	It has it's own suffix provided in the name, split the extension (type) from the name
-		if ([name rangeOfString:suffix options:(NSCaseInsensitiveSearch)range:suffixRange].location != NSNotFound)
-		{
+		if ([name rangeOfString:suffix options:(NSCaseInsensitiveSearch)range:suffixRange].location != NSNotFound) {
 			NSString *extensionSeparator = @".";
 			const NSUInteger extensionSeparatorLength = extensionSeparator.length;
 
@@ -81,8 +76,7 @@ static NSCache *sharedPDFImageCache = nil;
 	return [self imageResource:pathName ofType:pathType inBundle:bundle];
 }
 
-+ (instancetype)imageResource:(NSString *)name ofType:(NSString *)type inBundle:(NSBundle *)bundle
-{
++ (instancetype)imageResource:(NSString *)name ofType:(NSString *)type inBundle:(NSBundle *)bundle {
 	NSString *filepath = [bundle pathForResource:name ofType:type];
 	NSString *cacheKey = filepath;
 
@@ -93,12 +87,10 @@ static NSCache *sharedPDFImageCache = nil;
 
 	RAPDFImage *result = [sharedPDFImageCache objectForKey:cacheKey];
 
-	if (result == nil)
-	{
+	if (!result) {
 		result = [(RAPDFImage *)[self alloc] initWithContentsOfFile:filepath];
 
-		if (result != nil)
-		{
+		if (result) {
 			[sharedPDFImageCache setObject:result forKey:cacheKey];
 		}
 	}
@@ -106,45 +98,40 @@ static NSCache *sharedPDFImageCache = nil;
 	return result;
 }
 
-+ (instancetype)imageWithContentsOfFile:(NSString *)path
-{
++ (instancetype)imageWithContentsOfFile:(NSString *)path {
 	return [(RAPDFImage *)[self alloc] initWithContentsOfFile:path];
 }
 
-+ (instancetype)imageWithData:(NSData *)data
-{
++ (instancetype)imageWithData:(NSData *)data {
 	return [(RAPDFImage *)[self alloc] initWithData:data];
 }
 
-- (instancetype)initWithContentsOfFile:(NSString *)path
-{
+- (instancetype)initWithContentsOfFile:(NSString *)path {
 	NSData *data = [[NSData alloc] initWithContentsOfFile:path];
 	return [self initWithData:data];
 }
 
-- (instancetype)initWithData:(NSData *)data
-{
+- (instancetype)initWithData:(NSData *)data {
 	CGDataProviderRef provider = CGDataProviderCreateWithCFData((__bridge CFDataRef)data);
 	CGPDFDocumentRef document = CGPDFDocumentCreateWithProvider(provider);
 	CGDataProviderRelease(provider);
 
 	id result = [self initWithDocument:document];
 
-	if (document != nil)
+	if (document) {
 		CGPDFDocumentRelease(document);
+	}
 
 	return result;
 }
 
-- (instancetype)initWithDocument:(CGPDFDocumentRef)document
-{
-	if (document == nil)
+- (instancetype)initWithDocument:(CGPDFDocumentRef)document {
+	if (!document) {
 		return nil;
+	}
 
 	self = [super init];
-
-	if (self != nil)
-	{
+	if (self) {
 		_document = CGPDFDocumentRetain(document);
 		_page = CGPDFDocumentGetPage(_document, 1);
 
@@ -157,8 +144,7 @@ static NSCache *sharedPDFImageCache = nil;
 #pragma mark -
 #pragma mark Self
 
-- (UIImage *)imageWithOptions:(RAPDFImageOptions *)options
-{
+- (UIImage *)imageWithOptions:(RAPDFImageOptions *)options {
 	//	Where to draw the image
 	const CGRect rect = [options contentBoundsForContentSize:self.size];
 
@@ -174,16 +160,14 @@ static NSCache *sharedPDFImageCache = nil;
 
 	UIImage *image = [_imageCache objectForKey:cacheKey];
 
-	if (image == nil)
-	{
-		UIGraphicsBeginImageContextWithOptions(containerSize, NO, scale);
+	if (!image) {
+		UIGraphicsBeginImageContextWithOptions(containerSize, YES, scale);
 
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 
 		[self drawInRect:rect];
 
-		if (tintColor != nil)
-		{
+		if (tintColor) {
 			CGContextSaveGState(ctx);
 
 			//	Color the image
@@ -198,8 +182,7 @@ static NSCache *sharedPDFImageCache = nil;
 
 		UIGraphicsEndImageContext();
 
-		if (image != nil)
-		{
+		if (image) {
 			[_imageCache setObject:image forKey:cacheKey];
 		}
 	}
@@ -207,8 +190,7 @@ static NSCache *sharedPDFImageCache = nil;
 	return image;
 }
 
-- (void)drawInRect:(CGRect)rect
-{
+- (void)drawInRect:(CGRect)rect {
 	const CGSize drawSize = rect.size;
 	const CGSize size = self.size;
 	const CGSize sizeRatio = CGSizeMake(size.width / drawSize.width, size.height / drawSize.height);
@@ -229,10 +211,8 @@ static NSCache *sharedPDFImageCache = nil;
 #pragma mark -
 #pragma mark Cleanup
 
-- (void)dealloc
-{
-	if (_document != nil)
-	{
+- (void)dealloc {
+	if (_document) {
 		CGPDFDocumentRelease(_document);
 		_document = nil;
 	}

@@ -9,7 +9,7 @@ NSCache *_rsImgCache = [NSCache new];
   // from: https://stackoverflow.com/questions/2658738/the-simplest-way-to-resize-an-uiimage
   // In next line, pass 0.0 to use the current device's pixel scaling factor (and thus account for Retina resolution).
   // Pass 1.0 to force exact pixel size.
-  UIGraphicsBeginImageContextWithOptions(newSize, NO, 0.0);
+  UIGraphicsBeginImageContextWithOptions(newSize, YES, 0.0);
   [image drawInRect:CGRectMake(0, 0, newSize.width, newSize.height)];
   UIImage *newImage = UIGraphicsGetImageFromCurrentImageContext();
   UIGraphicsEndImageContext();

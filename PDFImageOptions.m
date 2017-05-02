@@ -29,8 +29,7 @@
 
 @implementation RAPDFImageOptions
 
-+ (instancetype)optionsWithSize:(CGSize)size
-{
++ (instancetype)optionsWithSize:(CGSize)size {
 	RAPDFImageOptions *options = [self new];
 	options.size = size;
 	return options;
@@ -38,12 +37,9 @@
 
 #pragma mark -
 
-- (instancetype)init
-{
+- (instancetype)init {
 	self = [super init];
-
-	if (self != nil)
-	{
+	if (self) {
 		_contentMode = UIViewContentModeScaleToFill;
 	}
 
@@ -53,8 +49,7 @@
 #pragma mark -
 #pragma mark Self
 
-- (CGRect)contentBoundsForContentSize:(CGSize)contentSize
-{
+- (CGRect)contentBoundsForContentSize:(CGSize)contentSize {
 	const CGSize containerSize = self.size;
 	const UIViewContentMode contentMode = self.contentMode;
 
@@ -63,8 +58,7 @@
 	BOOL shouldCenterWidth = NO;
 	BOOL shouldCenterHeight = NO;
 
-	switch (contentMode)
-	{
+	switch (contentMode) {
 		case UIViewContentModeScaleToFill: //	Scaled unproportionally to fill entire area (no gaps, no clipping)
 		case UIViewContentModeRedraw:
 			rect.size = containerSize;
@@ -93,44 +87,37 @@
 		case UIViewContentModeTopLeft:
 		case UIViewContentModeTopRight:
 		case UIViewContentModeBottomLeft:
-		case UIViewContentModeBottomRight:
-		{
+		case UIViewContentModeBottomRight: {
 			rect.size = contentSize;
 
 			//	X positioning
-			switch (contentMode)
-			{
+			switch (contentMode) {
 				case UIViewContentModeCenter:
 				case UIViewContentModeTop:
 				case UIViewContentModeBottom:
 					shouldCenterWidth = YES;
 					break;
-
 				case UIViewContentModeRight:
 				case UIViewContentModeTopRight:
 				case UIViewContentModeBottomRight:
 					rect.origin.x = containerSize.width - rect.size.width;
 					break;
-
 				default:
 					break;
 			}
 
 			//	Y positioning
-			switch (contentMode)
-			{
+			switch (contentMode) {
 				case UIViewContentModeCenter:
 				case UIViewContentModeLeft:
 				case UIViewContentModeRight:
 					shouldCenterHeight = YES;
 					break;
-
 				case UIViewContentModeBottom:
 				case UIViewContentModeBottomLeft:
 				case UIViewContentModeBottomRight:
 					rect.origin.y = containerSize.height - rect.size.height;
 					break;
-
 				default:
 					break;
 			}
@@ -139,27 +126,24 @@
 		}
 	}
 
-	if (shouldCenterWidth)
+	if (shouldCenterWidth) {
 		rect.origin.x = floorf((containerSize.width - rect.size.width) / 2);
+	}
 
-	if (shouldCenterHeight)
+	if (shouldCenterHeight) {
 		rect.origin.y = floorf((containerSize.height - rect.size.height) / 2);
+	}
 
 	return rect;
 }
 
-- (CGSize)wholeProportionalFitForContentSize:(CGSize)contentSize
-{
+- (CGSize)wholeProportionalFitForContentSize:(CGSize)contentSize {
 	const CGSize containerSize = self.size;
 
-	if (contentSize.width > containerSize.width || contentSize.height > containerSize.height)
-	{
+	if (contentSize.width > containerSize.width || contentSize.height > containerSize.height) {
 		const CGFloat ratio = ceilf(MAX(contentSize.width / containerSize.width, contentSize.height / containerSize.height));
 		return CGSizeMake(contentSize.width / ratio, contentSize.height / ratio);
-	}
-	else
-	{
-
+	} else {
 		const CGFloat ratio = floorf(MIN(containerSize.width / contentSize.width, containerSize.height / contentSize.height));
 		return CGSizeMake(contentSize.width * ratio, contentSize.height * ratio);
 	}

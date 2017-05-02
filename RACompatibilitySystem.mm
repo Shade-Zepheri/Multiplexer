@@ -13,7 +13,7 @@
 	uname(&systemInfo);
 	NSString *sysInfo = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 
-	[ret appendString:[NSString stringWithFormat:@"%@, %@ %@\n", sysInfo, UIDevice.currentDevice.systemName, UIDevice.currentDevice.systemVersion]];
+	[ret appendString:[NSString stringWithFormat:@"%@, %@ %@\n", sysInfo, [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion]];
 
 	return ret;
 }
