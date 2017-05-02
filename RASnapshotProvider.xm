@@ -41,7 +41,9 @@
 
 		if (view) {
 			if ([view respondsToSelector:@selector(_loadSnapshotSync)]) {
-				[view performSelectorOnMainThread:@selector(_loadSnapshotSync) withObject:nil waitUntilDone:YES];
+				dispatch_sync(dispatch_get_main_queue(), ^{
+					[view _loadSnapshotSync];
+				});
 				image = MSHookIvar<UIImageView*>(view, "_snapshotImageView").image;
 			} else {
 				// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere

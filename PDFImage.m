@@ -161,7 +161,7 @@ static NSCache *sharedPDFImageCache = nil;
 	UIImage *image = [_imageCache objectForKey:cacheKey];
 
 	if (!image) {
-		UIGraphicsBeginImageContextWithOptions(containerSize, YES, scale);
+		UIGraphicsBeginImageContextWithOptions(containerSize, NO, scale);
 
 		CGContextRef ctx = UIGraphicsGetCurrentContext();
 
