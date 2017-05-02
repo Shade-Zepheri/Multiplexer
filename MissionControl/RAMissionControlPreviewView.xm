@@ -44,7 +44,7 @@
   CGFloat scale = (iconView.frame.size.width - 3.0) / iconView.frame.size.width;
   iconView.transform = CGAffineTransformMakeScale(scale, scale);
 
-  dispatch_sync(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_main_queue(), ^{
     [self addSubview:iconView];
     [self updateIconViewFrame];
   });
@@ -61,7 +61,7 @@
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     UIImage *image = [[%c(RASnapshotProvider) sharedInstance] snapshotForDesktop:desktop];
 
-    dispatch_async(dispatch_get_main_queue(), ^{
+    dispatch_async(dispatch_get_main_queue(), ^{ //Potential problem here
       self.image = image;
     });
 

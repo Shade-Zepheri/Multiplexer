@@ -51,7 +51,7 @@
 		}
 
 		if (!image) {
-			LogWarn(@"no image, trying something else");
+			LogWarn(@"Couldn't Get Switcher Image; Using SplashScreen");
 			SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
 
 			if (app && app.mainSceneID) {
@@ -114,7 +114,7 @@
 }
 
 - (NSString*)createKeyForDesktop:(RADesktopWindow*)desktop {
-	return [NSString stringWithFormat:@"desktop-%lu", (unsigned long)desktop.hash];
+	return [NSString stringWithFormat:@"desktop-%tu", desktop.hash];
 }
 
 - (UIImage*)snapshotForDesktop:(RADesktopWindow*)desktop {

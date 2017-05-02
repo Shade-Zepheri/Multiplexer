@@ -581,7 +581,7 @@
 		SBApplication *app = realView.application;
 		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
 			[runningApplications removeObject:app];
-			dispatch_async(dispatch_get_main_queue(), ^{
+			dispatch_sync(dispatch_get_main_queue(), ^{
 				[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
 				[self reloadOtherAppsSection];
 			});
@@ -597,7 +597,7 @@
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
 		SBApplication *app = realView.application;
 		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
-			dispatch_async(dispatch_get_main_queue(), ^{
+			dispatch_sync(dispatch_get_main_queue(), ^{
 				[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
 				[self reloadOtherAppsSection];
 			});
