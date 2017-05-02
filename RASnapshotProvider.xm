@@ -45,7 +45,6 @@
 				image = MSHookIvar<UIImageView*>(view, "_snapshotImageView").image;
 			} else {
 				// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
-				[view shouldTransitionToDefaultPng];
 				_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:0 preferringDownscaled:NO defaultImageOnly:NO];
 				image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
 			}
