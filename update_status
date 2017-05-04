@@ -19,7 +19,6 @@ Bugs:
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - adding items to SBAppSwitcherModel is broken (fixed now?)
 - SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
-- icons and apps do not show up in RASnapshotProvider
 - SwipeOver whacky on iPads
 - Fake phone mode freezes apps
 - Aura breaks calls? (Some say it fixes itself)

@@ -19,7 +19,6 @@
 		[targetQueue waitUntilAllOperationsAreFinished];
 		return result;
 	}*/
-	//TODO: Needs optimization
 	@autoreleasepool {
 		if ([imageCache objectForKey:identifier]) {
 			return [imageCache objectForKey:identifier];
