@@ -61,11 +61,11 @@
 					CGRect frame = CGRectMake(0, 0, 0, 0);
 					UIView *view = [%c(SBUIController) _zoomViewWithSplashboardLaunchImageForApplication:app sceneID:app.mainSceneID screen:UIScreen.mainScreen interfaceOrientation:0 includeStatusBar:YES snapshotFrame:&frame];
 
-					if (view) {
+					if (view) { //renderInContext appears to actually be faster
 						UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, 0);
 
 						ON_MAIN_THREAD(^{
-							[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
+							[view.layer renderInContext:UIGraphicsGetCurrentContext()];
 						});
 
 						image = UIGraphicsGetImageFromCurrentImageContext();
@@ -105,7 +105,7 @@
 - (void)storeSnapshotOfMissionControl:(UIWindow*)window {
 	UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0);
 
-	[window drawViewHierarchyInRect:window.bounds afterScreenUpdates:NO];
+	[window.layer renderInContext:UIGraphicsGetCurrentContext()];
 
 	UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 	UIGraphicsEndImageContext();
@@ -205,12 +205,12 @@
 			//[MSHookIvar<UIWindow*>([%c(SBWallpaperController) sharedInstance], "_wallpaperWindow") drawViewHierarchyInRect:UIScreen.mainScreen.bounds afterScreenUpdates:YES];
 			if (IS_IOS_OR_NEWER(iOS_9_0)) { //not sure why broken
 				UIView *view = [[%c(SBIconController) sharedInstance] view];
-				[view drawViewHierarchyInRect:view.bounds afterScreenUpdates:NO];
+				[view.layer renderInContext:context];
 			} else {
-				[[[%c(SBUIController) sharedInstance] window] drawViewHierarchyInRect:[UIScreen mainScreen].bounds afterScreenUpdates:NO];
+				[[[[%c(SBUIController) sharedInstance] window] layer] renderInContext:context];
 			}
 
-			[desktop drawViewHierarchyInRect:desktop.bounds afterScreenUpdates:NO];
+			[desktop.layer renderInContext:context];
 		});
 		//[desktop.layer performSelectorOnMainThread:@selector(renderInContext:) withObject:(__bridge id)c waitUntilDone:YES]; // Desktop windows
 

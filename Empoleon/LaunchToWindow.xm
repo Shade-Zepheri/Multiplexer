@@ -30,7 +30,7 @@ BOOL allowOpenApp = NO;
 	// Broken
 	//if (launchNextOpenIntoWindow)
 
-	if ([RASettings.sharedInstance windowedMultitaskingEnabled] &&[RASettings.sharedInstance launchIntoWindows] && !allowOpenApp) {
+	if ([RASettings.sharedInstance windowedMultitaskingEnabled] && [RASettings.sharedInstance launchIntoWindows] && !allowOpenApp) {
 		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:arg1 animated:YES];
 		//launchNextOpenIntoWindow = NO;
 		return;
@@ -44,7 +44,7 @@ BOOL allowOpenApp = NO;
 	// Broken
 	//if (launchNextOpenIntoWindow)
 
-	if ([RASettings.sharedInstance windowedMultitaskingEnabled] &&[RASettings.sharedInstance launchIntoWindows] && !allowOpenApp) {
+	if ([RASettings.sharedInstance windowedMultitaskingEnabled] && [RASettings.sharedInstance launchIntoWindows] && !allowOpenApp) {
 		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:arg1 animated:YES];
 		//launchNextOpenIntoWindow = NO;
 		return;

@@ -93,7 +93,11 @@
 			[desktopScrollView addSubview:preview];
 		}];
 		//preview.image = [[%c(RASnapshotProvider) sharedInstance] snapshotForDesktop:desktop];
-		[preview generateDesktopPreviewAsync:desktop completion:desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] ? ^{ [[%c(RADesktopManager) sharedInstance] performSelectorOnMainThread:@selector(hideDesktop) withObject:nil waitUntilDone:NO]; } : (dispatch_block_t)nil];
+		[preview generateDesktopPreviewAsync:desktop completion:desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] ? ^{
+			dispatch_async(dispatch_get_main_queue(), ^{
+				[[%c(RADesktopManager) sharedInstance] hideDesktop];
+			});
+		} : (dispatch_block_t)nil];
 
 		if (desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[%c(RASettings) sharedInstance] missionControlDesktopStyle] == 0) {
 			preview.backgroundColor = [UIColor grayColor];
