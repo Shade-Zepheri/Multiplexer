@@ -261,9 +261,9 @@
 		}
 	} else {
 		if ([wallpaperController valueForKey:@"_homescreenWallpaperView"]) {
-			oldImage = [wallpaperController valueForKey:@"_homescreenWallpaperView"];
+			oldImage = [[wallpaperController valueForKey:@"_homescreenWallpaperView"] wallpaperImage];
 		} else {
-			oldImage = [wallpaperController valueForKey:@"_sharedWallpaperView"];
+			oldImage = [[wallpaperController valueForKey:@"_sharedWallpaperView"] wallpaperImage];
 		}
 	}
 
