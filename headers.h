@@ -229,7 +229,7 @@ return sharedInstance;
 @end
 
 @interface SBToAppsWorkspaceTransaction : NSObject
--(NSArray*) toApplications;
+- (NSArray*)toApplications;
 @end
 
 @interface SBFWallpaperView : UIView
@@ -241,6 +241,8 @@ return sharedInstance;
 
 @interface SBFStaticWallpaperView : SBFWallpaperView
 @property (setter=_setDisplayedImage:,getter=_displayedImage,nonatomic,retain) UIImage *displayedImage;
+- (UIImage*)_displayedImage;
+- (void)_setDisplayedImage:(UIImage*)arg1;
 @end
 
 @interface SBControlCenterController : UIViewController
@@ -493,12 +495,12 @@ typedef struct {
 - (void)_updateInterfaceOrientationAnimated:(BOOL)arg1;
 @end
 
-@interface SBWallpaperController
+@interface SBWallpaperController : NSObject
 @property (nonatomic,retain) SBFStaticWallpaperView *homescreenWallpaperView;
 @property (nonatomic,retain) SBFStaticWallpaperView *sharedWallpaperView;
-+(id) sharedInstance;
--(void) beginRequiringWithReason:(NSString*)reason;
--(void) endRequiringWithReason:(NSString*)reason;
++ (instancetype)sharedInstance;
+- (void)beginRequiringWithReason:(NSString*)reason;
+- (void)endRequiringWithReason:(NSString*)reason;
 @end
 
 @interface BBAction
@@ -509,8 +511,7 @@ typedef struct {
 + (id)actionWithCallblock:(id)arg1;
 @end
 
-typedef enum
-{
+typedef enum {
     NSNotificationSuspensionBehaviorDrop = 1,
     NSNotificationSuspensionBehaviorCoalesce = 2,
     NSNotificationSuspensionBehaviorHold = 3,

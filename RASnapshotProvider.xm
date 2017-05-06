@@ -251,12 +251,22 @@
 		return [imageCache objectForKey:key];
 	}
 	//its really that easy elijah (ok maybe i need to resize the image);
+	SBWallpaperController *wallpaperController = [%c(SBWallpaperController) sharedInstance];
 	UIImage *oldImage;
-	if ([[%c(SBWallpaperController) sharedInstance] homescreenWallpaperView]) {
-		oldImage = [[%c(SBWallpaperController) sharedInstance] homescreenWallpaperView].displayedImage;
+	if ([wallpaperController respondsToSelector:@selector(homescreenWallpaperView)]) {
+		if ([wallpaperController homescreenWallpaperView]) {
+			oldImage = [wallpaperController homescreenWallpaperView].displayedImage;
+		} else {
+			oldImage = [wallpaperController sharedWallpaperView].displayedImage;
+		}
 	} else {
-		oldImage = [[%c(SBWallpaperController) sharedInstance] sharedWallpaperView].displayedImage;
+		if ([wallpaperController valueForKey:@"_homescreenWallpaperView"]) {
+			oldImage = [wallpaperController valueForKey:@"_homescreenWallpaperView"];
+		} else {
+			oldImage = [wallpaperController valueForKey:@"_sharedWallpaperView"];
+		}
 	}
+
 	UIImage *image = [RAResourceImageProvider imageWithImage:oldImage scaledToSize:[UIScreen mainScreen].bounds.size];
 
 	if (blurred) {
@@ -267,7 +277,7 @@
 		[gaussianBlurFilter setValue:@25 forKey:kCIInputRadiusKey];
 
 		CIImage *outputImage = [gaussianBlurFilter outputImage];
-		outputImage = [outputImage imageByCroppingToRect:CGRectMake(0, 0, image.size.width * UIScreen.mainScreen.scale, image.size.height * UIScreen.mainScreen.scale)];
+		outputImage = [outputImage imageByCroppingToRect:CGRectMake(0, 0, image.size.width * [UIScreen mainScreen].scale, image.size.height * [UIScreen mainScreen].scale)];
 		CIContext *context = [CIContext contextWithOptions:nil];
 		CGImageRef cgimg = [context createCGImage:outputImage fromRect:[inputImage extent]];  // note, use input image extent if you want it the same size, the output image extent is larger
 		image = [UIImage imageWithCGImage:cgimg];

@@ -89,9 +89,9 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
       [RAMessagingClient.sharedInstance notifyServerWithKeyboardContextId:contextID];
 
   #if DEBUG && NO
-      assert([[[UIKeyboard activeKeyboard] window] _contextId]);
-      assert(contextID != 0);
-      assert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
+      NSCAssert([[[UIKeyboard activeKeyboard] window] _contextId]);
+      NSCAssert(contextID != 0);
+      NSCAssert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
   #endif
 
       LogDebug(@"[ReachApp] c id %tu", contextID);
