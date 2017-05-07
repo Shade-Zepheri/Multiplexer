@@ -159,10 +159,7 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
   }
 }
 
-%hook SpringBoard
-- (void)applicationDidFinishLaunching:(UIApplication *)application {
-  %orig;
-
+static inline void initializeGestures(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   clientCreatePointer clientCreate;
   void *handle = dlopen(0, 9);
   *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
@@ -170,7 +167,6 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
   IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
   IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
 }
-%end
 
 __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
 
@@ -180,6 +176,8 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
   }
 
   @autoreleasepool {
+    CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &initializeGestures, CFSTR("SBSpringBoardDidLaunchNotification"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+
     class_addProtocol(%c(Hooks9$SBHandMotionExtractorReplacementByMultiplexer), @protocol(_UIScreenEdgePanRecognizerDelegate));
 
     UIRectEdge edgesToWatch[] = { UIRectEdgeBottom, UIRectEdgeLeft, UIRectEdgeRight, UIRectEdgeTop };
