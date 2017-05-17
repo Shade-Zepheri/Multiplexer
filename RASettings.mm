@@ -8,7 +8,6 @@
 
 NSCache *backgrounderSettingsCache = [NSCache new];
 
-
 @implementation RASettings
 + (BOOL)isParagonInstalled {
 	static BOOL installed = NO;

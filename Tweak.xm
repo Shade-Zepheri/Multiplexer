@@ -25,6 +25,8 @@ BOOL $__IS_SPRINGBOARD = NO;
 }
 
 //honestly obselete, overkill and unneeded as backgrounded is a property
+
+/*
 void SET_BACKGROUNDED(id settings, BOOL value) {
 #if __has_feature(objc_arc)
 	// stupid ARC...
@@ -40,6 +42,7 @@ void SET_BACKGROUNDED(id settings, BOOL value) {
 	}
 #endif
 }
+*/
 
 /*
 #if DEBUG

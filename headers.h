@@ -40,7 +40,7 @@
 #import "RASBWorkspaceFetcher.h"
 #define GET_SBWORKSPACE [RASBWorkspaceFetcher getCurrentSBWorkspaceImplementationInstanceForThisOS]
 
-#define GET_STATUSBAR_ORIENTATION (![UIApplication sharedApplication]._accessibilityFrontMostApplication ? UIApplication.sharedApplication.statusBarOrientation : UIApplication.sharedApplication._accessibilityFrontMostApplication.statusBarOrientation)
+#define GET_STATUSBAR_ORIENTATION (![UIApplication sharedApplication]._accessibilityFrontMostApplication ? [UIApplication sharedApplication].statusBarOrientation : [UIApplication sharedApplication]._accessibilityFrontMostApplication.statusBarOrientation)
 
 #if DEBUG
 #define LogDebug HBLogDebug
@@ -92,7 +92,7 @@ void BKSHIDServicesCancelTouchesOnMainDisplay();
 #define RADIANS_TO_DEGREES(radians) (radians * 180.0 / M_PI)
 #define DEGREES_TO_RADIANS(radians) (radians * M_PI / 180)
 
-void SET_BACKGROUNDED(id settings, BOOL val);
+//void SET_BACKGROUNDED(id settings, BOOL val);
 
 #define SHARED_INSTANCE2(cls, extracode) \
 static cls *sharedInstance = nil; \

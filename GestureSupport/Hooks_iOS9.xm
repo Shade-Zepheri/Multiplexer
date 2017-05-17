@@ -78,17 +78,17 @@ typedef struct {
 
   CGPoint location = MSHookIvar<CGPoint>(screenEdgePanRecognizer, "_lastTouchLocation");
 
-  if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
-    location.x = UIScreen.mainScreen.bounds.size.width - location.x;
-  } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
-      location.x = UIScreen.mainScreen.bounds.size.width - location.x;
-  } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+  if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
+    location.x = [UIScreen mainScreen].bounds.size.width - location.x;
+  } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
+      location.x = [UIScreen mainScreen].bounds.size.width - location.x;
+  } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
     CGFloat t = location.y;
     location.y = location.x;
     location.x = t;
   }
   LogDebug(@"[ReachApp] _UIScreenEdgePanRecognizer location: %@", NSStringFromCGPoint(location));
-  if ([RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateBegan withPoint:location velocity:screenEdgePanRecognizer.RA_velocity forEdge:screenEdgePanRecognizer.targetEdges]) {
+  if ([[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateBegan withPoint:location velocity:screenEdgePanRecognizer.RA_velocity forEdge:screenEdgePanRecognizer.targetEdges]) {
     currentEdge9 = screenEdgePanRecognizer.targetEdges;
     BKSHIDServicesCancelTouchesOnMainDisplay(); // This is needed or open apps, etc will still get touch events. For example open settings app + swipeover without this line and you can still scroll up/down through the settings
   }
@@ -112,9 +112,9 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
 
       if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
         rotatedX = y;
-        rotatedY = UIScreen.mainScreen._referenceBounds.size.width - x;
+        rotatedY = [UIScreen mainScreen]._referenceBounds.size.width - x;
       } else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
-        rotatedX = UIScreen.mainScreen._referenceBounds.size.height - y;
+        rotatedX = [UIScreen mainScreen]._referenceBounds.size.height - y;
         rotatedY = x;
       }
 
@@ -135,7 +135,7 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
           }
         }
 
-        [RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateEnded withPoint:CGPointZero velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
+        [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateEnded withPoint:CGPointZero velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
         for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
           [recognizer reset]; // remove current touches it's "incorporated"
         }
@@ -153,7 +153,7 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
             targetRecognizer = recognizer;
           }
         }
-        [RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateChanged withPoint:rotatedLocation velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
+        [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateChanged withPoint:rotatedLocation velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
       }
     }
   }

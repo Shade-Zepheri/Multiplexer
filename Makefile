@@ -5,8 +5,8 @@ export THEOS_DEVICE_IP=192.168.254.1
 export THEOS_DEVICE_PORT=22
 endif
 
-CFLAGS = -flto=thin -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IMissionControl/ -IQuickAccess/ -IReachApp/ -ISwipeOver/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
-CFLAGS += -fobjc-arc
+CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IMissionControl/ -IQuickAccess/ -IReachApp/ -ISwipeOver/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
+CFLAGS += -fobjc-arc -flto=thin 
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
