@@ -16,7 +16,9 @@ static RAActivatorListener *sharedInstance;
 		if ([%c(SBUIController) respondsToSelector:@selector(_appSwitcherController)]) {
 			[[[%c(SBUIController) sharedInstance] _appSwitcherController] forceDismissAnimated:NO];
 		} else {
-			[[%c(SBMainSwitcherViewController) sharedInstance] RA_dismissSwitcherUnanimated];
+			[UIView performWithoutAnimation:^{
+				[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
+			}];
 		}
 	}
 	[event setHandled:YES];

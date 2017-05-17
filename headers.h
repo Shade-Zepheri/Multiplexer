@@ -1492,7 +1492,6 @@ extern NSString* FBSOpenApplicationOptionKeyActivateSuspended;
 - (BOOL)dismissSwitcherNoninteractively;
 - (BOOL)isVisible;
 - (BOOL)activateSwitcherNoninteractively;
-- (void)RA_dismissSwitcherUnanimated;
 @end
 
 @interface SBSwitcherContainerView : UIView

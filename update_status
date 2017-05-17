@@ -21,7 +21,7 @@ Bugs:
 - SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
 - SwipeOver whacky on iPads
 - Fake phone mode freezes apps
-- Aura breaks calls? (Some say it fixes itself)
+- Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 
 Minor Things/Bugs to note:

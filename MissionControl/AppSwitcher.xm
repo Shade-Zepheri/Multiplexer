@@ -533,7 +533,9 @@ BOOL toggleOrActivate = NO;
 				if ([%c(SBUIController) respondsToSelector:@selector(dismissSwitcherAnimated:)]) {
 					[[%c(SBUIController) sharedInstance] dismissSwitcherAnimated:NO];
 				} else {
-					[[%c(SBMainSwitcherViewController) sharedInstance] RA_dismissSwitcherUnanimated];
+					[UIView performWithoutAnimation:^{
+						[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
+					}];
 				}
 				[RAMissionControlManager.sharedInstance showMissionControl:NO];
 				[fakeView removeFromSuperview];
@@ -591,33 +593,6 @@ BOOL toggleOrActivate = NO;
 		//[[[%c(RADesktopManager) sharedInstance] currentDesktop] loadApps];
 	}
 	%orig;
-}
-
-%new - (void)RA_dismissSwitcherUnanimated {
-	FBWorkspaceEvent *event = [%c(FBWorkspaceEvent) eventWithName:@"ActivateSpringBoard" handler:^{
-		SBWorkspaceApplicationTransitionContext *transitionContext = [[%c(SBWorkspaceApplicationTransitionContext) alloc] init];
-		[transitionContext setAnimationDisabled:YES];
-
-		//set layout role to 'side' (deactivating)
-		SBWorkspaceDeactivatingEntity *deactivatingEntity = [%c(SBWorkspaceDeactivatingEntity) entity];
-		[deactivatingEntity setLayoutRole:3];
-		[transitionContext setEntity:deactivatingEntity forLayoutRole:3];
-
-		//set layout role for 'primary' (activating)
-		SBWorkspaceHomeScreenEntity *homescreenEntity = [[%c(SBWorkspaceHomeScreenEntity) alloc] init];
-		[transitionContext setEntity:homescreenEntity forLayoutRole:2];
-
-		//create transititon request
-		SBMainWorkspaceTransitionRequest *transitionRequest = [[%c(SBMainWorkspaceTransitionRequest) alloc] initWithDisplay:[%c(FBDisplayManager) mainDisplay]];
-		[transitionRequest setApplicationContext:transitionContext];
-
-		//create apptoapp transaction
-		SBAppToAppWorkspaceTransaction *transaction = [[%c(SBAppToAppWorkspaceTransaction) alloc] initWithTransitionRequest:transitionRequest];
-
-		//start closing
-		[transaction begin];
-	}];
-	[(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
 }
 
 //Because I cant think of a better solution
