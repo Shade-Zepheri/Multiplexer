@@ -186,32 +186,21 @@
 		CGContextRef context = UIGraphicsGetCurrentContext();
 
 		ON_MAIN_THREAD(^{
-			[[%c(SBUIController) sharedInstance] restoreContentAndUnscatterIconsAnimated:NO];
-		//});
+			//apparently SB as native caching since iOS 7
+			SBWallpaperPreviewSnapshotCache *previewCache = [[%c(SBWallpaperController) sharedInstance] valueForKey:@"_previewCache"];
+			UIImage *homeScreenSnapshot = [previewCache homeScreenSnapshot];
+			UIImage *image = [RAResourceImageProvider imageWithImage:homeScreenSnapshot scaledToSize:[UIScreen mainScreen].bounds.size];
+			CGRect imageFrame = CGRectMake(0, 0, image.size.width, image.size.height);
 
-			UIImage *image = [self wallpaperImage:NO];
-			CGRect imageRect = CGRectMake(0, 0, image.size.width, image.size.height);
-			//since drawInRect doesnt work
-			CGContextTranslateCTM(context, 0, image.size.height);
+			//since drawInRect STILL doesnt work
+			CGContextTranslateCTM(context, 0, imageFrame.size.height);
 			CGContextScaleCTM(context, 1.0, -1.0);
 
-			CGContextDrawImage(context, imageRect, image.CGImage); // Wallpaper
+			CGContextDrawImage(context, imageFrame, image.CGImage);
 
 			CGContextScaleCTM(context, 1.0, -1.0);
-			CGContextTranslateCTM(context, 0, -imageRect.size.height);
-		//[[[[%c(SBUIController) sharedInstance] window] layer] performSelectorOnMainThread:@selector(renderInContext:) withObject:(__bridge id)c waitUntilDone:YES]; // Icons
-		//ON_MAIN_THREAD(^{
-			//[MSHookIvar<UIWindow*>([%c(SBWallpaperController) sharedInstance], "_wallpaperWindow") drawViewHierarchyInRect:UIScreen.mainScreen.bounds afterScreenUpdates:YES];
-			if (IS_IOS_OR_NEWER(iOS_9_0)) { //not sure why broken
-				UIView *view = [[%c(SBIconController) sharedInstance] view];
-				[view.layer renderInContext:context];
-			} else {
-				[[[[%c(SBUIController) sharedInstance] window] layer] renderInContext:context];
-			}
-
-			[desktop.layer renderInContext:context];
+			CGContextTranslateCTM(context, 0, -imageFrame.size.height);
 		});
-		//[desktop.layer performSelectorOnMainThread:@selector(renderInContext:) withObject:(__bridge id)c waitUntilDone:YES]; // Desktop windows
 
 		for (UIView *view in desktop.subviews) { // Application views
 			if (![view isKindOfClass:[%c(RAWindowBar) class]]) {

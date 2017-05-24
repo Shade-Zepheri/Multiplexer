@@ -495,9 +495,15 @@ typedef struct {
 - (void)_updateInterfaceOrientationAnimated:(BOOL)arg1;
 @end
 
+@interface SBWallpaperPreviewSnapshotCache : NSObject
+- (UIImage*)homeScreenSnapshot;
+- (UIImage*)lockScreenSnapshot;
+@end
+
 @interface SBWallpaperController : NSObject {
     SBFWallpaperView *_homescreenWallpaperView;
     SBFWallpaperView *_sharedWallpaperView;
+    SBWallpaperPreviewSnapshotCache* _previewCache;
 }
 @property (nonatomic,retain) SBFStaticWallpaperView *homescreenWallpaperView;
 @property (nonatomic,retain) SBFStaticWallpaperView *sharedWallpaperView;

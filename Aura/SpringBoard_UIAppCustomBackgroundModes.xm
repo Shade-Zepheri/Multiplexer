@@ -22,7 +22,7 @@
 %hook BKSProcessAssertion
 - (instancetype)initWithPID:(NSInteger)arg1 flags:(NSUInteger)arg2 reason:(NSUInteger)arg3 name:(NSString *)arg4 withHandler:(unsafe_id)arg5 {
 	if (arg3 == BKSProcessAssertionReasonViewServices || [arg4 isEqualToString:@"Called by iOS6_iCleaner, from unknown method"] || [arg4 isEqualToString:@"Called by Filza_main, from -[AppDelegate applicationDidEnterBackground:]"] || [arg4 isEqualToString:@"QRC"]) {
-		//Whitelist share menu, iCleaner, Filza and QRC 
+		//Whitelist share menu, iCleaner, Filza and QRC
 		return %orig;
 	}
 
