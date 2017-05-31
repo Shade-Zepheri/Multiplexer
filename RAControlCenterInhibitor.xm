@@ -6,6 +6,10 @@ BOOL overrideCC = NO;
 @implementation RAControlCenterInhibitor : NSObject
 + (void)setInhibited:(BOOL)value {
 	overrideCC = value;
+	
+	if (%c(SBSystemGestureManager)) {
+		[[%c(SBSystemGestureManager) mainDisplayManager] setSystemGesturesDisabledForAccessibility:value];
+	}
 }
 
 + (BOOL)isInhibited {
@@ -22,15 +26,6 @@ BOOL overrideCC = NO;
 }
 
 - (void)handleShowControlCenterSystemGesture:(__unsafe_unretained id)arg1 {
-	if (overrideCC) {
-		return;
-	}
-	%orig;
-}
-%end
-
-%hook SBControlCenterController
-- (void)presentAnimated:(BOOL)arg1 completion:(id)arg2 {
 	if (overrideCC) {
 		return;
 	}
