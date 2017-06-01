@@ -45,11 +45,11 @@
 		SBWorkspaceHomeScreenEntity *homescreenEntity = [[%c(SBWorkspaceHomeScreenEntity) alloc] init];
 		[transitionContext setEntity:homescreenEntity forLayoutRole:2];
 
-		[transitionContext setAnimationDisabled:YES];
+		transitionContext.animationDisabled = YES;
 
 		//create transititon request
 		SBMainWorkspaceTransitionRequest *transitionRequest = [[%c(SBMainWorkspaceTransitionRequest) alloc] initWithDisplay:[%c(FBDisplayManager) mainDisplay]];
-		[transitionRequest setApplicationContext:transitionContext];
+		transitionRequest.applicationContext = transitionContext;
 
 		return [[%c(SBAppToAppWorkspaceTransaction) alloc] initWithTransitionRequest:transitionRequest];
 	}
