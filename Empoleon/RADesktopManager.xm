@@ -181,7 +181,7 @@ BOOL overrideUIWindow = NO;
 %hook SpringBoard
 - (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 {
 	%orig;
-	[RADesktopManager.sharedInstance updateRotationOnClients:arg1];
+	[[RADesktopManager sharedInstance] updateRotationOnClients:arg1];
 }
 
 - (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 logMessage:(id)arg3 {

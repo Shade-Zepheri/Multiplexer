@@ -39,6 +39,7 @@ BOOL locationIsInValidArea(CGFloat x) {
 
     // Dismiss potential CC
     //[[%c(SBUIController) sharedInstance] _showControlCenterGestureEndedWithLocation:CGPointMake(0, UIScreen.mainScreen.bounds.size.height - 1) velocity:CGPointZero];
+    [[%c(SBControlCenterController) sharedInstance] dismissAnimated:YES];
 
     if (state == UIGestureRecognizerStateBegan) {
       [RAControlCenterInhibitor setInhibited:YES];
