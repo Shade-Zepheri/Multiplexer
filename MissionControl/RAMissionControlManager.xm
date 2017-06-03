@@ -76,7 +76,7 @@ CGRect swappedForOrientation2(CGRect in) {
 
 	_isShowingMissionControl = YES;
 
-	SBApplication *app = UIApplication.sharedApplication._accessibilityFrontMostApplication;
+	SBApplication *app = [UIApplication sharedApplication]._accessibilityFrontMostApplication;
 	if (app) {
 		lastOpenedApp = app;
 	}
@@ -108,9 +108,9 @@ CGRect swappedForOrientation2(CGRect in) {
 		originalAppView.frame = swappedForOrientation2(CGRectMake(originalAppFrame.origin.x, originalAppView.frame.size.height, originalAppFrame.size.width, originalAppFrame.size.height));
 	}
 
-	[window updateForOrientation:UIApplication.sharedApplication.statusBarOrientation];
+	[window updateForOrientation:[UIApplication sharedApplication].statusBarOrientation];
 	[[%c(RAGestureManager) sharedInstance] addGestureRecognizerWithTarget:self forEdge:UIRectEdgeBottom identifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture" priority:RAGesturePriorityHigh];
-	[[%c(RAGestureManager) sharedInstance] ignoreSwipesBeginningInRect:UIScreen.mainScreen.bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
+	[[%c(RAGestureManager) sharedInstance] ignoreSwipesBeginningInRect:[UIScreen mainScreen].bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
 	[[%c(RARunningAppsProvider) sharedInstance] addTarget:window];
 	[%c(RAOrientationLocker) lockOrientation];
 	if (!IS_IOS_OR_NEWER(iOS_10_0)) { //Not required on 10.x, not sure about other versions
@@ -137,7 +137,7 @@ CGRect swappedForOrientation2(CGRect in) {
 
 	window = [[RAMissionControlWindow alloc] initWithFrame:[UIScreen mainScreen].RA_interfaceOrientedBounds];
 	window.manager = self;
-	[window _rotateWindowToOrientation:UIApplication.sharedApplication.statusBarOrientation updateStatusBar:YES duration:1 skipCallbacks:NO];
+	//[window _rotateWindowToOrientation:[UIApplication sharedApplication].statusBarOrientation updateStatusBar:YES duration:1 skipCallbacks:NO];
 
 	//_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithStyle:1];
 	_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:THEMED(missionControlBlurStyle) graphicsQuality:10]; // speed++ hopefully
@@ -146,8 +146,8 @@ CGRect swappedForOrientation2(CGRect in) {
 	[window addSubview:blurView];
 
 	int statusBarStyle = 0x12F; //Normal notification center style
-	UIInterfaceOrientation orientation = UIApplication.sharedApplication.statusBarOrientation;
-	statusBar = [[UIStatusBar alloc] initWithFrame:CGRectMake(0, 0, UIApplication.sharedApplication.statusBar.bounds.size.width, [UIStatusBar heightForStyle:statusBarStyle orientation:orientation])];
+	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
+	statusBar = [[UIStatusBar alloc] initWithFrame:CGRectMake(0, 0, [UIApplication sharedApplication].statusBar.bounds.size.width, [UIStatusBar heightForStyle:statusBarStyle orientation:orientation])];
 	[statusBar requestStyle:statusBarStyle];
 	statusBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[window addSubview:statusBar];

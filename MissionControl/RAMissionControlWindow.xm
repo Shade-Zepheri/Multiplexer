@@ -39,7 +39,7 @@
 	return self;
 }
 
-- (BOOL)_shouldAutorotateToInterfaceOrientation:(int)arg1 checkForDismissal:(BOOL)arg2 isRotationDisabled:(BOOL*)arg3 {
+- (BOOL)_shouldAutorotateToInterfaceOrientation:(NSInteger)arg1 checkForDismissal:(BOOL)arg2 isRotationDisabled:(BOOL*)arg3 {
 	return YES;
 }
 

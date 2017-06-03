@@ -90,7 +90,7 @@
 }
 
 - (UIImage*)snapshotForIdentifier:(NSString*)identifier {
-	return [self snapshotForIdentifier:identifier orientation:UIApplication.sharedApplication.statusBarOrientation];
+	return [self snapshotForIdentifier:identifier orientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
 - (void)forceReloadOfSnapshotForIdentifier:(NSString*)identifier {
@@ -136,13 +136,21 @@
 }
 
 - (UIImage*)rotateImageToMatchOrientation:(UIImage*)oldImage {
-	CGFloat degrees = 0;
-	if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
-		degrees = 270;
-	} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-		degrees = 90;
-	} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown) {
-		degrees = 180;
+	CGFloat degrees;
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationLandscapeRight:
+			degrees = 270;
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			degrees = 90;
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			degrees = 180;
+			break;
+		case UIInterfaceOrientationPortrait:
+		case UIInterfaceOrientationUnknown:
+			degrees = 0;
+			break;
 	}
 
 	// https://stackoverflow.com/questions/20764623/rotate-newly-created-ios-image-90-degrees-prior-to-saving-as-png
@@ -186,7 +194,7 @@
 		CGContextRef context = UIGraphicsGetCurrentContext();
 
 		ON_MAIN_THREAD(^{
-			//apparently SB as native caching since iOS 7
+			//apparently SB has native caching since iOS 7
 			SBWallpaperPreviewSnapshotCache *previewCache = [[%c(SBWallpaperController) sharedInstance] valueForKey:@"_previewCache"];
 			UIImage *homeScreenSnapshot = [previewCache homeScreenSnapshot];
 			UIImage *image = [RAResourceImageProvider imageWithImage:homeScreenSnapshot scaledToSize:[UIScreen mainScreen].bounds.size];
@@ -225,7 +233,7 @@
 		//	CGContextRotateCTM(c, DEGREES_TO_RADIANS(90));
 		UIImage *image = UIGraphicsGetImageFromCurrentImageContext();
 		UIGraphicsEndImageContext();
-		image = [self rotateImageToMatchOrientation:image];
+		//image = [self rotateImageToMatchOrientation:image];
 		return image;
 	}
 }
