@@ -1,4 +1,5 @@
 #import "RAControlCenterInhibitor.h"
+#import "headers.h"
 #import <UIKit/UIKit.h>
 
 BOOL overrideCC = NO;
@@ -6,7 +7,7 @@ BOOL overrideCC = NO;
 @implementation RAControlCenterInhibitor : NSObject
 + (void)setInhibited:(BOOL)value {
 	overrideCC = value;
-	
+
 	if (%c(SBSystemGestureManager)) {
 		[[%c(SBSystemGestureManager) mainDisplayManager] setSystemGesturesDisabledForAccessibility:value];
 	}

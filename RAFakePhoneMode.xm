@@ -19,7 +19,7 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
   if (!IS_IPAD) {
     return;
   }
-  
+
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{ // somehow, this is needed to make sure that both force resizing and Fake Phone Mode work. Without the dispatch_after, even if fake phone mode is disabled,
     // force resizing seems to render touches incorrectly ¯\_(ツ)_/¯
     IF_NOT_SPRINGBOARD {
@@ -31,7 +31,7 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
 }
 
 + (CGSize)fakedSize {
-  if (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation)) {
+  if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
     return CGSizeMake(forcePhoneModeSize.height, forcePhoneModeSize.width);
   }
   return forcePhoneModeSize;
@@ -48,21 +48,22 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
 }
 
 + (BOOL)shouldFakeForAppWithIdentifier:(NSString*)identifier {
-  IF_SPRINGBOARD {
-    return [RAMessagingServer.sharedInstance getDataForIdentifier:identifier].forcePhoneMode;
+  IF_NOT_SPRINGBOARD {
+    LogWarn(@"[ReachApp] WARNING: +[RAFakePhoneMode shouldFakeForAppWithIdentifier:] called from outside SpringBoard!");
+    return NO;
   }
-  LogWarn(@"[ReachApp] WARNING: +[RAFakePhoneMode shouldFakeForAppWithIdentifier:] called from outside SpringBoard!");
-  return NO;
+
+  return [[RAMessagingServer sharedInstance] getDataForIdentifier:identifier].forcePhoneMode;
 }
 
 + (BOOL)shouldFakeForThisProcess {
   static char fakeFlag = 0;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    if (!RAMessagingClient.sharedInstance.hasRecievedData) {
-      [RAMessagingClient.sharedInstance requestUpdateFromServer];
+    if (![RAMessagingClient sharedInstance].hasRecievedData) {
+      [[RAMessagingClient sharedInstance] requestUpdateFromServer];
     }
-    fakeFlag = RAMessagingClient.sharedInstance.currentData.forcePhoneMode;
+    fakeFlag = [RAMessagingClient sharedInstance].currentData.forcePhoneMode;
   });
   return fakeFlag;
 }

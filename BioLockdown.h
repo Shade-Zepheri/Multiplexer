@@ -22,7 +22,7 @@ __attribute__((visibility("hidden")))
 @end
 #pragma GCC diagnostic pop
 
-#define HAS_BIOLOCKDOWN (objc_getClass("BioLockdownController") != nil)
+#define HAS_BIOLOCKDOWN (objc_getClass("BioLockdownController"))
 #define IF_BIOLOCKDOWN  if (HAS_BIOLOCKDOWN)
 
 #define BIOLOCKDOWN_AUTHENTICATE_APP(ident, success, failure_) \

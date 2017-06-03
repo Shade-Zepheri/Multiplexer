@@ -1,3 +1,4 @@
+#import <SpringBoard/SBApplication.h>
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBIconModel.h>
 #import <SpringBoard/SBIcon.h>
@@ -10,7 +11,6 @@
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import <substrate.h>
-#import <SpringBoard/SBApplication.h>
 #include <mach/mach.h>
 #include <libkern/OSCacheControl.h>
 #include <stdbool.h>
@@ -611,6 +611,11 @@ typedef enum {
 - (void)dismissSwitcherForAlert:(id)arg1;
 
 - (void)activateApplication:(id)arg1;
+@end
+
+@interface SBSystemGestureManager : NSObject
++ (instancetype)mainDisplayManager;
+- (void)setSystemGesturesDisabledForAccessibility:(BOOL)arg1;
 @end
 
 @interface SBDisplayItem : NSObject <NSCopying>

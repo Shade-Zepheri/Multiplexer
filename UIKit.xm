@@ -68,7 +68,7 @@ BOOL allowClosingReachabilityNatively = NO;
   %orig;
 
   dispatch_async(dispatch_get_main_queue(), ^{
-    [RAMessagingClient.sharedInstance notifySpringBoardOfFrontAppChangeToSelf];
+    [[RAMessagingClient sharedInstance] notifySpringBoardOfFrontAppChangeToSelf];
   });
 }
 %end

@@ -3,30 +3,32 @@
 
 // IMPORTANT: DO NOT IMPORT HEADERS.H
 // REASON: HEADERS.H IMPORTS THIS FILE
-// Cant we just use a version check? (this seems terrible inefficient)
+// Cant we just use a version check? (this seems terribly inefficient)
 
 @interface __SBWorkspace__class_impl_dummy : NSObject
 + (id)sharedInstance;
 @end
 
-Class SBWorkspace_class_implementation_class = nil;
+
+Class CurrentSBWorkspaceClass = nil;
 
 @implementation RASBWorkspaceFetcher
 + (Class)SBWorkspaceClass {
-	return SBWorkspace_class_implementation_class;
+	return CurrentSBWorkspaceClass;
 }
 
 + (SBWorkspace*)getCurrentSBWorkspaceImplementationInstanceForThisOS {
-	if ([SBWorkspace_class_implementation_class respondsToSelector:@selector(sharedInstance)]) {
-		return [SBWorkspace_class_implementation_class sharedInstance];
+	if (![CurrentSBWorkspaceClass respondsToSelector:@selector(sharedInstance)]) {
+		HBLogError(@"[ReachApp] \"SBWorkspace\" class '%s' does not have '+sharedInstance' method", class_getName(CurrentSBWorkspaceClass));
+		return nil;
 	}
-	HBLogError(@"[ReachApp] \"SBWorkspace\" class '%s' does not have '+sharedInstance' method", class_getName(SBWorkspace_class_implementation_class));
-	return nil;
+
+	return [CurrentSBWorkspaceClass sharedInstance];
 }
 @end
 
 %ctor {
 	// SBMainWorkspace: iOS 9
 	// SBWorkspace: iOS 8
-	SBWorkspace_class_implementation_class = %c(SBMainWorkspace) ?: %c(SBWorkspace);
+	CurrentSBWorkspaceClass = %c(SBMainWorkspace) ?: %c(SBWorkspace);
 }

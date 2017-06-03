@@ -38,7 +38,7 @@
 
 		//set layout role to 'side' (deactivating)
 		SBWorkspaceDeactivatingEntity *deactivatingEntity = [%c(SBWorkspaceDeactivatingEntity) entity];
-		[deactivatingEntity setLayoutRole:3];
+		deactivatingEntity.layoutRole = 3;
 		[transitionContext setEntity:deactivatingEntity forLayoutRole:3];
 
 		//set layout role for 'primary' (activating)

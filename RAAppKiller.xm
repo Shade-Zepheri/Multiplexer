@@ -68,7 +68,7 @@ extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSStrin
 	}
 	*/
 
-	[RAAppKiller.sharedInstance->completionDictionary setObject:[handler copy] forKey:app.bundleIdentifier];
+	[[RAAppKiller sharedInstance]->completionDictionary setObject:[handler copy] forKey:app.bundleIdentifier];
 	BKSTerminateApplicationForReasonAndReportWithDescription(app.bundleIdentifier, 5, 1, @"Multiplexer requested this process to be slayed.");
 }
 

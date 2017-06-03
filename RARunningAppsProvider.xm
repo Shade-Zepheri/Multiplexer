@@ -82,10 +82,10 @@
 - (void)updateProcessState:(unsafe_id)arg1 {
 	%orig;
 
-	if (self.isRunning && ![RARunningAppsProvider.sharedInstance.mutableRunningApplications containsObject:self]) {
-		[RARunningAppsProvider.sharedInstance addRunningApp:self];
-	} else if (!self.isRunning && [RARunningAppsProvider.sharedInstance.mutableRunningApplications containsObject:self]) {
-		[RARunningAppsProvider.sharedInstance removeRunningApp:self];
+	if (self.isRunning && ![[RARunningAppsProvider sharedInstance].mutableRunningApplications containsObject:self]) {
+		[[RARunningAppsProvider sharedInstance] addRunningApp:self];
+	} else if (!self.isRunning && [[RARunningAppsProvider sharedInstance].mutableRunningApplications containsObject:self]) {
+		[[RARunningAppsProvider sharedInstance] removeRunningApp:self];
 	}
 }
 %end

@@ -154,14 +154,14 @@ BOOL overrideDisableForStatusBar = NO;
 %hook SpringBoard
 - (void)noteInterfaceOrientationChanged:(int)arg1 duration:(float)arg2 {
 	%orig;
-	[RASnapshotProvider.sharedInstance forceReloadEverything];
+	[[RASnapshotProvider sharedInstance] forceReloadEverything];
 }
 %end
 
 %hook SBApplication
 - (void)didActivateWithTransactionID:(unsigned long long)arg1 {
 	dispatch_async(dispatch_get_main_queue(), ^{
-	  [RASnapshotProvider.sharedInstance forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
+	  [[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
 	});
 
 	%orig;
@@ -199,7 +199,7 @@ static inline void respring_notification(CFNotificationCenterRef center, void *o
 }
 
 static inline void reset_settings_notification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-	[RASettings.sharedInstance resetSettings];
+	[[RASettings sharedInstance] resetSettings];
 }
 
 %ctor {

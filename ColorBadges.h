@@ -58,5 +58,5 @@ static inline int RGBFromUIColor(UIColor *self) {
   return 0;
 }
 
-#define HAS_COLORBADGES (objc_getClass("ColorBadges") != nil)
+#define HAS_COLORBADGES (objc_getClass("ColorBadges"))
 #define GET_COLORBADGES_COLOR(icon, alt) HAS_COLORBADGES ? ([objc_getClass("ColorBadges") isEnabled] ? UIColorFromRGB([[objc_getClass("ColorBadges") sharedInstance] colorForIcon:icon]) : alt) : alt
