@@ -23,7 +23,7 @@ Bugs:
 - Fake phone mode freezes apps
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
-- MissionControl Window wrong orientation on iPads
+- NCApp Misaligned on iPads
 
 Minor Things/Bugs to note:
 - Seems split caused more blackscreens in windowed apps

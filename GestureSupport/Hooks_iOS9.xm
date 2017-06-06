@@ -76,7 +76,7 @@ typedef struct {
     return;
   }
 
-  CGPoint location = MSHookIvar<CGPoint>(screenEdgePanRecognizer, "_lastTouchLocation");
+  CGPoint location = screenEdgePanRecognizer._lastTouchLocation;
 
   if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
     location.x = [UIScreen mainScreen].bounds.size.width - location.x;
@@ -107,15 +107,26 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
 
       UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
 
-      float rotatedX = x;
-      float rotatedY = y;
+      float rotatedX, rotatedY;
 
-      if (interfaceOrientation == UIInterfaceOrientationLandscapeRight) {
-        rotatedX = y;
-        rotatedY = [UIScreen mainScreen]._referenceBounds.size.width - x;
-      } else if (interfaceOrientation == UIInterfaceOrientationLandscapeLeft) {
-        rotatedX = [UIScreen mainScreen]._referenceBounds.size.height - y;
-        rotatedY = x;
+      switch (interfaceOrientation) {
+        case UIInterfaceOrientationUnknown:
+        case UIInterfaceOrientationPortrait:
+          rotatedX = x;
+          rotatedY = y;
+          break;
+        case UIInterfaceOrientationPortraitUpsideDown:
+          rotatedX = [UIScreen mainScreen].bounds.size.width - x;
+          rotatedY = [UIScreen mainScreen].bounds.size.height - y;
+          break;
+        case UIInterfaceOrientationLandscapeLeft:
+          rotatedX = [UIScreen mainScreen].bounds.size.width - y;
+          rotatedY = x;
+          break;
+        case UIInterfaceOrientationLandscapeRight:
+          rotatedX = y;
+          rotatedY = [UIScreen mainScreen].bounds.size.height - x;
+          break;
       }
 
       CGPoint rotatedLocation = CGPointMake(rotatedX, rotatedY);
@@ -186,7 +197,7 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
     for (int i = 0; i < edgeCount; i++) {
       _UIScreenEdgePanRecognizer *recognizer = [[_UIScreenEdgePanRecognizer alloc] initWithType:2];
       recognizer.targetEdges = edgesToWatch[i];
-      recognizer.screenBounds = [UIScreen mainScreen]._referenceBounds;
+      recognizer.screenBounds = [UIScreen mainScreen].bounds;
       [gestureRecognizers addObject:recognizer];
     }
 

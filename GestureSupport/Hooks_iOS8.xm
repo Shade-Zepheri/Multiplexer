@@ -58,7 +58,7 @@ typedef struct {
       [recognizer setDelegate:(id<_UIScreenEdgePanRecognizerDelegate>)self];
     }
   }
-  
+
   return self;
 }
 
@@ -90,7 +90,7 @@ typedef struct {
 
 %new - (void)screenEdgePanRecognizerStateDidChange:(_UIScreenEdgePanRecognizer*)screenEdgePanRecognizer {
   if (screenEdgePanRecognizer.state == UIGestureRecognizerStateBegan) {
-    CGPoint location = MSHookIvar<CGPoint>(screenEdgePanRecognizer, "_lastTouchLocation");
+    CGPoint location = screenEdgePanRecognizer._lastTouchLocation;
 
     // Adjust for the two unsupported orientations... what...
     if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
@@ -145,7 +145,7 @@ typedef struct {
   for (int i = 0; i < edgeCount; i++) {
     _UIScreenEdgePanRecognizer *recognizer = [[_UIScreenEdgePanRecognizer alloc] initWithType:2];
     recognizer.targetEdges = edgesToWatch[i];
-    recognizer.screenBounds = UIScreen.mainScreen.bounds;
+    recognizer.screenBounds = [UIScreen mainScreen].bounds;
     [gestureRecognizers addObject:recognizer];
   }
 

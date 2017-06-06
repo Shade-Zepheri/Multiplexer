@@ -679,6 +679,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (nonatomic, readonly) NSInteger state;
 @property (nonatomic) UIRectEdge targetEdges;
 @property (nonatomic) CGRect screenBounds;
+@property (nonatomic,readonly) CGPoint _lastTouchLocation;
 @end
 
 @protocol _UIScreenEdgePanRecognizerDelegate <NSObject>
