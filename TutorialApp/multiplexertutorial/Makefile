@@ -1,8 +1,8 @@
-ARCHS = armv7 arm64
+export TARGET = iphone:9.2
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 
-include theos/makefiles/common.mk
+include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = MultiplexerTutorial
 MultiplexerTutorial_FILES = Tweak.xm
