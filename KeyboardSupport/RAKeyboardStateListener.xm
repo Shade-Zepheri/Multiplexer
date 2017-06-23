@@ -53,6 +53,7 @@ BOOL isShowing = NO;
     [center addObserver:self selector:@selector(didHide) name:UIKeyboardWillHideNotification object:nil];
     [center addObserver:self selector:@selector(didHide) name:UIApplicationWillResignActiveNotification object:nil];
   }
+  
   return self;
 }
 
@@ -84,15 +85,15 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
       if (%c(UIRemoteKeyboardWindow) && [UIKeyboard activeKeyboard] && [[UIKeyboard activeKeyboard] window]) {
         contextID = [[[UIKeyboard activeKeyboard] window] _contextId]; // ((UITextEffectsWindow*)[%c(UIRemoteKeyboardWindow) remoteKeyboardWindowForScreen:UIScreen.mainScreen create:NO])._contextId;
       } else {
-        contextID = UITextEffectsWindow.sharedTextEffectsWindow._contextId;
+        contextID = [UITextEffectsWindow sharedTextEffectsWindow]._contextId;
       }
-      [RAMessagingClient.sharedInstance notifyServerWithKeyboardContextId:contextID];
+      [[RAMessagingClient sharedInstance] notifyServerWithKeyboardContextId:contextID];
 
-  #if DEBUG && NO
+#if DEBUG && NO
       NSCAssert([[[UIKeyboard activeKeyboard] window] _contextId]);
       NSCAssert(contextID != 0);
       NSCAssert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
-  #endif
+#endif
 
       LogDebug(@"[ReachApp] c id %tu", contextID);
     }

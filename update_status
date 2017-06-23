@@ -37,3 +37,6 @@ Things to do/Features to add:
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?
 (_referenceBounds orientation independent, bounds changes with orientation)
+
+SBSystemGestureManager replaces SBHandMotionExtractor on 9+
+Somehow find a way to convert existing system to hook it?

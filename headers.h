@@ -610,12 +610,24 @@ typedef enum {
 - (void)_dismissAppSwitcherImmediately;
 - (void)dismissSwitcherForAlert:(id)arg1;
 
+-(id)contentView;
 - (void)activateApplication:(id)arg1;
+@end
+
+@protocol SBSystemGestureRecognizerDelegate <UIGestureRecognizerDelegate>
+@required
+-(id)viewForSystemGestureRecognizer:(id)arg1;
 @end
 
 @interface SBSystemGestureManager : NSObject
 + (instancetype)mainDisplayManager;
 - (void)setSystemGesturesDisabledForAccessibility:(BOOL)arg1;
+-(void)addGestureRecognizer:(id)arg1 withType:(NSUInteger)arg2;
+@end
+
+@interface SBScreenEdgePanGestureRecognizer : UIScreenEdgePanGestureRecognizer
+- (instancetype)initWithTarget:(id)arg1 action:(SEL)arg2;
+- (void)reset;
 @end
 
 @interface SBDisplayItem : NSObject <NSCopying>
