@@ -24,6 +24,7 @@ Bugs:
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - NCApp Misaligned on iPads
+- NCApp app still doesnt properly unload (more testing required)
 
 Minor Things/Bugs to note:
 - Seems split caused more blackscreens in windowed apps

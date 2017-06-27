@@ -5,7 +5,7 @@
 	SBAppSwitcherModel *model = [%c(SBAppSwitcherModel) sharedInstance];
 	if ([model respondsToSelector:@selector(addToFront:)]) { // iOS 7 + 8
 		SBDisplayLayout *layout = [%c(SBDisplayLayout) fullScreenDisplayLayoutForApplication:app];
-	  [model addToFront:layout];
+		[model addToFront:layout];
 	} else { // iOS 9
 		SBDisplayItem *layout = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:app.bundleIdentifier];
 		[model addToFront:layout role:2];
@@ -27,7 +27,7 @@
 
 	NSMutableArray *ret = [NSMutableArray array];
 
-	id list = [model mainSwitcherDisplayItems]; // NSArray<SBDisplayItem>
+	NSArray *list = [model mainSwitcherDisplayItems]; // NSArray<SBDisplayItem>
 	for (SBDisplayItem *item in list) {
 		[ret addObject:item.displayIdentifier];
 	}
@@ -37,11 +37,11 @@
 
 + (void)removeItemWithIdentifier:(NSString*)ident {
 	SBDisplayItem *item = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:ident];
-	id appSwitcherModel = [%c(SBAppSwitcherModel) sharedInstance];
+	SBAppSwitcherModel *appSwitcherModel = [%c(SBAppSwitcherModel) sharedInstance];
 	if ([appSwitcherModel respondsToSelector:@selector(removeDisplayItem:)]) {
-		[[%c(SBAppSwitcherModel) sharedInstance] removeDisplayItem:item];
+		[appSwitcherModel removeDisplayItem:item];
 	} else {
-		[[%c(SBAppSwitcherModel) sharedInstance] remove:item];
+		[appSwitcherModel remove:item];
 	}
 }
 @end

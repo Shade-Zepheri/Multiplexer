@@ -1059,8 +1059,7 @@ extern NSString* FBSOpenApplicationOptionKeyActivateSuspended;
 // iOS 9
 - (id)commandTabDisplayItems;
 - (id)displayItemsForAppsOfRoles:(id)arg1;
-- (id)mainSwitcherDisplayItems;
-//- (void)remove:(id)arg1;
+- (NSArray*)mainSwitcherDisplayItems;
 - (void)addToFront:(id)arg1 role:(long long)arg2;
 - (void)_warmUpIconForDisplayItem:(id)arg1;
 - (void)_warmUpRecentIcons;
