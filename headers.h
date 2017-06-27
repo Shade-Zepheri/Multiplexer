@@ -955,8 +955,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (id)initWithSettings:(id)arg1;
 @end
 
-extern NSString* FBSOpenApplicationOptionKeyActivateSuspended;
-
 @interface FBSSystemService ()
 - (void)openApplication:(id)arg1 options:(id)arg2 withResult:(void (^)(void))arg3;
 @end

@@ -26,7 +26,7 @@ libmultiplexercore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard
 	$(wildcard Debugging/*.xm) $(wildcard Debugging/*.mm) $(wildcard Debugging/*.m)
 
 libmultiplexercore_FRAMEWORKS = UIKit QuartzCore CoreGraphics CoreImage
-libmultiplexercore_PRIVATE_FRAMEWORKS = GraphicsServices BackBoardServices AppSupport IOKit
+libmultiplexercore_PRIVATE_FRAMEWORKS = GraphicsServices FrontBoardServices BackBoardServices AppSupport IOKit
 libmultiplexercore_EXTRA_FRAMEWORKS = CydiaSubstrate
 libmultiplexercore_LIBRARIES = rocketbootstrap applist
 

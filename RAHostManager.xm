@@ -21,19 +21,18 @@
 	}
 
 	if ([app respondsToSelector:@selector(mainScene)]) {
-		[[UIApplication sharedApplication] launchApplicationWithIdentifier:app.bundleIdentifier suspended:YES];
-
-		FBScene *scene = [app mainScene];
-		FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
-
+		FBScene *scene = [app mainScene];		
 		FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
 		if (!settings) {
 			return nil;
 		}
 
-		settings.backgrounded = NO;
-		[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
+		[[%c(FBSSystemService) sharedService] openApplication:app.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:^{
+			settings.backgrounded = NO;
+			[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
+		}];
 
+		FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
 		[contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
 		return [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
 	}
