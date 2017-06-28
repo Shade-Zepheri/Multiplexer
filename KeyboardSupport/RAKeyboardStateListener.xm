@@ -53,7 +53,7 @@ BOOL isShowing = NO;
     [center addObserver:self selector:@selector(didHide) name:UIKeyboardWillHideNotification object:nil];
     [center addObserver:self selector:@selector(didHide) name:UIApplicationWillResignActiveNotification object:nil];
   }
-  
+
   return self;
 }
 

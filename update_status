@@ -22,6 +22,8 @@ Bugs:
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - NCApp app still doesnt properly unload (more testing required)
+- FakePhoneMode wrong dimensions
+- Empoleon windows dont properly rotate in some apps
 
 Minor Things/Bugs to note:
 - Seems split caused more blackscreens in windowed apps

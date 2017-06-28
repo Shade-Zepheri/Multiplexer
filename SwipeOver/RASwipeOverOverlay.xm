@@ -5,7 +5,8 @@
 @synthesize grabberView;
 
 - (instancetype)initWithFrame:(CGRect)frame {
-	if (self = [super initWithFrame:frame]) {
+	self = [super initWithFrame:frame];
+	if (self) {
 		//self.backgroundColor = [UIColor blueColor];
 		//self.alpha = 0.4;
 		self.windowLevel = UIWindowLevelStatusBar + 1;

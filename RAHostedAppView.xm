@@ -42,6 +42,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     self.renderWallpaper = NO;
     self.backgroundColor = [UIColor clearColor];
   }
+
   return self;
 }
 
@@ -83,8 +84,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
                       message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
                       preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault
-                      handler:^(UIAlertAction * action) {}];
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefaul handler:nil];
     [alert addAction:defaultAction];
     [self.inputViewController presentViewController:alert animated:YES completion:nil];
     return;
@@ -100,7 +100,9 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     [UIApplication.sharedApplication launchApplicationWithIdentifier:self.bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:self.bundleIdentifier]; // ummm...?
   }
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{ [self _preloadOrAttemptToUpdateReachabilityCounterpart]; });
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    [self _preloadOrAttemptToUpdateReachabilityCounterpart];
+  });
   // this ^ runs either way. when _preloadOrAttemptToUpdateReachabilityCounterpart runs, if the app is "loaded" it will not call preloadApp again, otherwise
   // it will call it again.
 }
