@@ -84,7 +84,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
                       message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
                       preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefaul handler:nil];
+    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:defaultAction];
     [self.inputViewController presentViewController:alert animated:YES completion:nil];
     return;
