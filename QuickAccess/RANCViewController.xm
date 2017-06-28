@@ -117,7 +117,12 @@ int rotationDegsForOrientation(int o) {
 		// Align vertically
 		CGRect f = appView.frame;
 		f.origin.y = 0;
-		f.origin.x = (self.view.frame.size.width - f.size.width) / 2.0;
+		if (IS_IOS_OR_NEWER(iOS_10_0) && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) { //really hacky but u gotta do what ya gotta do
+			f.origin.x = (self.view.frame.size.width - f.size.height) / 2.0;
+		} else {
+			f.origin.x = (self.view.frame.size.width - f.size.width) / 2.0;
+		}
+		LogDebug(@"self.view.frame: %f f.size.width: %f f.origin.x: %f", self.view.frame.size.width, f.size.height, (self.view.frame.size.width - f.size.height) / 2.0);
 		appView.frame = f;
 	}
 	//[appView rotateToOrientation:UIApplication.sharedApplication.statusBarOrientation];
@@ -131,10 +136,12 @@ int rotationDegsForOrientation(int o) {
 }
 
 - (void)hostDidDismiss {
-	if (appView.isCurrentlyHosting) {
-		appView.hideStatusBar = NO;
-		[appView unloadApp];
+	if (!appView.isCurrentlyHosting) {
+		return;
 	}
+
+	appView.hideStatusBar = NO;
+	[appView unloadApp];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {

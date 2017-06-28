@@ -1,5 +1,5 @@
 ifeq ($(IPAD),1)
-export THEOS_DEVICE_IP=192.168.254.4
+export THEOS_DEVICE_IP=192.168.254.3
 export THEOS_DEVICE_PORT=22
 endif
 
