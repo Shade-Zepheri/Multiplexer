@@ -81,11 +81,13 @@ extern int rotationDegsForOrientation(int o);
 			[((RAHostedAppView*)overlayWindow.currentView) viewWithTag:9903553].alpha = 0;
 		}
 		overlayWindow.frame = newFrame;
-	} completion:^(BOOL _) {
-		[self closeCurrentView];
+	} completion:^(BOOL finished) {
+		if (finished) {
+			[self closeCurrentView];
 
-		overlayWindow.hidden = YES;
-		overlayWindow = nil;
+			overlayWindow.hidden = YES;
+			overlayWindow = nil;
+		}
 	}];
 }
 

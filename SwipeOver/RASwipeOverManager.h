@@ -22,4 +22,4 @@
 - (void)sizeViewForTranslation:(CGPoint)translation state:(UIGestureRecognizerState)state;
 @end
 
-#define RASWIPEOVER_VIEW_TAG 996
+static NSInteger const RASWIPEOVER_VIEW_TAG = 996;
