@@ -64,23 +64,28 @@ extern int rotationDegsForOrientation(int o);
 	isUsingSwipeOver = NO;
 	currentAppIdentifier = nil;
 
-	CGRect newFrame = overlayWindow.frame;
+	CGRect frame = overlayWindow.frame;
+	CGPoint newCenter = overlayWindow.center;
 	switch ([UIApplication.sharedApplication statusBarOrientation]) {
 	  case UIInterfaceOrientationPortrait:
-	   	newFrame = (CGRect) { { newFrame.origin.x + newFrame.size.height, newFrame.origin.y }, newFrame.size };
+			newCenter = CGPointMake((frame.size.width * 3) / 2, newCenter.y);
+			break;
 	  case UIInterfaceOrientationPortraitUpsideDown:
-	   	newFrame = (CGRect) { { newFrame.origin.x - newFrame.size.height, newFrame.origin.y }, newFrame.size };
+			newCenter = CGPointMake(frame.size.width / -2, newCenter.y);
+			break;
 	  case UIInterfaceOrientationLandscapeLeft:
-	   	newFrame = (CGRect) { { newFrame.origin.x, newFrame.origin.y - newFrame.size.height }, newFrame.size };
+			newCenter = CGPointMake(newCenter.x, frame.size.width / -2);
+			break;
 	  case UIInterfaceOrientationLandscapeRight:
-	   	newFrame = (CGRect) { { newFrame.origin.x, newFrame.origin.y + newFrame.size.height }, newFrame.size };
+			newCenter = CGPointMake(newCenter.x, (frame.size.width * 3) / 2);
+			break;
 	}
 
 	[UIView animateWithDuration:0.3 animations:^{
 		if ([[overlayWindow currentView] isKindOfClass:[%c(RAHostedAppView) class]]) {
 			[((RAHostedAppView*)overlayWindow.currentView) viewWithTag:9903553].alpha = 0;
 		}
-		overlayWindow.frame = newFrame;
+		overlayWindow.center = newCenter;
 	} completion:^(BOOL finished) {
 		if (finished) {
 			[self closeCurrentView];

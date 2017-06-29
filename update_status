@@ -17,8 +17,8 @@ Bugs:
 - Fix KeyboardSupport
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch (cant seeem to reproduce anymore);
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
-- SwipeOver sliding off screen animation is broken (RASwipeOverManager.xm:L62)
-- SwipeOver whacky on iPads
+- SwipeOver sliding on screen animation is broken
+- SwipeOver grabber doesnt always show when supposed to
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - NCApp app still doesnt properly unload (more testing required)
