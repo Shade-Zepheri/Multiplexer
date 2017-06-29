@@ -116,7 +116,7 @@ extern int rotationDegsForOrientation(int o);
 	  while (!scene && bundleIdentifiers.count > 0) {
 	    identifier = bundleIdentifiers[0];
 
-	    if ([identifier isEqual:currentAppIdentifier]) {
+	    if ([identifier isEqualToString:currentAppIdentifier]) {
 	      [bundleIdentifiers removeObjectAtIndex:0];
 	      continue;
 	    }
@@ -127,10 +127,7 @@ extern int rotationDegsForOrientation(int o);
 	}
 
 	if (app) {
-		SBDisplayLayout *layout = [%c(SBDisplayLayout) fullScreenDisplayLayoutForApplication:app];
-		if (layout) {
-			[[%c(SBAppSwitcherModel) sharedInstance] addToFront:layout];
-		}
+		[RAAppSwitcherModelWrapper addToFront:app];
 	}
 
 	if (!identifier || identifier.length == 0) {
