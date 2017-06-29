@@ -1,13 +1,26 @@
-#import <SpringBoard/SBApplication.h>
+#import <AssertionServices/BKSProcessAssertion.h>
+#import <FrontBoard/FBApplicationProcess.h>
+#import <FrontBoard/FBProcessManager.h>
+#import <FrontBoard/FBScene.h>
+#import <FrontBoard/FBSceneManager.h>
+#import <FrontBoardServices/FBSMutableSceneSettings.h>
+#import <FrontBoardServices/FBSSystemService.h>
+#import <GraphicsServices/GraphicsServices.h>
 #import <SpringBoard/SpringBoard.h>
-#import <SpringBoard/SBIconModel.h>
+#import <SpringBoard/SBApplication.h>
+#import <SpringBoard/SBApplicationIcon.h>
+#import <SpringBoard/SBBulletinBannerController.h>
+#import <SpringBoard/SBDisplayItem.h>
 #import <SpringBoard/SBIcon.h>
 #import <SpringBoard/SBIconController.h>
-#import <SpringBoard/SBApplicationIcon.h>
-#import <UIKit/UIImage.h>
-#import <UIKit/UIImageView.h>
 #import <SpringBoard/SBIconLabel.h>
-#import <SpringBoard/SBApplication.h>
+#import <SpringBoard/SBIconModel.h>
+#import <SpringBoard/SBNotificationCenterController.h>
+#import <SpringBoard/SBLockScreenManager.h>
+#import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
+#import <SpringBoard/SBSystemGestureManager.h>
+#import <SpringBoard/SBUIController.h>
+#import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
 #import <substrate.h>
@@ -18,14 +31,6 @@
 #include <sys/sysctl.h>
 #import <notify.h>
 #import <IOKit/hid/IOHIDEvent.h>
-#import <AssertionServices/BKSProcessAssertion.h>
-#import <GraphicsServices/GraphicsServices.h>
-#import <SpringBoardServices/SBSRestartRenderServerAction.h>
-#import <FrontBoard/FBProcess.h>
-#import <FrontBoard/FBProcessManager.h>
-#import <FrontBoard/FBScene.h>
-#import <FrontBoard/FBSceneManager.h>
-#import <FrontBoardServices/FBSSystemService.h>
 #import <version.h>
 
 #define RA_BASE_PATH @"/Library/Multiplexer"
@@ -447,9 +452,7 @@ typedef struct {
 -(id)_visibleView;
 @end
 
-@interface SBNotificationCenterController : NSObject
-+(id) sharedInstance;
--(SBNotificationCenterViewController *)viewController;
+@interface SBNotificationCenterController ()
 -(BOOL) isVisible;
 -(double)percentComplete;
 -(BOOL)isTransitioning;
@@ -552,12 +555,6 @@ typedef enum {
 @property(retain) NSDate * expirationDate;
 @end
 
-@interface SBBulletinBannerController : NSObject
-+ (SBBulletinBannerController *)sharedInstance;
-- (void)observer:(id)observer addBulletin:(BBBulletinRequest *)bulletin forFeed:(int)feed;
--(void) observer:(id)observer addBulletin:(BBBulletinRequest*) bulletin forFeed:(int)feed playLightsAndSirens:(BOOL)guess1 withReply:(id)guess2;
-@end
-
 @interface SBAppSwitcherWindow : UIWindow
 @end
 
@@ -581,8 +578,7 @@ typedef enum {
 - (void)switcherWasPresented:(_Bool)arg1;
 @end
 
-@interface SBUIController : NSObject
-+(id) sharedInstance;
+@interface SBUIController ()
 + (id)_zoomViewWithSplashboardLaunchImageForApplication:(id)arg1 sceneID:(id)arg2 screen:(id)arg3 interfaceOrientation:(long long)arg4 includeStatusBar:(_Bool)arg5 snapshotFrame:(struct CGRect *)arg6;
 -(id) switcherController;
 - (id)_appSwitcherController;
@@ -619,22 +615,12 @@ typedef enum {
 -(id)viewForSystemGestureRecognizer:(id)arg1;
 @end
 
-@interface SBSystemGestureManager : NSObject
-+ (instancetype)mainDisplayManager;
+@interface SBSystemGestureManager ()
 - (void)setSystemGesturesDisabledForAccessibility:(BOOL)arg1;
--(void)addGestureRecognizer:(id)arg1 withType:(NSUInteger)arg2;
 @end
 
-@interface SBScreenEdgePanGestureRecognizer : UIScreenEdgePanGestureRecognizer
-- (instancetype)initWithTarget:(id)arg1 action:(SEL)arg2;
-- (void)reset;
-@end
-
-@interface SBDisplayItem : NSObject <NSCopying>
-+ (id)displayItemWithType:(NSString *)arg1 displayIdentifier:(id)arg2;
-
-@property(readonly, nonatomic) NSString *displayIdentifier; // @synthesize displayIdentifier=_displayIdentifier;
-@property(readonly, nonatomic) NSString *type; // @synthesize type=_type;
+@interface SBDisplayItem ()
++ (instancetype)displayItemWithType:(NSString *)arg1 displayIdentifier:(id)arg2;
 @end
 
 @interface SBHomeScreenViewController : UIViewController
@@ -642,11 +628,6 @@ typedef enum {
 
 @interface SBHomeScreenWindow : UIWindow
 @property (nonatomic, weak,readonly) SBHomeScreenViewController *homeScreenViewController;
-@end
-
-@interface SBLockScreenManager
-+(id) sharedInstance;
--(BOOL) isUILocked;
 @end
 
 @interface BKSWorkspace : NSObject
@@ -916,56 +897,8 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property(copy, nonatomic) NSString *identifier; // @synthesize identifier=_identifier;
 @end
 
-@interface FBSSceneSettings : NSObject <NSCopying, NSMutableCopying> {
-    CGRect _frame;
-    CGPoint _contentOffset;
-    float _level;
-    int _interfaceOrientation;
-    BOOL _backgrounded;
-    BOOL _occluded;
-    BOOL _occludedHasBeenCalculated;
-    NSSet *_ignoreOcclusionReasons;
-    NSArray *_occlusions;
-    //BSSettings *_otherSettings;
-    //BSSettings *_transientLocalSettings;
-}
-
-+ (BOOL)_isMutable;
-+ (id)settings;
-@property(readonly, copy, nonatomic) NSArray *occlusions; // @synthesize occlusions=_occlusions;
-@property(readonly, nonatomic, getter=isBackgrounded) BOOL backgrounded; // @synthesize backgrounded=_backgrounded;
-@property(readonly, nonatomic) int interfaceOrientation; // @synthesize interfaceOrientation=_interfaceOrientation;
-@property(readonly, nonatomic) float level; // @synthesize level=_level;
-@property(readonly, nonatomic) CGPoint contentOffset; // @synthesize contentOffset=_contentOffset;
-@property(readonly, nonatomic) CGRect frame; // @synthesize frame=_frame;
-- (id)valueDescriptionForFlag:(int)arg1 object:(id)arg2 ofSetting:(unsigned int)arg3;
-- (id)keyDescriptionForSetting:(unsigned int)arg1;
-- (id)description;
-- (BOOL)isEqual:(id)arg1;
-- (unsigned int)hash;
-- (id)_descriptionOfSettingsWithMultilinePrefix:(id)arg1;
-- (id)transientLocalSettings;
-- (BOOL)isIgnoringOcclusions;
-- (id)ignoreOcclusionReasons;
-- (id)otherSettings;
-- (BOOL)isOccluded;
-- (CGRect)bounds;
-- (void)dealloc;
-- (id)init;
-- (id)initWithSettings:(id)arg1;
-@end
-
 @interface FBSSystemService ()
 - (void)openApplication:(id)arg1 options:(id)arg2 withResult:(void (^)(void))arg3;
-@end
-
-
-@interface FBSMutableSceneSettings : FBSSceneSettings
-@property(nonatomic, getter=isBackgrounded) BOOL backgrounded;
-@property(nonatomic) int interfaceOrientation;
-@property(nonatomic) float level;
-@property(nonatomic) struct CGPoint contentOffset;
-@property(nonatomic) struct CGRect frame;
 @end
 
 @interface UIMutableApplicationSceneSettings : FBSMutableSceneSettings
@@ -1032,7 +965,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface BKSProcessAssertion ()
-- (id)initWithBundleIdentifier:(id)arg1 flags:(unsigned int)arg2 reason:(unsigned int)arg3 name:(id)arg4 withHandler:(id)arg5;
+- (instancetype)initWithBundleIdentifier:(id)arg1 flags:(unsigned int)arg2 reason:(unsigned int)arg3 name:(id)arg4 withHandler:(id)arg5;
 - (void)invalidate;
 @property(readonly, nonatomic) BOOL valid;
 @end
@@ -1074,15 +1007,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 + (id)_applicationIconImageForBundleIdentifier:(id)arg1 format:(int)arg2 scale:(float)arg3;
 + (id)_applicationIconImageForBundleIdentifier:(id)arg1 format:(int)arg2;
 - (UIImage*) _flatImageWithColor: (UIColor*) color;
-@end
-
-@interface FBApplicationProcess : NSObject
-- (void)launchIfNecessary;
-- (BOOL)bootstrapAndExec;
-- (void)killForReason:(int)arg1 andReport:(BOOL)arg2 withDescription:(id)arg3 completion:(id/*block*/)arg4;
-- (void)killForReason:(int)arg1 andReport:(BOOL)arg2 withDescription:(id)arg3;
-@property(readonly, copy, nonatomic) NSString *bundleIdentifier;
-- (void)processWillExpire:(id)arg1;
 @end
 
 @interface UITextEffectsWindow : UIWindow
@@ -1489,11 +1413,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (id)allBulletinIDsForSectionID:(id)arg1;
 - (id)noticesBulletinIDsForSectionID:(id)arg1;
 - (id)bulletinIDsForSectionID:(id)arg1 inFeed:(unsigned long long)arg2;
-@end
-
-@interface FBSystemService : NSObject
-- (id)sharedInstance;
-- (void)exitAndRelaunch:(bool)arg1;
 @end
 
 @interface SBSwitcherSnapshotImageView : UIView

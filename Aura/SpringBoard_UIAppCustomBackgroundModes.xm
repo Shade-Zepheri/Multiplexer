@@ -1,13 +1,9 @@
 #import "headers.h"
 #import "RABackgrounder.h"
+#import <FrontBoard/FBApplicationInfo.h>
 #include <execinfo.h>
 #include <stdio.h>
 #include <stdlib.h>
-
-@interface FBApplicationInfo : NSObject
-@property (nonatomic, copy) NSString *bundleIdentifier;
-- (BOOL)isExitsOnSuspend;
-@end
 
 %hook FBApplicationInfo
 - (BOOL)supportsBackgroundMode:(__unsafe_unretained NSString *)mode {
