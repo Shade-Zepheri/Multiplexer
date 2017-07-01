@@ -1,10 +1,21 @@
-{
-    entry = {
-	bundle = ReachAppSettings;
-	cell = PSLinkCell;
-	detail = ReachAppSettingsListController;
-	icon = Multiplexer.png;
-	isController = 1;
-	label = Multiplexer;
-    };
-}
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>entry</key>
+	<dict>
+		<key>bundle</key>
+		<string>ReachAppSettings</string>
+		<key>cell</key>
+		<string>PSLinkCell</string>
+		<key>detail</key>
+		<string>ReachAppSettingsListController</string>
+		<key>icon</key>
+		<string>Multiplexer.png</string>
+		<key>isController</key>
+		<true/>
+		<key>label</key>
+		<string>Multiplexer</string>
+	</dict>
+</dict>
+</plist>

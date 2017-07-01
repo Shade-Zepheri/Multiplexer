@@ -1,24 +1,62 @@
-"BIOLOCKDOWN_AUTH_DESCRIPTION" = "Multiplexer necesita autenticación";
-"BIOLOCKDOWN_AUTH_FAILED" = "Autenticación de BioLockdown falló para %@. Toca para tratar otra vez.";
-"MULTIPLEXER" = "Multiplexer";
-"BACKGROUNDER_POPUP_SWITCHER_TEXT" = "Cual modo de fondo quieres usar par %@ (Ahorita es %@)?";
-"CANCEL" = "Cancela";
-"FORCE_FOREGROUND" = "Forzar primer plano";
-"NATIVE" = "Nativo";
-"SUSPEND_IMMEDIATELY" = "Suspende inmediatamente";
-"DISABLE" = "Inhabilitar";
-"THANK_YOU_TEXT" = "Gracias por instalando Multiplexer! Toca aquí para ver el tutorial.";
-"DESKTOPS" = "Escritorio";
-"ON_THIS_DESKTOP" = "En este Escritorio";
-"RUNNING_ELSEWHERE" = "Corriendo en otra parte";
-"NO_APPS" = "Ningun Aplicaciones";
-"APP" = "Aplicacion";
-"UNLOCK_FOR_NCAPP" = "Desbloquear para usar\nQuick Access";
-"ALL_APPS" = "All Apps";
-"WIDGETS" = "Widgets";
-"FAVORITES" = "Favoritos";
-"RECENTS" = "Reciente";
-"ACTIVE_APP_WARNING" = "%@\n está abierto";
-"ASPHALEIA_AUTH_FAILED" = "Asphaleia \n Autenticación falló para\n %@.\nToca para tratar otra vez.";
-"UNLIMITED_BACKGROUNDING_TIME" = "Ilimitado tiemp en el fondo";
-"KILL_ALL" = "Mata Todos";
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>BIOLOCKDOWN_AUTH_DESCRIPTION</key>
+    <string>Multiplexer necesita autenticación</string>
+    <key>BIOLOCKDOWN_AUTH_FAILED</key>
+    <string>Autenticación de BioLockdown falló para %@. Toca para tratar otra vez.</string>
+
+    <key>MULTIPLEXER</key>
+    <string>Multiplexer</string>
+
+    <key>BACKGROUNDER_POPUP_SWITCHER_TEXT</key>
+    <string>Cual modo de fondo quieres usar par %@ (Ahorita es %@)?</string>
+    <key>CANCEL</key>
+    <string>Cancela</string>
+    <key>FORCE_FOREGROUND</key>
+    <string>Forzar primer plano</string>
+    <key>NATIVE</key>
+    <string>Nativo</string>
+    <key>SUSPEND_IMMEDIATELY</key>
+    <string>Suspende inmediatamente</string>
+    <key>DISABLE</key>
+    <string>Inhabilitar</string>
+    <key>UNLIMITED_BACKGROUNDING_TIME</key>
+    <string>Ilimitado tiemp en el fondo</string>
+    <key>KILL_ALL</key>
+    <string>Mata Todos</string>
+
+    <key>THANK_YOU_TEXT</key>
+    <string>Gracias por instalando Multiplexer! Toca aquí para ver el tutorial.</string>
+
+    <key>DESKTOPS</key>
+    <string>Escritorio</string>
+    <key>ON_THIS_DESKTOP</key>
+    <string>En este Escritorio</string>
+    <key>RUNNING_ELSEWHERE</key>
+    <string>Corriendo en otra parte</string>
+    <key>NO_APPS</key>
+    <string>Ningun Aplicaciones</string>
+
+    <key>APP</key>
+    <string>Aplicacion</string>
+    <key>UNLOCK_FOR_NCAPP</key>
+    <string>Desbloquear para usar\nQuick Access</string>
+
+    <key>ALL_APPS</key>
+    <string>All Apps</string>
+    <key>WIDGETS</key>
+    <string>Widgets</string>
+    <key>FAVORITES</key>
+    <string>Favoritos</string>
+    <key>RECENTS</key>
+    <string>Reciente</string>
+
+    <key>ACTIVE_APP_WARNING</key>
+    <string>%@\n está abierto</string>
+
+    <key>ASPHALEIA_AUTH_FAILED</key>
+    <string>Asphaleia \n Autenticación falló para\n %@.\nToca para tratar otra vez.</string>
+</dict>
+</plist>

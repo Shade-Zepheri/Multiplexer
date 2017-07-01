@@ -145,7 +145,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 
 		if (keyList) {
 			//_settings = (__bridge NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
-			_settings = (NSDictionary*)CFBridgingRelease(CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost));
+			_settings = (__bridge_transfer NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 			CFRelease(keyList);
 
 			if (!_settings) {
@@ -167,7 +167,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 			LogError(@"[ReachApp] could not load settings from CFPreferences or NSDictionary");
 		}
 
-		if (![previousNCAppSetting isEqual:self.NCApp]) {
+		if (![previousNCAppSetting isEqualToString:self.NCApp]) {
 			[[objc_getClass("RANCViewController") sharedViewController] forceReloadAppLikelyBecauseTheSettingChanged]; // using objc_getClass allows RASettings to be used in reachappsettings and other places
 		}
 

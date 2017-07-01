@@ -123,6 +123,7 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
         if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
           [[[%c(RAHostManager) systemHostViewForApplication:[UIApplication sharedApplication]._accessibilityFrontMostApplication] superview] addSubview:grabberView];
         } else {
+          //Nothing seems to work
           UIWindow *window = [[%c(SBUIController) sharedInstance] window];
           [window addSubview:grabberView];
         }

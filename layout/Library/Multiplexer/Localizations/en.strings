@@ -1,24 +1,62 @@
-"BIOLOCKDOWN_AUTH_DESCRIPTION" = "Multiplexer requires authentication";
-"BIOLOCKDOWN_AUTH_FAILED" = "BioLockdown authentication failed for %@. Tap to try again.";
-"MULTIPLEXER" = "Multiplexer";
-"BACKGROUNDER_POPUP_SWITCHER_TEXT" = "Which backgrounding mode would you like to enable for %@ (currently %@)?";
-"CANCEL" = "Cancel";
-"FORCE_FOREGROUND" = "Force Foreground";
-"NATIVE" = "Native";
-"SUSPEND_IMMEDIATELY" = "Suspend Immediately";
-"DISABLE" = "Disable";
-"THANK_YOU_TEXT" = "Thank you for installing Multiplexer! Tap here to view the tutorial.";
-"DESKTOPS" = "Desktops";
-"ON_THIS_DESKTOP" = "On This Desktop";
-"RUNNING_ELSEWHERE" = "Running Elsewhere";
-"NO_APPS" = "No Apps";
-"APP" = "App";
-"UNLOCK_FOR_NCAPP" = "Unlock to use\nQuick Access";
-"ALL_APPS" = "All Apps";
-"WIDGETS" = "Widgets";
-"FAVORITES" = "Favorites";
-"RECENTS" = "Recent";
-"ACTIVE_APP_WARNING" = "%@\n is currently open";
-"ASPHALEIA_AUTH_FAILED" = "Asphaleia \n authentication failed for\n %@.\nTap to try again.";
-"UNLIMITED_BACKGROUNDING_TIME" = "Unlimited Backgrounding Time";
-"KILL_ALL" = "Kill All";
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>BIOLOCKDOWN_AUTH_DESCRIPTION</key>
+    <string>Multiplexer requires authentication</string>
+    <key>BIOLOCKDOWN_AUTH_FAILED</key>
+    <string>BioLockdown authentication failed for %@. Tap to try again.</string>
+
+    <key>MULTIPLEXER</key>
+    <string>Multiplexer</string>
+
+    <key>BACKGROUNDER_POPUP_SWITCHER_TEXT</key>
+    <string>Which backgrounding mode would you like to enable for %@ (currently %@)?</string>
+    <key>CANCEL</key>
+    <string>Cancel</string>
+    <key>FORCE_FOREGROUND</key>
+    <string>Force Foreground</string>
+    <key>NATIVE</key>
+    <string>Native</string>
+    <key>SUSPEND_IMMEDIATELY</key>
+    <string>Suspend Immediately</string>
+    <key>DISABLE</key>
+    <string>Disable</string>
+    <key>UNLIMITED_BACKGROUNDING_TIME</key>
+    <string>Unlimited Backgrounding Time</string>
+    <key>KILL_ALL</key>
+    <string>Kill All</string>
+
+    <key>THANK_YOU_TEXT</key>
+    <string>Thank you for installing Multiplexer! Tap here to view the tutorial.</string>
+
+    <key>DESKTOPS</key>
+    <string>Desktops</string>
+    <key>ON_THIS_DESKTOP</key>
+    <string>On This Desktop</string>
+    <key>RUNNING_ELSEWHERE</key>
+    <string>Running Elsewhere</string>
+    <key>NO_APPS</key>
+    <string>No Apps</string>
+
+    <key>APP</key>
+    <string>App</string>
+    <key>UNLOCK_FOR_NCAPP</key>
+    <string>Unlock to use\nQuick Access</string>
+
+    <key>ALL_APPS</key>
+    <string>All Apps</string>
+    <key>WIDGETS</key>
+    <string>Widgets</string>
+    <key>FAVORITES</key>
+    <string>Favorites</string>
+    <key>RECENTS</key>
+    <string>Recent</string>
+
+    <key>ACTIVE_APP_WARNING</key>
+    <string>%@\n is currently open</string>
+
+    <key>ASPHALEIA_AUTH_FAILED</key>
+    <string>Asphaleia \n authentication failed for\n %@.\nTap to try again.</string>
+</dict>
+</plist>

@@ -436,6 +436,7 @@ typedef struct {
 @end
 
 @interface SBNotificationCenterViewController : UIViewController
+@property (nonatomic,readonly) UIPageControl * pageControl;
 @property (nonatomic,readonly) CGRect contentFrame;
 -(CGRect)_containerFrame;
 -(void)_setContainerFrame:(CGRect)arg1 ;

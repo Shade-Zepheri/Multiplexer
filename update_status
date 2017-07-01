@@ -19,7 +19,6 @@ Bugs:
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
-- NCApp app still doesnt properly unload (more testing required)
 - FakePhoneMode wrong dimensions
 - Empoleon windows dont properly rotate in some (most) apps
 
