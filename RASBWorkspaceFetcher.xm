@@ -3,12 +3,10 @@
 
 // IMPORTANT: DO NOT IMPORT HEADERS.H
 // REASON: HEADERS.H IMPORTS THIS FILE
-// Cant we just use a version check? (this seems terribly inefficient)
 
-@interface __SBWorkspace__class_impl_dummy : NSObject
-+ (id)sharedInstance;
+@interface SBWorkspace : NSObject
++ (instancetype)sharedInstance;
 @end
-
 
 Class CurrentSBWorkspaceClass = nil;
 
@@ -19,7 +17,7 @@ Class CurrentSBWorkspaceClass = nil;
 
 + (SBWorkspace*)getCurrentSBWorkspaceImplementationInstanceForThisOS {
 	if (![CurrentSBWorkspaceClass respondsToSelector:@selector(sharedInstance)]) {
-		HBLogError(@"[ReachApp] \"SBWorkspace\" class '%s' does not have '+sharedInstance' method", class_getName(CurrentSBWorkspaceClass));
+		HBLogError(@"\"SBWorkspace\" class '%s' does not have '+sharedInstance' method", class_getName(CurrentSBWorkspaceClass));
 		return nil;
 	}
 

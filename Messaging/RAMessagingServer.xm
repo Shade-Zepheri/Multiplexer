@@ -97,18 +97,18 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 }
 
 - (NSDictionary*)handleMessageNamed:(NSString*)identifier userInfo:(NSDictionary*)info {
-	if ([identifier isEqual:RAMessagingShowKeyboardMessageName]) {
+	if ([identifier isEqualToString:RAMessagingShowKeyboardMessageName]) {
 		[self receiveShowKeyboardForAppWithIdentifier:info[@"bundleIdentifier"]];
-	} else if ([identifier isEqual:RAMessagingHideKeyboardMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingHideKeyboardMessageName]) {
 		[self receiveHideKeyboard];
-	} else if ([identifier isEqual:RAMessagingUpdateKeyboardContextIdMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingUpdateKeyboardContextIdMessageName]) {
 		[self setKeyboardContextId:[info[@"contextId"] integerValue] forIdentifier:info[@"bundleIdentifier"]];
-	} else if ([identifier isEqual:RAMessagingRetrieveKeyboardContextIdMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingRetrieveKeyboardContextIdMessageName]) {
 		return @{ @"contextId": @([self getStoredKeyboardContextIdForApp:info[@"bundleIdentifier"]]) };
-	} else if ([identifier isEqual:RAMessagingUpdateKeyboardSizeMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingUpdateKeyboardSizeMessageName]) {
 		CGSize size = CGSizeFromString(info[@"size"]);
 		[RAKeyboardStateListener.sharedInstance _setSize:size];
-	} else if ([identifier isEqual:RAMessagingUpdateAppInfoMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingUpdateAppInfoMessageName]) {
 		NSString *identifier = info[@"bundleIdentifier"];
 		RAMessageAppData data = [self getDataForIdentifier:identifier];
 
@@ -128,7 +128,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		return @{
 			@"data": [NSData dataWithBytes:&data length:sizeof(data)],
 		};
-	} else if ([identifier isEqual:RAMessagingOpenURLKMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingOpenURLKMessageName]) {
 		NSURL *url = [NSURL URLWithString:info[@"url"]];
 		BOOL openInWindow = [RASettings.sharedInstance openLinksInWindows]; // [info[@"openInWindow"] boolValue];
 		if (openInWindow) {
@@ -137,7 +137,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 
 		BOOL success = [UIApplication.sharedApplication openURL:url];
 		return @{ @"success": @(success) };
-	} else if ([identifier isEqual:RAMessagingGetFrontMostAppInfoMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingGetFrontMostAppInfoMessageName]) {
 		if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
 			return nil;
 		}
@@ -151,7 +151,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 				};
 			}
 		}
-	} else if ([identifier isEqual:RAMessagingChangeFrontMostAppMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingChangeFrontMostAppMessageName]) {
 		NSString *bundleIdentifier = info[@"bundleIdentifier"];
 		RAWindowBar *window = [[%c(RADesktopManager) sharedInstance] windowForIdentifier:bundleIdentifier];
 		if (window) {
@@ -164,7 +164,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 }
 
 - (void)handleKeyboardEvent:(NSString*)identifier userInfo:(NSDictionary*)info {
-	if ([identifier isEqual:RAMessagingDetachCurrentAppMessageName]) {
+	if ([identifier isEqualToString:RAMessagingDetachCurrentAppMessageName]) {
 		SBApplication *topApp = [[UIApplication sharedApplication] _accessibilityFrontMostApplication];
 
 		if (topApp) {
@@ -190,18 +190,18 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 				[[[%c(RADesktopManager) sharedInstance] currentDesktop] createAppWindowForSBApplication:topApp animated:YES];
 		  }];
 		}
-	} else if ([identifier isEqual:RAMessagingGoToDesktopOnTheLeftMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingGoToDesktopOnTheLeftMessageName]) {
 		int newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] - 1;
 		BOOL isValid = newIndex >= 0 && newIndex <= [[%c(RADesktopManager) sharedInstance] numberOfDesktops];
 		if (isValid) {
 			[[%c(RADesktopManager) sharedInstance] switchToDesktop:newIndex];
 		}
-	} else if ([identifier isEqual:RAMessagingGoToDesktopOnTheRightMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingGoToDesktopOnTheRightMessageName]) {
 		int newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] + 1;
 		BOOL isValid = newIndex >= 0 && newIndex < [[%c(RADesktopManager) sharedInstance] numberOfDesktops];
 		if (isValid)
 			[[%c(RADesktopManager) sharedInstance] switchToDesktop:newIndex];
-	} else if ([identifier isEqual:RAMessagingAddNewDesktopMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingAddNewDesktopMessageName]) {
 		[[%c(RADesktopManager) sharedInstance] addDesktop:YES];
 	}
 
@@ -209,13 +209,13 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	if (!window) {
 		return;
 	}
-	if ([identifier isEqual:RAMessagingSnapFrontMostWindowLeftMessageName]) {
+	if ([identifier isEqualToString:RAMessagingSnapFrontMostWindowLeftMessageName]) {
 		[%c(RAWindowSnapDataProvider) snapWindow:window toLocation:RAWindowSnapLocationGetLeftOfScreen() animated:YES];
-	} else if ([identifier isEqual:RAMessagingSnapFrontMostWindowRightMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingSnapFrontMostWindowRightMessageName]) {
 		[%c(RAWindowSnapDataProvider) snapWindow:window toLocation:RAWindowSnapLocationGetRightOfScreen() animated:YES];
-	} else if ([identifier isEqual:RAMessagingMaximizeAppMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingMaximizeAppMessageName]) {
 		[window maximize];
-	} else if ([identifier isEqual:RAMessagingCloseAppMessageName]) {
+	} else if ([identifier isEqualToString:RAMessagingCloseAppMessageName]) {
 		[window close];
 	}
 }

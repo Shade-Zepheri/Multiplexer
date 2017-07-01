@@ -4,21 +4,20 @@
 #import <AppSupport/CPDistributedMessagingCenter.h>
 #import <rocketbootstrap/rocketbootstrap.h>
 
-#define CTRL_KEY 224
-#define CMD_KEY 231
-#define CMD_KEY2 227
-#define SHIFT_KEY 229
-#define SHIFT_KEY2 225
-#define ALT_KEY 226
-#define ALT_KEY2 230
-#define D_KEY 7
-#define P_KEY 19
-#define BKSPCE_KEY 42
-#define ARROW_RIGHT_KEY 79
-#define ARROW_LEFT_KEY 80
-#define ARROW_UP_KEY 82
-#define ARROW_DOWN_KEY 81
-#define EQUALS_OR_PLUS_KEY 46
+static NSInteger const CTRL_KEY = 224;
+static NSInteger const CMD_KEY = 231;
+static NSInteger const CMD_KEY2 = 227;
+static NSInteger const SHIFT_KEY = 229;
+static NSInteger const SHIFT_KEY2 = 225;
+static NSInteger const ALT_KEY = 226;
+static NSInteger const ALT_KEY2 = 230;
+static NSInteger const D_KEY = 7;
+static NSInteger const BKSPCE_KEY = 42;
+static NSInteger const ARROW_RIGHT_KEY = 79;
+static NSInteger const ARROW_LEFT_KEY = 80;
+static NSInteger const ARROW_UP_KEY = 82;
+static NSInteger const ARROW_DOWN_KEY = 81;
+static NSInteger const EQUALS_OR_PLUS_KEY = 46;
 
 IOHIDEventSystemCallback eventCallback = NULL;
 BOOL isControlKeyDown = NO;
@@ -88,12 +87,12 @@ void handle_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEven
 	return %orig(system, handle_event, target, refcon, unused);
 }
 
-%hook BKEventFocusManager
-@interface BKEventDestination
+@interface BKEventDestination : NSObject
 - (instancetype)initWithPid:(NSUInteger)arg1 clientID:(NSString*)arg2;
 @end
 
-- (id)destinationForFocusedEventWithDisplay:(__unsafe_unretained id)arg1 {
+%hook BKEventFocusManager
+- (BKEventDestination*)destinationForFocusedEventWithDisplay:(__unsafe_unretained id)arg1 {
 	NSDictionary *response = [center sendMessageAndReceiveReplyName:RAMessagingGetFrontMostAppInfoMessageName userInfo:nil];
 
 	if (response) {

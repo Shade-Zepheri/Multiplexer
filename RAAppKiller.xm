@@ -1,7 +1,7 @@
 #import "RAAppKiller.h"
 #import "RARunningAppsProvider.h"
 
-extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSString *app, int a, int b, NSString *description);
+extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSString *app, int reasonID, bool report, NSString *description);
 
 @interface RAAppKiller () {
 	NSMutableDictionary *completionDictionary;
@@ -69,7 +69,7 @@ extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSStrin
 	*/
 
 	[[RAAppKiller sharedInstance]->completionDictionary setObject:[handler copy] forKey:app.bundleIdentifier];
-	BKSTerminateApplicationForReasonAndReportWithDescription(app.bundleIdentifier, 5, 1, @"Multiplexer requested this process to be slayed.");
+	BKSTerminateApplicationForReasonAndReportWithDescription(app.bundleIdentifier, 5, true, @"Multiplexer requested this process to be slayed.");
 }
 
 - (void)initialize {
