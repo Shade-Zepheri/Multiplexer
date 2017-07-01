@@ -122,7 +122,6 @@ int rotationDegsForOrientation(int o) {
 		} else {
 			f.origin.x = (self.view.frame.size.width - f.size.width) / 2.0;
 		}
-		LogDebug(@"self.view.frame: %f f.size.width: %f f.origin.x: %f", self.view.frame.size.width, f.size.height, (self.view.frame.size.width - f.size.height) / 2.0);
 		appView.frame = f;
 	}
 	//[appView rotateToOrientation:UIApplication.sharedApplication.statusBarOrientation];
