@@ -9,6 +9,7 @@ I split them apart when i was trying to find some issue with app resizing/touche
 
 #define RA_4S_SIZE CGSizeMake(320, 480)
 #define RA_5S_SIZE CGSizeMake(320, 568)
+#define RA_6S_SIZE CGSizeMake(375, 667)
 #define RA_6P_SIZE CGSizeMake(414, 736)
 
 CGSize forcePhoneModeSize = RA_6P_SIZE;
@@ -65,6 +66,7 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
     }
     fakeFlag = [RAMessagingClient sharedInstance].currentData.forcePhoneMode;
   });
+
   return fakeFlag;
 }
 @end

@@ -25,6 +25,7 @@
 }
 %end
 
+/*
 %hook UIScreen
 - (CGRect)_unjailedReferenceBounds {
   FAKE;
@@ -76,3 +77,4 @@
   return %orig;
 }
 %end
+*/
