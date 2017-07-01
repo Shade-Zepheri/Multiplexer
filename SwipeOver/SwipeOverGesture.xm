@@ -12,7 +12,7 @@
 UIView *grabberView;
 BOOL isShowingGrabber = NO;
 BOOL isPastGrabber = NO;
-NSDate *lastTouch;
+CFTimeInterval startTime; //maybe use  mach_absolute_time cuz y not
 CGPoint startingPoint;
 BOOL firstSwipe = NO;
 
@@ -97,21 +97,20 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
 %ctor {
   [[%c(RAGestureManager) sharedInstance] addGestureRecognizer:^RAGestureCallbackResult(UIGestureRecognizerState state, CGPoint location, CGPoint velocity) {
-    lastTouch = [NSDate date];
+    startTime = CACurrentMediaTime();
 
     if ([%c(Multiplexer) shouldShowControlCenterGrabberOnFirstSwipe] || [[%c(RASettings) sharedInstance] alwaysShowSOGrabber]) {
       if (!isShowingGrabber && !isPastGrabber) {
         firstSwipe = YES;
         isShowingGrabber = YES;
 
-        grabberView = [[UIView alloc] init];
+        grabberView = [[UIView alloc] initWithFrame:adjustFrameForRotation()];
 
         _UIBackdropView *bgView = [[%c(_UIBackdropView) alloc] initWithStyle:1];
         bgView.frame = CGRectMake(0, 0, grabberView.frame.size.width, grabberView.frame.size.height);
         [grabberView addSubview:bgView];
 
         //grabberView.backgroundColor = UIColor.redColor;
-        grabberView.frame = adjustFrameForRotation();
 
         UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, grabberView.frame.size.width - 20, grabberView.frame.size.height - 20)];
         imgView.image = [%c(RAResourceImageProvider) imageForFilename:@"Grabber" constrainedToSize:CGSizeMake(grabberView.frame.size.width - 20, grabberView.frame.size.height - 20)];
@@ -121,18 +120,25 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
         grabberView.transform = adjustTransformRotation();
         //[UIWindow.keyWindow addSubview:grabberView]; // The desktop view most likely
-        [[[%c(RAHostManager) systemHostViewForApplication:[UIApplication sharedApplication]._accessibilityFrontMostApplication] superview] addSubview:grabberView];
+        if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
+          [[[%c(RAHostManager) systemHostViewForApplication:[UIApplication sharedApplication]._accessibilityFrontMostApplication] superview] addSubview:grabberView];
+        } else {
+          UIWindow *window = [[%c(SBUIController) sharedInstance] window];
+          [window addSubview:grabberView];
+        }
 
         static void (^dismisser)() = ^{ // top kek, needs "static" so it's not a local, self-retaining block
-          if ([[NSDate date] timeIntervalSinceDate:lastTouch] > 2) {
+          if ((CACurrentMediaTime() - startTime) > 2) {
             [UIView animateWithDuration:0.2 animations:^{
               //grabberView.frame = CGRectOffset(grabberView.frame, 40, 0);
               grabberView.center = adjustCenterForOffscreenSlide(grabberView.center);
-            } completion:^(BOOL _) {
-              [grabberView removeFromSuperview];
-              grabberView = nil;
-              isShowingGrabber = NO;
-              isPastGrabber = NO;
+            } completion:^(BOOL finished) {
+              if (finished) {
+                [grabberView removeFromSuperview];
+                grabberView = nil;
+                isShowingGrabber = NO;
+                isPastGrabber = NO;
+              }
             }];
           } else if (grabberView) { // left there
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{

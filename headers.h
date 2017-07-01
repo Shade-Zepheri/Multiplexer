@@ -606,7 +606,7 @@ typedef enum {
 - (void)_dismissAppSwitcherImmediately;
 - (void)dismissSwitcherForAlert:(id)arg1;
 
--(id)contentView;
+- (UIView*)contentView;
 - (void)activateApplication:(id)arg1;
 @end
 

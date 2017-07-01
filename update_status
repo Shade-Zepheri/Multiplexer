@@ -17,8 +17,6 @@ Bugs:
 - Fix KeyboardSupport
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch (cant seeem to reproduce anymore);
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
-- SwipeOver sliding on screen animation is broken
-- SwipeOver grabber doesnt always show when supposed to
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - NCApp app still doesnt properly unload (more testing required)
@@ -26,9 +24,9 @@ Bugs:
 - Empoleon windows dont properly rotate in some apps
 
 Minor Things/Bugs to note:
-- Seems split caused more blackscreens in windowed apps
 - (some of these are leftover from the original release lol: eg MC lag)
 - Improve SwipeOver
+- SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard)
 
 Things to do/Features to add:
 - 3D Touch actions?
