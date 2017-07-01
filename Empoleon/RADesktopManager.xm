@@ -127,7 +127,7 @@ BOOL overrideUIWindow = NO;
 
 - (void)findNewForemostApp {
 	RADesktopWindow *desktop = [self currentDesktop];
-	for (RAHostedAppView *hostedApp in desktop.hostedWindows) {
+	for (RAHostedAppView *hostedApp in desktop.appViews) {
 		RAWindowBar *bar = [desktop windowForIdentifier:hostedApp.app.bundleIdentifier];
 		if (bar) {
 			self.lastUsedWindow = bar;
@@ -179,14 +179,14 @@ BOOL overrideUIWindow = NO;
 */
 
 %hook SpringBoard
-- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 {
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation duration:(CGFloat)duration {
 	%orig;
-	[[RADesktopManager sharedInstance] updateRotationOnClients:arg1];
+	[[RADesktopManager sharedInstance] updateRotationOnClients:orientation];
 }
 
-- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)arg1 duration:(CGFloat)arg2 logMessage:(id)arg3 {
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation duration:(CGFloat)duration logMessage:(id)message {
 	%orig;
-	[[RADesktopManager sharedInstance] updateRotationOnClients:arg1];
+	[[RADesktopManager sharedInstance] updateRotationOnClients:orientation];
 }
 %end
 

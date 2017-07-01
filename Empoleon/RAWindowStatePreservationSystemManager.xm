@@ -21,7 +21,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 	NSUInteger index = [RADesktopManager.sharedInstance.availableDesktops indexOfObject:desktop];
 	NSString *key = [NSString stringWithFormat:@"%tu", index];
 	NSMutableArray *openApps = [NSMutableArray array];
-	for (RAHostedAppView *app in desktop.hostedWindows) {
+	for (RAHostedAppView *app in desktop.appViews) {
 		[openApps addObject:app.app.bundleIdentifier];
 	}
 

@@ -9,7 +9,7 @@
 @implementation RADesktopWindow
 - (instancetype)initWithFrame:(CGRect)frame {
 	if (self = [super initWithFrame:frame]) {
-		appViews = [NSMutableArray array];
+		self.appViews = [NSMutableArray array];
 		self.windowLevel = 1000;
 	}
 	return self;
@@ -33,7 +33,7 @@
 	RAWindowBar *windowBar = [[RAWindowBar alloc] init];
 	windowBar.desktop = self;
 	[windowBar attachView:view];
-	[appViews addObject:view];
+	[self.appViews addObject:view];
 
 	if (animated) {
 		windowBar.alpha = 0;
@@ -80,7 +80,7 @@
 }
 
 - (void)addExistingWindow:(RAWindowBar*)window {
-	[appViews addObject:window.attachedView];
+	[self.appViews addObject:window.attachedView];
 	[self addSubview:window];
 
 	[self addAppWithView:window.attachedView animated:NO];
@@ -102,14 +102,14 @@
 }
 
 - (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force {
-	for (RAHostedAppView *view in appViews) {
+	for (RAHostedAppView *view in self.appViews) {
 		if ([view.bundleIdentifier isEqual:identifier]) {
 			void (^destructor)() = ^{
 				//view.shouldUseExternalKeyboard = NO;
 				[view unloadApp:force];
 				[view.superview removeFromSuperview];
 				[view removeFromSuperview];
-				[appViews removeObject:view];
+				[self.appViews removeObject:view];
 				[self saveInfo];
 
 				if (!dontClearForcedPhoneState && [RAFakePhoneMode shouldFakeForAppWithIdentifier:identifier]) {
@@ -135,7 +135,7 @@
 }
 
 - (void)updateWindowSizeForApplication:(NSString*)identifier {
-	NSArray *tempArrayToAvoidMutationCrash = [appViews copy];
+	NSArray *tempArrayToAvoidMutationCrash = [self.appViews copy];
 	for (RAHostedAppView *view in tempArrayToAvoidMutationCrash) {
 		if ([view.bundleIdentifier isEqual:identifier]) {
 			dontClearForcedPhoneState = YES;
@@ -157,27 +157,23 @@
 	}
 }
 
-- (NSArray*)hostedWindows {
-	return appViews;
-}
-
 - (void)unloadApps {
-	for (RAHostedAppView *view in appViews) {
+	for (RAHostedAppView *view in self.appViews) {
 		[view unloadApp];
 	}
 }
 
 - (void)loadApps {
-	for (RAHostedAppView *view in appViews) {
+	for (RAHostedAppView *view in self.appViews) {
 		[view loadApp];
 	}
 }
 
 - (void)closeAllApps {
 	//while (appViews.count > 0)
-	int i = appViews.count - 1;
+	int i = self.appViews.count - 1;
 	while (i --> 0) { // Always wanted to use that 😍
-		[self removeAppWithIdentifier:((RAHostedAppView*)appViews[i]).bundleIdentifier animated:YES];
+		[self removeAppWithIdentifier:((RAHostedAppView*)self.appViews[i]).bundleIdentifier animated:YES];
 	}
 }
 
@@ -192,7 +188,7 @@
 }
 
 - (BOOL)isAppOpened:(NSString*)identifier {
-	for (RAHostedAppView *app in appViews) {
+	for (RAHostedAppView *app in self.appViews) {
 		if ([app.app.bundleIdentifier isEqual:identifier]) {
 			return YES;
 		}
@@ -222,7 +218,7 @@
 	if (![RAWindowStatePreservationSystemManager.sharedInstance hasDesktopInformationAtIndex:index]) {
 		return;
 	}
-	
+
 	RAPreservedDesktopInformation info = [RAWindowStatePreservationSystemManager.sharedInstance desktopInformationForIndex:index];
 	for (NSString *bundleIdentifier in info.openApps) {
 		[self createAppWindowWithIdentifier:bundleIdentifier animated:YES];

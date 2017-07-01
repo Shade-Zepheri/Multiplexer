@@ -194,7 +194,7 @@
 	}
 
 	BOOL empty = YES;
-	for (RAHostedAppView *app in [[%c(RADesktopManager) sharedInstance] currentDesktop].hostedWindows) {
+	for (RAHostedAppView *app in [[%c(RADesktopManager) sharedInstance] currentDesktop].appViews) {
 		SBApplication *sbapp = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:app.bundleIdentifier];
 		[appsWithoutWindows removeObject:sbapp];
 

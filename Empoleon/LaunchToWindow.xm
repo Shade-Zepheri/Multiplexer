@@ -8,9 +8,9 @@ BOOL override = NO;
 BOOL allowOpenApp = NO;
 
 %hook SBIconController
-- (void)iconWasTapped:(__unsafe_unretained SBApplicationIcon*)arg1 {
-	if ([RASettings.sharedInstance windowedMultitaskingEnabled] && [RASettings.sharedInstance launchIntoWindows] && arg1.application) {
-		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:arg1.application animated:YES];
+- (void)iconWasTapped:(__unsafe_unretained SBApplicationIcon*)icon {
+	if ([RASettings.sharedInstance windowedMultitaskingEnabled] && [RASettings.sharedInstance launchIntoWindows] && icon.application) {
+		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:icon.application animated:YES];
 		override = YES;
 	}
 	%orig;
@@ -26,30 +26,30 @@ BOOL allowOpenApp = NO;
 %end
 
 %hook SBUIController
-- (void)activateApplicationAnimated:(__unsafe_unretained SBApplication*)arg1 {
+- (void)activateApplicationAnimated:(__unsafe_unretained SBApplication*)application {
 	// Broken
 	//if (launchNextOpenIntoWindow)
 
 	if ([RASettings.sharedInstance windowedMultitaskingEnabled] && [RASettings.sharedInstance launchIntoWindows] && !allowOpenApp) {
-		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:arg1 animated:YES];
+		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:application animated:YES];
 		//launchNextOpenIntoWindow = NO;
 		return;
 	} else {
-		[RADesktopManager.sharedInstance removeAppWithIdentifier:arg1.bundleIdentifier animated:NO forceImmediateUnload:YES];
+		[RADesktopManager.sharedInstance removeAppWithIdentifier:application.bundleIdentifier animated:NO forceImmediateUnload:YES];
 	}
 	%orig;
 }
 
-- (void)activateApplication:(__unsafe_unretained SBApplication*)arg1 {
+- (void)activateApplication:(__unsafe_unretained SBApplication*)application {
 	// Broken
 	//if (launchNextOpenIntoWindow)
 
 	if ([RASettings.sharedInstance windowedMultitaskingEnabled] && [RASettings.sharedInstance launchIntoWindows] && !allowOpenApp) {
-		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:arg1 animated:YES];
+		[RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:application animated:YES];
 		//launchNextOpenIntoWindow = NO;
 		return;
 	} else {
-		[RADesktopManager.sharedInstance removeAppWithIdentifier:arg1.bundleIdentifier animated:NO forceImmediateUnload:YES];
+		[RADesktopManager.sharedInstance removeAppWithIdentifier:application.bundleIdentifier animated:NO forceImmediateUnload:YES];
 	}
 	%orig;
 }

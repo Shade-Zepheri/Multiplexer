@@ -4,10 +4,9 @@
 
 @interface RADesktopWindow : UIWindow {
 	UIInterfaceOrientation lastKnownOrientation;
-	NSMutableArray *appViews;
-
 	BOOL dontClearForcedPhoneState;
 }
+@property (strong, nonatomic) NSMutableArray *appViews;
 
 - (RAWindowBar*)addAppWithView:(RAHostedAppView*)view animated:(BOOL)animated;
 - (RAWindowBar*)createAppWindowForSBApplication:(SBApplication*)app animated:(BOOL)animated;
@@ -17,7 +16,6 @@
 - (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated;
 - (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force;
 
-- (NSArray*)hostedWindows;
 - (BOOL)isAppOpened:(NSString*)identifier;
 - (RAWindowBar*)windowForIdentifier:(NSString*)identifier;
 
