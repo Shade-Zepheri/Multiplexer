@@ -2,13 +2,13 @@ update status:
 
 Windowed: working
 fs daemon: working
-SwipeOver: working (replace with native slide over(?))
+SwipeOver: working (replace with native slide over(nope, SwipeOver is something Special))
 Reachability: working (show NC broken in 10.x)
 GestureSupport: fixed
 Backgrounding: working
 KeyboardSupport: semi-working
 MissionControl: working
-NCApp: working (misaligned on ipads);
+NCApp: working
 assertiond hooks: working
 backboardd hooks: working
 fake phone mode: semi working
@@ -21,12 +21,13 @@ Bugs:
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - NCApp app still doesnt properly unload (more testing required)
 - FakePhoneMode wrong dimensions
-- Empoleon windows dont properly rotate in some apps
+- Empoleon windows dont properly rotate in some (most) apps
 
 Minor Things/Bugs to note:
 - (some of these are leftover from the original release lol: eg MC lag)
 - Improve SwipeOver
-- SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard)
+- SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard, which nothing seems to work)
+- Something is running in the background and increasing background usage (Thought it was NCApp but more testing required)
 
 Things to do/Features to add:
 - 3D Touch actions?
@@ -37,4 +38,4 @@ use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes
 (_referenceBounds orientation independent, bounds changes with orientation)
 
 SBSystemGestureManager replaces SBHandMotionExtractor on 9+
-Somehow find a way to convert existing system to hook it?
+Somehow find a way to convert existing system to hook/use it?
