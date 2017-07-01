@@ -585,10 +585,8 @@
 		SBApplication *app = realView.application;
 		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
 			[runningApplications removeObject:app];
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
-				[self reloadOtherAppsSection];
-			});
+			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[[%c(RARunningAppsProvider) sharedInstance] runningApplications] waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
 		}];
 	}
 }
@@ -601,10 +599,8 @@
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
 		SBApplication *app = realView.application;
 		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
-			dispatch_sync(dispatch_get_main_queue(), ^{
-				[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
-				[self reloadOtherAppsSection];
-			});
+			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[[%c(RARunningAppsProvider) sharedInstance] runningApplications] waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
 		}];
 	}
 }
