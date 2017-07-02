@@ -1455,3 +1455,26 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (NSArray *)pageViews;
 - (void)setPageViews:(NSArray *)arg1;
 @end
+
+@interface SBApplicationShortcutMenuContentView : UIView
+@end
+
+@interface SBSApplicationShortcutIcon : NSObject
+@end
+
+@interface SBSApplicationShortcutSystemIcon : SBSApplicationShortcutIcon
+- (instancetype)initWithType:(NSInteger)type;
+@end
+
+@interface SBSApplicationShortcutItem : NSObject
+@property (nonatomic,copy) NSString *type;                                  //@synthesize type=_type - In the implementation block
+@property (nonatomic,copy) NSString *localizedTitle;                        //@synthesize localizedTitle=_localizedTitle - In the implementation block
+@property (nonatomic,copy) NSString *localizedSubtitle;                     //@synthesize localizedSubtitle=_localizedSubtitle - In the implementation block
+@property (nonatomic,copy) SBSApplicationShortcutIcon *icon;
+@property (nonatomic,copy) NSString *bundleIdentifierToLaunch;
++ (instancetype)staticShortcutItemWithDictionary:(NSDictionary*)dictionary localizationHandler:(/*^block*/id)handler;
+@end
+
+@interface SBUIAppIconForceTouchController : NSObject
++ (NSArray *)filteredApplicationShortcutItemsWithStaticApplicationShortcutItems:(NSArray *)staticItems dynamicApplicationShortcutItems:(NSArray *)dynamicItems;
+@end
