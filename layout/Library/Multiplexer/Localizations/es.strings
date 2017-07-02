@@ -27,6 +27,11 @@
     <key>KILL_ALL</key>
     <string>Mata Todos</string>
 
+    <key>CREATE_WINDOW_TITLE</key>
+    <string>Crea ventana de Empoleon</string>
+    <key>CREATE_WINDOW_SUBTITLE</key>
+    <string>Abre la aplicacion en una ventana de Empoleon</string>
+
     <key>THANK_YOU_TEXT</key>
     <string>Gracias por instalando Multiplexer! Toca aquí para ver el tutorial.</string>
 

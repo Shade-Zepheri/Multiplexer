@@ -30,6 +30,11 @@
     <key>THANK_YOU_TEXT</key>
     <string>Thank you for installing Multiplexer! Tap here to view the tutorial.</string>
 
+    <key>CREATE_WINDOW_TITLE</key>
+    <string>Create Empoleon Window</string>
+    <key>CREATE_WINDOW_SUBTITLE</key>
+    <string>Open application into an Empoleon window</string>
+
     <key>DESKTOPS</key>
     <string>Desktops</string>
     <key>ON_THIS_DESKTOP</key>
