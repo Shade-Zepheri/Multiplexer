@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ENABLED</key>
+    <string>Enabled</string>
+    <key>ENABLED_FOOTER</key>
+    <string>Quickly enable or disable ReachApp.</string>
+
+    <key>USE_NC</key>
+    <string>Show NC Instead of App</string>
+    <key>USE_NC_FOOTER</key>
+    <string>If enabled, the Notification Center view is displayed in Reachability.</string>
+
+    <key>DISABLE_DISMISS</key>
+    <string>Disable Auto-dismiss</string>
+    <key>DISABLE_DISMISS_FOOTER</key>
+    <string>Disables the default duration that Reachability closes after.</string>
+
+    <key>HOME_CLOSE_REACH</key>
+    <string>Home Button Closes Reachability</string>
+    <key>HOME_CLOSE_REACH_FOOTER</key>
+    <string>If enabled, the home button will no longer return to the home screen when Reachability is displayed.</string>
+
+    <key>DISPLAY_WIDGETS</key>
+    <string>Display Widget Selector</string>
+    <key>OPTIONS</key>
+    <string>Options</string>
+    <key>DISPLAY_WIDGETS_FOOTER</key>
+    <string>If enabled, a widget selector will be displayed. If disabled, the last used app will be show in Reachability.</string>
+
+    <key>AUTOSIZE_CHOOSER</key>
+    <string>Auto-size Widget Chooser</string>
+    <key>AUTOSIZE_CHOOSER_FOOTER</key>
+    <string>If enabled, the app selector will scale to the size of available apps.</string>
+
+    <key>DISPLAY_RECENTS</key>
+    <string>Display Recent Apps</string>
+    <key>DISPLAY_RECENTS_FOOTER</key>
+    <string>If enabled, a list of your recent apps will display in the app selector.</string>
+
+    <key>DISPLAY_FAVORITES</key>
+    <string>Display Favorite Apps</string>
+    <key>FAVORITES</key>
+    <string>Favorites</string>
+    <key>DISPLAY_FAVORITES_FOOTER</key>
+    <string>Apps that will be displayed in the favorites section of the app selector.</string>
+
+    <key>DISPLAY_ALL</key>
+    <string>Display All Apps</string>
+    <key>DISPLAY_ALL_FOOTER</key>
+    <string>If enabled, a section with all your apps will display in the app selector.</string>
+
+    <key>PAGINATION</key>
+    <string>Pagination</string>
+    <key>PAGINATION_FOOTER</key>
+    <string>If enabled, apps will be divided into discrete pages.</string>
+
+    <key>APPLICATIONS</key>
+    <string>Applications</string>
+</dict>
+</plist>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ENABLED</key>
+    <string>Enabled</string>
+    <key>ENABLED_FOOTER</key>
+    <string>Quickly enable or disable Quick Access.</string>
+
+    <key>USE_GENERIC_TAB</key>
+    <string>Use Generic Tab Label</string>
+    <key>USE_GENERIC_TAB_FOOTER</key>
+    <string>Instead of using the app's name, the tab label will simply show \"App\". Only Works on iOS 9 and below.</string>
+
+    <key>CUSTOMIZATION</key>
+    <string>Customization</string>
+    <key>DARKEN</key>
+    <string>Darken</string>
+
+    <key>HIDE_ON_LOCK</key>
+    <string>Hide on Lock Screen</string>
+    <key>HIDE_ON_LOCK_FOOTER</key>
+    <string>Instead of displaying a label, this will completely hide the Quick Access tab on the Lock Screen.</string>
+
+    <key>SELECTED_APP</key>
+    <string>Selected App</string>
+
+    <key>APPLICATION</key>
+    <string>Applications</string>
+    <key>RESPRING_WARNING</key>
+    <string>A respring is required to apply changes. Would you like to respring now?</string>
+</dict>
+</plist>

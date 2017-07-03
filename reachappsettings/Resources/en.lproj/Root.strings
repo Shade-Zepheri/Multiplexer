@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ENABLED</key>
+    <string>Enabled</string>
+    <key>SHOW_IPC</key>
+    <string>Show IPC communication messages</string>
+    <key>ENABLED_FOOTER</key>
+    <string>Quickly enable or disable Multiplexer.</string>
+
+    <key>THEME</key>
+    <string>Theme</string>
+    <key>THEME_FOOTER</key>
+    <string>Customize the look of Multiplexer.</string>
+
+    <key>AURA</key>
+    <string>Aura</string>
+    <key>AURA_FOOTER</key>
+    <string>Let apps run in the background.</string>
+
+    <key>EMPOLEON</key>
+    <string>Empoleon</string>
+    <key>EMPOLEON_FOOTER</key>
+    <string>Windowed multitasking.</string>
+
+    <key>MISSION_CONTROL</key>
+    <string>Mission Control</string>
+    <key>MISSION_CONTROL_FOOTER</key>
+    <string>Manage multiple desktops and their windows.</string>
+
+    <key>QUICK_ACCESS</key>
+    <string>Quick Access</string>
+    <key>QUICK_ACCESS_FOOTER</key>
+    <string>Have an app in Notification Center.</string>
+
+    <key>REACHAPP</key>
+    <string>Reach App</string>
+    <key>REACHAPP_FOOTER</key>
+    <string>Use an app in Reachability alongside another.</string>
+
+    <key>SWIPE_OVER</key>
+    <string>Swipe Over</string>
+    <key>SWIPE_OVER_FOOTER</key>
+    <string>Access another app simply by swiping in from the right side of the screen.</string>
+
+    <key>CREATORS</key>
+    <string>Creators</string>
+    <key>SUPPORT</key>
+    <string>Support</string>
+    <key>TUTORIAL</key>
+    <string>Tutorial</string>
+    <key>RESET_ALL</key>
+    <string>Reset All Settings & Respring</string>
+    <key>RESET_WARNING</key>
+    <string>Please confirm your choice to reset all settings & respring..</string>
+</dict>
+</plist>

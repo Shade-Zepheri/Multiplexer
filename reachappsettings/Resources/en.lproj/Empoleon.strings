@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ENABLED</key>
+    <string>Enabled</string>
+    <key>ENABLED_FOOTER</key>
+    <string>Quickly enable or disable Empoleon.</string>
+
+    <key>SWIPE_UP_FROM</key>
+    <string>Swipe Up From Bottom...</string>
+    <key>LEFT</key>
+    <string>Left</string>
+    <key>MIDDLE</key>
+    <string>Middle</string>
+    <key>RIGHT</key>
+    <string>Right</string>
+    <key>LAUNCH_INTO_WINDOW</key>
+    <string>Launch Into Window</string>
+    <key>SWIPE_UP_FROM_FOOTER</key>
+    <string>Launches all apps into windows rather than fullscreen.</string>
+
+    <key>ALWAYS_ENABLE_GESTURES</key>
+    <string>Always Enable Gestures</string>
+    <key>ALWAYS_EASY_TAP</key>
+    <string>Only Show Icons in Easy-Tap-Mode</string>
+    <key>ALWAYS_EASY_TAP_FOOTER</key>
+    <string>If disabled, you will not be able to resize and rotate windows unless the easy-tap-mode overlay is displayed.</string>
+
+    <key>COMPLETE_ANIMATIONS</key>
+    <string>Complete Animations</string>
+    <key>COMPLETE_ANIMATIONS_FOOTER</key>
+    <string>If enabled, tapping an icon on the easy-tap-mode overlay will be delayed until the bounce animation is complete.</string>
+
+    <key>SNAPPING</key>
+    <string>Snapping</string>
+    <key>SNAP_WINDOWS</key>
+    <string>Snap Windows</string>
+    <key>ROTATION_SNAPPING</key>
+    <string>Rotation Snapping</string>
+    <key>SHOW_SNAP_HELPER</key>
+    <string>Show Snap Helper</string>
+
+    <key>LOCK_BUTTON_ACTION</key>
+    <string>Lock button action</string>
+    <key>LOCK_ALL_ROTATION</key>
+    <string>Lock All Rotation</string>
+    <key>LOCK_APP_ROTATION</key>
+    <string>Lock App Rotation</string>
+
+    <key>ACTIVATOR</key>
+    <string>Activator</string>
+    <key>SORT_WINDOWS_ACTIVATION</key>
+    <string>Sort Windows Activation</string>
+    <key>EASY_TAP_ACTIVATION</key>
+    <string>Easy-Tap-Mode Activation</string>
+    <key>CREATE_WINDOW_ACTIVATION</key>
+    <string>Create App Window Activation</string>
+    <key>ACTIVATOR_WARNING</key>
+    <string>Activator must be installed to use this feature.</string>
+</dict>
+</plist>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ENABLED</key>
+    <string>Enabled</string>
+    <key>ENABLED_FOOTER</key>
+    <string>Quickly enable or disable Mission Control.</string>
+
+    <key>REPLACE_SWITCHER</key>
+    <string>Replace App Switcher</string>
+    <key>REPLACE_SWITCHER_FOOTER</key>
+    <string>If enabled the App Switcher will be replaced with the Mission Control view.</string>
+
+    <key>CUSTOMIZATION</key>
+    <string>Customization</string>
+    <key>DARKEN</key>
+    <string>Darken</string>
+    <key>OUTLINE</key>
+    <string>Outline</string>
+    <key>PAGED_SCROLLING</key>
+    <string>Paged Scrolling</string>
+    <key>CUSTOMIZATION_FOOTER</key>
+    <string>Modifies the desktop portion of the Mission Control view.</string>
+
+    <key>KILL_APP</key>
+    <string>Kill App</string>
+    <key>KILL_APP_FOOTER</key>
+    <string>If enabled, using the trash can icon to remove an app will also kill it.</string>
+
+    <key>ACTIVATOR</key>
+    <string>Activator</string>
+    <key>SECONDARY_ACTIVATION</key>
+    <string>Secondary Activation Method</string>
+    <key>ACTIVATOR_WARNING</key>
+    <string>Activator must be installed to use this feature.</string>
+</dict>
+</plist>

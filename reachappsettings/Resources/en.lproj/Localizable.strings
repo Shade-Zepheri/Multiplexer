@@ -31,9 +31,9 @@
     <string>Thank you for installing Multiplexer! Tap here to view the tutorial.</string>
 
     <key>CREATE_WINDOW_TITLE</key>
-    <string>Create Empoleon Window</string>
+    <string>Create Empoleon</string>
     <key>CREATE_WINDOW_SUBTITLE</key>
-    <string>Open application into an Empoleon window</string>
+    <string>Open app in an Empoleon window</string>
 
     <key>DESKTOPS</key>
     <string>Desktops</string>

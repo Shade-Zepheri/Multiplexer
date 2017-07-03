@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <key>ENABLED</key>
+    <string>Enabled</string>
+    <key>ENABLED_FOOTER</key>
+    <string>Quickly enable or disable Aura. Relaunch apps to apply changes.</string>
+
+    <key>ACTIVATOR</key>
+    <string>Activator</string>
+    <key>ACTIVATOR_FOOTER</key>
+    <string>If enabled, the current app will be closed after performing the activation method.</string>
+    <key>ACTIVATION_METHOD</key>
+    <string>Activation Method</string>
+    <key>EXIT_AFTER_MENU</key>
+    <string>Exit App After Menu</string>
+
+    <key>GLOBAL</key>
+    <string>Global</string>
+    <key>BACKGROUND_MODE</key>
+    <string>Background Mode</string>
+    <key>ICON_OPTIONS</key>
+    <string>Icon Indicator Options</string>
+    <key>STATUSBAR_OPTIONS</key>
+    <string>Status Bar Indicator Options</string>
+
+    <key>SPECIFIC</key>
+    <string>Specific</string>
+    <key>PER_APP</key>
+    <string>Per App</string>
+
+    <key>NATIVE</key>
+    <string>Native</string>
+    <key>UNLIMITED_BACKGROUND</key>
+    <string>Unlimited Backgrounding Time</string>
+    <key>FORCE_FOREGROUND</key>
+    <string>Force Foreground</string>
+    <key>KILL_ON_EXIT</key>
+    <string>Kill on Exit</string>
+    <key>SUSPEND_IMMEDIATELY</key>
+    <string>Suspend Immediately</string>
+    <key>BACKGROUND_MODE_FOOTER</key>
+    <string>Does not apply to apps enabled with differing options in the “Per App” section.</string>
+
+    <key>SHOW_ICON_INDICATORS</key>
+    <string>Show Icon Indicators</string>
+    <key>SHOW_NATIVE_INDICATORS</key>
+    <string>Show Native Mode Indicators</string>
+
+    <key>SHOW_STATUSBAR_ICONS</key>
+    <string>Show on Status Bar</string>
+    <key>SHOW_NATIVE_STATUSBAR</key>
+    <string>Show Native in Status Bar</string>
+
+    <key>APPLICATIONS</key>
+    <string>Applications</string>
+    <key>SEARCH_RESULTS</key>
+    <string>Search Results</string>
+    <key>ENABLED_APPS</key>
+    <string>Enabled Applications</string>
+    <key>OTHER_APPS</key>
+    <string>Other Applications</string>
+
+    <key>AUTO_LAUNCH</key>
+    <string>Auto Launch (On Boot)</string>
+    <key>AUTO_RELAUNCH</key>
+    <string>Auto Relaunch</string>
+
+    <key>REMOVE_FROM_SWITCHER</key>
+    <string>Remove from Switcher</string>
+    <key>SWITCHER_FOOTER</key>
+    <string>If the app's background mode is Disabled, this will remove the app from the switcher in addition to killing it.</string>
+
+    <key>PREVENT_DEATH</key>
+    <string>Prevent Death</string>
+    <key>PREVENT_DEATH_FOOTER</key>
+    <string>This will prevent most cases of the app being terminated (app switcher, low memory, etc). Please note that if you enable this option, and your system runs low on memory or some other situation, it may yield unpredictable results. Enabling both this and \"Exit on Suspend\" (see below) will cause this switch to have no effect.</string>
+
+    <key>EXIT_ON_SUSPEND</key>
+    <string>Exit on Suspend</string>
+    <key>EXIT_ON_SUSPEND_FOOTER</key>
+    <string>This switch causes applications to completely disable their backgrounding, natively. Apps such as BatteryLife, FinalFantasy2, and a certain Solitaire do this. This switch will not revert upon the uninstallation of Multiplexer because it actually writes to the app's data. A respring may be required to apply.</string>
+
+    <key>NATIVE_MODES</key>
+    <string>Native Backgrounding Modes</string>
+    <key>TASK_COMPLETION</key>
+    <string>Unbounded Task Completion</string>
+    <key>CONTINUOUS</key>
+    <string>Continuous</string>
+    <key>FETCH</key>
+    <string>Fetch</string>
+    <key>REMOTE_NOTIFICATION</key>
+    <string>Remote Notification</string>
+    <key>EXTERNAL_ACCESSORY</key>
+    <string>External Accessory</string>
+    <key>VOIP</key>
+    <string>VoIP</string>
+    <key>LOCATION</key>
+    <string>Location</string>
+    <key>AUDIO</key>
+    <string>Audio</string>
+    <key>BLUETOOTH_CENTRAL</key>
+    <string>Bluetooth (Central)</string>
+    <key>BLUETOOTH_PERIPHERAL</key>
+    <string>Bluetooth (Peripheral)</string>
+    <key>NATIVE_MODES_FOOTER</key>
+    <string>A respring is required to apply changes to these values. Just because a mode has been enabled does not necessarily mean it will be used by the app.</string>
+
+    <key>INDIVIDUAL_APP_FOOTER</key>
+    <string>Description of icon letters: \n\ N - Native\n\ ∞ - Unlimited Backgrounding Time\n\ F - Force Foreground\n ll - Suspend Immediately\n\ U - Unkillable\n\ \n\ The status bar icon is simply the app icon.</string>
+</dict>
+</plist>
