@@ -15,7 +15,7 @@
 	return self;
 }
 
-- (NSString*)localizedStringForKey:(NSString*)key {
-	return [self.bundle localizedStringForKey:key value:nil table:@"Localizable"];
+- (NSString*)localizedStringForKey:(NSString *)key table:(NSString *)table {
+	return [self.bundle localizedStringForKey:key value:nil table:table];
 }
 @end

@@ -36,7 +36,7 @@
 #define RA_BASE_PATH @"/Library/Multiplexer"
 
 #import "RALocalizer.h"
-#define LOCALIZE(x) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:x]
+#define LOCALIZE(key, table) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:key table:table]
 
 #import "RAThemeManager.h"
 // Note that "x" expands into the passed variable
