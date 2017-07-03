@@ -7,8 +7,9 @@ BUNDLE_NAME = ReachAppSettings
 ReachAppSettings_FILES = ReachAppSettings.mm $(shell find $(THEOS)/include/SettingsKit -name '*.m') $(wildcard *.xm) RAHeaderView.mm ../PDFImageOptions.m ../PDFImage.m ../RALocalizer.m ../RASettings.mm $(wildcard ../Theming/*.mm)
 ReachAppSettings_INSTALL_PATH = /Library/PreferenceBundles
 ReachAppSettings_FRAMEWORKS = UIKit MessageUI Social QuartzCore CoreGraphics
-ReachAppSettings_LIBRARIES = applist substrate
+ReachAppSettings_LIBRARIES = applist
 ReachAppSettings_PRIVATE_FRAMEWORKS = Preferences
+ReachAppSettings_EXTRA_FRAMEWORKS = CydiaSubstrate
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
