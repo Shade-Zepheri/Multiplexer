@@ -103,7 +103,7 @@
 }
 
 - (void)buttonPress:(UIButton*)button {
-	if ([RASettings.sharedInstance windowedMultitaskingCompleteAnimations]) {
+	if ([[RASettings sharedInstance] windowedMultitaskingCompleteAnimations]) {
 		probablyAnimating = YES;
 	}
 	//[UIView animateWithDuration:0.2 animations:^{
@@ -130,7 +130,7 @@
 }
 
 - (void)buttonRelease:(UIButton*)button {
-	if ([RASettings.sharedInstance windowedMultitaskingCompleteAnimations]) {
+	if ([[RASettings sharedInstance] windowedMultitaskingCompleteAnimations]) {
 		probablyAnimating = YES;
 	}
 	//[UIView animateWithDuration:0.2 animations:^{

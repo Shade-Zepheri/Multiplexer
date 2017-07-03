@@ -68,7 +68,7 @@ extern BOOL allowClosingReachabilityNatively;
 
 - (void)alertUser:(NSString*)description {
 #if DEBUG
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER") message:description preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
 	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
 	[alert show];
 #endif

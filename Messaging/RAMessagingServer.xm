@@ -225,7 +225,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	if (![RASettings.sharedInstance debug_showIPCMessages]) {
 		return;
 	}
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER") message:description preferredStyle:UIAlertControllerStyleAlert];
+	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
 	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
 	[alert show];
 #endif

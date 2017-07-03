@@ -5,15 +5,15 @@
 NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 	switch (mode) {
 		case RABackgroundModeNative:
-			return LOCALIZE(@"NATIVE");
+			return LOCALIZE(@"NATIVE", @"Localizable");
 		case RABackgroundModeForcedForeground:
-			return LOCALIZE(@"FORCE_FOREGROUND");
+			return LOCALIZE(@"FORCE_FOREGROUND", @"Localizable");
 		case RABackgroundModeForceNone:
-			return LOCALIZE(@"DISABLE");
+			return LOCALIZE(@"DISABLE", @"Localizable");
 		case RABackgroundModeSuspendImmediately:
-			return LOCALIZE(@"SUSPEND_IMMEDIATELY");
+			return LOCALIZE(@"SUSPEND_IMMEDIATELY", @"Localizable");
 		case RABackgroundModeUnlimitedBackgroundingTime:
-			return LOCALIZE(@"UNLIMITED_BACKGROUNDING_TIME");
+			return LOCALIZE(@"UNLIMITED_BACKGROUNDING_TIME", @"Localizable");
 		default:
 			return @"Unknown";
 	}

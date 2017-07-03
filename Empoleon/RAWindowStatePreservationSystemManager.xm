@@ -18,7 +18,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 }
 
 - (void)saveDesktopInformation:(RADesktopWindow*)desktop {
-	NSUInteger index = [RADesktopManager.sharedInstance.availableDesktops indexOfObject:desktop];
+	NSUInteger index = [[RADesktopManager sharedInstance].availableDesktops indexOfObject:desktop];
 	NSString *key = [NSString stringWithFormat:@"%tu", index];
 	NSMutableArray *openApps = [NSMutableArray array];
 	for (RAHostedAppView *app in desktop.appViews) {

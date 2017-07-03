@@ -114,8 +114,8 @@ try_bottom:
 
 + (CGPoint)snapCenterForWindow:(RAWindowBar*)window toLocation:(RAWindowSnapLocation)location {
 	// Convienence values
-	CGFloat width = UIScreen.mainScreen._referenceBounds.size.width;
-	CGFloat height = UIScreen.mainScreen._referenceBounds.size.height;
+	CGFloat width = CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
+	CGFloat height = CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
 
 	// Target frame values
 	CGRect frame = window.frame;
@@ -164,15 +164,15 @@ try_bottom:
 			break;
 	}
 
-	if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight && adjustStatusBar) {
+	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight && adjustStatusBar) {
 		newCenter.y -= 20;
 	}
-	if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight && (location == RAWindowSnapLocationRightMiddle || location == RAWindowSnapLocationRightBottom || location == RAWindowSnapLocationRightTop)) {
+	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight && (location == RAWindowSnapLocationRightMiddle || location == RAWindowSnapLocationRightBottom || location == RAWindowSnapLocationRightTop)) {
 		newCenter.x -= 20;
-	} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && adjustStatusBar) {
+	} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft && adjustStatusBar) {
 		newCenter.y -= 20;
 	}
-	if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location == RAWindowSnapLocationLeftMiddle || location == RAWindowSnapLocationLeftBottom || location == RAWindowSnapLocationLeftTop)) {
+	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location == RAWindowSnapLocationLeftMiddle || location == RAWindowSnapLocationLeftBottom || location == RAWindowSnapLocationLeftTop)) {
 		newCenter.x += 20;
 	}
 

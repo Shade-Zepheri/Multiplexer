@@ -1,4 +1,5 @@
 #import <AssertionServices/BKSProcessAssertion.h>
+#import <BulletinBoard/BBBulletinRequest.h>
 #import <FrontBoard/FBApplicationProcess.h>
 #import <FrontBoard/FBProcessManager.h>
 #import <FrontBoard/FBScene.h>
@@ -36,7 +37,7 @@
 #define RA_BASE_PATH @"/Library/Multiplexer"
 
 #import "RALocalizer.h"
-#define LOCALIZE(key, table) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:key table:table]
+#define LOCALIZE(key, local) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:key table:local]
 
 #import "RAThemeManager.h"
 // Note that "x" expands into the passed variable
@@ -543,12 +544,7 @@ typedef enum {
 -(BOOL) hasAnyLockState;
 @end
 
-@interface BBBulletinRequest : NSObject
-@property (nonatomic, copy) NSString *title;
-@property (nonatomic, copy) NSString *message;
-@property (nonatomic, copy) NSString *sectionID;
-@property (nonatomic, copy) BBAction *defaultAction;
-@property (nonatomic, copy) NSDate *date;
+@interface BBBulletinRequest ()
 
 @property(copy) BBAction * acknowledgeAction;
 @property(copy) BBAction * replyAction;
@@ -1382,16 +1378,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface SBFolderIconBackgroundView : SBIconBlurryBackgroundView
 - (id)initWithDefaultSize;
-@end
-
-@interface BBBulletin
-@property(copy, nonatomic) NSString *bulletinID; // @synthesize bulletinID=_bulletinID;
-@property(copy, nonatomic) NSString *sectionID; // @synthesize sectionID=_sectionID;
-@property(copy, nonatomic) NSString *section;
-@property(copy, nonatomic) NSString *message;
-@property(copy, nonatomic) NSString *subtitle;
-@property(copy, nonatomic) NSString *title;
-@property(copy, nonatomic) NSDate *date;
 @end
 
 @interface BBServer

@@ -174,7 +174,6 @@ extern void RA_BGAppsControllerNeedsToReload();
 						 N - Native\n\
 						 ∞ - Unlimited Backgrounding Time\n\
 						 F - Force Foreground\n"
-						 //D - Kill on Exit\n\
 						 "ll - Suspend Immediately\n\
 						 U - Unkillable\n\
 						 \n\

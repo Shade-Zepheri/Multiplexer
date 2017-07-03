@@ -140,12 +140,13 @@ BOOL allowClosingReachabilityNatively = NO;
     setPreviousOrientation = NO;
   }
 
-  if (![UIApplication.sharedApplication _isSupportedOrientation:orientation]) {
+  if (![[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
+    LogWarn(@"UIApplication doesnt support orientation");
     return;
   }
 
   for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
-    [window _setRotatableViewOrientation:orientation updateStatusBar:YES duration:0.25 force:YES];
+    [window _setRotatableViewOrientation:orientation updateStatusBar:YES duration:0.45 force:YES];
   }
 }
 

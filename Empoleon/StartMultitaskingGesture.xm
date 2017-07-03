@@ -14,14 +14,14 @@ BOOL locationIsInValidArea(CGFloat x) {
     return YES;
   }
 
-  switch ([RASettings.sharedInstance windowedMultitaskingGrabArea]) {
+  switch ([[RASettings sharedInstance] windowedMultitaskingGrabArea]) {
     case RAGrabAreaBottomLeftThird:
-      LogDebug(@"[ReachApp] StartMultitaskingGesture: %f %f", x, UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width);
-      return x <= UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 3.0;
+      LogDebug(@"[ReachApp] StartMultitaskingGesture: %f %f", x, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width);
+      return x <= [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0;
     case RAGrabAreaBottomMiddleThird:
-      return x >= UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 3.0 && x <= (UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 3.0) * 2;
+      return x >= [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0 && x <= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0) * 2;
     case RAGrabAreaBottomRightThird:
-      return x >= (UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 3.0) * 2;
+      return x >= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0) * 2;
     default:
       return NO;
   }
@@ -56,13 +56,13 @@ BOOL locationIsInValidArea(CGFloat x) {
       originalCenter = appView.center;
     } else if (state == UIGestureRecognizerStateChanged) {
       lastY = location.y;
-      CGFloat scale = location.y / UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height;
+      CGFloat scale = location.y / [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height;
 
-      if ([RAWindowStatePreservationSystemManager.sharedInstance hasWindowInformationForIdentifier:topApp.bundleIdentifier]) {
+      if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:topApp.bundleIdentifier]) {
         scale = MIN(MAX(scale, 0.01), 1);
         CGFloat actualScale = scale;
         scale = 1 - scale;
-        RAPreservedWindowInformation info = [RAWindowStatePreservationSystemManager.sharedInstance windowInformationForAppIdentifier:topApp.bundleIdentifier];
+        RAPreservedWindowInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] windowInformationForAppIdentifier:topApp.bundleIdentifier];
 
         // Interpolates between A and B with percentage T (T% between state A and state B)
         CGFloat (^interpolate)(CGFloat, CGFloat, CGFloat) = ^CGFloat(CGFloat a, CGFloat b, CGFloat t){
@@ -88,10 +88,10 @@ BOOL locationIsInValidArea(CGFloat x) {
     } else if (state == UIGestureRecognizerStateEnded) {
       [RAControlCenterInhibitor setInhibited:NO];
 
-      if (lastY <= (UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height / 4) * 3 && lastY != 0) { // 75% down, 0 == gesture ended in most situations
+      if (lastY <= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4) * 3 && lastY != 0) { // 75% down, 0 == gesture ended in most situations
         [UIView animateWithDuration:.3 animations:^{
-          if ([RAWindowStatePreservationSystemManager.sharedInstance hasWindowInformationForIdentifier:topApp.bundleIdentifier]) {
-            RAPreservedWindowInformation info = [RAWindowStatePreservationSystemManager.sharedInstance windowInformationForAppIdentifier:topApp.bundleIdentifier];
+          if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:topApp.bundleIdentifier]) {
+            RAPreservedWindowInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] windowInformationForAppIdentifier:topApp.bundleIdentifier];
             appView.center = info.center;
             appView.transform = info.transform;
           } else {

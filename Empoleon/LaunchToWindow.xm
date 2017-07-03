@@ -60,8 +60,8 @@ BOOL allowOpenApp = NO;
 - (NSArray *)staticShortcutItems {
 	NSMutableArray *mutableItems = [%orig mutableCopy];
 
-	NSString *title = LOCALIZE(@"CREATE_WINDOW_TITLE");
-	NSString *subtitle = LOCALIZE(@"CREATE_WINDOW_SUBTITLE");
+	NSString *title = LOCALIZE(@"CREATE_WINDOW_TITLE", @"Localizable");
+	NSString *subtitle = LOCALIZE(@"CREATE_WINDOW_SUBTITLE", @"Localizable");
 	NSDictionary *info = @{@"UIApplicationShortcutItemTitle": title, @"UIApplicationShortcutItemSubtitle": subtitle, @"UIApplicationShortcutItemType": @"com.efrederickson.reachapp.windowedmultitasking.3dtouchgesture"};
 
 	SBSApplicationShortcutItem *windowItem = [%c(SBSApplicationShortcutItem) staticShortcutItemWithDictionary:info localizationHandler:nil];
@@ -91,8 +91,8 @@ BOOL allowOpenApp = NO;
 - (NSArray *)staticApplicationShortcutItems {
 	NSMutableArray *mutableItems = [%orig mutableCopy];
 
-	NSString *title = LOCALIZE(@"CREATE_WINDOW_TITLE");
-	NSString *subtitle = LOCALIZE(@"CREATE_WINDOW_SUBTITLE");
+	NSString *title = LOCALIZE(@"CREATE_WINDOW_TITLE", @"Localizable");
+	NSString *subtitle = LOCALIZE(@"CREATE_WINDOW_SUBTITLE", @"Localizable");
 	NSDictionary *info = @{@"UIApplicationShortcutItemTitle": title, @"UIApplicationShortcutItemSubtitle": subtitle, @"UIApplicationShortcutItemType": @"com.efrederickson.reachapp.windowedmultitasking.3dtouchgesture"};
 
 	SBSApplicationShortcutItem *windowItem = [%c(SBSApplicationShortcutItem) staticShortcutItemWithDictionary:info localizationHandler:nil];

@@ -43,9 +43,9 @@ RANCViewController *ncAppViewController;
 	if (aClass == [RANCViewController class]) {
 		BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [RASettings.sharedInstance quickAccessUseGenericTabLabel];
 		if (useGenericLabel) {
-			return LOCALIZE(@"APP");
+			return LOCALIZE(@"APP", @"Localizable");
 		}
-		return ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP");
+		return ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP", @"Localizable");
 	} else {
 		return %orig;
 	}
@@ -79,9 +79,9 @@ RANCViewController *ncAppViewController;
 	NSString *text = @"";
 	BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [RASettings.sharedInstance quickAccessUseGenericTabLabel];
 	if (useGenericLabel) {
-		text = LOCALIZE(@"APP");
+		text = LOCALIZE(@"APP", @"Localizable");
 	} else {
-		text = ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP");
+		text = ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP", @"Localizable");
 	}
 
 	for (UIView *view in MSHookIvar<UIView*>(self, "_headerView").subviews) {
@@ -133,7 +133,7 @@ BOOL shouldLoadView = NO;
 
 - (void)viewDidLoad {
 	%orig;
-	
+
 	UIPageControl *pageControl = self.pageControl;
 	pageControl.numberOfPages += 1;
 }

@@ -59,8 +59,8 @@
 
 	//view.shouldUseExternalKeyboard = YES;
 
-	if ([RAWindowStatePreservationSystemManager.sharedInstance hasWindowInformationForIdentifier:view.app.bundleIdentifier]) {
-		RAPreservedWindowInformation info = [RAWindowStatePreservationSystemManager.sharedInstance windowInformationForAppIdentifier:view.app.bundleIdentifier];
+	if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:view.app.bundleIdentifier]) {
+		RAPreservedWindowInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] windowInformationForAppIdentifier:view.app.bundleIdentifier];
 
 		windowBar.center = info.center;
 		windowBar.transform = info.transform;
@@ -69,7 +69,7 @@
 			windowBar.transform = info.transform;
 		} completion:^(BOOL _) {
 			[windowBar updateClientRotation];
-			RADesktopManager.sharedInstance.lastUsedWindow = windowBar;
+			[RADesktopManager sharedInstance].lastUsedWindow = windowBar;
 		}];
 	}
 
@@ -229,19 +229,29 @@
 	if (lastKnownOrientation >= 0) {
 		return lastKnownOrientation;
 	}
-	return UIApplication.sharedApplication.statusBarOrientation;
+	return [UIApplication sharedApplication].statusBarOrientation;
 }
 
 - (CGFloat)baseRotationForOrientation {
-	UIInterfaceOrientation o = [self currentOrientation];
-	if (o == UIInterfaceOrientationLandscapeRight) {
-		return 90;
-	} else if (o == UIInterfaceOrientationLandscapeLeft) {
-		return 270;
-	} else if (o == UIInterfaceOrientationPortraitUpsideDown) {
-		return 180;
+	UIInterfaceOrientation orientation = [self currentOrientation];
+	CGFloat angle;
+	switch (orientation) {
+		case UIInterfaceOrientationUnknown:
+		case UIInterfaceOrientationPortrait:
+			angle = 0;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			angle = 90;
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			angle = 180;
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			angle=  270;
+			break;
 	}
-	return 0;
+
+	return angle;
 }
 
 - (UIInterfaceOrientation)appOrientationRelativeToThisOrientation:(CGFloat)currentRotation {

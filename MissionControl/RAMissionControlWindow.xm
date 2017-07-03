@@ -68,7 +68,7 @@
 		desktopLabel = [[UILabel alloc] initWithFrame:CGRectMake(panePadding, y, self.frame.size.width - 20, 25)];
 		desktopLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
 		desktopLabel.textColor = UIColor.whiteColor;
-		desktopLabel.text = LOCALIZE(@"DESKTOPS");
+		desktopLabel.text = LOCALIZE(@"DESKTOPS", @"Localizable");
 		[self addSubview:desktopLabel];
 
 		y = y + desktopLabel.frame.size.height;
@@ -183,7 +183,7 @@
 		windowedLabel = [[UILabel alloc] initWithFrame:CGRectMake(panePadding, y, self.frame.size.width - 20, 25)];
 		windowedLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
 		windowedLabel.textColor = UIColor.whiteColor;
-		windowedLabel.text = LOCALIZE(@"ON_THIS_DESKTOP");
+		windowedLabel.text = LOCALIZE(@"ON_THIS_DESKTOP", @"Localizable");
 		[self addSubview:windowedLabel];
 
 		windowedAppScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y + windowedLabel.frame.size.height, self.frame.size.width, height * 1.15)];
@@ -224,7 +224,7 @@
 		UILabel *emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (windowedAppScrollView.frame.size.height - 30) / 2, windowedAppScrollView.frame.size.width, 30)];
 		emptyLabel.textAlignment = NSTextAlignmentCenter;
 		emptyLabel.font = [UIFont systemFontOfSize:25];
-		emptyLabel.text = LOCALIZE(@"NO_APPS");
+		emptyLabel.text = LOCALIZE(@"NO_APPS", @"Localizable");
 		emptyLabel.textColor = [UIColor whiteColor];
 		emptyLabel.alpha = 0.7;
 		[windowedAppScrollView addSubview:emptyLabel];
@@ -236,7 +236,7 @@
 	} else {
 		if (!windowedKillAllButton) {
 			windowedKillAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			[windowedKillAllButton setTitle:LOCALIZE(@"KILL_ALL") forState:UIControlStateNormal];
+			[windowedKillAllButton setTitle:LOCALIZE(@"KILL_ALL", @"Localizable") forState:UIControlStateNormal];
 			windowedKillAllButton.titleLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
 			windowedKillAllButton.titleLabel.textColor = [UIColor whiteColor];
 			[windowedKillAllButton sizeToFit];
@@ -258,7 +258,7 @@
 		otherLabel = [[UILabel alloc] initWithFrame:CGRectMake(panePadding, y, self.frame.size.width - 20, 25)];
 		otherLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
 		otherLabel.textColor = UIColor.whiteColor;
-		otherLabel.text = LOCALIZE(@"RUNNING_ELSEWHERE");
+		otherLabel.text = LOCALIZE(@"RUNNING_ELSEWHERE", @"Localizable");
 		[self addSubview:otherLabel];
 
 		otherRunningAppsScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y + otherLabel.frame.size.height, self.frame.size.width, height * 1.15)];
@@ -297,7 +297,7 @@
 		UILabel *emptyLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, (windowedAppScrollView.frame.size.height - 30) / 2, windowedAppScrollView.frame.size.width, 30)];
 		emptyLabel.textAlignment = NSTextAlignmentCenter;
 		emptyLabel.font = [UIFont systemFontOfSize:25];
-		emptyLabel.text = LOCALIZE(@"NO_APPS");
+		emptyLabel.text = LOCALIZE(@"NO_APPS", @"Localizable");
 		emptyLabel.textColor = [UIColor whiteColor];
 		emptyLabel.alpha = 0.7;
 		[otherRunningAppsScrollView addSubview:emptyLabel];
@@ -309,7 +309,7 @@
 	} else {
 		if (!otherKillAllButton) {
 			otherKillAllButton = [UIButton buttonWithType:UIButtonTypeCustom];
-			[otherKillAllButton setTitle:LOCALIZE(@"KILL_ALL") forState:UIControlStateNormal];
+			[otherKillAllButton setTitle:LOCALIZE(@"KILL_ALL", @"Localizable") forState:UIControlStateNormal];
 			otherKillAllButton.titleLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
 			otherKillAllButton.titleLabel.textColor = [UIColor whiteColor];
 			[otherKillAllButton sizeToFit];

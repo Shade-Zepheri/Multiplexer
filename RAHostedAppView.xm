@@ -80,7 +80,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   startTries++;
   if (startTries > 5) {
     isPreloading = NO;
-    LogDebug(@"[ReachApp] maxed out preload attempts for app %@", app.bundleIdentifier);
+    LogError(@"[ReachApp] maxed out preload attempts for app %@", app.bundleIdentifier);
     UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
                       message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
                       preferredStyle:UIAlertControllerStyleAlert];
@@ -157,7 +157,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     isForemostAppLabel.font = [UIFont systemFontOfSize:36];
     isForemostAppLabel.numberOfLines = 0;
     isForemostAppLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    isForemostAppLabel.text = [NSString stringWithFormat:LOCALIZE(@"ACTIVE_APP_WARNING"),self.app.displayName];
+    isForemostAppLabel.text = [NSString stringWithFormat:LOCALIZE(@"ACTIVE_APP_WARNING", @"Localizable"),self.app.displayName];
     [self addSubview:isForemostAppLabel];
     return;
   }
@@ -173,7 +173,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
           authenticationDidFailLabel.font = [UIFont systemFontOfSize:36];
           authenticationDidFailLabel.numberOfLines = 0;
           authenticationDidFailLabel.lineBreakMode = NSLineBreakByWordWrapping;
-          authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"BIOLOCKDOWN_AUTH_FAILED"),self.app.displayName];
+          authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"BIOLOCKDOWN_AUTH_FAILED", @"Localizable"),self.app.displayName];
           [self addSubview:authenticationDidFailLabel];
 
           authenticationFailedRetryTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loadApp)];
@@ -196,7 +196,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
         authenticationDidFailLabel.font = [UIFont systemFontOfSize:36];
         authenticationDidFailLabel.numberOfLines = 0;
         authenticationDidFailLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"ASPHALEIA_AUTH_FAILED"),self.app.displayName];
+        authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"ASPHALEIA_AUTH_FAILED", @"Localizable"),self.app.displayName];
         [self addSubview:authenticationDidFailLabel];
 
         authenticationFailedRetryTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loadApp)];
@@ -334,8 +334,8 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     isForemostAppLabel = nil;
   }
 
-  if ([RASpringBoardKeyboardActivation.sharedInstance.currentIdentifier isEqual:self.bundleIdentifier]) {
-    [RASpringBoardKeyboardActivation.sharedInstance hideKeyboard];
+  if ([[RASpringBoardKeyboardActivation sharedInstance].currentIdentifier isEqualToString:self.bundleIdentifier]) {
+    [[RASpringBoardKeyboardActivation sharedInstance] hideKeyboard];
   }
 
   if (contextHostManager) {
@@ -349,7 +349,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   __weak RAHostedAppView *weakSelf = self;
   __block BOOL didRun = NO;
   RAMessageCompletionCallback block = ^(BOOL success) {
-    if (didRun || (weakSelf && [UIApplication.sharedApplication._accessibilityFrontMostApplication isEqual:weakSelf.app])) {
+    if (didRun || (weakSelf && [[UIApplication sharedApplication]._accessibilityFrontMostApplication isEqual:weakSelf.app])) {
       return;
     }
     if (!scene) {

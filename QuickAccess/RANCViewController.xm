@@ -78,7 +78,7 @@ int rotationDegsForOrientation(int o) {
 
 		isLockedLabel.frame = CGRectMake((self.view.frame.size.width - isLockedLabel.frame.size.width) / 2, (self.view.frame.size.height - isLockedLabel.frame.size.height) / 2, isLockedLabel.frame.size.width, isLockedLabel.frame.size.height);
 
-		isLockedLabel.text = LOCALIZE(@"UNLOCK_FOR_NCAPP");
+		isLockedLabel.text = LOCALIZE(@"UNLOCK_FOR_NCAPP", @"Localizable");
 		return;
 	} else if (isLockedLabel) {
 		[isLockedLabel removeFromSuperview];
