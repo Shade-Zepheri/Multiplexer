@@ -31,6 +31,8 @@ Minor Things/Bugs to note:
 Things to do/Features to add:
 - 3D Touch actions?
 - General Code Cleanup/conform to standards, feels to messy RN (at least indents are fine)
+- Localize prefs
+- Rework RALocalizer (maybe look up translations from Prefs Bundle?)
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?

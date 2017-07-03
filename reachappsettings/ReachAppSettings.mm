@@ -274,7 +274,7 @@
   if (!keyList) {
     return YES;
   }
-  NSDictionary *_settings = (__bridge NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  NSDictionary *_settings = (__bridge_transfer NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   CFRelease(keyList);
   if (!_settings) {
     return YES;
