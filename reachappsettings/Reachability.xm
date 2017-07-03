@@ -292,7 +292,7 @@
   if (!keyList) {
     return cell;
   }
-  prefs = (__bridge NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  prefs = (__bridge_transfer NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   if (!prefs) {
     return cell;
   }
@@ -311,16 +311,7 @@
 @implementation RAFavoritesAppSelectorView
 
 -(void)updateDataSource:(NSString*)searchText {
-  _dataSource.sectionDescriptors = [NSArray arrayWithObjects:
-                                [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"", ALSectionDescriptorTitleKey,
-                                 @"ALCheckCell", ALSectionDescriptorCellClassNameKey,
-                                 @(29), ALSectionDescriptorIconSizeKey,
-                                  @YES, ALSectionDescriptorSuppressHiddenAppsKey,
-                                 [NSString stringWithFormat:@"not bundleIdentifier in { }"],
-                                 ALSectionDescriptorPredicateKey
-                                 , nil],
-                                nil];
+  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in {%@}"]}];
   [_tableView reloadData];
 }
 

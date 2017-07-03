@@ -250,7 +250,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 	if (!keyList) {
 		return [specifier propertyForKey:@"default"];
 	}
-	NSDictionary *_settings = (__bridge NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+	NSDictionary *_settings = (__bridge_transfer NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 	CFRelease(keyList);
 	if (!_settings) {
 		return [specifier propertyForKey:@"default"];

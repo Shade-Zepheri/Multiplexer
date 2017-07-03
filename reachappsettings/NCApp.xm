@@ -135,7 +135,7 @@
   if (!keyList) {
     return cell;
   }
-  prefs = (__bridge NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  prefs = (__bridge_transfer NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   if (!prefs) {
     return cell;
   }

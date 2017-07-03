@@ -27,6 +27,7 @@
 	if (self) {
 		self.accessoryType = UITableViewCellAccessoryDisclosureIndicator;
 	}
+
 	return self;
 }
 @end
@@ -58,7 +59,7 @@ void RA_BGAppsControllerNeedsToReload() {
 	CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
 	CFArrayRef keyList = CFPreferencesCopyKeyList(appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 	if (keyList) {
-	  NSDictionary *prefs = (__bridge NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+	  NSDictionary *prefs = (__bridge_transfer NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 	  CFRelease(keyList);
 	  if (prefs) {
 	    NSArray *apps = [[ALApplicationList sharedApplicationList] applications].allKeys;
@@ -73,46 +74,18 @@ void RA_BGAppsControllerNeedsToReload() {
 	NSString* filter = (searchText && searchText.length > 0) ? [NSString stringWithFormat:@"displayName beginsWith[cd] '%@'", searchText] : nil;
 
 	if (filter) {
-		_dataSource.sectionDescriptors = [NSArray arrayWithObjects:
-	                                        [NSDictionary dictionaryWithObjectsAndKeys:
-	                                         @"Search Results", ALSectionDescriptorTitleKey,
-	                                         @"ALLinkCell", ALSectionDescriptorCellClassNameKey,
-	                                         iconSize, ALSectionDescriptorIconSizeKey,
-	                                         @YES, ALSectionDescriptorSuppressHiddenAppsKey,
-	                                         filter, ALSectionDescriptorPredicateKey
-	                                         , nil]
-	                                        , nil];
+		_dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"Search Results", ALSectionDescriptorCellClassNameKey: @"ALLinkCell", ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: filter}];
 	} else {
-	  if ([enabledList isEqual:@""]) {
-	      _dataSource.sectionDescriptors = [NSArray arrayWithObjects:
-	                                    [NSDictionary dictionaryWithObjectsAndKeys:
-	                                     @"", ALSectionDescriptorTitleKey,
-	                                     @"ALLinkCell", ALSectionDescriptorCellClassNameKey,
-	                                     iconSize, ALSectionDescriptorIconSizeKey,
-	                                      @YES, ALSectionDescriptorSuppressHiddenAppsKey,
-	                                     [NSString stringWithFormat:@"not bundleIdentifier in {%@}", enabledList],
-	                                     ALSectionDescriptorPredicateKey
-	                                     , nil],
-	                                    nil];
+	  if ([enabledList isEqualToString:@""]) {
+	      _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALLinkCell", ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in {%@}", enabledList]}];
 	  } else {
-	      _dataSource.sectionDescriptors = [NSArray arrayWithObjects:
-	                                    [NSDictionary dictionaryWithObjectsAndKeys:
-	                                     @"Enabled Applications", ALSectionDescriptorTitleKey,
-	                                     @"ALLinkCell", ALSectionDescriptorCellClassNameKey,
-	                                     iconSize, ALSectionDescriptorIconSizeKey,
-	                                     @YES, ALSectionDescriptorSuppressHiddenAppsKey,
-	                                     [NSString stringWithFormat:@"bundleIdentifier in {%@}", enabledList],
-	                                     ALSectionDescriptorPredicateKey
-	                                     , nil],
-	                                    [NSDictionary dictionaryWithObjectsAndKeys:
-	                                     @"Other Applications", ALSectionDescriptorTitleKey,
-	                                     @"ALLinkCell", ALSectionDescriptorCellClassNameKey,
-	                                     iconSize, ALSectionDescriptorIconSizeKey,
-	                                     @YES, ALSectionDescriptorSuppressHiddenAppsKey,
-	                                     [NSString stringWithFormat:@"not bundleIdentifier in {%@}", enabledList],
-	                                     ALSectionDescriptorPredicateKey
-	                                     , nil],
-	                                    nil];
+	      _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"Enabled Applications", ALSectionDescriptorCellClassNameKey: @"ALLinkCell",
+					ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES,
+					ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"bundleIdentifier in {%@}", enabledList]},
+					@{ALSectionDescriptorTitleKey: @"Other Applications", ALSectionDescriptorCellClassNameKey: @"ALLinkCell",
+					ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES,
+					ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in {%@}", enabledList]}
+				];
 	  }
 	}
 	[_tableView reloadData];
@@ -121,7 +94,7 @@ void RA_BGAppsControllerNeedsToReload() {
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		CGRect bounds = [[UIScreen mainScreen] bounds];
+		CGRect bounds = [UIScreen mainScreen].bounds;
 
 		_dataSource = [[ALApplicationTableDataSource alloc] init];
 
@@ -132,6 +105,7 @@ void RA_BGAppsControllerNeedsToReload() {
 		_dataSource.tableView = _tableView;
 		[self updateDataSource:nil];
 	}
+	
 	return self;
 }
 
