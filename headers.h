@@ -721,18 +721,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 -(void) setShouldUseUIKitHeuristics:(BOOL)val;
 @end
 
-@interface UIInternalEvent : UIEvent {
-    __GSEvent *_gsEvent;
-    __IOHIDEvent *_hidEvent;
-}
-
-- (__GSEvent*)_gsEvent;
-- (__IOHIDEvent*)_hidEvent;
-- (id)_screen;
-- (void)_setGSEvent:(__GSEvent*)arg1;
-- (void)_setHIDEvent:(__IOHIDEvent*)arg1;
-@end
-
 @interface UIKeyboardImpl
 + (id)activeInstance;
 + (id)sharedInstance;
@@ -758,7 +746,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (id)_cloneEvent;
 - (BOOL)isEqual:(id)arg1;
 - (BOOL)_matchesKeyCommand:(id)arg1;
-- (void)_setHIDEvent:(struct __IOHIDEvent *)arg1 keyboard:(struct __GSKeyboard *)arg2;
 @property(readonly, nonatomic) long _keyCode;
 @property(readonly, nonatomic) BOOL _isKeyDown;
 - (int)type;

@@ -311,7 +311,7 @@
 @implementation RAFavoritesAppSelectorView
 
 -(void)updateDataSource:(NSString*)searchText {
-  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in {%@}"]}];
+  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in { }"]}];
   [_tableView reloadData];
 }
 
