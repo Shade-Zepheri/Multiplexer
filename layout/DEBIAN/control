@@ -3,7 +3,7 @@ Name: Multiplexer Core
 Depends: mobilesubstrate, applist, preferenceloader, com.rpetrich.rocketbootstrap
 Conflicts: cc.tweak.statushud
 Replaces: com.efrederickson.reachapp
-Version: 0.1
+Version: 0.2
 Architecture: iphoneos-arm
 Description: Main Library for Multiplexer.
 Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.multiplexercore
