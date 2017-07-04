@@ -51,8 +51,16 @@
     <key>TUTORIAL</key>
     <string>Tutorial</string>
     <key>RESET_ALL</key>
-    <string>Reset All Settings & Respring</string>
+    <string>Reset All Settings and Respring</string>
     <key>RESET_WARNING</key>
-    <string>Please confirm your choice to reset all settings & respring..</string>
+    <string>Please confirm your choice to reset all settings and respring..</string>
+
+    <key>ACTIVATOR</key>
+    <string>Activator</string>
+    <key>ACTIVATOR_WARNING</key>
+    <string>Activator must be installed to use this feature.</string>
+
+    <key>APPLICATIONS</key>
+    <string>Applications</string>
 </dict>
 </plist>

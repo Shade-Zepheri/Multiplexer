@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>ENABLED</key>
-    <string>Enabled</string>
     <key>ENABLED_FOOTER</key>
     <string>Quickly enable or disable ReachApp.</string>
 
@@ -55,8 +53,5 @@
     <string>Pagination</string>
     <key>PAGINATION_FOOTER</key>
     <string>If enabled, apps will be divided into discrete pages.</string>
-
-    <key>APPLICATIONS</key>
-    <string>Applications</string>
 </dict>
 </plist>

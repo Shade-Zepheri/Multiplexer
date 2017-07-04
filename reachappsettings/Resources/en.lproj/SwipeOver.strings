@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>ENABLED</key>
-    <string>Enabled</string>
     <key>ENABLED_FOOTER</key>
     <string>Quickly enable or disable Swipe Over.</string>
 

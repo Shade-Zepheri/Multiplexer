@@ -2,13 +2,9 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>ENABLED</key>
-    <string>Enabled</string>
     <key>ENABLED_FOOTER</key>
     <string>Quickly enable or disable Aura. Relaunch apps to apply changes.</string>
 
-    <key>ACTIVATOR</key>
-    <string>Activator</string>
     <key>ACTIVATOR_FOOTER</key>
     <string>If enabled, the current app will be closed after performing the activation method.</string>
     <key>ACTIVATION_METHOD</key>
@@ -53,8 +49,6 @@
     <key>SHOW_NATIVE_STATUSBAR</key>
     <string>Show Native in Status Bar</string>
 
-    <key>APPLICATIONS</key>
-    <string>Applications</string>
     <key>SEARCH_RESULTS</key>
     <string>Search Results</string>
     <key>ENABLED_APPS</key>
@@ -108,6 +102,6 @@
     <string>A respring is required to apply changes to these values. Just because a mode has been enabled does not necessarily mean it will be used by the app.</string>
 
     <key>INDIVIDUAL_APP_FOOTER</key>
-    <string>Description of icon letters: \n\ N - Native\n\ ∞ - Unlimited Backgrounding Time\n\ F - Force Foreground\n ll - Suspend Immediately\n\ U - Unkillable\n\ \n\ The status bar icon is simply the app icon.</string>
+    <string>Description of icon letters: \n\ N - Native\n\ ∞ - Unlimited Backgrounding Time\n\ F - Force Foreground\n\ ll - Suspend Immediately\n\ U - Unkillable\n\ \n\ The status bar icon is simply the app icon.</string>
 </dict>
 </plist>

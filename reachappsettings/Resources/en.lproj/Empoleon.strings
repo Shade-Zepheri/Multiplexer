@@ -2,8 +2,6 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <key>ENABLED</key>
-    <string>Enabled</string>
     <key>ENABLED_FOOTER</key>
     <string>Quickly enable or disable Empoleon.</string>
 
@@ -48,15 +46,11 @@
     <key>LOCK_APP_ROTATION</key>
     <string>Lock App Rotation</string>
 
-    <key>ACTIVATOR</key>
-    <string>Activator</string>
     <key>SORT_WINDOWS_ACTIVATION</key>
     <string>Sort Windows Activation</string>
     <key>EASY_TAP_ACTIVATION</key>
     <string>Easy-Tap-Mode Activation</string>
     <key>CREATE_WINDOW_ACTIVATION</key>
     <string>Create App Window Activation</string>
-    <key>ACTIVATOR_WARNING</key>
-    <string>Activator must be installed to use this feature.</string>
 </dict>
 </plist>
