@@ -37,15 +37,25 @@ void handle_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEven
 		BOOL isDown = IOHIDEventGetIntegerValue(event2, kIOHIDEventFieldKeyboardDown);
 		int key = IOHIDEventGetIntegerValue(event2, kIOHIDEventFieldKeyboardUsage);
 
-		if (key == CTRL_KEY) {
-			isControlKeyDown = isDown;
-		} else if (key == CMD_KEY || key == CMD_KEY2) {
-			isWindowsKeyDown = isDown;
-		} else if (key == SHIFT_KEY || key == SHIFT_KEY2) {
-			isShiftKeyDown = isDown;
-		} else if (key == ALT_KEY || key == ALT_KEY2) {
-			isAltKeyDown = isDown;
-		} else if (isDown && isWindowsKeyDown && isControlKeyDown) {
+		switch (key) {
+			case CTRL_KEY:
+				isControlKeyDown = isDown;
+				break;
+			case CMD_KEY:
+			case CMD_KEY2:
+				isWindowsKeyDown = isDown;
+				break;
+			case SHIFT_KEY:
+			case SHIFT_KEY2:
+				isShiftKeyDown = isDown;
+				break;
+			case ALT_KEY:
+			case ALT_KEY2:
+				isAltKeyDown = isDown;
+				break;
+		}
+
+		if (isDown && isWindowsKeyDown && isControlKeyDown) {
 			switch (key) {
 				case ARROW_LEFT_KEY:
 					[center sendMessageName:RAMessagingGoToDesktopOnTheLeftMessageName userInfo:nil];

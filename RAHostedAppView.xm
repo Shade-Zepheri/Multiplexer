@@ -81,10 +81,10 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   if (startTries > 5) {
     isPreloading = NO;
     LogError(@"[ReachApp] maxed out preload attempts for app %@", app.bundleIdentifier);
-    UIAlertController* alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
                       message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
                       preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction* defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:defaultAction];
     [self.inputViewController presentViewController:alert animated:YES completion:nil];
     return;

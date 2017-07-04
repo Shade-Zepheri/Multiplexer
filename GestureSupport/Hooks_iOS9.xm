@@ -96,77 +96,81 @@ typedef struct {
 @end
 
 void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEventRef event) {
-  if (IOHIDEventGetType(event) == kIOHIDEventTypeDigitizer) {
-    NSArray *children = (__bridge NSArray *)IOHIDEventGetChildren(event);
-    if ([children count] == 1) {
-      float density = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerDensity);
+  if (IOHIDEventGetType(event) != kIOHIDEventTypeDigitizer) {
+    return;
+  }
 
-      float x = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
-      float y = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
-      CGPoint location = CGPointMake(x, y);
+  NSArray *children = (__bridge_transfer NSArray *)IOHIDEventGetChildren(event);
+  if ([children count] != 1) {
+    return;
+  }
 
-      UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
+  float density = IOHIDEventGetFloatValue((__bridge_transfer __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerDensity);
 
-      float rotatedX, rotatedY;
+  float x = IOHIDEventGetFloatValue((__bridge_transfer __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
+  float y = IOHIDEventGetFloatValue((__bridge_transfer __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
+  CGPoint location = CGPointMake(x, y);
 
-      switch (interfaceOrientation) {
-        case UIInterfaceOrientationUnknown:
-        case UIInterfaceOrientationPortrait:
-          rotatedX = x;
-          rotatedY = y;
-          break;
-        case UIInterfaceOrientationPortraitUpsideDown:
-          rotatedX = [UIScreen mainScreen].bounds.size.width - x;
-          rotatedY = [UIScreen mainScreen].bounds.size.height - y;
-          break;
-        case UIInterfaceOrientationLandscapeLeft:
-          rotatedX = [UIScreen mainScreen].bounds.size.width - y;
-          rotatedY = x;
-          break;
-        case UIInterfaceOrientationLandscapeRight:
-          rotatedX = y;
-          rotatedY = [UIScreen mainScreen].bounds.size.height - x;
-          break;
-      }
+  UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
 
-      CGPoint rotatedLocation = CGPointMake(rotatedX, rotatedY);
+  float rotatedX, rotatedY;
 
-      LogInfo(@"[ReachApp] (%f, %d) %@ -> %@", density, isTracking, NSStringFromCGPoint(location), NSStringFromCGPoint(rotatedLocation));
+  switch (interfaceOrientation) {
+    case UIInterfaceOrientationUnknown:
+    case UIInterfaceOrientationPortrait:
+      rotatedX = x;
+      rotatedY = y;
+      break;
+    case UIInterfaceOrientationPortraitUpsideDown:
+      rotatedX = [UIScreen mainScreen].bounds.size.width - x;
+      rotatedY = [UIScreen mainScreen].bounds.size.height - y;
+      break;
+    case UIInterfaceOrientationLandscapeLeft:
+      rotatedX = [UIScreen mainScreen].bounds.size.width - y;
+      rotatedY = x;
+      break;
+    case UIInterfaceOrientationLandscapeRight:
+      rotatedX = y;
+      rotatedY = [UIScreen mainScreen].bounds.size.height - x;
+      break;
+  }
 
-      if (!isTracking) {
-        for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
-          [recognizer incorporateTouchSampleAtLocation:location timestamp:CACurrentMediaTime() modifier:1 interfaceOrientation:interfaceOrientation forceState:0];
-        }
-        isTracking = YES;
-      } else if (density == 0 && isTracking) {
-        _UIScreenEdgePanRecognizer *targetRecognizer = nil;
-        for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
-          if (recognizer.targetEdges & currentEdge9) {
-            targetRecognizer = recognizer;
-          }
-        }
+  CGPoint rotatedLocation = CGPointMake(rotatedX, rotatedY);
 
-        [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateEnded withPoint:CGPointZero velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
-        for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
-          [recognizer reset]; // remove current touches it's "incorporated"
-        }
-        currentEdge9 = UIRectEdgeNone;
-        isTracking = NO;
+  LogInfo(@"[ReachApp] (%f, %d) %@ -> %@", density, isTracking, NSStringFromCGPoint(location), NSStringFromCGPoint(rotatedLocation));
 
-        LogInfo(@"[ReachApp] touch ended.");
-      } else {
-        _UIScreenEdgePanRecognizer *targetRecognizer = nil;
-
-        for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
-          [recognizer incorporateTouchSampleAtLocation:location timestamp:CACurrentMediaTime() modifier:1 interfaceOrientation:interfaceOrientation forceState:0];
-
-          if (recognizer.targetEdges & currentEdge9) {
-            targetRecognizer = recognizer;
-          }
-        }
-        [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateChanged withPoint:rotatedLocation velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
+  if (!isTracking) {
+    for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
+      [recognizer incorporateTouchSampleAtLocation:location timestamp:CACurrentMediaTime() modifier:1 interfaceOrientation:interfaceOrientation forceState:0];
+    }
+    isTracking = YES;
+  } else if (density == 0 && isTracking) {
+    _UIScreenEdgePanRecognizer *targetRecognizer = nil;
+    for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
+      if (recognizer.targetEdges & currentEdge9) {
+        targetRecognizer = recognizer;
       }
     }
+
+    [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateEnded withPoint:CGPointZero velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
+    for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
+      [recognizer reset]; // remove current touches it's "incorporated"
+    }
+    currentEdge9 = UIRectEdgeNone;
+    isTracking = NO;
+
+    LogInfo(@"[ReachApp] touch ended.");
+  } else {
+    _UIScreenEdgePanRecognizer *targetRecognizer = nil;
+
+    for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
+      [recognizer incorporateTouchSampleAtLocation:location timestamp:CACurrentMediaTime() modifier:1 interfaceOrientation:interfaceOrientation forceState:0];
+
+      if (recognizer.targetEdges & currentEdge9) {
+        targetRecognizer = recognizer;
+      }
+    }
+    [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateChanged withPoint:rotatedLocation velocity:targetRecognizer.RA_velocity forEdge:currentEdge9];
   }
 }
 
