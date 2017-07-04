@@ -59,7 +59,7 @@
 }
 
 - (NSString*)customTitle {
-  return @"Empoleon";
+  return LOCALIZE(@"EMPOLEON", @"Root");
 }
 
 - (BOOL)showHeartImage {

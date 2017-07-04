@@ -58,7 +58,7 @@
 }
 
 - (NSString*)customTitle {
-  return @"Reach App";
+  return LOCALIZE(@"REACHAPP", @"Root");
 }
 
 - (BOOL)showHeartImage {

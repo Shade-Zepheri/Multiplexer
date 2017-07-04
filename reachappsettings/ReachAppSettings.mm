@@ -66,7 +66,7 @@
 }
 
 - (NSString*)customTitle {
-  return @"Multiplexer";
+  return LOCALIZE(@"Multiplexer", @"Localizable");
 }
 
 - (BOOL)showHeartImage {
@@ -212,10 +212,10 @@
 
 - (void)resetData {
   UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer", @"Localizable") message:LOCALIZE(@"RESET_WARNING", @"Root") preferredStyle:UIAlertControllerStyleAlert];
-  UIAlertAction *resetAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+  UIAlertAction *resetAction = [UIAlertAction actionWithTitle:LOCALIZE(@"YES", @"Root") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.resetSettings"), nil, nil, YES);
   }];
-  UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"Cancel" style:UIAlertActionStyleCancel handler:nil];
+  UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:LOCALIZE(@"CANCEL", @"Localizable") style:UIAlertActionStyleCancel handler:nil];
 
   [alert addAction:resetAction];
   [alert addAction:cancelAction];

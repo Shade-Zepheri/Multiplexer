@@ -60,7 +60,7 @@
 }
 
 - (NSString*)customTitle {
-  return @"Aura";
+  return LOCALIZE(@"AURA", @"Root");
 }
 
 - (BOOL)showHeartImage {

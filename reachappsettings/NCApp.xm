@@ -57,7 +57,7 @@
 }
 
 - (NSString*)customTitle {
-  return @"Quick Access";
+  return LOCALIZE(@"QUICK_ACCESS", @"Root");
 }
 
 - (BOOL)showHeartImage {
@@ -201,11 +201,11 @@
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.settings/reloadSettings"), nil, nil, YES);
   });
 
-  UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Quick Access" message:LOCALIZE(@"RESPRING_WARNING", @"QuickAccess") preferredStyle:UIAlertControllerStyleAlert];
-  UIAlertAction *respringAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"QUICK_ACCESS", @"Root") message:LOCALIZE(@"RESPRING_WARNING", @"QuickAccess") preferredStyle:UIAlertControllerStyleAlert];
+  UIAlertAction *respringAction = [UIAlertAction actionWithTitle:LOCALIZE(@"YES", @"Root") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.respring"), nil, nil, YES);
   }];
-  UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"No" style:UIAlertActionStyleCancel handler:nil];
+  UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:LOCALIZE(@"NO", @"Root") style:UIAlertActionStyleCancel handler:nil];
 
   [alert addAction:respringAction];
   [alert addAction:cancelAction];

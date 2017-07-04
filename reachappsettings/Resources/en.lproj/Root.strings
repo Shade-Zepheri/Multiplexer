@@ -55,6 +55,11 @@
     <key>RESET_WARNING</key>
     <string>Please confirm your choice to reset all settings and respring..</string>
 
+    <key>YES</key>
+    <string>Yes</string>
+    <key>NO</key>
+    <string>No</string>
+
     <key>ACTIVATOR</key>
     <string>Activator</string>
     <key>ACTIVATOR_WARNING</key>

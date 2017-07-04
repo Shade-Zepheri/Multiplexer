@@ -58,7 +58,7 @@
 }
 
 - (NSString*)customTitle {
-  return @"Mission Control";
+  return LOCALIZE(@"MISSION_CONTROL", @"Root");
 }
 
 - (BOOL)showHeartImage {

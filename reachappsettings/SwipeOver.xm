@@ -45,7 +45,7 @@
   return notHeader;
 }
 - (NSString*)customTitle {
-  return @"Swipe Over";
+  return LOCALIZE(@"SWIPE_OVER", @"Root");
 }
 
 - (UIColor*)tintColor {
