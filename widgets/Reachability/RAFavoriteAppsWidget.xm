@@ -19,7 +19,7 @@
 }
 
 - (NSString*)displayName {
-	return LOCALIZE(@"FAVORITES");
+	return LOCALIZE(@"FAVORITES", @"Localizable");
 }
 
 - (NSString*)identifier {

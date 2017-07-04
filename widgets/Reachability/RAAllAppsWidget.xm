@@ -19,7 +19,7 @@
 }
 
 - (NSString*)displayName {
-	return LOCALIZE(@"ALL_APPS");
+	return LOCALIZE(@"ALL_APPS", @"Localizable");
 }
 
 - (NSString*)identifier {

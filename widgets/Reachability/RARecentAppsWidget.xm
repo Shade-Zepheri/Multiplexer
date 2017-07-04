@@ -24,7 +24,7 @@
 }
 
 - (NSString*)displayName {
-	return LOCALIZE(@"RECENTS");
+	return LOCALIZE(@"RECENTS", @"Localizable");
 }
 
 - (NSString*)identifier {

@@ -9,7 +9,7 @@
 }
 
 - (NSString*)displayName {
-	return LOCALIZE(@"WIDGETS");
+	return LOCALIZE(@"WIDGETS", @"Localizable");
 }
 
 - (NSString*)identifier {
