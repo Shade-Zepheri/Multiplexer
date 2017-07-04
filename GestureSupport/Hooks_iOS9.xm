@@ -100,7 +100,7 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
     return;
   }
 
-  NSArray *children = (__bridge_transfer NSArray *)IOHIDEventGetChildren(event);
+  NSArray *children = (__bridge NSArray *)IOHIDEventGetChildren(event);
   if ([children count] != 1) {
     return;
   }
