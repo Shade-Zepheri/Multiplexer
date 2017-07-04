@@ -7,6 +7,8 @@
 #if DEBUG
 	LogInfo(@"[ReachApp][DRM] Not checking statistics on debug build");
 #else
+	LogInfo(@"[DRM] Would Normally Check DRM but public beta so ¯\_(ツ)_/¯");
+/*
 	dispatch_async(dispatch_get_main_queue(), ^{
 		NSString *statsPath = @"/var/mobile/Library/Preferences/.multiplexer.stats_checked";
 		if (![NSFileManager.defaultManager fileExistsAtPath:statsPath]) {
@@ -26,5 +28,6 @@
 		  }];
 		}
 	});
+	*/
 #endif
 }

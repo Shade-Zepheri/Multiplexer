@@ -19,7 +19,7 @@
 #import <SpringBoard/SBNotificationCenterController.h>
 #import <SpringBoard/SBLockScreenManager.h>
 #import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
-#import <SpringBoard/SBSystemGestureManager.h>
+#import <SpringBoard/SBMainDisplaySystemGestureManager.h>
 #import <SpringBoard/SBUIController.h>
 #import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>

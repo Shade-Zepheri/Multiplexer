@@ -105,10 +105,10 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
     return;
   }
 
-  float density = IOHIDEventGetFloatValue((__bridge_transfer __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerDensity);
+  float density = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerDensity);
 
-  float x = IOHIDEventGetFloatValue((__bridge_transfer __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
-  float y = IOHIDEventGetFloatValue((__bridge_transfer __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
+  float x = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerX) * CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
+  float y = IOHIDEventGetFloatValue((__bridge __IOHIDEvent *)children[0], (IOHIDEventField)kIOHIDEventFieldDigitizerY) * CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
   CGPoint location = CGPointMake(x, y);
 
   UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
