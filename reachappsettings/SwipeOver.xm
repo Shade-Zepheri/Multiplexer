@@ -67,34 +67,34 @@
 
 - (NSArray*)customSpecifiers {
     return @[
-             @{ @"footerText": @"Quickly enable or disable Swipe Over." },
+             @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"SwipeOver") },
              @{
                  @"cell": @"PSSwitchCell",
                  @"default": @YES,
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"key": @"swipeOverEnabled",
-                 @"label": @"Enabled",
+                 @"label": LOCALIZE(@"ENABLED", @"Root"),
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
 
-             @{ @"label": @"Swipe In From Left..."},
+             @{ @"label": LOCALIZE(@"SWIPE_IN_FROM", @"SwipeOver")},
              @{
                  @"cell": @"PSSegmentCell",
-                 @"validTitles": @[ @"Anywhere",               @"Top",                      @"Middle",           @"Bottom" ],
-                 @"validValues": @[ @(RAGrabAreaSideAnywhere), @(RAGrabAreaSideTopThird), @(RAGrabAreaSideMiddleThird), @(RAGrabAreaSideBottomThird) ],
+                 @"validTitles": @[LOCALIZE(@"ANYWHERE", @"SwipeOver"), LOCALIZE(@"TOP", @"SwipeOver"), LOCALIZE(@"MIDDLE", @"SwipeOver"), LOCALIZE(@"BOTTOM", @"SwipeOver")],
+                 @"validValues": @[@(RAGrabAreaSideAnywhere), @(RAGrabAreaSideTopThird), @(RAGrabAreaSideMiddleThird), @(RAGrabAreaSideBottomThird)],
                  @"default": @(RAGrabAreaSideAnywhere),
                  @"key": @"swipeOverGrabArea",
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
 
-             @{ @"footerText": @"If enabled, the grabber will always display when invoking Swipe Over." },
+             @{ @"footerText": LOCALIZE(@"ALWAYS_SHOW_GRABBER_FOOTER", @"SwipeOver") },
              @{
                  @"cell": @"PSSwitchCell",
                  @"default": @NO,
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"key": @"alwaysShowSOGrabber",
-                 @"label": @"Always Display Grabber",
+                 @"label": LOCALIZE(@"ALWAYS_SHOW_GRABBER", @"SwipeOver"),
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
             ];

@@ -72,32 +72,32 @@
 
 - (NSArray*)customSpecifiers {
     return @[
-             @{ @"footerText": @"Quickly enable or disable Mission Control." },
+             @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"MissionControl") },
              @{
                  @"cell": @"PSSwitchCell",
                  @"default": @YES,
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"key": @"missionControlEnabled",
-                 @"label": @"Enabled",
+                 @"label": LOCALIZE(@"ENABLED", @"Root"),
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
 
-             @{ @"footerText": @"If enabled the App Switcher will be replaced with the Mission Control view."},
+             @{ @"footerText": LOCALIZE(@"REPLACE_SWITCHER_FOOTER", @"MissionControl")},
              @{
                  @"cell": @"PSSwitchCell",
                  @"default": @NO,
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"key": @"replaceAppSwitcherWithMC",
-                 @"label": @"Replace App Switcher",
+                 @"label": LOCALIZE(@"REPLACE_SWITCHER", @"MissionControl"),
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
 
-                 @{ @"label": @"Customization", @"footerText": @"Modifies the desktop portion of the Mission Control view." },
+                 @{ @"label": LOCALIZE(@"CUSTOMIZATION", @"MissionControl"), @"footerText": LOCALIZE(@"CUSTOMIZATION_FOOTER", @"MissionControl") },
              @{
                  @"cell": @"PSSegmentCell",
-                 @"validTitles": @[ @"Darken", @"Outline" ],
-                 @"validValues": @[ @(1), @(0), ],
-                 @"default": @(1),
+                 @"validTitles": @[ LOCALIZE(@"DARKEN", @"MissionControl"), LOCALIZE(@"OUTLINE", @"MissionControl") ],
+                 @"validValues": @[ @1, @0, ],
+                 @"default": @1,
                  @"key": @"missionControlDesktopStyle",
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
@@ -107,24 +107,24 @@
                  @"default": @NO,
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"key": @"missionControlPagingEnabled",
-                 @"label": @"Paged Scrolling",
+                 @"label": LOCALIZE(@"PAGED_SCROLLING", @"MissionControl"),
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
 
-                 @{ @"footerText": @"If enabled, using the trash can icon to remove an app will also kill it." },
+                 @{ @"footerText": LOCALIZE(@"KILL_APP_FOOTER", @"MissionControl") },
              @{
                  @"cell": @"PSSwitchCell",
                  @"default": @YES,
                  @"defaults": @"com.efrederickson.reachapp.settings",
                  @"key": @"mcKillApps",
-                 @"label": @"Kill App",
+                 @"label": LOCALIZE(@"KILL_APP", @"MissionControl"),
                  @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                  },
-                 @{ @"label": @"Activator" },
+                 @{ @"label": LOCALIZE(@"ACTIVATOR", @"Root") },
              @{
                     @"cell": @"PSLinkCell",
                     @"action": @"showActivatorAction",
-                    @"label": @"Secondary Activation Method",
+                    @"label": LOCALIZE(@"SECONDARY_ACTIVATION", @"MissionControl"),
                     //@"enabled": objc_getClass("LAEventSettingsController") != nil,
                  },
              ];
@@ -133,7 +133,7 @@
 - (void)showActivatorAction {
   id activator = %c(LAListenerSettingsViewController);
   if (!activator) {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer") message:@"Activator must be installed to use this feature." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer", @"Localizable") message:LOCALIZE(@"ACTIVATOR_WARNING", @"Root") preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:cancelAction];
     [self presentViewController:alert animated:YES completion:nil];

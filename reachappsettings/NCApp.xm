@@ -71,38 +71,38 @@
 
 - (NSArray*)customSpecifiers {
   return @[
-           @{ @"footerText": @"Quickly enable or disable Quick Access." },
+           @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"QuickAccess") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"ncAppEnabled",
-               @"label": @"Enabled",
+               @"label": LOCALIZE(@"ENABLED", @"Root"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
-           @{ @"footerText": @"Instead of using the app's name, the tab label will simply show \"App\". Only Works on iOS 9 and below" },
+           @{ @"footerText": LOCALIZE(@"USE_GENERIC_TAB_FOOTER", @"QuickAccess") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"quickAccessUseGenericTabLabel",
-               @"label": @"Use Generic Tab Label",
+               @"label": LOCALIZE(@"USE_GENERIC_TAB", @"QuickAccess"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
-           @{ @"footerText": @"Instead of displaying a label, this will completely hide the Quick Access tab on the Lock Screen." },
+           @{ @"footerText": LOCALIZE(@"HIDE_ON_LOCK_FOOTER", @"QuickAccess") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"ncAppHideOnLS",
-               @"label": @"Hide on Lock Screen",
+               @"label": LOCALIZE(@"HIDE_ON_LOCK", @"QuickAccess"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
                @{ },
            @{
                @"cell": @"PSLinkListCell",
                @"detail": @"RANCAppSelectorView",
-               @"label": @"Selected App",
+               @"label": LOCALIZE(@"SELECTED_APP", @"QuickAccess"),
                },
            ];
 }
@@ -155,16 +155,7 @@
 @implementation RANCAppSelectorView
 
 - (void)updateDataSource:(NSString*)searchText {
-  _dataSource.sectionDescriptors = [NSArray arrayWithObjects:
-                                [NSDictionary dictionaryWithObjectsAndKeys:
-                                 @"", ALSectionDescriptorTitleKey,
-                                 @"ALCheckCell", ALSectionDescriptorCellClassNameKey,
-                                 @(29), ALSectionDescriptorIconSizeKey,
-                                  @YES, ALSectionDescriptorSuppressHiddenAppsKey,
-                                 [NSString stringWithFormat:@"not bundleIdentifier in { }"],ALSectionDescriptorPredicateKey,
-                                 @YES,@"ALSingleEnabledMode"
-                                 , nil],
-                                nil];
+  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: @"not bundleIdentifier in { }", @"ALSingleEnabledMode": @YES}];
   [_tableView reloadData];
 }
 
@@ -186,7 +177,7 @@
 }
 
 - (void)viewDidLoad {
-  ((UIViewController *)self).title = @"Applications";
+  ((UIViewController *)self).title = LOCALIZE(@"APPLICATION", @"Root");
   [self.view addSubview:_tableView];
   [super viewDidLoad];
 }
@@ -210,7 +201,7 @@
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.settings/reloadSettings"), nil, nil, YES);
   });
 
-  UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Quick Access" message:@"A respring is required to apply changes. Would you like to respring now?" preferredStyle:UIAlertControllerStyleAlert];
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Quick Access" message:LOCALIZE(@"RESPRING_WARNING", @"QuickAccess") preferredStyle:UIAlertControllerStyleAlert];
   UIAlertAction *respringAction = [UIAlertAction actionWithTitle:@"Yes" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.respring"), nil, nil, YES);
   }];

@@ -72,33 +72,33 @@
 
 - (NSArray*)customSpecifiers {
   return @[
-           @{ @"footerText": @"Quickly enable or disable ReachApp." },
+           @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"reachabilityEnabled",
-               @"label": @"Enabled",
+               @"label": LOCALIZE(@"ENABLED", @"Root"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"footerText": @"If enabled, the Notification Center view is displayed in Reachability." },
+           @{ @"footerText": LOCALIZE(@"USE_NC_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"showNCInstead",
-               @"label": @"Show NC Instead of App",
+               @"label": LOCALIZE(@"USE_NC", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"footerText": @"Disables the default duration that Reachability closes after." },
+           @{ @"footerText": LOCALIZE(@"DISABLE_DISMISS_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"disableAutoDismiss",
-               @"label": @"Disable Auto-dismiss",
+               @"label": LOCALIZE(@"DISABLE_DISMISS", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 /*
@@ -113,13 +113,13 @@
                },
 */
 
-           @{ @"footerText": @"If enabled, the home button will no longer return to the home screen when Reachability is displayed." },
+           @{ @"footerText": LOCALIZE(@"HOME_CLOSE_REACH_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"homeButtonClosesReachability",
-               @"label": @"Home Button Closes Reachability",
+               @"label": LOCALIZE(@"HOME_CLOSE_REACH", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 /*
@@ -144,19 +144,19 @@
                },
 */
 
-           @{ @"footerText": @"If enabled, a widget selector will be displayed. If disabled, the last used app will be show in Reachability." },
+           @{ @"footerText": LOCALIZE(@"DISPLAY_WIDGETS_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"showAppSelector",
-               @"label": @"Display Widget Selector",
+               @"label": LOCALIZE(@"DISPLAY_WIDGETS", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
            @{
               @"cell": @"PSLinkListCell",
               @"detail": @"RAAppChooserOptionsListController",
-              @"label": @"Options",
+              @"label": LOCALIZE(@"OPTIONS", @"ReachApp"),
           },
 
 /*
@@ -193,58 +193,58 @@
 
 - (NSArray*)customSpecifiers {
   return @[
-           @{ @"footerText": @"If enabled, the app selector will scale to the size of available apps." },
+           @{ @"footerText": LOCALIZE(@"AUTOSIZE_CHOOSER_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"autoSizeAppChooser",
-               @"label": @"Auto-size Widget Chooser",
+               @"label": LOCALIZE(@"AUTOSIZE_CHOOSER", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"footerText": @"If enabled, a list of your recent apps will display in the app selector." },
+           @{ @"footerText": LOCALIZE(@"DISPLAY_RECENTS_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"showRecents",
-               @"label": @"Display Recent Apps",
+               @"label": LOCALIZE(@"DISPLAY_RECENTS", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-          @{ @"footerText": @"Apps that will be displayed in the favorites section of the app selector." },
+          @{ @"footerText": LOCALIZE(@"DISPLAY_FAVORITES_FOOTER", @"ReachApp") },
           @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"showFavorites",
-               @"label": @"Display Favorite Apps",
+               @"label": LOCALIZE(@"DISPLAY_FAVORITES", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
           @{
                @"cell": @"PSLinkListCell",
                @"detail": @"RAFavoritesAppSelectorView",
-               @"label": @"Favorites",
+               @"label": LOCALIZE(@"FAVORITES", @"ReachApp"),
                },
 
-           @{ @"footerText": @"If enabled, a section with all your apps will display in the app selector." },
+           @{ @"footerText": LOCALIZE(@"DISPLAY_ALL_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"showAllAppsInAppChooser",
-               @"label": @"Display All Apps",
+               @"label": LOCALIZE(@"DISPLAY_ALL", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"footerText": @"If enabled, apps will be divided into discrete pages." },
+           @{ @"footerText": LOCALIZE(@"PAGINATION_FOOTER", @"ReachApp") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"pagingEnabled",
-               @"label": @"Pagination",
+               @"label": LOCALIZE(@"PAGINATION", @"ReachApp"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
@@ -311,7 +311,7 @@
 @implementation RAFavoritesAppSelectorView
 
 -(void)updateDataSource:(NSString*)searchText {
-  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in { }"]}];
+  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: @"not bundleIdentifier in { }"}];
   [_tableView reloadData];
 }
 
@@ -332,7 +332,7 @@
 }
 
 - (void)viewDidLoad {
-  ((UIViewController *)self).title = @"Applications";
+  ((UIViewController *)self).title = LOCALIZE(@"APPLICATIONS", @"Root");
   [self.view addSubview:_tableView];
   [super viewDidLoad];
 }

@@ -73,21 +73,21 @@
 
 - (NSArray*)customSpecifiers {
   return @[
-               @{ @"footerText": @"Quickly enable or disable Empoleon." },
+               @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"Empoleon") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"windowedMultitaskingEnabled",
-               @"label": @"Enabled",
+               @"label": LOCALIZE(@"ENABLED", @"Root"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"label": @"Swipe Up From Bottom...", @"footerText": @"Launches all apps into windows rather than fullscreen." },
+           @{ @"label": LOCALIZE(@"SWIPE_UP_FROM", @"Empoleon"), @"footerText": LOCALIZE(@"SWIPE_UP_FROM_FOOTER", @"Empoleon") },
            @{
                @"cell": @"PSSegmentCell",
-               @"validTitles": @[ @"Left",                      @"Middle",                      @"Right" ],
-               @"validValues": @[ @(RAGrabAreaBottomLeftThird), @(RAGrabAreaBottomMiddleThird), @(RAGrabAreaBottomRightThird), ],
+               @"validTitles": @[LOCALIZE(@"LEFT", @"Empoleon"), LOCALIZE(@"MIDDLE", @"Empoleon"), LOCALIZE(@"RIGHT", @"Empoleon")],
+               @"validValues": @[@(RAGrabAreaBottomLeftThird), @(RAGrabAreaBottomMiddleThird), @(RAGrabAreaBottomRightThird),],
                @"default": @(RAGrabAreaBottomLeftThird),
                @"key": @"windowedMultitaskingGrabArea",
                @"defaults": @"com.efrederickson.reachapp.settings",
@@ -98,17 +98,17 @@
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"launchIntoWindows",
-               @"label": @"Launch Into Window",
+               @"label": LOCALIZE(@"LAUNCH_INTO_WINDOW", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"footerText": @"If disabled, you will not be able to resize and rotate windows unless the easy-tap-mode overlay is displayed." },
+           @{ @"footerText": LOCALIZE(@"ALWAYS_EASY_TAP_FOOTER", @"Empoleon") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"alwaysEnableGestures",
-               @"label": @"Always Enable Gestures",
+               @"label": LOCALIZE(@"ALWAYS_ENABLE_GESTURES", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
            @{
@@ -116,27 +116,27 @@
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"onlyShowWindowBarIconsOnOverlay",
-               @"label": @"Only Show Icons in Easy-Tap-Mode",
+               @"label": LOCALIZE(@"ALWAYS_EASY_TAP", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"footerText": @"If enabled, tapping an icon on the easy-tap-mode overlay will be delayed until the bounce animation is complete." },
+           @{ @"footerText": LOCALIZE(@"COMPLETE_ANIMATIONS_FOOTER", @"Empoleon") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"windowedMultitaskingCompleteAnimations",
-               @"label": @"Complete Animations",
+               @"label": LOCALIZE(@"COMPLETE_ANIMATIONS", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"label": @"Snapping" },
+           @{ @"label": LOCALIZE(@"SNAPPING", @"Empoleon") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"snapWindows",
-               @"label": @"Snap Windows",
+               @"label": LOCALIZE(@"SNAP_WINDOWS", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
            @{
@@ -144,7 +144,7 @@
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"snapRotation",
-               @"label": @"Rotation Snapping",
+               @"label": LOCALIZE(@"ROTATION_SNAPPING", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
            @{
@@ -152,14 +152,14 @@
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"showSnapHelper",
-               @"label": @"Show Snap Helper",
+               @"label": LOCALIZE(@"SHOW_SNAP_HELPER", @"Empoleon"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"label": @"Lock button action" },
+           @{ @"label": LOCALIZE(@"LOCK_BUTTON_ACTION", @"Empoleon") },
            @{
                @"cell": @"PSSegmentCell",
-               @"validTitles": @[ @"Lock All Rotation", @"Lock App Rotation" ],
+               @"validTitles": @[ LOCALIZE(@"LOCK_ALL_ROTATION", @"Empoleon"), LOCALIZE(@"LOCK_APP_ROTATION", @"Empoleon") ],
                @"validValues": @[ @0, @1 ],
                @"default": @0,
                @"key": @"windowRotationLockMode",
@@ -167,23 +167,23 @@
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
 
-           @{ @"label": @"Activator" },
+           @{ @"label": LOCALIZE(@"ACTIVATOR", @"Root") },
            @{
               @"cell": @"PSLinkCell",
               @"action": @"showActivatorAction",
-              @"label": @"Sort Windows Activation",
+              @"label": LOCALIZE(@"SORT_WINDOWS_ACTIVATION", @"Empoleon"),
               //@"enabled": objc_getClass("LAEventSettingsController") != nil,
            },
            @{
               @"cell": @"PSLinkCell",
               @"action": @"showActivatorAction2",
-              @"label": @"Easy-Tap-Mode Activation",
+              @"label": LOCALIZE(@"EASY_TAP_ACTIVATION", @"Empoleon"),
               //@"enabled": objc_getClass("LAEventSettingsController") != nil,
            },
            @{
               @"cell": @"PSLinkCell",
               @"action": @"showActivatorAction3",
-              @"label": @"Create App Window Activation",
+              @"label": LOCALIZE(@"CREATE_WINDOW_ACTIVATION", @"Empoleon"),
               //@"enabled": objc_getClass("LAEventSettingsController") != nil,
            },
 
@@ -203,7 +203,7 @@
 - (void)showActivatorAction {
   id activator = %c(LAListenerSettingsViewController);
   if (!activator) {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer") message:@"Activator must be installed to use this feature." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer", @"Localizable") message:LOCALIZE(@"ACTIVATOR_WARNING", @"Root") preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:cancelAction];
     [self presentViewController:alert animated:YES completion:nil];
@@ -217,7 +217,7 @@
 - (void)showActivatorAction2 {
   id activator = %c(LAListenerSettingsViewController);
   if (!activator) {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer") message:@"Activator must be installed to use this feature." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer", @"Localizable") message:LOCALIZE(@"ACTIVATOR_WARNING", @"Root") preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:cancelAction];
     [self presentViewController:alert animated:YES completion:nil];
@@ -231,7 +231,7 @@
 - (void)showActivatorAction3 {
   id activator = %c(LAListenerSettingsViewController);
   if (!activator) {
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer") message:@"Activator must be installed to use this feature." preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer", @"Localizable") message:LOCALIZE(@"ACTIVATOR_WARNING", @"Root") preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *cancelAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:cancelAction];
     [self presentViewController:alert animated:YES completion:nil];

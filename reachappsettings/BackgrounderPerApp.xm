@@ -74,15 +74,15 @@ void RA_BGAppsControllerNeedsToReload() {
 	NSString* filter = (searchText && searchText.length > 0) ? [NSString stringWithFormat:@"displayName beginsWith[cd] '%@'", searchText] : nil;
 
 	if (filter) {
-		_dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"Search Results", ALSectionDescriptorCellClassNameKey: @"ALLinkCell", ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: filter}];
+		_dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: LOCALIZE(@"SEARCH_RESULTS", @"Aura"), ALSectionDescriptorCellClassNameKey: @"ALLinkCell", ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: filter}];
 	} else {
 	  if ([enabledList isEqualToString:@""]) {
 	      _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALLinkCell", ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in {%@}", enabledList]}];
 	  } else {
-	      _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"Enabled Applications", ALSectionDescriptorCellClassNameKey: @"ALLinkCell",
+	      _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: LOCALIZE(@"ENABLED_APPS", @"Aura"), ALSectionDescriptorCellClassNameKey: @"ALLinkCell",
 					ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES,
 					ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"bundleIdentifier in {%@}", enabledList]},
-					@{ALSectionDescriptorTitleKey: @"Other Applications", ALSectionDescriptorCellClassNameKey: @"ALLinkCell",
+					@{ALSectionDescriptorTitleKey: LOCALIZE(@"OTHER_APPS", @"Aura"), ALSectionDescriptorCellClassNameKey: @"ALLinkCell",
 					ALSectionDescriptorIconSizeKey: iconSize, ALSectionDescriptorSuppressHiddenAppsKey: @YES,
 					ALSectionDescriptorPredicateKey: [NSString stringWithFormat:@"not bundleIdentifier in {%@}", enabledList]}
 				];
@@ -105,12 +105,12 @@ void RA_BGAppsControllerNeedsToReload() {
 		_dataSource.tableView = _tableView;
 		[self updateDataSource:nil];
 	}
-	
+
 	return self;
 }
 
 - (void)viewDidLoad {
-	((UIViewController *)self).title = @"Applications";
+	((UIViewController *)self).title = LOCALIZE(@"APPLICATIONS", @"Root");
 
 	[self.view addSubview:_tableView];
 

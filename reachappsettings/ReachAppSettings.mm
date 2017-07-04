@@ -79,13 +79,13 @@
 
 - (NSArray*)customSpecifiers {
   return @[
-           @{ @"footerText": @"Quickly enable or disable Multiplexer." },
+           @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"Root") },
            @{
                @"cell": @"PSSwitchCell",
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"enabled",
-               @"label": @"Enabled",
+               @"label": LOCALIZE(@"ENABLED", @"Root"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                @"icon": @"ra_enabled.png",
                },
@@ -95,19 +95,19 @@
                @"default": @YES,
                @"defaults": @"com.efrederickson.reachapp.settings",
                @"key": @"debug_showIPCMessages",
-               @"label": @"Show IPC communication messages",
+               @"label": LOCALIZE(@"SHOW_IPC", @"Root"),
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                @"icon": @"ra_enabled.png",
                },
 #endif
-           @{ @"footerText": @"Customize the look of Multiplexer." },
+           @{ @"footerText": LOCALIZE(@"THEME_FOOTER", @"Root") },
 
            @{
               @"cell": @"PSLinkListCell",
               @"default": [RASettings.sharedInstance currentThemeIdentifier],
               @"defaults": @"com.efrederickson.reachapp.settings",
               @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
-              @"label": @"Theme",
+              @"label": LOCALIZE(@"THEME", @"Root"),
               @"icon": @"theme.png",
               @"key": @"currentThemeIdentifier",
               @"detail": @"RAListItemsController",
@@ -116,50 +116,50 @@
               @"enabled": @([self getEnabledForPane:0])
            },
 
-           @{ @"footerText": @"Let apps run in the background." },
+           @{ @"footerText": LOCALIZE(@"AURA_FOOTER", @"Root") },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Aura",
+               @"label": LOCALIZE(@"AURA", @"Root"),
                @"detail": @"ReachAppBackgrounderSettingsListController",
                @"icon": @"aura.png",
                @"enabled": @([self getEnabledForPane:1])
                },
-           @{ @"footerText": @"Windowed multitasking." },
+           @{ @"footerText": LOCALIZE(@"EMPOLEON_FOOTER", @"Root") },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Empoleon",
+               @"label": LOCALIZE(@"EMPOLEON", @"Root"),
                @"detail": @"ReachAppWindowSettingsListController",
                @"icon": @"empoleon.png",
                @"enabled": @([self getEnabledForPane:2])
                },
-           @{ @"footerText": @"Manage multiple desktops and their windows." },
+           @{ @"footerText": LOCALIZE(@"MISSION_CONTROL_FOOTER", @"Root") },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Mission Control",
+               @"label": LOCALIZE(@"MISSION_CONTROL", @"Root"),
                @"detail": @"ReachAppMCSettingsListController",
                @"icon": @"missioncontrol.png",
                @"enabled": @([self getEnabledForPane:3])
                },
-           @{ @"footerText": @"Have an app in Notification Center." },
+           @{ @"footerText": LOCALIZE(@"QUICK_ACCESS_FOOTER", @"Root") },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Quick Access",
+               @"label": LOCALIZE(@"QUICK_ACCESS", @"Root"),
                @"detail": @"ReachAppNCAppSettingsListController",
                @"icon": @"quickaccess.png",
                @"enabled": @([self getEnabledForPane:4])
                },
-          @{ @"footerText": @"Use an app in Reachability alongside another." },
+          @{ @"footerText": LOCALIZE(@"REACHAPP_FOOTER", @"Root") },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Reach App",
+               @"label": LOCALIZE(@"REACHAPP", @"Root"),
                @"detail": @"ReachAppReachabilitySettingsListController",
                @"icon": @"reachapp.png",
                @"enabled": @([self getEnabledForPane:5])
                },
-           @{ @"footerText": @"Access another app simply by swiping in from the right side of the screen." },
+           @{ @"footerText": LOCALIZE(@"SWIPE_OVER_FOOTER", @"Root") },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Swipe Over",
+               @"label": LOCALIZE(@"SWIPE_OVER", @"Root"),
                @"detail": @"ReachAppSwipeOverSettingsListController",
                @"icon": @"swipeover.png",
                @"enabled": @([self getEnabledForPane:6])
@@ -177,20 +177,20 @@
                    ]},
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Creators",
+               @"label": LOCALIZE(@"CREATORS", @"Root"),
                @"detail": @"RAMakersController",
                @"icon": @"ra_makers.png"
                },
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Support",
+               @"label": LOCALIZE(@"SUPPORT", @"Root"),
                @"action": @"showSupportDialog",
                @"icon": @"ra_support.png"
                },
 
            @{
                @"cell": @"PSLinkCell",
-               @"label": @"Tutorial",
+               @"label": LOCALIZE(@"TUTORIAL", @"Root"),
                @"action": @"showTutorial",
                @"icon": @"tutorial.png",
                //@"enabled": @NO,
@@ -204,14 +204,14 @@
            @{
                @"cell": @"PSButtonCell",
                @"action": @"resetData",
-               @"label": @"Reset All Settings & Respring",
+               @"label": LOCALIZE(@"RESET_ALL", @"Root"),
                @"icon": @"Reset.png"
                }
            ];
 }
 
 - (void)resetData {
-  UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer") message:@"Please confirm your choice to reset all settings & respring.." preferredStyle:UIAlertControllerStyleAlert];
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"Multiplexer", @"Localizable") message:LOCALIZE(@"RESET_WARNING", @"Root") preferredStyle:UIAlertControllerStyleAlert];
   UIAlertAction *resetAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.resetSettings"), nil, nil, YES);
   }];
