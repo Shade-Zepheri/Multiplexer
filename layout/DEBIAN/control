@@ -5,8 +5,8 @@ Conflicts: cc.tweak.statushud
 Replaces: com.efrederickson.reachapp
 Version: 0.2
 Architecture: iphoneos-arm
-Description: Main Library for Multiplexer.
+Description: Main Framework for Multiplexer.
 Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.multiplexercore
 Maintainer: Shade Zepheri <ziroalpha@gmail.com>
 Author: Shade Zepheri <ziroalpha@gmail.com>
-Section: Tweaks
+Section: Development

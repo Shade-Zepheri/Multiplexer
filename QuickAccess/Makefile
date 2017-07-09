@@ -13,7 +13,6 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = QuickAccess
 QuickAccess_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
-QuickAccess_FRAMEWORKS = UIKit CoreGraphics
-QuickAccess_LIBRARIES = multiplexercore
+QuickAccess_FRAMEWORKS = UIKit CoreGraphics MultiplexerCore
 
 include $(THEOS_MAKE_PATH)/tweak.mk

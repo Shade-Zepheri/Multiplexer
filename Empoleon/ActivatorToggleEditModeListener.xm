@@ -29,6 +29,7 @@ static RAActivatorToggleEditModeListener *sharedInstance;
   IF_NOT_SPRINGBOARD {
     return;
   }
+
   sharedInstance = [[RAActivatorToggleEditModeListener alloc] init];
   [[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.efrederickson.reachapp.windowedmultitasking.toggleEditMode"];
 }

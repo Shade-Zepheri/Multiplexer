@@ -27,6 +27,7 @@
 		grabberView.backgroundColor = [UIColor whiteColor];
 		[self addSubview:grabberView];
 	}
+
 	return self;
 }
 

@@ -800,6 +800,7 @@ CGFloat startingY = -1;
   IF_NOT_SPRINGBOARD {
     return;
   }
+
   Class c = %c(SBMainWorkspace) ?: %c(SBWorkspace);
   %init(hooks, SB_WORKSPACE_CLASS=c);
 }

@@ -47,6 +47,7 @@ static RAActivatorCreateWindowListener *sharedInstance$RAActivatorCreateWindowLi
   IF_NOT_SPRINGBOARD {
     return;
   }
+
   sharedInstance$RAActivatorCreateWindowListener = [[RAActivatorCreateWindowListener alloc] init];
   [[%c(LAActivator) sharedInstance] registerListener:sharedInstance$RAActivatorCreateWindowListener forName:@"com.efrederickson.reachapp.windowedmultitasking.createWindow"];
 }

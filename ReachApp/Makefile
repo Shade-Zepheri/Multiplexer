@@ -13,7 +13,6 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = ReachApp
 ReachApp_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
-ReachApp_FRAMEWORKS = UIKit CoreGraphics
-ReachApp_LIBRARIES = multiplexercore
+ReachApp_FRAMEWORKS = UIKit CoreGraphics MultiplexerCore
 
 include $(THEOS_MAKE_PATH)/tweak.mk

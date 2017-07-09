@@ -29,6 +29,7 @@ static RAActivatorListener *sharedInstance;
 	IF_NOT_SPRINGBOARD {
 		return;
 	}
+
 	sharedInstance = [[RAActivatorListener alloc] init];
 	[[%c(LAActivator) sharedInstance] registerListener:sharedInstance forName:@"com.efrederickson.reachapp.missioncontrol.activatorlistener"];
 }

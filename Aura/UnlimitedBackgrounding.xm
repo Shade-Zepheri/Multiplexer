@@ -33,6 +33,7 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   IF_NOT_SPRINGBOARD {
     return;
   }
+
   sharedInstance$RAUnlimitedBackgroundingAppWatcher = [[RAUnlimitedBackgroundingAppWatcher alloc] init];
   [[%c(RARunningAppsProvider) sharedInstance] addTarget:sharedInstance$RAUnlimitedBackgroundingAppWatcher];
 }
@@ -41,6 +42,7 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   if (![processAssertions objectForKey:app.bundleIdentifier]) {
     return;
   }
+
   [processAssertions[app.bundleIdentifier] invalidate];
   [processAssertions removeObjectForKey:app.bundleIdentifier];
 }

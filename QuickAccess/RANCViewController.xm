@@ -30,6 +30,7 @@ int patchOrientation(int in) {
 	if (in == 3) {
 		return 1;
 	}
+
 	return in;
 }
 

@@ -492,5 +492,6 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	IF_NOT_SPRINGBOARD {
 		return;
 	}
+
 	[RAMessagingServer sharedInstance];
 }

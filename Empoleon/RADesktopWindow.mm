@@ -12,6 +12,7 @@
 		self.appViews = [NSMutableArray array];
 		self.windowLevel = 1000;
 	}
+
 	return self;
 }
 

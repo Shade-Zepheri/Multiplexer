@@ -31,6 +31,7 @@ BOOL locationIsInValidArea(CGFloat x) {
   IF_NOT_SPRINGBOARD {
     return;
   }
+
   __weak __block UIView *appView = nil;
   __block CGFloat lastY = 0;
   __block CGPoint originalCenter;

@@ -13,7 +13,6 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Empoleon
 Empoleon_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
-Empoleon_FRAMEWORKS = UIKit CoreGraphics
-Empoleon_LIBRARIES = multiplexercore
+Empoleon_FRAMEWORKS = UIKit CoreGraphics MultiplexerCore
 
 include $(THEOS_MAKE_PATH)/tweak.mk

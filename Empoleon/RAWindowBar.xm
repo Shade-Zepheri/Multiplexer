@@ -530,6 +530,7 @@ extern BOOL allowOpenApp;
 	if (self.isOverlayShowing) {
 		return;
 	}
+
 	[self showOverlay];
 }
 

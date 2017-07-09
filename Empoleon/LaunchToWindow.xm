@@ -13,6 +13,7 @@ BOOL allowOpenApp = NO;
 		[[RADesktopManager sharedInstance].currentDesktop createAppWindowForSBApplication:icon.application animated:YES];
 		override = YES;
 	}
+
 	%orig;
 }
 

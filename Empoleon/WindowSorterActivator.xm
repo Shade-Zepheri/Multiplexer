@@ -22,6 +22,7 @@ static RAActivatorSortWindowsListener *sharedInstance$RAActivatorSortWindowsList
   IF_NOT_SPRINGBOARD {
     return;
   }
+
   sharedInstance$RAActivatorSortWindowsListener = [[RAActivatorSortWindowsListener alloc] init];
   [[%c(LAActivator) sharedInstance] registerListener:sharedInstance$RAActivatorSortWindowsListener forName:@"com.efrederickson.reachapp.windowedmultitasking.sortWindows"];
 }
