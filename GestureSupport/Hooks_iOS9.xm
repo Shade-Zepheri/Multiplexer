@@ -95,7 +95,7 @@ typedef struct {
 }
 @end
 
-void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEventRef event) {
+static void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEventRef event) {
   if (IOHIDEventGetType(event) != kIOHIDEventTypeDigitizer) {
     return;
   }
@@ -174,7 +174,7 @@ void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEvent
   }
 }
 
-static inline void initializeGestures(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
+static void initializeGestures(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   clientCreatePointer clientCreate;
   void *handle = dlopen(0, 9);
   *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");

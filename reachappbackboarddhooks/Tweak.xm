@@ -30,7 +30,7 @@ CPDistributedMessagingCenter *center;
 // TODO: Ensure all keyboard commands do not conflict with
 // https://support.apple.com/en-us/HT201236
 
-void handle_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEventRef event) {
+static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEventRef event) {
 	if (IOHIDEventGetType(event) == kIOHIDEventTypeKeyboard) {
 		IOHIDEventRef event2 = IOHIDEventCreateCopy(kCFAllocatorDefault, event);
 
