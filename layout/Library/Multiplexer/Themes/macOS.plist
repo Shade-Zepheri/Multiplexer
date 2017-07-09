@@ -3,14 +3,14 @@
 <plist version="1.0">
 <dict>
 	<key>identifier</key>
-	<string>com.eljahandandrew.multiplexer.themes.Dark</string>
+	<string>com.eljahandandrew.multiplexer.themes.macos</string>
 	<key>displayName</key>
-	<string>Dark</string>
+	<string>macOS</string>
 
 	<key>backgroundingIndicatorTextColor</key>
 	<string>FFFFFF</string>
 	<key>backgroundingIndicatorBackgroundColor</key>
-	<string>434a51</string>
+	<string>007AFF</string>
 
 	<key>missionControlBlurStyle</key>
 	<integer>1</integer>
@@ -21,33 +21,32 @@
 	<key>missionControlIconPreviewShadowRadius</key>
 	<real>12</real>
 	<key>windowedMultitaskingWindowBarBackgroundColor</key>
-	<string>434a51</string>
+	<string>E5E4E5</string>
 	<key>windowedMultitaskingCloseIconTint</key>
 	<string>80000000</string>
 	<key>windowedMultitaskingCloseIconBackgroundColor</key>
-	<string>FF7070</string>
+	<string>FF3B30</string>
 	<key>windowedMultitaskingMaxIconTint</key>
 	<string>80000000</string>
 	<key>windowedMultitaskingMaxIconBackgroundColor</key>
-	<string>73E8A6</string>
+	<string>4CD964</string>
 	<key>windowedMultitaskingMinIconTint</key>
 	<string>80000000</string>
 	<key>windowedMultitaskingMinIconBackgroundColor</key>
-	<string>5ABFFF</string>
+	<string>FF9500</string>
 	<key>windowedMultitaskingRotationIconTint</key>
 	<string>80000000</string>
 	<key>windowedMultitaskingRotationIconBackgroundColor</key>
 	<string>B974F5</string>
+	<key>windowedMultitaskingBarTitleColor</key>
+	<string>737273</string>
 	<key>windowedMultitaskingOverlayColor</key>
 	<string>99000000</string>
-	<key>swipeOverDetachBarColor</key>
-	<string>5a6168</string>
-	<key>swipeOverDetachImageColor</key>
-	<string>FFFFFF</string>
-	<key>windowedMultitaskingBarTitleColor</key>
-	<string>ffffff</string>
 	<key>windowedMultitaskingBlurStyle</key>
 	<integer>2</integer>
+
+	<key>swipeOverDetachBarColor</key>
+	<string>E5E4E5</string>
 
 	<key>windowedMultitaskingCloseButtonAlignment</key>
 	<integer>0</integer>
@@ -60,9 +59,9 @@
 	<key>windowedMultitaskingCloseButtonPriority</key>
 	<integer>0</integer>
 	<key>windowedMultitaskingMaxButtonPriority</key>
-	<integer>1</integer>
-	<key>windowedMultitaskingMinButtonPriority</key>
 	<integer>2</integer>
+	<key>windowedMultitaskingMinButtonPriority</key>
+	<integer>1</integer>
 	<key>windowedMultitaskingRotationPriority</key>
 	<integer>0</integer>
 	<key>windowedMultaskingBarTitleTextAlignment</key>
