@@ -12,7 +12,7 @@ static RAActivatorListener *sharedInstance;
 	if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
 		return;
 	} else if ([[%c(RASettings) sharedInstance] missionControlEnabled]) {
-	  [RAMissionControlManager.sharedInstance toggleMissionControl:YES];
+	  [[RAMissionControlManager sharedInstance] toggleMissionControl:YES];
 		if ([%c(SBUIController) respondsToSelector:@selector(_appSwitcherController)]) {
 			[[[%c(SBUIController) sharedInstance] _appSwitcherController] forceDismissAnimated:NO];
 		} else {

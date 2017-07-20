@@ -4,9 +4,9 @@
 <dict>
     <key>Filter</key>
     <dict>
-        <key>Executables</key>
+        <key>Bundles</key>
         <array>
-            <string>backboardd</string>
+            <string>com.apple.backboardd</string>
         </array>
     </dict>
 </dict>

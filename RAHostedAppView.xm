@@ -73,7 +73,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 
 - (void)setShouldUseExternalKeyboard:(BOOL)value {
   _shouldUseExternalKeyboard = value;
-  [RAMessagingServer.sharedInstance setShouldUseExternalKeyboard:value forApp:self.bundleIdentifier completion:nil];
+  [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:value forApp:self.bundleIdentifier completion:nil];
 }
 
 - (void)preloadApp {
@@ -81,9 +81,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   if (startTries > 5) {
     isPreloading = NO;
     LogError(@"[ReachApp] maxed out preload attempts for app %@", app.bundleIdentifier);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer"
-                      message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName]
-                      preferredStyle:UIAlertControllerStyleAlert];
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer" message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:defaultAction];
     [self.inputViewController presentViewController:alert animated:YES completion:nil];
@@ -97,7 +95,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   isPreloading = YES;
   FBScene *scene = [app mainScene];
   if (![app pid] || !scene) {
-    [UIApplication.sharedApplication launchApplicationWithIdentifier:self.bundleIdentifier suspended:YES];
+    [[UIApplication sharedApplication] launchApplicationWithIdentifier:self.bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:self.bundleIdentifier]; // ummm...?
   }
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -130,12 +128,12 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 
   [self addSubview:view];
 
-  [RAMessagingServer.sharedInstance setHosted:YES forIdentifier:app.bundleIdentifier completion:nil];
+  [[RAMessagingServer sharedInstance] setHosted:YES forIdentifier:app.bundleIdentifier completion:nil];
   if (IS_IPAD) {
     [RAHostedAppView iPad_iOS83_fixHosting];
   }
 
-  [RARunningAppsProvider.sharedInstance addTarget:self];
+  [[RARunningAppsProvider sharedInstance] addTarget:self];
 
   loadedTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(verifyHostingAndRehostIfNecessary) userInfo:nil repeats:YES];
   [[NSRunLoop currentRunLoop] addTimer:loadedTimer forMode:NSRunLoopCommonModes];
@@ -274,13 +272,13 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   [view setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 
   if (self.autosizesApp) {
-    RAMessageAppData data = [RAMessagingServer.sharedInstance getDataForIdentifier:self.bundleIdentifier];
+    RAMessageAppData data = [[RAMessagingServer sharedInstance] getDataForIdentifier:self.bundleIdentifier];
     data.canHideStatusBarIfWanted = self.allowHidingStatusBar;
-    [RAMessagingServer.sharedInstance setData:data forIdentifier:self.bundleIdentifier];
-    [RAMessagingServer.sharedInstance resizeApp:self.bundleIdentifier toSize:CGSizeMake(frame.size.width, frame.size.height) completion:nil];
+    [[RAMessagingServer sharedInstance] setData:data forIdentifier:self.bundleIdentifier];
+    [[RAMessagingServer sharedInstance] resizeApp:self.bundleIdentifier toSize:CGSizeMake(frame.size.width, frame.size.height) completion:nil];
 
   } else if (self.bundleIdentifier) {
-    [RAMessagingServer.sharedInstance endResizingApp:self.bundleIdentifier completion:nil];
+    [[RAMessagingServer sharedInstance] endResizingApp:self.bundleIdentifier completion:nil];
   }
 }
 
@@ -292,9 +290,9 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   }
 
   if (value) {
-    [RAMessagingServer.sharedInstance forceStatusBarVisibility:!value forApp:self.bundleIdentifier completion:nil];
+    [[RAMessagingServer sharedInstance] forceStatusBarVisibility:!value forApp:self.bundleIdentifier completion:nil];
   } else {
-    [RAMessagingServer.sharedInstance unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:nil];
+    [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:nil];
   }
 }
 
@@ -309,7 +307,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   [loadedTimer invalidate];
   loadedTimer = nil;
 
-  [RARunningAppsProvider.sharedInstance removeTarget:self];
+  [[RARunningAppsProvider sharedInstance] removeTarget:self];
 
   disablePreload = YES;
 
@@ -369,27 +367,27 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     didRun = YES;
   };
 
-  [RAMessagingServer.sharedInstance setHosted:NO forIdentifier:app.bundleIdentifier completion:nil];
-  [RAMessagingServer.sharedInstance unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:nil];
-  [RAMessagingServer.sharedInstance unRotateApp:self.bundleIdentifier completion:nil];
+  [[RAMessagingServer sharedInstance] setHosted:NO forIdentifier:app.bundleIdentifier completion:nil];
+  [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:nil];
+  [[RAMessagingServer sharedInstance] unRotateApp:self.bundleIdentifier completion:nil];
   if (forceImmediate) {
-    [RAMessagingServer.sharedInstance endResizingApp:self.bundleIdentifier completion:nil];
+    [[RAMessagingServer sharedInstance] endResizingApp:self.bundleIdentifier completion:nil];
     block(YES);
   } else {
     // >Somewhere in the messaging server, the block is being removed from the waitingCompletions dictionary without being called.
     // >This is a large issue (probably to do with asynchronous code) TODO: FIXME
     // lol im retarded, it's the default empty callback the messaging server made
-    //[RAMessagingServer.sharedInstance unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:block];
-    //[RAMessagingServer.sharedInstance unRotateApp:self.bundleIdentifier completion:block];
+    //[[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:block];
+    //[[RAMessagingServer sharedInstance] unRotateApp:self.bundleIdentifier completion:block];
 
-    [RAMessagingServer.sharedInstance endResizingApp:self.bundleIdentifier completion:block];
+    [[RAMessagingServer sharedInstance] endResizingApp:self.bundleIdentifier completion:block];
   }
 }
 
 - (void)rotateToOrientation:(UIInterfaceOrientation)orientation {
   _orientation = orientation;
 
-  [RAMessagingServer.sharedInstance rotateApp:self.bundleIdentifier toOrientation:orientation completion:nil];
+  [[RAMessagingServer sharedInstance] rotateApp:self.bundleIdentifier toOrientation:orientation completion:nil];
 }
 
 + (void)iPad_iOS83_fixHosting {

@@ -74,7 +74,7 @@ extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSStrin
 
 - (void)initialize {
 	completionDictionary = [NSMutableDictionary dictionary];
-	[RARunningAppsProvider.sharedInstance addTarget:self];
+	[[RARunningAppsProvider sharedInstance] addTarget:self];
 }
 
 - (void)appDidDie:(__unsafe_unretained SBApplication*)app {

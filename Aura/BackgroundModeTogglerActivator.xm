@@ -18,23 +18,23 @@ static RAActivatorBackgrounderToggleModeListener *sharedInstance$RAActivatorBack
 
   BOOL dismissApp = [[%c(RASettings) sharedInstance] exitAppAfterUsingActivatorAction];
 
-  NSString *friendlyCurrentBackgroundMode = FriendlyNameForBackgroundMode((RABackgroundMode)[RABackgrounder.sharedInstance backgroundModeForIdentifier:app.bundleIdentifier]);
+  NSString *friendlyCurrentBackgroundMode = FriendlyNameForBackgroundMode((RABackgroundMode)[[RABackgrounder sharedInstance] backgroundModeForIdentifier:app.bundleIdentifier]);
 
   UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:[NSString stringWithFormat:LOCALIZE(@"BACKGROUNDER_POPUP_SWITCHER_TEXT", @"Localizable"),app.displayName,friendlyCurrentBackgroundMode] preferredStyle:UIAlertControllerStyleAlert];
   [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE(@"FORCE_FOREGROUND", @"Aura") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    [RABackgrounder.sharedInstance temporarilyApplyBackgroundingMode:RABackgroundModeForcedForeground forApplication:app andCloseForegroundApp:dismissApp];
+    [[RABackgrounder sharedInstance] temporarilyApplyBackgroundingMode:RABackgroundModeForcedForeground forApplication:app andCloseForegroundApp:dismissApp];
   }]];
 
   [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE(@"NATIVE", @"Aura") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    [RABackgrounder.sharedInstance temporarilyApplyBackgroundingMode:RABackgroundModeNative forApplication:app andCloseForegroundApp:dismissApp];
+    [[RABackgrounder sharedInstance] temporarilyApplyBackgroundingMode:RABackgroundModeNative forApplication:app andCloseForegroundApp:dismissApp];
   }]];
 
   [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE(@"SUSPEND_IMMEDIATELY", @"Aura") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    [RABackgrounder.sharedInstance temporarilyApplyBackgroundingMode:RABackgroundModeSuspendImmediately forApplication:app andCloseForegroundApp:dismissApp];
+    [[RABackgrounder sharedInstance] temporarilyApplyBackgroundingMode:RABackgroundModeSuspendImmediately forApplication:app andCloseForegroundApp:dismissApp];
   }]];
 
   [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE(@"KILL_ON_EXIT", @"Aura") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-    [RABackgrounder.sharedInstance temporarilyApplyBackgroundingMode:RABackgroundModeForceNone forApplication:app andCloseForegroundApp:dismissApp];
+    [[RABackgrounder sharedInstance] temporarilyApplyBackgroundingMode:RABackgroundModeForceNone forApplication:app andCloseForegroundApp:dismissApp];
   }]];
 
   [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE(@"CANCEL", @"Localizable") style:UIAlertActionStyleDefault handler:nil]];

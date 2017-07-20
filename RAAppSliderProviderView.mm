@@ -26,7 +26,7 @@
 		return;
 	}
 
-	[RAGestureManager.sharedInstance removeGestureWithIdentifier:currentView.bundleIdentifier];
+	[[RAGestureManager sharedInstance] removeGestureWithIdentifier:currentView.bundleIdentifier];
 	[currentView unloadApp];
 }
 
@@ -41,7 +41,7 @@
 		self.backgroundColor = [UIColor clearColor]; // redColor];
 		self.userInteractionEnabled = YES;
 
-		[RAGestureManager.sharedInstance addGestureRecognizerWithTarget:self forEdge:UIRectEdgeLeft | UIRectEdgeRight identifier:currentView.bundleIdentifier priority:RAGesturePriorityHigh];
+		[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:self forEdge:UIRectEdgeLeft | UIRectEdgeRight identifier:currentView.bundleIdentifier priority:RAGesturePriorityHigh];
 		//[RAGestureManager.sharedInstance addGestureRecognizerWithTarget:self forEdge:UIRectEdgeRight identifier:currentView.bundleIdentifier priority:RAGesturePriorityHigh];
 
 		currentView.frame = CGRectMake(0, 0, self.frame.size.width - 0, self.frame.size.height);

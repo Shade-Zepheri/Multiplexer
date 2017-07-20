@@ -25,7 +25,7 @@ BOOL isWindowsKeyDown = NO;
 BOOL isShiftKeyDown = NO;
 BOOL isAltKeyDown = NO;
 
-CPDistributedMessagingCenter *center;
+static CPDistributedMessagingCenter *center;
 
 // TODO: Ensure all keyboard commands do not conflict with
 // https://support.apple.com/en-us/HT201236
@@ -106,7 +106,7 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 	NSDictionary *response = [center sendMessageAndReceiveReplyName:RAMessagingGetFrontMostAppInfoMessageName userInfo:nil];
 
 	if (response) {
-		int pid = [response[@"pid"] unsignedIntValue];
+		NSUInteger pid = [response[@"pid"] unsignedIntValue];
 		NSString *clientId = response[@"bundleIdentifier"];
 
 		if (pid && clientId) {

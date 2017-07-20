@@ -5,7 +5,7 @@
 
 @implementation RASnapshotProvider
 + (instancetype)sharedInstance {
-	SHARED_INSTANCE2(RASnapshotProvider, sharedInstance->imageCache = [NSCache new]);
+	SHARED_INSTANCE2(RASnapshotProvider, sharedInstance->imageCache = [[NSCache alloc] init]);
 }
 
 - (UIImage*)snapshotForIdentifier:(NSString*)identifier orientation:(UIInterfaceOrientation)orientation {

@@ -7,7 +7,7 @@
 		return nil;
 	}
 	if ([app respondsToSelector:@selector(mainScene)]) { // iOS 8
-		return MSHookIvar<UIView*>(app.mainScene.contextHostManager, "_hostView");
+		return MSHookIvar<UIView*>([app mainScene].contextHostManager, "_hostView");
 	} else if ([app respondsToSelector:@selector(mainScreenContextHostManager)]) {
 		return MSHookIvar<UIView*>([app mainScreenContextHostManager], "_hostView");
 	}
@@ -21,7 +21,7 @@
 	}
 
 	if ([app respondsToSelector:@selector(mainScene)]) {
-		FBScene *scene = [app mainScene];		
+		FBScene *scene = [app mainScene];
 		FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
 		if (!settings) {
 			return nil;

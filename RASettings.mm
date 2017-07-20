@@ -13,7 +13,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-	    installed = [NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ParagonPlus.dylib"];
+	    installed = [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ParagonPlus.dylib"];
 	});
 	return installed;
 }
@@ -22,7 +22,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/libactivator.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/libactivator.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/libactivator.dylib", RTLD_LAZY);
 		}
@@ -34,7 +34,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib", RTLD_LAZY);
 		}
@@ -46,7 +46,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Aura.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Aura.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/Aura.dylib", RTLD_LAZY);
 		}
@@ -58,7 +58,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Empoleon.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/Empoleon.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/Empoleon.dylib", RTLD_LAZY);
 		}
@@ -70,7 +70,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/MissionControl.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/MissionControl.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/MissionControl.dylib", RTLD_LAZY);
 		}
@@ -82,7 +82,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/QuickAccess.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/QuickAccess.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/QuickAccess.dylib", RTLD_LAZY);
 		}
@@ -94,7 +94,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ReachApp.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ReachApp.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/ReachApp.dylib", RTLD_LAZY);
 		}
@@ -106,7 +106,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	static BOOL installed = NO;
 	static dispatch_once_t onceToken;
 	dispatch_once(&onceToken, ^{
-		if ([NSFileManager.defaultManager fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/SwipeOver.dylib"]) {
+		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/SwipeOver.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/SwipeOver.dylib", RTLD_LAZY);
 		}

@@ -20,14 +20,14 @@ NSCache *_rsImgCache = [NSCache new];
   NSString *pdfPath = [NSString stringWithFormat:@"%@/Resources/%@.pdf",resourcePath,stripped];
   NSString *pngPath = [NSString stringWithFormat:@"%@/Resources/%@.png",resourcePath,stripped];
 
-  if ([NSFileManager.defaultManager fileExistsAtPath:pdfPath]) {
+  if ([[NSFileManager defaultManager] fileExistsAtPath:pdfPath]) {
   	RAPDFImage *pdf = [RAPDFImage imageWithContentsOfFile:pdfPath];
 
   	if (pdf) {
       [_rsImgCache setObject:pdf forKey:stripped];
     }
   	return pdf;
-  } else if ([NSFileManager.defaultManager fileExistsAtPath:pngPath]) {
+  } else if ([[NSFileManager defaultManager] fileExistsAtPath:pngPath]) {
   	UIImage *img = [UIImage imageWithContentsOfFile:pngPath];
   	if (img) {
       [_rsImgCache setObject:img forKey:stripped];

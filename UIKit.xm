@@ -19,15 +19,15 @@ BOOL allowClosingReachabilityNatively = NO;
 
 %hook UIWindow
 - (void)setFrame:(CGRect)frame {
-  if (![self.class isEqual:$memorized$UITextEffectsWindow$class] && [RAMessagingClient.sharedInstance shouldResize]) {
+  if (![self.class isEqual:$memorized$UITextEffectsWindow$class] && [[RAMessagingClient sharedInstance] shouldResize]) {
     if (![oldFrames objectForKey:@(self.hash)]) {
       [oldFrames setObject:[NSValue valueWithCGRect:frame] forKey:@(self.hash)];
     }
 
-    frame.origin.x = RAMessagingClient.sharedInstance.currentData.wantedClientOriginX == -1 ? 0 : RAMessagingClient.sharedInstance.currentData.wantedClientOriginX;
-    frame.origin.y = RAMessagingClient.sharedInstance.currentData.wantedClientOriginY == -1 ? 0 : RAMessagingClient.sharedInstance.currentData.wantedClientOriginY;
-    CGFloat overrideWidth = [RAMessagingClient.sharedInstance resizeSize].width;
-    CGFloat overrideHeight = [RAMessagingClient.sharedInstance resizeSize].height;
+    frame.origin.x = [RAMessagingClient sharedInstance].currentData.wantedClientOriginX == -1 ? 0 : [RAMessagingClient sharedInstance].currentData.wantedClientOriginX;
+    frame.origin.y = [RAMessagingClient sharedInstance].currentData.wantedClientOriginY == -1 ? 0 : [RAMessagingClient sharedInstance].currentData.wantedClientOriginY;
+    CGFloat overrideWidth = [[RAMessagingClient sharedInstance] resizeSize].width;
+    CGFloat overrideHeight = [[RAMessagingClient sharedInstance] resizeSize].height;
     if (overrideWidth != -1 && overrideWidth != 0) {
       frame.size.width = overrideWidth;
     }
@@ -44,24 +44,27 @@ BOOL allowClosingReachabilityNatively = NO;
 }
 
 - (void)_rotateWindowToOrientation:(UIInterfaceOrientation)arg1 updateStatusBar:(BOOL)arg2 duration:(double)arg3 skipCallbacks:(BOOL)arg4 {
-  if ([RAMessagingClient.sharedInstance shouldForceOrientation] && arg1 != [RAMessagingClient.sharedInstance forcedOrientation] && [UIApplication.sharedApplication _isSupportedOrientation:arg1]) {
+  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && arg1 != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:arg1]) {
     return;
   }
+
   %orig;
 }
 
-- (BOOL)_shouldAutorotateToInterfaceOrientation:(int)arg1 checkForDismissal:(BOOL)arg2 isRotationDisabled:(BOOL*)arg3 {
-  if ([RAMessagingClient.sharedInstance shouldForceOrientation] && arg1 != [RAMessagingClient.sharedInstance forcedOrientation] && [UIApplication.sharedApplication _isSupportedOrientation:arg1]) {
+- (BOOL)_shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)arg1 checkForDismissal:(BOOL)arg2 isRotationDisabled:(BOOL*)arg3 {
+  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && arg1 != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:arg1]) {
     return NO;
   }
+
   return %orig;
 }
 
-- (void)_setWindowInterfaceOrientation:(int)arg1 {
-  if ([RAMessagingClient.sharedInstance shouldForceOrientation] && arg1 != [RAMessagingClient.sharedInstance forcedOrientation] && [UIApplication.sharedApplication _isSupportedOrientation:arg1]) {
+- (void)_setWindowInterfaceOrientation:(UIInterfaceOrientation)arg1 {
+  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && arg1 != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:arg1]) {
     return;
   }
-  %orig([RAMessagingClient.sharedInstance shouldForceOrientation] && [UIApplication.sharedApplication _isSupportedOrientation:[RAMessagingClient.sharedInstance forcedOrientation]] ? [RAMessagingClient.sharedInstance forcedOrientation] : arg1);
+
+  %orig([[RAMessagingClient sharedInstance] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient sharedInstance] forcedOrientation]] ? [[RAMessagingClient sharedInstance] forcedOrientation] : arg1);
 }
 
 - (void)_sendTouchesForEvent:(unsafe_id)arg1 {
@@ -82,7 +85,7 @@ BOOL allowClosingReachabilityNatively = NO;
     return;
   }
 
-  if ([RAMessagingClient.sharedInstance isBeingHosted]) {
+  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
     LogDebug(@"[ReachApp] stopping reachability from closing because hosted");
     return;
   }
@@ -91,7 +94,7 @@ BOOL allowClosingReachabilityNatively = NO;
 
 - (void)applicationDidResume {
   %orig;
-  [RAMessagingClient.sharedInstance requestUpdateFromServer];
+  [[RAMessagingClient sharedInstance] requestUpdateFromServer];
   //[RAFakePhoneMode updateAppSizing];
 }
 /*
@@ -104,10 +107,10 @@ BOOL allowClosingReachabilityNatively = NO;
 */
 - (void)_setStatusBarHidden:(BOOL)arg1 animationParameters:(unsafe_id)arg2 changeApplicationFlag:(BOOL)arg3 {
   //if ([RASettings.sharedInstance unifyStatusBar])
-  if ([RAMessagingClient.sharedInstance shouldHideStatusBar]) {
+  if ([[RAMessagingClient sharedInstance] shouldHideStatusBar]) {
     arg1 = YES;
     arg3 = YES;
-  } else if ([RAMessagingClient.sharedInstance shouldShowStatusBar]) {
+  } else if ([[RAMessagingClient sharedInstance] shouldShowStatusBar]) {
     arg1 = NO;
     arg3 = YES;
   }
@@ -129,14 +132,13 @@ BOOL allowClosingReachabilityNatively = NO;
   if (!reverting) {
     if (!setPreviousOrientation) {
       setPreviousOrientation = YES;
-      prevousOrientation = UIApplication.sharedApplication.statusBarOrientation;
+      prevousOrientation = [UIApplication sharedApplication].statusBarOrientation;
       if (wasStatusBarHidden == -1) {
-        wasStatusBarHidden = UIApplication.sharedApplication.statusBarHidden;
+        wasStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
       }
     }
   } else if (setPreviousOrientation) {
     orientation = prevousOrientation;
-
     setPreviousOrientation = NO;
   }
 
@@ -146,20 +148,20 @@ BOOL allowClosingReachabilityNatively = NO;
   }
 
   for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
-    [window _setRotatableViewOrientation:orientation updateStatusBar:YES duration:0.45 force:YES];
+    [window _setRotatableViewOrientation:orientation updateStatusBar:YES duration:0.25 force:YES];
   }
 }
 
 %new - (void)RA_forceStatusBarVisibility:(BOOL)visible orRevert:(BOOL)revert {
   if (revert) {
     if (wasStatusBarHidden != -1) {
-      [UIApplication.sharedApplication _setStatusBarHidden:wasStatusBarHidden animationParameters:nil changeApplicationFlag:YES];
+      [[UIApplication sharedApplication] _setStatusBarHidden:wasStatusBarHidden animationParameters:nil changeApplicationFlag:YES];
     }
   } else {
     if (wasStatusBarHidden == -1) {
-      wasStatusBarHidden = UIApplication.sharedApplication.statusBarHidden;
+      wasStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
     }
-    [UIApplication.sharedApplication _setStatusBarHidden:visible animationParameters:nil changeApplicationFlag:YES];
+    [[UIApplication sharedApplication] _setStatusBarHidden:visible animationParameters:nil changeApplicationFlag:YES];
   }
 }
 
@@ -178,16 +180,16 @@ BOOL allowClosingReachabilityNatively = NO;
     }
 
     if ([oldFrames objectForKey:@"statusBar"]) {
-      UIApplication.sharedApplication.statusBar.frame = [oldFrames[@"statusBar"] CGRectValue];
+      [UIApplication sharedApplication].statusBar.frame = [oldFrames[@"statusBar"] CGRectValue];
     }
     return;
   }
 
   if (size.width != -1) {
     if (![oldFrames objectForKey:@"statusBar"]) {
-      [oldFrames setObject:[NSValue valueWithCGRect:UIApplication.sharedApplication.statusBar.frame] forKey:@"statusBar"];
+      [oldFrames setObject:[NSValue valueWithCGRect:[UIApplication sharedApplication].statusBar.frame] forKey:@"statusBar"];
     }
-    UIApplication.sharedApplication.statusBar.frame = CGRectMake(0, 0, size.width, UIApplication.sharedApplication.statusBar.frame.size.height);
+    [UIApplication sharedApplication].statusBar.frame = CGRectMake(0, 0, size.width, [UIApplication sharedApplication].statusBar.frame.size.height);
   }
 
   for (UIWindow *window in [[UIApplication sharedApplication] windows]) {
@@ -202,7 +204,7 @@ BOOL allowClosingReachabilityNatively = NO;
 }
 
 - (BOOL)isNetworkActivityIndicatorVisible {
-  if ([RAMessagingClient.sharedInstance isBeingHosted]) {
+  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
     return self.RA_networkActivity;
   } else {
     return %orig;
@@ -211,17 +213,17 @@ BOOL allowClosingReachabilityNatively = NO;
 
 - (void)setNetworkActivityIndicatorVisible:(BOOL)arg1 {
   %orig(arg1);
-  if ([RAMessagingClient.sharedInstance isBeingHosted]) {
+  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
     self.RA_networkActivity = arg1;
     StatusBarData *data = [UIStatusBarServer getStatusBarData];
     data->itemIsEnabled[26] = arg1; // 26 = activity indicator TODO: check if ios 8
-    [UIApplication.sharedApplication.statusBar forceUpdateToData:data animated:YES];
+    [[UIApplication sharedApplication].statusBar forceUpdateToData:data animated:YES];
   }
 }
 
 - (BOOL)openURL:(__unsafe_unretained NSURL*)url {
-  if ([RAMessagingClient.sharedInstance isBeingHosted]) { // || [RASettings.sharedInstance openLinksInWindows])
-    return [RAMessagingClient.sharedInstance notifyServerToOpenURL:url openInWindow:[RASettings.sharedInstance openLinksInWindows]];
+  if ([[RAMessagingClient sharedInstance] isBeingHosted]) { // || [RASettings.sharedInstance openLinksInWindows])
+    return [[RAMessagingClient sharedInstance] notifyServerToOpenURL:url openInWindow:[[RASettings sharedInstance] openLinksInWindows]];
   }
   return %orig;
 }
@@ -229,15 +231,15 @@ BOOL allowClosingReachabilityNatively = NO;
 
 %hook UIStatusBar
 - (void)statusBarServer:(unsafe_id)arg1 didReceiveStatusBarData:(StatusBarData*)arg2 withActions:(int)arg3 {
-  if ([RAMessagingClient.sharedInstance isBeingHosted]) {
-    arg2->itemIsEnabled[26] = [UIApplication.sharedApplication isNetworkActivityIndicatorVisible];
+  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
+    arg2->itemIsEnabled[26] = [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible];
   }
   %orig;
 }
 %end
 
 static inline void reloadSettings(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-  [RASettings.sharedInstance reloadSettings];
+  [[RASettings sharedInstance] reloadSettings];
 }
 
 %ctor {

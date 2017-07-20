@@ -27,7 +27,7 @@ BOOL overrideDisableForStatusBar = NO;
 		return YES;
 	}
 
-	if ([RASettings.sharedInstance homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
+	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
 		overrideDisableForStatusBar = NO;
 		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
 		return YES;
@@ -47,7 +47,7 @@ BOOL overrideDisableForStatusBar = NO;
 		return YES;
 	}
 
-	if ([RASettings.sharedInstance homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
+	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
 		overrideDisableForStatusBar = NO;
 		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
 		return YES;
@@ -79,7 +79,7 @@ BOOL overrideDisableForStatusBar = NO;
 // This should help fix the problems where closing an app with Tage or the iPad Gesture would cause the app to suspend(?) and lock up the device.
 - (void)_suspendGestureBegan {
   %orig;
-  [UIApplication.sharedApplication._accessibilityFrontMostApplication clearDeactivationSettings];
+  [[UIApplication sharedApplication]._accessibilityFrontMostApplication clearDeactivationSettings];
 }
 %end
 
@@ -110,12 +110,7 @@ BOOL overrideDisableForStatusBar = NO;
 %hook SBToAppsWorkspaceTransaction
 - (void)_willBegin {
 	@autoreleasepool {
-	  NSArray *apps = nil;
-	  if ([self respondsToSelector:@selector(toApplications)]) {
-			apps = [self toApplications];
-		} else {
-			apps = [MSHookIvar<NSArray*>(self, "_toApplications") copy];
-		}
+	  NSArray *apps = self.toApplications;
 	  for (SBApplication *app in apps) {
       dispatch_async(dispatch_get_main_queue(), ^{
         [[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:app.bundleIdentifier animated:NO forceImmediateUnload:YES];
