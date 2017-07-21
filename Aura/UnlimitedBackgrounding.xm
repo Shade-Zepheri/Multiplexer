@@ -6,19 +6,19 @@ NSMutableDictionary *processAssertions = [NSMutableDictionary dictionary];
 BKSProcessAssertion *keepAlive$temp;
 
 %hook FBUIApplicationWorkspaceScene
-- (void)host:(__unsafe_unretained FBScene*)arg1 didUpdateSettings:(__unsafe_unretained FBSSceneSettings*)arg2 withDiff:(unsafe_id)arg3 transitionContext:(unsafe_id)arg4 completion:(unsafe_id)arg5 {
-  if ([[RABackgrounder sharedInstance] hasUnlimitedBackgroundTime:arg1.identifier] && arg2.backgrounded && ![processAssertions objectForKey:arg1.identifier]) {
-    SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:arg1.identifier];
+- (void)host:(FBScene *)scene didUpdateSettings:(FBSSceneSettings *)settings withDiff:(id)diff transitionContext:(id)context completion:(void (^)(BOOL))completion {
+  if ([[RABackgrounder sharedInstance] hasUnlimitedBackgroundTime:scene.identifier] && settings.backgrounded && ![processAssertions objectForKey:scene.identifier]) {
+    SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:scene.identifier];
 
     ProcessAssertionFlags flags = BKSProcessAssertionFlagPreventSuspend | BKSProcessAssertionFlagAllowIdleSleep | BKSProcessAssertionFlagPreventThrottleDownCPU | BKSProcessAssertionFlagWantsForegroundResourcePriority;
     keepAlive$temp = [[%c(BKSProcessAssertion) alloc] initWithPID:app.pid flags:flags reason:BKSProcessAssertionReasonBackgroundUI name:@"reachapp" withHandler:^{
       LogInfo(@"ReachApp: %d kept alive: %@", app.pid, keepAlive$temp.valid ? @"TRUE" : @"FALSE");
       if (keepAlive$temp.valid) {
-        processAssertions[arg1.identifier] = keepAlive$temp;
+        processAssertions[scene.identifier] = keepAlive$temp;
       }
     }];
   }
-  %orig(arg1, arg2, arg3, arg4, arg5);
+  %orig(scene, settings, diff, context, completion);
 }
 %end
 
@@ -38,7 +38,7 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   [[%c(RARunningAppsProvider) sharedInstance] addTarget:sharedInstance$RAUnlimitedBackgroundingAppWatcher];
 }
 
-- (void)appDidDie:(__unsafe_unretained SBApplication*)app {
+- (void)appDidDie:(__unsafe_unretained SBApplication *)app {
   if (![processAssertions objectForKey:app.bundleIdentifier]) {
     return;
   }
