@@ -16,7 +16,7 @@ static RAActivatorBackgrounderToggleModeListener *sharedInstance$RAActivatorBack
     return;
   }
 
-  BOOL dismissApp = [[%c(RASettings) sharedInstance] exitAppAfterUsingActivatorAction];
+  BOOL dismissApp = [[RASettings sharedInstance] exitAppAfterUsingActivatorAction];
 
   NSString *friendlyCurrentBackgroundMode = FriendlyNameForBackgroundMode((RABackgroundMode)[[RABackgrounder sharedInstance] backgroundModeForIdentifier:app.bundleIdentifier]);
 

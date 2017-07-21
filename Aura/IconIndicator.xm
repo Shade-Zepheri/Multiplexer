@@ -19,7 +19,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 		return nil;
 	}
 
-	if ([[%c(RASettings) sharedInstance] showNativeStateIconIndicators] && (info & RAIconIndicatorViewInfoNative)) {
+	if ([[RASettings sharedInstance] showNativeStateIconIndicators] && (info & RAIconIndicatorViewInfoNative)) {
 		ret = [ret stringByAppendingString:@"N"];
 	}
 
@@ -68,7 +68,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 			[self RA_isIconIndicatorInhibited] ||
 			(!text || text.length == 0) || // OR info == RAIconIndicatorViewInfoNone
 			(!self.icon || !self.icon.application || !self.icon.application.isRunning || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) ||
-			![[%c(RASettings) sharedInstance] backgrounderEnabled])
+			![[RASettings sharedInstance] backgrounderEnabled])
 		{
 			[[self viewWithTag:9962] removeFromSuperview];
 			return;
@@ -216,7 +216,7 @@ NSMutableDictionary *lsbitems = [[NSMutableDictionary alloc] init];
 		if (homescreenMapCheck || homescreenIconViewMapCheck) {
 			RAIconIndicatorViewInfo info = [[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier];
 			BOOL native = (info & RAIconIndicatorViewInfoNative);
-			if ((info & RAIconIndicatorViewInfoNone) == 0 && (!native || [[%c(RASettings) sharedInstance] shouldShowStatusBarNativeIcons])) {
+			if ((info & RAIconIndicatorViewInfoNone) == 0 && (!native || [[RASettings sharedInstance] shouldShowStatusBarNativeIcons])) {
 				LSStatusBarItem *item = [[%c(LSStatusBarItem) alloc] initWithIdentifier:[NSString stringWithFormat:@"multiplexer-%@",self.bundleIdentifier] alignment:StatusBarAlignmentLeft];
 				if (![item customViewClass]) {
 					item.customViewClass = @"RAAppIconStatusBarIconView";
@@ -304,8 +304,9 @@ inline NSString *getAppNameFromIndicatorName(NSString *indicatorName) {
 %end
 
 %ctor {
-	if ([%c(RASettings) isLibStatusBarInstalled]) {
+	if ([RASettings isLibStatusBarInstalled]) {
 		%init(libstatusbar);
 	}
+
 	%init;
 }

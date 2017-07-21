@@ -80,7 +80,7 @@
           [proc2 killForReason:1 andReport:NO withDescription:@"ReachApp.Backgrounder.killOnExit" completion:nil];
           [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:arg1.identifier withInfo:RAIconIndicatorViewInfoForceDeath];
           if ([[RABackgrounder sharedInstance] shouldRemoveFromSwitcherWhenKilledOnExit:arg1.identifier]) {
-            [%c(RAAppSwitcherModelWrapper) removeItemWithIdentifier:arg1.identifier];
+            [RAAppSwitcherModelWrapper removeItemWithIdentifier:scene.identifier];
           }
         }
         [[RABackgrounder sharedInstance] queueRemoveTemporaryOverrideForIdentifier:arg1.identifier];

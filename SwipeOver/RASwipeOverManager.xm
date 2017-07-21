@@ -49,17 +49,17 @@ extern int rotationDegsForOrientation(int o);
 
 	[self createEdgeView];
 
-	[%c(RAOrientationLocker) lockOrientation];
+	[RAOrientationLocker lockOrientation];
 }
 
 - (void)stopUsingSwipeOver {
 	[overlayWindow removeOverlayFromUnderlyingAppImmediately];
 	if (currentAppIdentifier) {
-		[[%c(RAMessagingServer) sharedInstance] endResizingApp:currentAppIdentifier completion:nil];
-		[[%c(RAMessagingServer) sharedInstance] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
+		[[RAMessagingServer sharedInstance] endResizingApp:currentAppIdentifier completion:nil];
+		[[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
 	}
 
-	[%c(RAOrientationLocker) unlockOrientation];
+	[RAOrientationLocker unlockOrientation];
 
 	isUsingSwipeOver = NO;
 	currentAppIdentifier = nil;
@@ -82,7 +82,7 @@ extern int rotationDegsForOrientation(int o);
 	}
 
 	[UIView animateWithDuration:0.3 animations:^{
-		if ([[overlayWindow currentView] isKindOfClass:[%c(RAHostedAppView) class]]) {
+		if ([[overlayWindow currentView] isKindOfClass:[RAHostedAppView class]]) {
 			[((RAHostedAppView*)overlayWindow.currentView) viewWithTag:9903553].alpha = 0;
 		}
 		overlayWindow.center = newCenter;
@@ -117,7 +117,7 @@ extern int rotationDegsForOrientation(int o);
 	if (identifier) {
 		app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
 	} else {
-	  NSMutableArray *bundleIdentifiers = [[%c(RAAppSwitcherModelWrapper) appSwitcherAppIdentiferList] mutableCopy];
+	  NSMutableArray *bundleIdentifiers = [[RAAppSwitcherModelWrapper appSwitcherAppIdentiferList] mutableCopy];
 	  while (!scene && bundleIdentifiers.count > 0) {
 	    identifier = bundleIdentifiers[0];
 
@@ -139,7 +139,7 @@ extern int rotationDegsForOrientation(int o);
 		return;
 	}
 
-	RAHostedAppView *view = [[%c(RAHostedAppView) alloc] initWithBundleIdentifier:identifier];
+	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:identifier];
 	view.autosizesApp = NO;
 	if (!overlayWindow.isHidingUnderlyingApp) {
 		view.autosizesApp = YES;
@@ -153,7 +153,7 @@ extern int rotationDegsForOrientation(int o);
 	[view loadApp];
 
 	UIImageView *detachView = [[UIImageView alloc] initWithFrame:CGRectMake(0, -20, view.frame.size.width, 20)];
-	detachView.image = [[%c(RAResourceImageProvider) imageForFilename:@"SwipeOverDetachImage" constrainedToSize:CGSizeMake(97, 28)] _flatImageWithColor:THEMED(swipeOverDetachImageColor)];
+	detachView.image = [[RAResourceImageProvider imageForFilename:@"SwipeOverDetachImage" constrainedToSize:CGSizeMake(97, 28)] _flatImageWithColor:THEMED(swipeOverDetachImageColor)];
 	detachView.contentMode = UIViewContentModeScaleAspectFit;
 	UITapGestureRecognizer *detachGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(detachViewAndCloseSwipeOver)];
 	[detachView addGestureRecognizer:detachGesture];
@@ -202,7 +202,7 @@ extern int rotationDegsForOrientation(int o);
 
 	[[%c(RAMessagingServer) sharedInstance] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
 
-	if ([[overlayWindow currentView] isKindOfClass:[%c(RAHostedAppView) class]]) {
+	if ([[overlayWindow currentView] isKindOfClass:[RAHostedAppView class]]) {
 		((RAHostedAppView*)[overlayWindow currentView]).autosizesApp = YES;
 	}
 	[overlayWindow currentView].transform = CGAffineTransformIdentity;
@@ -224,7 +224,7 @@ extern int rotationDegsForOrientation(int o);
 - (void)updateClientSizes:(BOOL)reloadAppSelectorSizeNow {
 	if (currentAppIdentifier && !overlayWindow.isHidingUnderlyingApp) {
 		CGFloat underWidth = [overlayWindow isHidingUnderlyingApp] ? -1 : overlayWindow.frame.origin.x;
-		[[%c(RAMessagingServer) sharedInstance] resizeApp:currentAppIdentifier toSize:CGSizeMake(underWidth, -1) completion:nil];
+		[[RAMessagingServer sharedInstance] resizeApp:currentAppIdentifier toSize:CGSizeMake(underWidth, -1) completion:nil];
 	}
 
 	if (overlayWindow.isShowingAppSelector && reloadAppSelectorSizeNow) {

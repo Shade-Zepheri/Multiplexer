@@ -84,7 +84,7 @@
 }
 
 - (BOOL)isShowingAppSelector {
-	return [self.currentView isKindOfClass:[%c(RAAppSelectorView) class]];
+	return [self.currentView isKindOfClass:[RAAppSelectorView class]];
 }
 
 - (void)darkenerViewTap:(UITapGestureRecognizer*)gesture {
@@ -98,12 +98,12 @@
 
 - (void)longPress:(UILongPressGestureRecognizer*)gesture {
 	[RASwipeOverManager.sharedInstance closeCurrentView];
-	if ([[self currentView] isKindOfClass:[%c(RAAppSelectorView) class]]) {
+	if ([[self currentView] isKindOfClass:[RAAppSelectorView class]]) {
 		[(RAAppSelectorView*)[self currentView] relayoutApps];
 		[self currentView].frame = CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height);
 		return;
 	}
-	RAAppSelectorView *appSelector = [[%c(RAAppSelectorView) alloc] initWithFrame:CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height)];
+	RAAppSelectorView *appSelector = [[RAAppSelectorView alloc] initWithFrame:CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height)];
 	appSelector.tag = RASWIPEOVER_VIEW_TAG;
 	appSelector.target = self;
 	[appSelector relayoutApps];
@@ -118,7 +118,7 @@
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
 	UIView *v = [self viewWithTag:RASWIPEOVER_VIEW_TAG];
-	if ([v isKindOfClass:[%c(RAAppSelectorView) class]]) {
+	if ([v isKindOfClass:[RAAppSelectorView class]]) {
 		return NO;
 	}
 	if ([gestureRecognizer isKindOfClass:[UITapGestureRecognizer class]] && [otherGestureRecognizer isKindOfClass:[UITapGestureRecognizer class]]) {
