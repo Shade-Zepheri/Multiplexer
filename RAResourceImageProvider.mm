@@ -1,7 +1,7 @@
 #import "RAResourceImageProvider.h"
 #import "PDFImage.h"
 
-const NSString *resourcePath = RA_BASE_PATH;
+const NSString *resourcePath = MultiplexerBasePath;
 NSCache *_rsImgCache = [NSCache new];
 
 @implementation RAResourceImageProvider

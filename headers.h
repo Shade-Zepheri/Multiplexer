@@ -10,6 +10,7 @@
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
 #import <SpringBoard/SBApplicationIcon.h>
+#import <SpringBoard/SBAppSwitcherController.h>
 #import <SpringBoard/SBBulletinBannerController.h>
 #import <SpringBoard/SBDisplayItem.h>
 #import <SpringBoard/SBIcon.h>
@@ -24,6 +25,7 @@
 #import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/UIKit.h>
+#import <UIKit/_UIBackdropView.h>
 #import <substrate.h>
 #include <mach/mach.h>
 #include <libkern/OSCacheControl.h>
@@ -34,7 +36,7 @@
 #import <IOKit/hid/IOHIDEvent.h>
 #import <version.h>
 
-#define RA_BASE_PATH @"/Library/Multiplexer"
+static NSString * const MultiplexerBasePath =  @"/Library/Multiplexer";
 
 #import "RALocalizer.h"
 #define LOCALIZE(key, local) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:key table:local]
@@ -79,8 +81,7 @@ extern BOOL $__IS_SPRINGBOARD;
 
 #define IF_SPRINGBOARD if (IS_SPRINGBOARD)
 #define IF_NOT_SPRINGBOARD if (!IS_SPRINGBOARD)
-#define IF_THIS_PROCESS(x) if ([[x objectForKey:@"bundleIdentifier"] isEqual:[NSBundle mainBundle].bundleIdentifier])
-
+#define IF_THIS_PROCESS(x) if ([[x objectForKey:@"bundleIdentifier"] isEqualToString:[NSBundle mainBundle].bundleIdentifier])
 
 #ifdef __cplusplus
 extern "C" {
@@ -116,7 +117,7 @@ return sharedInstance;
 @end
 
 @interface SBMainSwitcherGestureCoordinator : NSObject
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 - (void)_releaseOrientationLock;
 - (void)_lockOrientation;
 @end
@@ -565,7 +566,7 @@ typedef enum {
 - (void)_setStatusState:(int)arg1;
 @end
 
-@interface SBAppSwitcherController
+@interface SBAppSwitcherController ()
 - (void)forceDismissAnimated:(_Bool)arg1;
 - (void)animateDismissalToDisplayLayout:(id)arg1 withCompletion:(id/*block*/)arg2;
 - (void)animatePresentationFromDisplayLayout:(id)arg1 withViews:(id)arg2 withCompletion:(id/*block*/)arg3;
@@ -682,28 +683,15 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @interface _UIBackdropViewSettings : NSObject
 @property (nonatomic) CGFloat grayscaleTintAlpha;
 @property (nonatomic) CGFloat grayscaleTintLevel;
-- (void)setBlurQuality:(id)arg1;
-+ (id)settingsForStyle:(int)arg1;
-+ (id)settingsForStyle:(int)arg1 graphicsQuality:(int)arg2;
++ (instancetype)settingsForStyle:(NSInteger)style;
++ (instancetype)settingsForStyle:(NSInteger)style graphicsQuality:(NSInteger)quality;
 - (void)setBlurRadius:(CGFloat)arg1;
 @end
 
-@interface _UIBackdropView : UIView
-@property (retain, nonatomic) _UIBackdropViewSettings *outputSettings;
-@property (retain, nonatomic) _UIBackdropViewSettings *inputSettings;
+@interface _UIBackdropView ()
 @property (assign,nonatomic) double _blurRadius;
-@property (nonatomic) int blurHardEdges;
+- (void)_setCornerRadius:(double)radius;
 - (void)_applyCornerRadiusToSubviews;
-- (void)_setCornerRadius:(double)arg1 ;
-- (void) setBlursWithHardEdges:(BOOL)arg1;
-- (void)setBlurQuality:(id)arg1;
-- (void)setBlurRadius:(CGFloat)radius;
-- (void)setBlurRadiusSetOnce:(BOOL)v;
-- (id)initWithStyle:(NSInteger)style;
-@property (nonatomic) BOOL autosizesToFitSuperview;
-@property (nonatomic) BOOL blursBackground;
-- (void)_setBlursBackground:(BOOL)arg1;
-- (void)setBlurFilterWithRadius:(float)arg1 blurQuality:(id)arg2 blurHardEdges:(int)arg3;
 @end
 
 @interface SBOffscreenSwipeGestureRecognizer : NSObject // SBPanGestureRecognizer <_UIScreenEdgePanRecognizerDelegate>
@@ -862,7 +850,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 }
 @end
 
-@interface FBWindowContextHostManager
+@interface FBWindowContextHostManager : NSObject
 - (id)hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
 - (void)resumeContextHosting;
 - (id)_hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
@@ -947,7 +935,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface BKSProcessAssertion ()
-- (instancetype)initWithBundleIdentifier:(id)arg1 flags:(unsigned int)arg2 reason:(unsigned int)arg3 name:(id)arg4 withHandler:(id)arg5;
 - (void)invalidate;
 @property(readonly, nonatomic) BOOL valid;
 @end
