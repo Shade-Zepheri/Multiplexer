@@ -38,7 +38,7 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   [[%c(RARunningAppsProvider) sharedInstance] addTarget:sharedInstance$RAUnlimitedBackgroundingAppWatcher];
 }
 
-- (void)appDidDie:(__unsafe_unretained SBApplication *)app {
+- (void)appDidDie:(SBApplication *)app {
   if (![processAssertions objectForKey:app.bundleIdentifier]) {
     return;
   }

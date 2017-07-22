@@ -13,10 +13,11 @@
 	if (self) {
 		pthread_mutex_init(&mutex, NULL);
 	}
+
 	return self;
 }
 
-- (void)addRunningApp:(__unsafe_unretained SBApplication*)app {
+- (void)addRunningApp:(SBApplication *)app {
 	pthread_mutex_lock(&mutex);
 
 	[apps addObject:app];
@@ -31,7 +32,7 @@
 	pthread_mutex_unlock(&mutex);
 }
 
-- (void)removeRunningApp:(__unsafe_unretained SBApplication*)app {
+- (void)removeRunningApp:(SBApplication *)app {
 	pthread_mutex_lock(&mutex);
 
 	[apps removeObject:app];
@@ -69,17 +70,17 @@
 	pthread_mutex_destroy(&mutex);
 }
 
-- (NSArray*)runningApplications {
+- (NSArray *)runningApplications {
 	return apps;
 }
 
-- (NSMutableArray*)mutableRunningApplications {
+- (NSMutableArray *)mutableRunningApplications {
 	return apps;
 }
 @end
 
 %hook SBApplication
-- (void)updateProcessState:(unsafe_id)arg1 {
+- (void)updateProcessState:(id)state {
 	%orig;
 
 	if (self.isRunning && ![[RARunningAppsProvider sharedInstance].mutableRunningApplications containsObject:self]) {

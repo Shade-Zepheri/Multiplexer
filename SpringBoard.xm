@@ -95,7 +95,7 @@ BOOL overrideDisableForStatusBar = NO;
 %end
 
 %hook SBApplicationController
-%new - (SBApplication*)RA_applicationWithBundleIdentifier:(__unsafe_unretained NSString*)bundleIdentifier {
+%new - (SBApplication *)RA_applicationWithBundleIdentifier:(NSString *)bundleIdentifier {
   if ([self respondsToSelector:@selector(applicationWithBundleIdentifier:)]) {
 		return [self applicationWithBundleIdentifier:bundleIdentifier];
 	} else if ([self respondsToSelector:@selector(applicationWithDisplayIdentifier:)]) {

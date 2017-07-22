@@ -147,10 +147,11 @@ id SBWorkspace$sharedInstance;
   return (view || showingNC);
 }
 
-- (void)_exitReachabilityModeWithCompletion:(unsafe_id)arg1 {
+- (void)_exitReachabilityModeWithCompletion:(id)completion {
   if (overrideDisableForStatusBar) {
     return;
   }
+
   %orig;
 }
 

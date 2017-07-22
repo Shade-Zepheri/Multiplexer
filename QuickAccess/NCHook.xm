@@ -39,7 +39,7 @@ RANCViewController *ncAppViewController;
 	}
 }
 
-+ (NSString *)_localizableTitleForBulletinViewControllerOfClass:(__unsafe_unretained Class)aClass {
++ (NSString *)_localizableTitleForBulletinViewControllerOfClass:(Class)aClass {
 	if (aClass == [RANCViewController class]) {
 		BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [RASettings.sharedInstance quickAccessUseGenericTabLabel];
 		if (useGenericLabel) {

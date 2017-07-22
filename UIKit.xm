@@ -67,7 +67,7 @@ BOOL allowClosingReachabilityNatively = NO;
   %orig([[RAMessagingClient sharedInstance] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient sharedInstance] forcedOrientation]] ? [[RAMessagingClient sharedInstance] forcedOrientation] : arg1);
 }
 
-- (void)_sendTouchesForEvent:(unsafe_id)arg1 {
+- (void)_sendTouchesForEvent:(id)event {
   %orig;
 
   dispatch_async(dispatch_get_main_queue(), ^{
@@ -105,7 +105,7 @@ BOOL allowClosingReachabilityNatively = NO;
     [RAFakePhoneMode updateAppSizing];
 }
 */
-- (void)_setStatusBarHidden:(BOOL)arg1 animationParameters:(unsafe_id)arg2 changeApplicationFlag:(BOOL)arg3 {
+- (void)_setStatusBarHidden:(BOOL)hidden animationParameters:(id)parameters changeApplicationFlag:(BOOL)change {
   //if ([RASettings.sharedInstance unifyStatusBar])
   if ([[RAMessagingClient sharedInstance] shouldHideStatusBar]) {
     arg1 = YES;

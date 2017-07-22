@@ -102,7 +102,7 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 @end
 
 %hook BKEventFocusManager
-- (BKEventDestination*)destinationForFocusedEventWithDisplay:(__unsafe_unretained id)arg1 {
+- (BKEventDestination *)destinationForFocusedEventWithDisplay:(id)display {
 	NSDictionary *response = [center sendMessageAndReceiveReplyName:RAMessagingGetFrontMostAppInfoMessageName userInfo:nil];
 
 	if (response) {
