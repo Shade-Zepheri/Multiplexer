@@ -130,7 +130,7 @@ BOOL toggleOrActivate = NO;
 - (void)_layoutInOrientation:(long long)arg1 {
 	%orig;
 
-	UIView *view = MSHookIvar<UIView*>(self, "_contentView");
+	UIView *view = [self valueForKey:@"_contentView"];
 
 	if (![view viewWithTag:999] && ([[%c(RASettings) sharedInstance] missionControlEnabled] && ![[%c(RASettings) sharedInstance] replaceAppSwitcherWithMC])) {
 		CGFloat width = 50, height = 30;
@@ -165,7 +165,7 @@ BOOL toggleOrActivate = NO;
 // iOS 8
 - (void)viewDidAppear:(BOOL)a {
 	%orig;
-	UIView *view = MSHookIvar<UIView*>(self, "_contentView");
+	UIView *view = [self valueForKey:@"_contentView"];
 
 	if (![view viewWithTag:999] && ([[%c(RASettings) sharedInstance] missionControlEnabled] && ![[%c(RASettings) sharedInstance] replaceAppSwitcherWithMC])) {
 		CGFloat width = 50, height = 30;
@@ -217,7 +217,7 @@ BOOL toggleOrActivate = NO;
 
 	static CGFloat origY = -1;
 	static UIView *fakeView;
-	UIView *view = MSHookIvar<UIView*>(self, "_contentView");
+	UIView *view = [self valueForKey:@"_contentView"];
 
 	if (!fakeView) {
 		UIImage *snapshot = [[%c(RASnapshotProvider) sharedInstance] storedSnapshotOfMissionControl];

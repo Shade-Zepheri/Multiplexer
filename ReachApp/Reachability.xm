@@ -177,7 +177,7 @@ id SBWorkspace$sharedInstance;
 
   if ([RASettings.sharedInstance showNCInstead]) {
     showingNC = NO;
-    UIWindow *window = MSHookIvar<UIWindow*>(self, "_reachabilityEffectWindow");
+    UIWindow *window = [self valueForKey:@"_reachabilityEffectWindow"];
     [window _setRotatableViewOrientation:UIInterfaceOrientationPortrait updateStatusBar:YES duration:0.0 force:YES];
     window.rootViewController = nil;
     SBNotificationCenterViewController *viewController = [[%c(SBNotificationCenterController) performSelector:@selector(sharedInstance)] performSelector:@selector(viewController)];
@@ -283,8 +283,8 @@ id SBWorkspace$sharedInstance;
   draggerView.layer.cornerRadius = 10;
   grabberCenter_X = draggerView.center.x;
 
-  UIWindow *w = MSHookIvar<UIWindow*>(self, "_reachabilityEffectWindow");
   if ([RASettings.sharedInstance showNCInstead]) {
+  UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
     showingNC = YES;
 
     if (!ncViewController) {
@@ -371,7 +371,7 @@ id SBWorkspace$sharedInstance;
     bottomDraggerView.layer.cornerRadius = 10;
     bottomDraggerView.backgroundColor = UIColor.lightGrayColor;
     [bottomDraggerView addGestureRecognizer:recognizer];
-    [MSHookIvar<UIWindow*>(self,"_reachabilityWindow") addSubview:bottomDraggerView];
+    [[self valueForKey:@"_reachabilityWindow"] addSubview:bottomDraggerView];
   }
 
   // Update sizes of reachability (and their contained apps) and the location of the dragger view
@@ -383,7 +383,7 @@ id SBWorkspace$sharedInstance;
     [self RA_closeCurrentView];
   }
 
-  UIWindow *w = MSHookIvar<UIWindow*>(self, "_reachabilityEffectWindow");
+  UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   //CGSize iconSize = [%c(SBIconView) defaultIconImageSize];
   static CGSize fullSize = [%c(SBIconView) defaultIconSize];
   fullSize.height = fullSize.width; // otherwise it often looks like {60,74}
@@ -408,7 +408,6 @@ id SBWorkspace$sharedInstance;
   }
   view = widgetSelectorView;
 
-  if ([RASettings.sharedInstance autoSizeWidgetSelector]) {
     CGFloat moddedHeight = widgetSelectorView.frame.size.height;
     if (old_grabberCenterY == -1) {
       old_grabberCenterY = UIScreen.mainScreen.bounds.size.height * 0.3;
@@ -511,8 +510,8 @@ CGFloat startingY = -1;
 
 %new - (void)updateViewSizes:(CGPoint)center animate:(BOOL)animate {
   // Resizing
-  UIWindow *topWindow = MSHookIvar<UIWindow*>(self, "_reachabilityEffectWindow");
-  UIWindow *bottomWindow = MSHookIvar<UIWindow*>(self, "_reachabilityWindow");
+  UIWindow *topWindow = [self valueForKey:@"_reachabilityEffectWindow"];
+  UIWindow *bottomWindow = [self valueForKey:@"_reachabilityWindow"];
 
   CGRect topFrame = CGRectMake(topWindow.frame.origin.x, topWindow.frame.origin.y, topWindow.frame.size.width, center.y);
   CGRect bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, UIScreen.mainScreen._referenceBounds.size.height - center.y);
@@ -721,7 +720,7 @@ CGFloat startingY = -1;
 
 %new - (void)RA_setView:(UIView*)view_ preferredHeight:(CGFloat)pHeight {
   view_.hidden = NO;
-  UIWindow *w = MSHookIvar<UIWindow*>(self, "_reachabilityEffectWindow");
+  UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   if (view) {
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
       [RAMessagingServer.sharedInstance endResizingApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];

@@ -7,9 +7,9 @@
 		return nil;
 	}
 	if ([app respondsToSelector:@selector(mainScene)]) { // iOS 8
-		return MSHookIvar<UIView*>([app mainScene].contextHostManager, "_hostView");
+		return [[app mainScene].contextHostManager valueForKey:@"_hostView"];
 	} else if ([app respondsToSelector:@selector(mainScreenContextHostManager)]) {
-		return MSHookIvar<UIView*>([app mainScreenContextHostManager], "_hostView");
+		return [[app mainScreenContextHostManager] valueForKey:@"_hostView"];
 	}
 	[RACompatibilitySystem showWarning:@"Unable to find valid method for accessing system context host views"];
 	return nil;

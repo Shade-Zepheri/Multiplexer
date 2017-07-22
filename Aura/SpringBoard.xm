@@ -26,7 +26,7 @@
   %orig;
 
   if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:process.bundleIdentifier]) {
-    BKSProcess *bkProcess = MSHookIvar<BKSProcess*>(process, "_bksProcess");
+    BKSProcess *bkProcess = [process valueForKey:@"_bksProcess"];
     [process processWillExpire:bkProcess];
   }
 }

@@ -31,7 +31,7 @@ RANCViewController *ncAppViewController;
 	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [RASettings.sharedInstance ncAppHideOnLS] : NO;
 
 	if ([RASettings.sharedInstance NCAppEnabled] && !hideBecauseLS) {
-		SBModeViewController* modeVC = MSHookIvar<id>(self, "_modeController");
+		SBModeViewController* modeVC = [self valueForKey:@"_modeController"];
 		if (!ncAppViewController) {
 			ncAppViewController = [self _newBulletinObserverViewControllerOfClass:[RANCViewController class]];
 		}
@@ -61,7 +61,7 @@ RANCViewController *ncAppViewController;
 	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [RASettings.sharedInstance ncAppHideOnLS] : NO;
 
 	if ([RASettings.sharedInstance NCAppEnabled] && !hideBecauseLS) {
-		SBModeViewController* modeVC = MSHookIvar<id>(self, "_modeViewController");
+		SBModeViewController* modeVC = [self valueForKey:@"_modeViewController"];
 		if (!ncAppViewController) {
 			ncAppViewController = [[RANCViewController alloc] init];
 		}
@@ -84,7 +84,7 @@ RANCViewController *ncAppViewController;
 		text = ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP", @"Localizable");
 	}
 
-	for (UIView *view in MSHookIvar<UIView*>(self, "_headerView").subviews) {
+	for (UIView *view in [[self valueForKey:@"_headerView"] subviews]) {
 		if ([view isKindOfClass:[UISegmentedControl class]]) {
 			UISegmentedControl *segment = (UISegmentedControl*)view;
 			if (segment.numberOfSegments > 2) {

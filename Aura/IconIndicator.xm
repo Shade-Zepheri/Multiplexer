@@ -186,19 +186,15 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 	//    [self RA_updateIndicatorView:GET_INFO];
 }
 
-- (void)setIsEditing:(_Bool)arg1 animated:(_Bool)arg2 {
+- (void)setIsEditing:(BOOL)value animated:(BOOL)animated {
 	%orig;
 
-	if (arg1) {
-		// inhibit icon indicator
-		[self RA_setIsIconIndicatorInhibited:YES];
-	} else {
-		[self RA_setIsIconIndicatorInhibited:NO];
-	}
+	// inhibit icon indicator
+	[self RA_setIsIconIndicatorInhibited:value];
 }
 %end
 
-NSMutableDictionary *lsbitems = [[NSMutableDictionary alloc] init];
+NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 
 %hook SBApplication
 %new - (void)RA_addStatusBarIconForSelfIfOneDoesNotExist {
@@ -228,7 +224,7 @@ NSMutableDictionary *lsbitems = [[NSMutableDictionary alloc] init];
 	}
 }
 
-- (void)setApplicationState:(unsigned int)arg1 {
+- (void)setApplicationState:(NSUInteger)state {
 	%orig;
 
 	if (!self.isRunning) {
@@ -262,7 +258,7 @@ NSMutableDictionary *lsbitems = [[NSMutableDictionary alloc] init];
 %end
 
 %hook SBIconViewMap
-- (id)_iconViewForIcon:(unsafe_id)arg1 {
+- (id)_iconViewForIcon:(id)icon {
 	SBIconView *iconView = %orig;
 
 	[iconView RA_updateIndicatorViewWithExistingInfo];
