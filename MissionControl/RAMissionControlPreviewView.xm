@@ -7,7 +7,7 @@
   dispatch_async(dispatch_get_main_queue(), ^{
     self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
     //self.image = [[%c(RASnapshotProvider) sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
-    UIImage *img = [[%c(RASnapshotProvider) sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
+    UIImage *img = [[RASnapshotProvider sharedInstance] snapshotForIdentifier:self.application.bundleIdentifier];
     self.image = img;
   });
   //if (!icon)
@@ -59,7 +59,7 @@
 - (void)generateDesktopPreviewAsync:(id)desktop_ completion:(dispatch_block_t)completionBlock {
   RADesktopWindow *desktop = (RADesktopWindow*)desktop_;
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    UIImage *image = [[%c(RASnapshotProvider) sharedInstance] snapshotForDesktop:desktop];
+    UIImage *image = [[RASnapshotProvider sharedInstance] snapshotForDesktop:desktop];
 
     dispatch_async(dispatch_get_main_queue(), ^{ //Potential problem here
       self.image = image;

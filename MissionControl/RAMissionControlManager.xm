@@ -91,7 +91,7 @@ CGRect swappedForOrientation2(CGRect in) {
 	[window makeKeyAndVisible];
 
 	if (lastOpenedApp && lastOpenedApp.isRunning) {
-		originalAppView = [%c(RAHostManager) systemHostViewForApplication:lastOpenedApp].superview;
+		originalAppView = [RAHostManager systemHostViewForApplication:lastOpenedApp].superview;
 		originalAppFrame = originalAppView.frame;
 	}
 
@@ -109,15 +109,15 @@ CGRect swappedForOrientation2(CGRect in) {
 	}
 
 	[window updateForOrientation:[UIApplication sharedApplication].statusBarOrientation];
-	[[%c(RAGestureManager) sharedInstance] addGestureRecognizerWithTarget:self forEdge:UIRectEdgeBottom identifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture" priority:RAGesturePriorityHigh];
-	[[%c(RAGestureManager) sharedInstance] ignoreSwipesBeginningInRect:[UIScreen mainScreen].bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
-	[[%c(RARunningAppsProvider) sharedInstance] addTarget:window];
-	[%c(RAOrientationLocker) lockOrientation];
+	[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:self forEdge:UIRectEdgeBottom identifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture" priority:RAGesturePriorityHigh];
+	[[RAGestureManager sharedInstance] ignoreSwipesBeginningInRect:[UIScreen mainScreen].bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
+	[[RARunningAppsProvider sharedInstance] addTarget:window];
+	[RAOrientationLocker lockOrientation];
 	if (!IS_IOS_OR_NEWER(iOS_10_0)) { //Not required on 10.x, not sure about other versions
 		[[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"RAMissionControlManager"];
 	}
 	self.inhibitDismissalGesture = NO;
-	[%c(RAControlCenterInhibitor) setInhibited:YES];
+	[RAControlCenterInhibitor setInhibited:YES];
 
 	if ([[%c(SBControlCenterController) sharedInstance] isVisible]) {
 		[[%c(SBControlCenterController) sharedInstance] dismissAnimated:YES];
@@ -168,7 +168,7 @@ CGRect swappedForOrientation2(CGRect in) {
 }
 
 - (void)reloadWindowedAppsSection {
-	[window reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
+	[window reloadWindowedAppsSection:[[RARunningAppsProvider sharedInstance] runningApplications]];
 }
 
 - (void)reloadOtherAppsSection {
@@ -177,9 +177,9 @@ CGRect swappedForOrientation2(CGRect in) {
 
 - (void)hideMissionControl:(BOOL)animated {
 	if (!didStoreSnapshot) {
-		[[%c(RASnapshotProvider) sharedInstance] storeSnapshotOfMissionControl:window];
+		[[RASnapshotProvider sharedInstance] storeSnapshotOfMissionControl:window];
 	}
-	[[%c(RARunningAppsProvider) sharedInstance] removeTarget:window];
+	[[RARunningAppsProvider sharedInstance] removeTarget:window];
 
 	void (^destructor)() = ^{
 		originalAppView = nil;
@@ -213,10 +213,10 @@ CGRect swappedForOrientation2(CGRect in) {
 	_isShowingMissionControl = NO;
 	[[%c(RADesktopManager) sharedInstance] reshowDesktop];
 	[[[%c(RADesktopManager) sharedInstance] currentDesktop] loadApps];
-	[[%c(RAGestureManager) sharedInstance] removeGestureWithIdentifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture"];
-	[[%c(RAGestureManager) sharedInstance] stopIgnoringSwipesForIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
-	[%c(RAOrientationLocker) unlockOrientation];
-	[%c(RAControlCenterInhibitor) setInhibited:NO];
+	[[RAGestureManager sharedInstance] removeGestureWithIdentifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture"];
+	[[RAGestureManager sharedInstance] stopIgnoringSwipesForIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
+	[RAOrientationLocker unlockOrientation];
+	[RAControlCenterInhibitor setInhibited:NO];
 
 	//if (lastOpenedApp && lastOpenedApp.isRunning && UIApplication.sharedApplication._accessibilityFrontMostApplication != lastOpenedApp)
 	//{
@@ -246,7 +246,7 @@ CGRect swappedForOrientation2(CGRect in) {
 
 	if (state == UIGestureRecognizerStateEnded) {
 		hasMoved = NO;
-		[%c(RAControlCenterInhibitor) setInhibited:NO];
+		[RAControlCenterInhibitor setInhibited:NO];
 
 		BOOL dismiss = NO;
 		if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
@@ -297,7 +297,7 @@ CGRect swappedForOrientation2(CGRect in) {
 		//[[%c(RASnapshotProvider) sharedInstance] storeSnapshotOfMissionControl:window];
 		didStoreSnapshot = YES;
 		hasMoved = YES;
-		[%c(RAControlCenterInhibitor) setInhibited:YES];
+		[RAControlCenterInhibitor setInhibited:YES];
 		initialCenter = window.center;
 		if (originalAppView) {
 			initialAppFrame = initialAppFrame;

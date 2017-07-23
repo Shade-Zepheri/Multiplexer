@@ -33,7 +33,7 @@
 - (instancetype)initWithFrame:(CGRect)frame {
 	self = [super initWithFrame:frame];
 	if (self) {
-		trashIcon = [%c(RAResourceImageProvider) imageForFilename:@"Trash.png"];
+		trashIcon = [RAResourceImageProvider imageForFilename:@"Trash.png"];
 		self.windowLevel = 1000;
 	}
 	return self;
@@ -75,7 +75,7 @@
 
 		desktopScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y, self.frame.size.width, height * 1.15)];
 		desktopScrollView.backgroundColor = [THEMED(missionControlScrollViewBackgroundColor) colorWithAlphaComponent:THEMED(missionControlScrollViewOpacity)];
-		desktopScrollView.pagingEnabled = [[%c(RASettings) sharedInstance] missionControlPagingEnabled];
+		desktopScrollView.pagingEnabled = [[RASettings sharedInstance] missionControlPagingEnabled];
 
 		[self addSubview:desktopScrollView];
 	}
@@ -99,13 +99,13 @@
 			});
 		} : (dispatch_block_t)nil];
 
-		if (desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[%c(RASettings) sharedInstance] missionControlDesktopStyle] == 0) {
+		if (desktop == [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[RASettings sharedInstance] missionControlDesktopStyle] == 0) {
 			preview.backgroundColor = [UIColor grayColor];
 			preview.clipsToBounds = YES;
 			preview.layer.borderWidth = 2;
 			preview.layer.cornerRadius = 10;
 			preview.layer.borderColor = [UIColor whiteColor].CGColor;
-		} else if (desktop != [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[%c(RASettings) sharedInstance] missionControlDesktopStyle] == 1) {
+		} else if (desktop != [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[RASettings sharedInstance] missionControlDesktopStyle] == 1) {
 			UIView *crapView = [[UIView alloc] initWithFrame:(CGRect){{ 0, 0 }, preview.frame.size }];
 			crapView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.5];
 			[preview addSubview:crapView];
@@ -154,7 +154,7 @@
 - (void)reloadWindowedAppsSection:(NSArray*)runningApplicationsArg {
 	runningApplications = [runningApplicationsArg mutableCopy];
 
-	NSArray *switcherOrder = [[%c(RAAppSwitcherModelWrapper) appSwitcherAppIdentiferList] copy];
+	NSArray *switcherOrder = [[RAAppSwitcherModelWrapper appSwitcherAppIdentiferList] copy];
 	[runningApplications sortUsingComparator:^NSComparisonResult(SBApplication *obj1, SBApplication *obj2) {
 		return [@([switcherOrder indexOfObject:obj1.bundleIdentifier]) compare:@([switcherOrder indexOfObject:obj2.bundleIdentifier])];
 	}];
@@ -188,7 +188,7 @@
 
 		windowedAppScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y + windowedLabel.frame.size.height, self.frame.size.width, height * 1.15)];
 		windowedAppScrollView.backgroundColor = [THEMED(missionControlScrollViewBackgroundColor) colorWithAlphaComponent:THEMED(missionControlScrollViewOpacity)];
-		windowedAppScrollView.pagingEnabled = [[%c(RASettings) sharedInstance] missionControlPagingEnabled];
+		windowedAppScrollView.pagingEnabled = [[RASettings sharedInstance] missionControlPagingEnabled];
 
 		[self addSubview:windowedAppScrollView];
 	}
@@ -263,7 +263,7 @@
 
 		otherRunningAppsScrollView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, y + otherLabel.frame.size.height, self.frame.size.width, height * 1.15)];
 		otherRunningAppsScrollView.backgroundColor = [THEMED(missionControlScrollViewBackgroundColor) colorWithAlphaComponent:THEMED(missionControlScrollViewOpacity)];
-		otherRunningAppsScrollView.pagingEnabled = [[%c(RASettings) sharedInstance] missionControlPagingEnabled];
+		otherRunningAppsScrollView.pagingEnabled = [[RASettings sharedInstance] missionControlPagingEnabled];
 
 		[self addSubview:otherRunningAppsScrollView];
 	}
@@ -436,8 +436,8 @@
 			SBApplication *app = ((RAMissionControlPreviewView*)gesture.view).application;
 			[[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:app.bundleIdentifier animated:NO];
 			[[%c(RAWindowStatePreservationSystemManager) sharedInstance] removeWindowInformationForIdentifier:app.bundleIdentifier];
-			if ([[%c(RASettings) sharedInstance] missionControlKillApps]) {
-				[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
+			if ([[RASettings sharedInstance] missionControlKillApps]) {
+				[RAAppKiller killAppWithSBApplication:app completion:^{
 					[runningApplications removeObject:app];
 
 					dispatch_async(dispatch_get_main_queue(), ^{
@@ -473,8 +473,8 @@
 
 					[desktop createAppWindowForSBApplication:app animated:NO];
 
-					[[%c(RASnapshotProvider) sharedInstance] forceReloadSnapshotOfDesktop:[[%c(RADesktopManager) sharedInstance] currentDesktop]];
-					[[%c(RASnapshotProvider) sharedInstance] forceReloadSnapshotOfDesktop:desktop];
+					[[RASnapshotProvider sharedInstance] forceReloadSnapshotOfDesktop:[[%c(RADesktopManager) sharedInstance] currentDesktop]];
+					[[RASnapshotProvider sharedInstance] forceReloadSnapshotOfDesktop:desktop];
 
 					[self reloadDesktopSection];
 					[self reloadWindowedAppsSection];
