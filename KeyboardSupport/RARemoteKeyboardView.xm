@@ -20,10 +20,10 @@
   }
   _identifier = identifier;
 
-  unsigned int value = [[RAMessagingServer sharedInstance] getStoredKeyboardContextIdForApp:identifier];
+  NSUInteger value = [[RAMessagingServer sharedInstance] getStoredKeyboardContextIdForApp:identifier];
   self.layerHost.contextId = value;
 
-  LogDebug(@"[ReachApp] loaded keyboard view with %u", value);
+  LogDebug(@"[ReachApp] loaded keyboard view with %tu", value);
   if (value == 0 && !cancelFetchingContextId) {
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
       [self connectToKeyboardWindowForApp:identifier];

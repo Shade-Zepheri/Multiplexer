@@ -30,13 +30,13 @@
 @end
 
 CGRect swappedForOrientation(CGRect in) {
-	if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
+	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
 		CGFloat x = in.origin.x;
 		in.origin.x = in.origin.y;
 		in.origin.y = x;
-	} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+	} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
 		CGFloat x = in.origin.x;
-		in.origin.x = fabs(in.origin.y) + UIScreen.mainScreen.bounds.size.width;
+		in.origin.x = fabs(in.origin.y) + [UIScreen mainScreen].bounds.size.width;
 		in.origin.y = x;
 	}
 
@@ -44,11 +44,11 @@ CGRect swappedForOrientation(CGRect in) {
 }
 
 CGRect swappedForOrientation2(CGRect in) {
-	if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
+	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
 		CGFloat x = in.origin.x;
 		in.origin.x = in.origin.y;
 		in.origin.y = x;
-	} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+	} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
 		CGFloat x = in.origin.x;
 		in.origin.x = -in.size.width;
 		in.origin.y = x;
@@ -151,7 +151,7 @@ CGRect swappedForOrientation2(CGRect in) {
 	[statusBar requestStyle:statusBarStyle];
 	statusBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
 	[window addSubview:statusBar];
-	[statusBar setOrientation:UIApplication.sharedApplication.statusBarOrientation];
+	[statusBar setOrientation:[UIApplication sharedApplication].statusBarOrientation];
 
 	// DESKTOPS
 	[self reloadDesktopSection];
@@ -218,7 +218,7 @@ CGRect swappedForOrientation2(CGRect in) {
 	[RAOrientationLocker unlockOrientation];
 	[RAControlCenterInhibitor setInhibited:NO];
 
-	//if (lastOpenedApp && lastOpenedApp.isRunning && UIApplication.sharedApplication._accessibilityFrontMostApplication != lastOpenedApp)
+	//if (lastOpenedApp && lastOpenedApp.isRunning && [UIApplication sharedApplication]._accessibilityFrontMostApplication != lastOpenedApp)
 	//{
 	//	if ([[%c(RADesktopManager) sharedInstance] isAppOpened:lastOpenedApp.bundleIdentifier] == NO)
 	//	{
@@ -249,30 +249,34 @@ CGRect swappedForOrientation2(CGRect in) {
 		[RAControlCenterInhibitor setInhibited:NO];
 
 		BOOL dismiss = NO;
-		if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
-			dismiss = window.frame.origin.x + velocity.y > UIScreen.mainScreen.bounds.size.width / 2.0;
-		} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-			dismiss = window.frame.origin.x + window.frame.size.width < UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 2.0;
-		} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortrait) {
-			dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height / 2;
+		switch ([UIApplication sharedApplication].statusBarOrientation) {
+			case UIInterfaceOrientationPortrait:
+				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
+				break;
+			case UIInterfaceOrientationLandscapeLeft:
+				dismiss = window.frame.origin.x + window.frame.size.width < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 2.0;
+				break;
+			case UIInterfaceOrientationLandscapeRight:
+				dismiss = window.frame.origin.x + velocity.y > [UIScreen mainScreen].bounds.size.width / 2.0;
+				break;
 		}
 
 		if (dismiss) {
 			// Close
-			CGFloat distance = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height - (window.frame.origin.y + window.frame.size.height);
+			CGFloat distance = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - (window.frame.origin.y + window.frame.size.height);
 			CGFloat duration = MIN(distance / velocity.y, 0.3);
 
 			[UIView animateWithDuration:duration animations:^{
-				if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortrait) {
+				if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) {
 					window.center = CGPointMake(window.center.x, -initialCenter.y);
 				}
-				if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+				if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
 					CGRect f = window.frame;
-					f.origin.x = UIScreen.mainScreen.bounds.size.width;
+					f.origin.x = [UIScreen mainScreen].bounds.size.width;
 					window.frame = f;
-				} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
+				} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
 					CGRect f = window.frame;
-					f.origin.x = -UIScreen.mainScreen.bounds.size.width;
+					f.origin.x = -[UIScreen mainScreen].bounds.size.width;
 					window.frame = f;
 				}
 
@@ -303,20 +307,20 @@ CGRect swappedForOrientation2(CGRect in) {
 			initialAppFrame = initialAppFrame;
 		}
 	} else {
-		if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+		if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
 			CGRect f = window.frame;
-			f.origin.x = UIScreen.mainScreen.bounds.size.width - location.y;
+			f.origin.x = [UIScreen mainScreen].bounds.size.width - location.y;
 			window.frame = f;
-		} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
+		} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
 			CGRect f = window.frame;
-			f.origin.x = -UIScreen.mainScreen.bounds.size.width + location.y;
+			f.origin.x = -[UIScreen mainScreen].bounds.size.width + location.y;
 			window.frame = f;
-		} else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortrait) {
+		} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortrait) {
 			window.center = CGPointMake(window.center.x, location.y - initialCenter.y);
 		}
 
 		if (originalAppView) {
-			originalAppView.frame = swappedForOrientation2(CGRectMake(originalAppView.frame.origin.x, UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height - (UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height - location.y), originalAppFrame.size.width, originalAppFrame.size.height));
+			originalAppView.frame = swappedForOrientation2(CGRectMake(originalAppView.frame.origin.x, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - location.y), originalAppFrame.size.width, originalAppFrame.size.height));
 		}
 	}
 	return RAGestureCallbackResultSuccess;
@@ -339,7 +343,7 @@ CGRect swappedForOrientation2(CGRect in) {
 	%orig;
 
 	if ([self hasAnyLockState] && [RAMissionControlManager sharedInstance].isShowingMissionControl) {
-		[RAMissionControlManager.sharedInstance hideMissionControl:NO];
+		[[RAMissionControlManager sharedInstance] hideMissionControl:NO];
 	}
 }
 %end

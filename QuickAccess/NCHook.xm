@@ -16,7 +16,7 @@
 @end
 
 NSString *getAppName() {
-	NSString *ident = [RASettings.sharedInstance NCApp] ?: @"com.apple.Preferences";
+	NSString *ident = [[RASettings sharedInstance] NCApp] ?: @"com.apple.Preferences";
 	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:ident];
 	return app ? app.displayName : nil;
 }
@@ -28,9 +28,9 @@ RANCViewController *ncAppViewController;
 - (void)viewWillAppear:(BOOL)animated {
 	%orig;
 
-	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [RASettings.sharedInstance ncAppHideOnLS] : NO;
+	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [[RASettings sharedInstance] ncAppHideOnLS] : NO;
 
-	if ([RASettings.sharedInstance NCAppEnabled] && !hideBecauseLS) {
+	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
 		SBModeViewController* modeVC = [self valueForKey:@"_modeController"];
 		if (!ncAppViewController) {
 			ncAppViewController = [self _newBulletinObserverViewControllerOfClass:[RANCViewController class]];
@@ -41,7 +41,7 @@ RANCViewController *ncAppViewController;
 
 + (NSString *)_localizableTitleForBulletinViewControllerOfClass:(Class)aClass {
 	if (aClass == [RANCViewController class]) {
-		BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [RASettings.sharedInstance quickAccessUseGenericTabLabel];
+		BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [[RASettings sharedInstance] quickAccessUseGenericTabLabel];
 		if (useGenericLabel) {
 			return LOCALIZE(@"APP", @"Localizable");
 		}
@@ -58,9 +58,9 @@ RANCViewController *ncAppViewController;
 - (void)viewWillAppear:(BOOL)animated {
 	%orig;
 
-	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [RASettings.sharedInstance ncAppHideOnLS] : NO;
+	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [[RASettings sharedInstance] ncAppHideOnLS] : NO;
 
-	if ([RASettings.sharedInstance NCAppEnabled] && !hideBecauseLS) {
+	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
 		SBModeViewController* modeVC = [self valueForKey:@"_modeViewController"];
 		if (!ncAppViewController) {
 			ncAppViewController = [[RANCViewController alloc] init];
@@ -77,7 +77,7 @@ RANCViewController *ncAppViewController;
 	%orig;
 
 	NSString *text = @"";
-	BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [RASettings.sharedInstance quickAccessUseGenericTabLabel];
+	BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [[RASettings sharedInstance] quickAccessUseGenericTabLabel];
 	if (useGenericLabel) {
 		text = LOCALIZE(@"APP", @"Localizable");
 	} else {
@@ -103,7 +103,7 @@ static BOOL hasEnteredPages = NO;
 - (void)layoutSubviews {
 	%orig;
 
-	if (!hasEnteredPages && [RASettings.sharedInstance NCAppEnabled] && [self.superview isKindOfClass:[%c(SBSearchEtceteraLayoutView) class]] && [[%c(SBNotificationCenterController) sharedInstance] isVisible]) {
+	if (!hasEnteredPages && [[RASettings sharedInstance] NCAppEnabled] && [self.superview isKindOfClass:[%c(SBSearchEtceteraLayoutView) class]] && [[%c(SBNotificationCenterController) sharedInstance] isVisible]) {
 		if (!ncAppViewController) {
 			ncAppViewController = [[RANCViewController alloc] init];
 		}

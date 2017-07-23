@@ -82,7 +82,7 @@ typedef struct {
             targetRecognizer = recognizer;
           }
         }
-        [RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateChanged withPoint:touch.location velocity:targetRecognizer.RA_velocity forEdge:currentEdge];
+        [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateChanged withPoint:touch.location velocity:targetRecognizer.RA_velocity forEdge:currentEdge];
       }
     }
   });
@@ -93,17 +93,17 @@ typedef struct {
     CGPoint location = screenEdgePanRecognizer._lastTouchLocation;
 
     // Adjust for the two unsupported orientations... what...
-    if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
-      location.x = UIScreen.mainScreen.bounds.size.width - location.x;
-    } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
-      location.x = UIScreen.mainScreen.bounds.size.width - location.x;
-    } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
+    if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
+      location.x = [UIScreen mainScreen].bounds.size.width - location.x;
+    } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
+      location.x = [UIScreen mainScreen].bounds.size.width - location.x;
+    } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
       CGFloat t = location.y;
       location.y = location.x;
       location.x = t;
     }
 
-    if ([RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateBegan withPoint:location velocity:screenEdgePanRecognizer.RA_velocity forEdge:screenEdgePanRecognizer.targetEdges]) {
+    if ([[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateBegan withPoint:location velocity:screenEdgePanRecognizer.RA_velocity forEdge:screenEdgePanRecognizer.targetEdges]) {
         currentEdge = screenEdgePanRecognizer.targetEdges;
         BKSHIDServicesCancelTouchesOnMainDisplay(); // This is needed or open apps, etc will still get touch events. For example open settings app + swipeover without this line and you can still scroll up/down through the settings
     }
@@ -120,7 +120,7 @@ typedef struct {
         }
       }
 
-      [RAGestureManager.sharedInstance handleMovementOrStateUpdate:UIGestureRecognizerStateEnded withPoint:CGPointZero velocity:targetRecognizer.RA_velocity forEdge:currentEdge];
+      [[RAGestureManager sharedInstance] handleMovementOrStateUpdate:UIGestureRecognizerStateEnded withPoint:CGPointZero velocity:targetRecognizer.RA_velocity forEdge:currentEdge];
       for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
         [recognizer reset]; // remove current touches it's "incorporated"
       }

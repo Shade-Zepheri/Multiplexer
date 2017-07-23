@@ -121,7 +121,7 @@ extern BOOL allowOpenApp;
 	buttonSize = tmp;
 	spacing = (height - buttonSize) / 2.0;
 
-	if (![RASettings.sharedInstance onlyShowWindowBarIconsOnOverlay]) {
+	if (![[RASettings sharedInstance] onlyShowWindowBarIconsOnOverlay]) {
 		/*
 		    alignment:
 		0 = left
@@ -313,7 +313,7 @@ extern BOOL allowOpenApp;
 }
 
 - (void)close {
-	[RADesktopManager.sharedInstance removeAppWithIdentifier:self.attachedView.bundleIdentifier animated:YES];
+	[[RADesktopManager sharedInstance] removeAppWithIdentifier:self.attachedView.bundleIdentifier animated:YES];
 }
 
 - (void)maximize {
@@ -346,14 +346,14 @@ extern BOOL allowOpenApp;
 }
 
 - (void)saveWindowInfo {
-	[RAWindowStatePreservationSystemManager.sharedInstance saveWindowInformation:self];
+	[[RAWindowStatePreservationSystemManager sharedInstance] saveWindowInformation:self];
 	if (self.desktop) {
 		[self.desktop saveInfo];
 	}
 }
 
 - (BOOL)isLocked {
-	if ([RASettings.sharedInstance windowRotationLockMode] == 0) {
+	if ([[RASettings sharedInstance] windowRotationLockMode] == 0) {
 		return sizingLocked;
 	} else {
 		return appRotationLocked;
@@ -361,7 +361,7 @@ extern BOOL allowOpenApp;
 }
 
 - (void)sizingLockButtonTap:(id)arg1 {
-	if ([RASettings.sharedInstance windowRotationLockMode] == 0) {
+	if ([[RASettings sharedInstance] windowRotationLockMode] == 0) {
 		sizingLocked = !sizingLocked;
 	} else {
 		appRotationLocked = !appRotationLocked;
@@ -425,7 +425,7 @@ extern BOOL allowOpenApp;
 			rotateSnapDegrees = 270 - currentRotation;
 		}
 
-		if ([RASettings.sharedInstance snapRotation]) {
+		if ([[RASettings sharedInstance] snapRotation]) {
 			[UIView animateWithDuration:0.2 animations:^{
 				self.transform = CGAffineTransformRotate(self.transform, DEGREES_TO_RADIANS(rotateSnapDegrees));
 			}];
@@ -435,7 +435,7 @@ extern BOOL allowOpenApp;
 			[attachedView rotateToOrientation:[self.desktop appOrientationRelativeToThisOrientation:currentRotation]];
 		}
 
-		if ([RASettings.sharedInstance snapWindows] && [RAWindowSnapDataProvider shouldSnapWindow:self]) {
+		if ([[RASettings sharedInstance] snapWindows] && [RAWindowSnapDataProvider shouldSnapWindow:self]) {
 			[RAWindowSnapDataProvider snapWindow:self toLocation:[RAWindowSnapDataProvider snapLocationForWindow:self] animated:YES];
 			isSnapped = YES;
 		}
@@ -474,7 +474,7 @@ extern BOOL allowOpenApp;
 }
 
 - (void)handleRotate:(UIRotationGestureRecognizer *)gesture {
-	if (![RASettings.sharedInstance alwaysEnableGestures] && !self.isOverlayShowing) {
+	if (![[RASettings sharedInstance] alwaysEnableGestures] && !self.isOverlayShowing) {
 		return;
 	}
 
@@ -545,7 +545,7 @@ extern BOOL allowOpenApp;
 	if (!IS_IPAD) {
 		return;
 	}
-	[RAMessagingServer.sharedInstance forcePhoneMode:![RAFakePhoneMode shouldFakeForAppWithIdentifier:attachedView.app.bundleIdentifier] forIdentifier:attachedView.app.bundleIdentifier andRelaunchApp:YES];
+	[[RAMessagingServer sharedInstance] forcePhoneMode:![RAFakePhoneMode shouldFakeForAppWithIdentifier:attachedView.app.bundleIdentifier] forIdentifier:attachedView.app.bundleIdentifier andRelaunchApp:YES];
 }
 
 - (void)handlePan:(UIPanGestureRecognizer*)sender {
@@ -563,7 +563,7 @@ extern BOOL allowOpenApp;
 		enableLongPress = YES;
 		[self saveWindowInfo];
 
-		if ([RASettings.sharedInstance snapWindows] && [RAWindowSnapDataProvider shouldSnapWindow:self]) {
+		if ([[RASettings sharedInstance] snapWindows] && [RAWindowSnapDataProvider shouldSnapWindow:self]) {
 			[RAWindowSnapDataProvider snapWindow:self toLocation:[RAWindowSnapDataProvider snapLocationForWindow:self] animated:YES completion:^{
 				[self removePotentialSnapShadow];
 				[self saveWindowInfo];
@@ -590,7 +590,7 @@ extern BOOL allowOpenApp;
 }
 
 - (void)handlePinch:(UIPinchGestureRecognizer *)gesture {
-	if (![RASettings.sharedInstance alwaysEnableGestures] && !self.isOverlayShowing) {
+	if (![[RASettings sharedInstance] alwaysEnableGestures] && !self.isOverlayShowing) {
 		return;
 	}
 
@@ -638,11 +638,11 @@ extern BOOL allowOpenApp;
 }
 
 - (void)updatePotentialSnapShadow {
-	if (![RASettings.sharedInstance snapWindows]) {
+	if (![[RASettings sharedInstance] snapWindows]) {
 		return;
 	}
 
-	if (![RASettings.sharedInstance showSnapHelper]) {
+	if (![[RASettings sharedInstance] showSnapHelper]) {
 		return;
 	}
 
@@ -677,7 +677,7 @@ extern BOOL allowOpenApp;
 
 - (void)touchesBegan:(NSSet *)touches withEvent:(UIEvent *)event {
 	isBeingTouched = YES;
-	RADesktopManager.sharedInstance.lastUsedWindow = self;
+	[RADesktopManager sharedInstance].lastUsedWindow = self;
 }
 
 - (void)touchesEnded:(NSSet *)touches withEvent:(UIEvent *)event {

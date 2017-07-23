@@ -87,7 +87,7 @@ int rotationDegsForOrientation(int o) {
 	}
 
 	if (!appView) {
-		NSString *ident = [RASettings.sharedInstance NCApp];
+		NSString *ident = [[RASettings sharedInstance] NCApp];
 		appView = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 		appView.frame = [UIScreen mainScreen].bounds;
 		[self.view addSubview:appView];

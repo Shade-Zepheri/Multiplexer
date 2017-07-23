@@ -29,9 +29,9 @@ static RAActivatorCreateWindowListener *sharedInstance$RAActivatorCreateWindowLi
     [transaction begin];
 
     // Open in window
-    RAWindowBar *windowBar = [RADesktopManager.sharedInstance.currentDesktop createAppWindowForSBApplication:topApp animated:YES];
-    if (!RADesktopManager.sharedInstance.lastUsedWindow) {
-      RADesktopManager.sharedInstance.lastUsedWindow = windowBar;
+    RAWindowBar *windowBar = [[RADesktopManager sharedInstance].currentDesktop createAppWindowForSBApplication:topApp animated:YES];
+    if (![RADesktopManager sharedInstance].lastUsedWindow) {
+      [RADesktopManager sharedInstance].lastUsedWindow = windowBar;
     }
   }];
   [(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];

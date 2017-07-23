@@ -25,25 +25,25 @@ BOOL toggleOrActivate = NO;
 }
 
 - (_Bool)_activateAppSwitcher {
-	statusBarVisibility = UIApplication.sharedApplication.statusBarHidden;
+	statusBarVisibility = [UIApplication sharedApplication].statusBarHidden;
 	willShowMissionControl = NO;
 
-	if ([[%c(RASettings) sharedInstance] replaceAppSwitcherWithMC] && [[%c(RASettings) sharedInstance] missionControlEnabled]) {
-		if (!RAMissionControlManager.sharedInstance.isShowingMissionControl) {
-			[RAMissionControlManager.sharedInstance showMissionControl:YES];
+	if ([[RASettings sharedInstance] replaceAppSwitcherWithMC] && [[RASettings sharedInstance] missionControlEnabled]) {
+		if (![RAMissionControlManager sharedInstance].isShowingMissionControl) {
+			[[RAMissionControlManager sharedInstance] showMissionControl:YES];
 		} else {
-			[RAMissionControlManager.sharedInstance hideMissionControl:YES];
+			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 
 		return YES;
 	} else {
-		if ([RAMissionControlManager.sharedInstance isShowingMissionControl]) {
-			[RAMissionControlManager.sharedInstance hideMissionControl:YES];
+		if ([[RAMissionControlManager sharedInstance] isShowingMissionControl]) {
+			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 	}
 
 	BOOL s = %orig;
-	if (s && [[%c(RASettings) sharedInstance] missionControlEnabled] && [[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999]) {
+	if (s && [[RASettings sharedInstance] missionControlEnabled] && [[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999]) {
 		[UIView animateWithDuration:0.3 animations:^{
 			[[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999].alpha = 1;
 		}];
@@ -57,26 +57,26 @@ BOOL toggleOrActivate = NO;
 
 - (void)_hideNotificationsGestureCancelled {
 	%orig;
-	RAMissionControlManager.sharedInstance.inhibitDismissalGesture = NO;
+	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = NO;
 }
 
 - (void)_hideNotificationsGestureEndedWithCompletionType:(long long)arg1 velocity:(CGPoint)arg2 {
 	%orig;
-	RAMissionControlManager.sharedInstance.inhibitDismissalGesture = NO;
+	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = NO;
 }
 
 - (void)_hideNotificationsGestureBegan:(CGFloat)arg1 {
-	RAMissionControlManager.sharedInstance.inhibitDismissalGesture = YES;
+	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = YES;
 	%orig;
 }
 
 - (_Bool)isAppSwitcherShowing {
-	return %orig || RAMissionControlManager.sharedInstance.isShowingMissionControl;
+	return %orig || [RAMissionControlManager sharedInstance].isShowingMissionControl;
 }
 
--(void) _dismissSwitcherAnimated:(_Bool)arg1 {
-	if (RAMissionControlManager.sharedInstance.isShowingMissionControl) {
-		[RAMissionControlManager.sharedInstance hideMissionControl:arg1];
+- (void) _dismissSwitcherAnimated:(BOOL)animated {
+	if ([RAMissionControlManager sharedInstance].isShowingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:animated];
 	}
 
 	%orig;
@@ -203,7 +203,7 @@ BOOL toggleOrActivate = NO;
 }
 
 %new - (BOOL)RAGestureCallback_canHandle:(CGPoint)point velocity:(CGPoint)velocity {
-	return allowMissionControlActivationFromSwitcher && [[%c(RASettings) sharedInstance] missionControlEnabled] && self.view.window.isKeyWindow;
+	return allowMissionControlActivationFromSwitcher && [[RASettings sharedInstance] missionControlEnabled] && self.view.window.isKeyWindow;
 }
 
 %new - (RAGestureCallbackResult) RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge {
@@ -229,8 +229,8 @@ BOOL toggleOrActivate = NO;
 		} else {
 			fakeView = [[UIView alloc] initWithFrame:view.frame];
 
-			CGFloat width = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 4.5714;
-			CGFloat height = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height / 4.36;
+			CGFloat width = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 4.5714;
+			CGFloat height = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4.36;
 
 			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithStyle:1];
 			blurView.frame = fakeView.frame;
@@ -306,25 +306,25 @@ BOOL toggleOrActivate = NO;
 	}
 
 	if (state == UIGestureRecognizerStateEnded) {
-		//NSLog(@"[ReachApp] %@ + %@ = %@ > %@", NSStringFromCGPoint(fakeView.frame.origin), NSStringFromCGPoint(velocity), @(fakeView.frame.origin.y + velocity.y), @(-(UIScreen.mainScreen.bounds.size.height / 2)));
+		//NSLog(@"[ReachApp] %@ + %@ = %@ > %@", NSStringFromCGPoint(fakeView.frame.origin), NSStringFromCGPoint(velocity), @(fakeView.frame.origin.y + velocity.y), @(-([UIScreen mainScreen].bounds.size.height / 2)));
 
-		if (fakeView.frame.origin.y + velocity.y > -(UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height / 2)) {
+		if (fakeView.frame.origin.y + velocity.y > -([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2)) {
 			willShowMissionControl = YES;
-			CGFloat distance = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
+			CGFloat distance = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
 			CGFloat duration = MIN(distance / velocity.y, 0.3);
 
 			//NSLog(@"[ReachApp] dist %f, dur %f", distance, duration);
 
 			[UIView animateWithDuration:duration animations:^{
-				fakeView.frame = UIScreen.mainScreen.RA_interfaceOrientedBounds;
+				fakeView.frame = [UIScreen mainScreen].RA_interfaceOrientedBounds;
 			} completion:^(BOOL _) {
 				//((UIWindow*)[[%c(SBUIController) sharedInstance] switcherWindow]).alpha = 0;
 				[[%c(SBUIController) sharedInstance] dismissSwitcherAnimated:NO];
 				[[%c(SBUIController) sharedInstance] restoreContentUpdatingStatusBar:YES];
-				[RAMissionControlManager.sharedInstance showMissionControl:NO];
+				[[RAMissionControlManager sharedInstance] showMissionControl:NO];
 				[fakeView removeFromSuperview];
 				fakeView = nil;
-				UIApplication.sharedApplication.statusBarHidden = statusBarVisibility;
+				[UIApplication sharedApplication].statusBarHidden = statusBarVisibility;
 				// avoid status bar hiding
 				//dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 				//	((UIWindow*)[[%c(SBUIController) sharedInstance] switcherWindow]).alpha = 1;
@@ -365,7 +365,7 @@ BOOL toggleOrActivate = NO;
 		if ([%c(SBControlCenterGrabberView) class]) {
 			SBControlCenterGrabberView *grabber = [[%c(SBControlCenterGrabberView) alloc] initWithFrame:CGRectMake(0, 0, width, height)];
 
-			grabber.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, 20/2);
+			grabber.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
 
 
 			grabber.backgroundColor = [UIColor clearColor];
@@ -386,7 +386,7 @@ BOOL toggleOrActivate = NO;
 		} else {
 			UIView *grabber = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
 
-			grabber.center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, 20/2);
+			grabber.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
 
 			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithStyle:2060];
 			blurView.frame = grabber.frame;
@@ -409,7 +409,7 @@ BOOL toggleOrActivate = NO;
 		}
 		[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)self forEdge:UIRectEdgeTop identifier:@"com.efrederickson.reachapp.appswitchergrabber"];
 	} else {
-		((UIView*)[view viewWithTag:999]).center = CGPointMake(UIScreen.mainScreen.bounds.size.width / 2, 20/2);
+		((UIView*)[view viewWithTag:999]).center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
 	}
 }
 
@@ -440,8 +440,8 @@ BOOL toggleOrActivate = NO;
 		} else {
 			fakeView = [[UIView alloc] initWithFrame:view.frame];
 
-			CGFloat width = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.width / 4.5714;
-			CGFloat height = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height / 4.36;
+			CGFloat width = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 4.5714;
+			CGFloat height = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4.36;
 
 			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithStyle:1];
 			blurView.frame = fakeView.frame;
@@ -517,17 +517,17 @@ BOOL toggleOrActivate = NO;
 	}
 
 	if (state == UIGestureRecognizerStateEnded) {
-		//NSLog(@"[ReachApp] %@ + %@ = %@ > %@", NSStringFromCGPoint(fakeView.frame.origin), NSStringFromCGPoint(velocity), @(fakeView.frame.origin.y + velocity.y), @(-(UIScreen.mainScreen.bounds.size.height / 2)));
+		//NSLog(@"[ReachApp] %@ + %@ = %@ > %@", NSStringFromCGPoint(fakeView.frame.origin), NSStringFromCGPoint(velocity), @(fakeView.frame.origin.y + velocity.y), @(-([UIScreen mainScreen].bounds.size.height / 2)));
 
-		if (fakeView.frame.origin.y + velocity.y > -(UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height / 2)) {
+		if (fakeView.frame.origin.y + velocity.y > -([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2)) {
 			willShowMissionControl = YES;
-			CGFloat distance = UIScreen.mainScreen.RA_interfaceOrientedBounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
+			CGFloat distance = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
 			CGFloat duration = MIN(distance / velocity.y, 0.3);
 
 			//NSLog(@"[ReachApp] dist %f, dur %f", distance, duration);
 
 			[UIView animateWithDuration:duration animations:^{
-				fakeView.frame = UIScreen.mainScreen.RA_interfaceOrientedBounds;
+				fakeView.frame = [UIScreen mainScreen].RA_interfaceOrientedBounds;
 			} completion:^(BOOL _) {
 				//((UIWindow*)[[%c(SBUIController) sharedInstance] switcherWindow]).alpha = 0;
 				if ([%c(SBUIController) respondsToSelector:@selector(dismissSwitcherAnimated:)]) {
@@ -537,10 +537,10 @@ BOOL toggleOrActivate = NO;
 						[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
 					}];
 				}
-				[RAMissionControlManager.sharedInstance showMissionControl:NO];
+				[[RAMissionControlManager sharedInstance] showMissionControl:NO];
 				[fakeView removeFromSuperview];
 				fakeView = nil;
-				UIApplication.sharedApplication.statusBarHidden = statusBarVisibility;
+				[UIApplication sharedApplication].statusBarHidden = statusBarVisibility;
 				// avoid status bar hiding
 				//dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 				//	((UIWindow*)[[%c(SBUIController) sharedInstance] switcherWindow]).alpha = 1;
@@ -567,18 +567,18 @@ BOOL toggleOrActivate = NO;
 
 %hook SBMainSwitcherViewController
 - (void)viewDidAppear:(BOOL)arg1 {
-	statusBarVisibility = UIApplication.sharedApplication.statusBarHidden;
+	statusBarVisibility = [UIApplication sharedApplication].statusBarHidden;
 	willShowMissionControl = NO;
 
-		if (!RAMissionControlManager.sharedInstance.isShowingMissionControl) {
-			[RAMissionControlManager.sharedInstance showMissionControl:YES];
 	if ([[RASettings sharedInstance] replaceAppSwitcherWithMC] && [[RASettings sharedInstance] missionControlEnabled]) {
+		if (![RAMissionControlManager sharedInstance].isShowingMissionControl) {
+			[[RAMissionControlManager sharedInstance] showMissionControl:YES];
 	  } else {
-			[RAMissionControlManager.sharedInstance hideMissionControl:YES];
+			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 	} else {
-		if ([RAMissionControlManager.sharedInstance isShowingMissionControl]) {
-			[RAMissionControlManager.sharedInstance hideMissionControl:YES];
+		if ([[RAMissionControlManager sharedInstance] isShowingMissionControl]) {
+			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 	}
 
@@ -605,17 +605,17 @@ BOOL toggleOrActivate = NO;
 }
 
 - (BOOL)activateSwitcherNoninteractively {
-		if (!RAMissionControlManager.sharedInstance.isShowingMissionControl) {
-			[RAMissionControlManager.sharedInstance showMissionControl:YES];
 	if ([[RASettings sharedInstance] replaceAppSwitcherWithMC] && [[RASettings sharedInstance] missionControlEnabled]) {
+		if (![RAMissionControlManager sharedInstance].isShowingMissionControl) {
+			[[RAMissionControlManager sharedInstance] showMissionControl:YES];
 		} else {
-			[RAMissionControlManager.sharedInstance hideMissionControl:YES];
+			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 
 		return YES;
 	} else {
-		if ([RAMissionControlManager.sharedInstance isShowingMissionControl]) {
-			[RAMissionControlManager.sharedInstance hideMissionControl:YES];
+		if ([[RAMissionControlManager sharedInstance] isShowingMissionControl]) {
+			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 	}
 
