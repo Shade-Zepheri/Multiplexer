@@ -141,8 +141,7 @@ CGRect swappedForOrientation2(CGRect in) {
 
 	//_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithStyle:1];
 	_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:THEMED(missionControlBlurStyle) graphicsQuality:10]; // speed++ hopefully
-	_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithSettings:blurSettings];
-	blurView.frame = window.frame;
+	_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:window.frame autosizesToFitSuperview:YES settings:blurSettings];
 	[window addSubview:blurView];
 
 	int statusBarStyle = 0x12F; //Normal notification center style
