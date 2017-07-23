@@ -15,7 +15,7 @@ Class CurrentSBWorkspaceClass = nil;
 	return CurrentSBWorkspaceClass;
 }
 
-+ (SBWorkspace*)getCurrentSBWorkspaceImplementationInstanceForThisOS {
++ (SBWorkspace *)getCurrentSBWorkspaceImplementationInstanceForThisOS {
 	if (![CurrentSBWorkspaceClass respondsToSelector:@selector(sharedInstance)]) {
 		HBLogError(@"\"SBWorkspace\" class '%s' does not have '+sharedInstance' method", class_getName(CurrentSBWorkspaceClass));
 		return nil;

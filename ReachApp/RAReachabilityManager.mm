@@ -9,12 +9,12 @@
 	SHARED_INSTANCE(RAReachabilityManager);
 }
 
-- (void)launchTopAppWithIdentifier:(NSString*)identifier {
+- (void)launchTopAppWithIdentifier:(NSString *)identifier {
 	//[[objc_getClass("SBWorkspace") sharedInstance] RA_closeCurrentView];
 	[GET_SBWORKSPACE RA_launchTopAppWithIdentifier:identifier];
 }
 
-- (void)launchWidget:(RAWidget*)widget {
+- (void)launchWidget:(RAWidget *)widget {
 	//[[objc_getClass("SBWorkspace") sharedInstance] RA_closeCurrentView];
 	[GET_SBWORKSPACE RA_setView:[widget view] preferredHeight:[widget preferredHeight]];
 }
@@ -24,7 +24,7 @@
 	[GET_SBWORKSPACE RA_showWidgetSelector];
 }
 
-- (void)showAppWithSliderProvider:(__weak RAAppSliderProviderView*)view {
+- (void)showAppWithSliderProvider:(__weak RAAppSliderProviderView *)view {
 	//[[objc_getClass("SBWorkspace") sharedInstance] RA_closeCurrentView];
 	[view updateCurrentView];
 	[view load];

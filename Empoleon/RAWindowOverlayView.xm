@@ -102,7 +102,7 @@
 	}
 }
 
-- (void)buttonPress:(UIButton*)button {
+- (void)buttonPress:(UIButton *)button {
 	if ([[RASettings sharedInstance] windowedMultitaskingCompleteAnimations]) {
 		probablyAnimating = YES;
 	}
@@ -129,7 +129,7 @@
 	});
 }
 
-- (void)buttonRelease:(UIButton*)button {
+- (void)buttonRelease:(UIButton *)button {
 	if ([[RASettings sharedInstance] windowedMultitaskingCompleteAnimations]) {
 		probablyAnimating = YES;
 	}

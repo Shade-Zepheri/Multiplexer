@@ -4,7 +4,7 @@
 #import "RADesktopManager.h"
 
 @implementation RAKeyboardWindow
-- (void)setupForKeyboardAndShow:(NSString*)identifier {
+- (void)setupForKeyboardAndShow:(NSString *)identifier {
 	self.userInteractionEnabled = YES;
 	self.backgroundColor = [UIColor clearColor];
 
@@ -27,7 +27,7 @@
 	kbView = nil;
 }
 
-- (unsigned int)contextId {
+- (NSUInteger)contextId {
 	return kbView.layerHost.contextId;
 }
 @end

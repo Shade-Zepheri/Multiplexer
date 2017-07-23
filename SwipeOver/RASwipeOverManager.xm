@@ -108,7 +108,7 @@ extern int rotationDegsForOrientation(int o);
 	[self showApp:nil];
 }
 
-- (void)showApp:(NSString*)identifier {
+- (void)showApp:(NSString *)identifier {
 	[self closeCurrentView];
 
 	SBApplication *app = nil;
@@ -173,7 +173,7 @@ extern int rotationDegsForOrientation(int o);
 		view.center = CGPointMake(SCREEN_WIDTH - (view.frame.size.width / 2), view.center.y);
 	}
 
-	view.tag = RASWIPEOVER_VIEW_TAG;
+	view.tag = SwipeOverViewTag;
 	[overlayWindow addSubview:view];
 
 	[self updateClientSizes:YES];
@@ -237,7 +237,7 @@ extern int rotationDegsForOrientation(int o);
 - (void)sizeViewForTranslation:(CGPoint)translation state:(UIGestureRecognizerState)state {
 	static CGFloat lastX = -1;
 	static CGFloat overlayOriginX = -1;
-	UIView *targetView = [overlayWindow isHidingUnderlyingApp] ? [overlayWindow viewWithTag:RASWIPEOVER_VIEW_TAG] : overlayWindow;
+	UIView *targetView = [overlayWindow isHidingUnderlyingApp] ? [overlayWindow viewWithTag:SwipeOverViewTag] : overlayWindow;
 
 	if (start == 0) {
 		start = targetView.center.x;

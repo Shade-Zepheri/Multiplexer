@@ -48,7 +48,7 @@
 	pthread_mutex_unlock(&mutex);
 }
 
-- (void)addTarget:(__weak NSObject<RARunningAppsProviderDelegate>*)target {
+- (void)addTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target {
 	pthread_mutex_lock(&mutex);
 
 	if (![targets containsObject:target]) {
@@ -58,7 +58,7 @@
 	pthread_mutex_unlock(&mutex);
 }
 
-- (void)removeTarget:(__weak NSObject<RARunningAppsProviderDelegate>*)target {
+- (void)removeTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target {
 	pthread_mutex_lock(&mutex);
 
 	[targets removeObject:target];

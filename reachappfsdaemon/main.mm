@@ -28,5 +28,6 @@ int main(int argc, char **argv, char **envp) {
 			[[NSFileManager defaultManager] removeItemAtPath:filePath error:nil];
 		}
 	}
+
 	return 0;
 }

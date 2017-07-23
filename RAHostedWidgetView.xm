@@ -8,17 +8,17 @@
 @end
 
 @implementation RAHostedWidgetView
-- (SBApplication*)app {
+- (SBApplication *)app {
 	return nil;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
 	return [self loadWidget].displayName;
 }
 
 //-(void) rotateToOrientation:(UIInterfaceOrientation)o;
 
-- (RAWidgetBase*)loadWidget {
+- (RAWidgetBase *)loadWidget {
 	widget = [RAWidgetHostManager.sharedInstance widgetForIdentifier:self.bundleIdentifier];
 	return widget;
 }

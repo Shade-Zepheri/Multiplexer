@@ -23,11 +23,11 @@
 	return 1;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
 	return LOCALIZE(@"RECENTS", @"Localizable");
 }
 
-- (NSString*)identifier {
+- (NSString *)identifier {
 	return @"com.efrederickson.reachapp.widgets.sections.recentapps";
 }
 
@@ -35,7 +35,7 @@
 	return savedX;
 }
 
-- (UIView*)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
+- (UIView *)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
 	viewFrame = frame;
 	CGSize size = [%c(SBIconView) defaultIconSize];
 	spacing = (frame.size.width - (iconsPerLine * size.width)) / (iconsPerLine + 0);
@@ -113,7 +113,7 @@
 	return recentsView;
 }
 
-- (void)appViewItemTap:(UIGestureRecognizer*)gesture {
+- (void)appViewItemTap:(UIGestureRecognizer *)gesture {
 	@autoreleasepool {
 		//[[%c(SBWorkspace) sharedInstance] appViewItemTap:gesture];
 

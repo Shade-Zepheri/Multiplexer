@@ -36,10 +36,11 @@
 		trashIcon = [RAResourceImageProvider imageForFilename:@"Trash.png"];
 		self.windowLevel = 1000;
 	}
+
 	return self;
 }
 
-- (BOOL)_shouldAutorotateToInterfaceOrientation:(NSInteger)arg1 checkForDismissal:(BOOL)arg2 isRotationDisabled:(BOOL*)arg3 {
+- (BOOL)_shouldAutorotateToInterfaceOrientation:(NSInteger)orientation checkForDismissal:(BOOL)check isRotationDisabled:(BOOL*)value {
 	return YES;
 }
 
@@ -151,7 +152,7 @@
 	[self reloadWindowedAppsSection:runningApplications];
 }
 
-- (void)reloadWindowedAppsSection:(NSArray*)runningApplicationsArg {
+- (void)reloadWindowedAppsSection:(NSArray *)runningApplicationsArg {
 	runningApplications = [runningApplicationsArg mutableCopy];
 
 	NSArray *switcherOrder = [[RAAppSwitcherModelWrapper appSwitcherAppIdentiferList] copy];
@@ -322,7 +323,7 @@
 	otherRunningAppsScrollView.contentSize = CGSizeMake(MAX(x, self.frame.size.width + (empty ? 0 : 1)), height * 1.15); // make slightly scrollable
 }
 
-- (void)createNewDesktop:(UIButton*)view {
+- (void)createNewDesktop:(UIButton *)view {
 	[[%c(RADesktopManager) sharedInstance] addDesktop:NO];
 
 	[UIView animateWithDuration:0.4 animations:^{
@@ -332,7 +333,7 @@
 	}];
 }
 
-- (void)removeCardForApplication:(SBApplication*)app {
+- (void)removeCardForApplication:(SBApplication *)app {
 	CGFloat originX = -1;
 	UIView *targetView = nil;
 	UIScrollView *parentView = [appsWithoutWindows containsObject:app] ? otherRunningAppsScrollView : windowedAppScrollView;
@@ -369,7 +370,7 @@
 	}
 }
 
-- (void)handleAppPreviewPan:(UILongPressGestureRecognizer*)gesture {
+- (void)handleAppPreviewPan:(UILongPressGestureRecognizer *)gesture {
 	static CGPoint initialCenter;
 	static UIView *draggedView;
 	static CGPoint lastPoint;
@@ -517,7 +518,7 @@
 	});
 }
 
-- (void)handleDesktopPan:(UIPanGestureRecognizer*)gesture {
+- (void)handleDesktopPan:(UIPanGestureRecognizer *)gesture {
 	static CGPoint initialCenter;
 
 	if (gesture.state == UIGestureRecognizerStateBegan) {
@@ -549,13 +550,13 @@
 	}
 }
 
-- (void)activateDesktop:(UITapGestureRecognizer*)gesture {
+- (void)activateDesktop:(UITapGestureRecognizer *)gesture {
 	int desktop = gesture.view.tag;
 	[[%c(RADesktopManager) sharedInstance] switchToDesktop:desktop];
 	[self.manager hideMissionControl:YES];
 }
 
-- (void)handleSingleDesktopTap:(UITapGestureRecognizer*)gesture {
+- (void)handleSingleDesktopTap:(UITapGestureRecognizer *)gesture {
 	int desktop = gesture.view.tag;
 	[[%c(RADesktopManager) sharedInstance] switchToDesktop:desktop actuallyShow:NO];
 	[self reloadDesktopSection];
@@ -563,7 +564,7 @@
 	[self reloadOtherAppsSection];
 }
 
-- (void)handleDoubleDesktopTap:(UITapGestureRecognizer*)gesture {
+- (void)handleDoubleDesktopTap:(UITapGestureRecognizer *)gesture {
 	[self activateDesktop:gesture];
 }
 
@@ -605,12 +606,12 @@
 	}
 }
 
-- (void)appDidStart:(SBApplication*)app {
+- (void)appDidStart:(SBApplication *)app {
 	[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
 	[self reloadOtherAppsSection];
 }
 
-- (void)appDidDie:(SBApplication*)app {
+- (void)appDidDie:(SBApplication *)app {
 	[self removeCardForApplication:app];
 }
 

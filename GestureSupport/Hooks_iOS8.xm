@@ -17,12 +17,12 @@ UIRectEdge currentEdge;
 
 typedef struct {
     CGPoint velocity;
-    double timestamp;
+    CGFloat timestamp;
     CGPoint location;
 } VelocityData;
 
 %hook _UIScreenEdgePanRecognizer
-- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(double)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation {
+- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(CGFloat)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation {
     %orig;
 
     VelocityData newData;
@@ -62,7 +62,7 @@ typedef struct {
   return self;
 }
 
-- (void)extractHandMotionForActiveTouches:(SBActiveTouch*) activeTouches count:(NSUInteger)count centroid:(CGPoint)centroid {
+- (void)extractHandMotionForActiveTouches:(SBActiveTouch *)activeTouches count:(NSUInteger)count centroid:(CGPoint)centroid {
   %orig;
   dispatch_async(dispatch_get_main_queue(), ^{
     if (count > 0) {
@@ -88,7 +88,7 @@ typedef struct {
   });
 }
 
-%new - (void)screenEdgePanRecognizerStateDidChange:(_UIScreenEdgePanRecognizer*)screenEdgePanRecognizer {
+%new - (void)screenEdgePanRecognizerStateDidChange:(_UIScreenEdgePanRecognizer *)screenEdgePanRecognizer {
   if (screenEdgePanRecognizer.state == UIGestureRecognizerStateBegan) {
     CGPoint location = screenEdgePanRecognizer._lastTouchLocation;
 
@@ -141,7 +141,7 @@ typedef struct {
 
   UIRectEdge edgesToWatch[] = { UIRectEdgeBottom, UIRectEdgeLeft, UIRectEdgeRight, UIRectEdgeTop };
   int edgeCount = sizeof(edgesToWatch) / sizeof(UIRectEdge);
-  gestureRecognizers = [[NSMutableSet alloc] initWithCapacity:edgeCount];
+  gestureRecognizers = [NSMutableSet setWithCapacity:edgeCount];
   for (int i = 0; i < edgeCount; i++) {
     _UIScreenEdgePanRecognizer *recognizer = [[_UIScreenEdgePanRecognizer alloc] initWithType:2];
     recognizer.targetEdges = edgesToWatch[i];

@@ -15,5 +15,5 @@
 - (BOOL)isShowingAppSelector;
 - (void)showAppSelector;
 
-- (UIView*)currentView;
+- (UIView *)currentView;
 @end

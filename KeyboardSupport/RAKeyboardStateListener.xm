@@ -16,7 +16,7 @@ BOOL isShowing = NO;
   SHARED_INSTANCE(RAKeyboardStateListener);
 }
 
-- (void)didShow:(NSNotification*)notif {
+- (void)didShow:(NSNotification *)notif {
   LogDebug(@"[ReachApp] keyboard didShow");
   _visible = YES;
   _size = [[notif.userInfo objectForKey:UIKeyboardFrameEndUserInfoKey] CGRectValue].size;

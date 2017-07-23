@@ -17,7 +17,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 	[dict writeToFile:FILE_PATH atomically:YES];
 }
 
-- (void)saveDesktopInformation:(RADesktopWindow*)desktop {
+- (void)saveDesktopInformation:(RADesktopWindow *)desktop {
 	NSUInteger index = [[RADesktopManager sharedInstance].availableDesktops indexOfObject:desktop];
 	NSString *key = [NSString stringWithFormat:@"%tu", index];
 	NSMutableArray *openApps = [NSMutableArray array];
@@ -51,7 +51,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 }
 
 // Window
-- (void)saveWindowInformation:(RAWindowBar*)window {
+- (void)saveWindowInformation:(RAWindowBar *)window {
 	CGPoint center = window.center;
 	CGAffineTransform transform = window.transform;
 	NSString *appIdent = window.attachedView.app.bundleIdentifier;
@@ -64,11 +64,11 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 	[self saveInfo];
 }
 
-- (BOOL)hasWindowInformationForIdentifier:(NSString*)appIdentifier {
+- (BOOL)hasWindowInformationForIdentifier:(NSString *)appIdentifier {
 	return [dict objectForKey:appIdentifier] != nil;
 }
 
-- (RAPreservedWindowInformation)windowInformationForAppIdentifier:(NSString*)identifier {
+- (RAPreservedWindowInformation)windowInformationForAppIdentifier:(NSString *)identifier {
 	RAPreservedWindowInformation info = (RAPreservedWindowInformation) { CGPointZero, CGAffineTransformIdentity };
 
 	NSDictionary *appInfo = dict[identifier];
@@ -82,7 +82,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 	return info;
 }
 
-- (void)removeWindowInformationForIdentifier:(NSString*)appIdentifier {
+- (void)removeWindowInformationForIdentifier:(NSString *)appIdentifier {
 	[dict removeObjectForKey:appIdentifier];
 	[self saveInfo];
 }

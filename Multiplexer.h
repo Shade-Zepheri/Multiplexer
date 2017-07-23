@@ -10,11 +10,11 @@
 }
 + (instancetype)sharedInstance;
 
-- (NSString*)currentVersion;
+- (NSString *)currentVersion;
 - (BOOL)isOnSupportedOS;
 
-- (void)registerExtension:(NSString*)name forMultiplexerVersion:(NSString*)version;
+- (void)registerExtension:(NSString *)name forMultiplexerVersion:(NSString *)version;
 
-+ (id)createSBAppToAppWorkspaceTransactionForExitingApp:(SBApplication*)app;
++ (id)createSBAppToAppWorkspaceTransactionForExitingApp:(SBApplication *)app;
 + (BOOL)shouldShowControlCenterGrabberOnFirstSwipe;
 @end

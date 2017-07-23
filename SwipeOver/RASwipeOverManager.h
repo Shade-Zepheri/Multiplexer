@@ -12,7 +12,7 @@
 
 - (void)createEdgeView;
 
-- (void)showApp:(NSString*)identifier; // if identifier is nil it will use the app switcher data
+- (void)showApp:(NSString *)identifier; // if identifier is nil it will use the app switcher data
 - (void)closeCurrentView; // App or selector
 - (void)showAppSelector; // No widget chooser, not enough horizontal space. TODO: make it work anyway
 
@@ -22,4 +22,4 @@
 - (void)sizeViewForTranslation:(CGPoint)translation state:(UIGestureRecognizerState)state;
 @end
 
-static NSInteger const RASWIPEOVER_VIEW_TAG = 996;
+static NSInteger const SwipeOverViewTag = 996;

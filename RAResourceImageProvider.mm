@@ -16,7 +16,7 @@ NSCache *_rsImgCache = [NSCache new];
   return newImage;
 }
 
-+ (id)loadAndCacheImageWithStrippedPath:(NSString*)stripped {
++ (id)loadAndCacheImageWithStrippedPath:(NSString *)stripped {
   NSString *pdfPath = [NSString stringWithFormat:@"%@/Resources/%@.pdf",resourcePath,stripped];
   NSString *pngPath = [NSString stringWithFormat:@"%@/Resources/%@.png",resourcePath,stripped];
 
@@ -38,39 +38,39 @@ NSCache *_rsImgCache = [NSCache new];
   return nil;
 }
 
-+ (id)getOrCacheImageWithFilename:(NSString*)strippedPath {
++ (id)getOrCacheImageWithFilename:(NSString *)strippedPath {
   return [_rsImgCache objectForKey:strippedPath] ?: [self loadAndCacheImageWithStrippedPath:strippedPath];
 }
 
-+ (UIImage*)convertToUIImageIfNeeded:(id)arg sizeIfNeeded:(CGSize)size forceSizing:(BOOL)force {
-  if ([arg isKindOfClass:UIImage.class]) {
++ (UIImage *)convertToUIImageIfNeeded:(id)input sizeIfNeeded:(CGSize)size forceSizing:(BOOL)force {
+  if ([input isKindOfClass:UIImage.class]) {
   	if (force) {
-      return [self imageWithImage:arg scaledToSize:size];
+      return [self imageWithImage:input scaledToSize:size];
     } else {
-      return (UIImage*)arg;
+      return (UIImage*)input;
     }
   }
 
-  if ([arg isKindOfClass:[RAPDFImage class]]) {
-  	UIImage *image = [arg imageWithOptions:[RAPDFImageOptions optionsWithSize:size]];
+  if ([input isKindOfClass:[RAPDFImage class]]) {
+  	UIImage *image = [input imageWithOptions:[RAPDFImageOptions optionsWithSize:size]];
   	return image;
   }
 
   return nil;
 }
 
-+ (UIImage*)imageForFilename:(NSString*)filename {
++ (UIImage *)imageForFilename:(NSString *)filename {
   NSString *strippedPath = [[filename lastPathComponent] stringByDeletingPathExtension];
   id img = [self getOrCacheImageWithFilename:strippedPath];
 
   return [self convertToUIImageIfNeeded:img sizeIfNeeded:CGSizeMake(200, 200) forceSizing:NO];
 }
 
-+ (UIImage*)imageForFilename:(NSString*)filename size:(CGSize)size tintedTo:(UIColor*)tint {
++ (UIImage *)imageForFilename:(NSString *)filename size:(CGSize)size tintedTo:(UIColor *)tint {
   return [[self imageForFilename:filename constrainedToSize:size] _flatImageWithColor:tint];
 }
 
-+ (UIImage*)imageForFilename:(NSString*)filename constrainedToSize:(CGSize)size {
++ (UIImage *)imageForFilename:(NSString *)filename constrainedToSize:(CGSize)size {
   NSString *strippedPath = [[filename lastPathComponent] stringByDeletingPathExtension];
   id img = [self getOrCacheImageWithFilename:strippedPath];
 

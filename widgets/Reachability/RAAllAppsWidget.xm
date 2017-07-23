@@ -18,11 +18,11 @@
 	return 3;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
 	return LOCALIZE(@"ALL_APPS", @"Localizable");
 }
 
-- (NSString*)identifier {
+- (NSString *)identifier {
 	return @"com.efrederickson.reachapp.widgets.sections.allapps";
 }
 
@@ -30,7 +30,7 @@
 	return savedX;
 }
 
-- (UIView*)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
+- (UIView *)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
 	UIScrollView *allAppsView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 200)];
 
 	CGSize size = [%c(SBIconView) defaultIconSize];
@@ -117,7 +117,7 @@
 	return allAppsView;
 }
 
-- (void)appViewItemTap:(UIGestureRecognizer*)gesture {
+- (void)appViewItemTap:(UIGestureRecognizer *)gesture {
 	[GET_SBWORKSPACE appViewItemTap:gesture];
 	//[[RAReachabilityManager sharedInstance] launchTopAppWithIdentifier:gesture.view.restorationIdentifier];
 }

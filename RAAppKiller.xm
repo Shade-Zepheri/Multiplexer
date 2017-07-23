@@ -1,7 +1,7 @@
 #import "RAAppKiller.h"
 #import "RARunningAppsProvider.h"
 
-extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSString *app, int reasonID, bool report, NSString *description);
+extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSString *app, int reasonID, BOOL report, NSString *description);
 
 @interface RAAppKiller () {
 	NSMutableDictionary *completionDictionary;
@@ -15,23 +15,23 @@ extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSStrin
 	);
 }
 
-+ (void)killAppWithIdentifier:(NSString*)identifier {
++ (void)killAppWithIdentifier:(NSString *)identifier {
 	return [RAAppKiller killAppWithIdentifier:identifier completion:nil];
 }
 
-+ (void)killAppWithIdentifier:(NSString*)identifier completion:(void(^)())handler {
++ (void)killAppWithIdentifier:(NSString *)identifier completion:(void(^)())handler {
 	return [RAAppKiller killAppWithSBApplication:[[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier] completion:handler];
 }
 
-+ (void)killAppWithSBApplication:(SBApplication*)app {
++ (void)killAppWithSBApplication:(SBApplication *)app {
 	return [RAAppKiller killAppWithSBApplication:app completion:nil];
 }
 
-+ (void)killAppWithSBApplication:(SBApplication*)app completion:(void(^)())handler {
++ (void)killAppWithSBApplication:(SBApplication *)app completion:(void(^)())handler {
 	return [RAAppKiller checkAppDead:app withTries:0 andCompletion:handler];
 }
 
-+ (void)checkAppDead:(SBApplication*)app withTries:(int)tries andCompletion:(void(^)())handler {
++ (void)checkAppDead:(SBApplication *)app withTries:(NSInteger)tries andCompletion:(void(^)())handler {
 	/*
 	BOOL isDeadOrMaxed = (app.pid == 0 || app.isRunning == NO) && tries < 5;
 	if (isDeadOrMaxed)

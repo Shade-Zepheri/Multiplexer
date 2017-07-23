@@ -30,7 +30,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 @end
 
 @implementation RAHostedAppView
-- (instancetype)initWithBundleIdentifier:(NSString*)bundleIdentifier {
+- (instancetype)initWithBundleIdentifier:(NSString *)bundleIdentifier {
   self = [super init];
   if (self) {
     self.bundleIdentifier = bundleIdentifier;
@@ -65,7 +65,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   }
 }
 
-- (void)setBundleIdentifier:(NSString*)value {
+- (void)setBundleIdentifier:(NSString *)value {
   _orientation = UIInterfaceOrientationPortrait;
   _bundleIdentifier = value;
   app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:value];
@@ -244,7 +244,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   }
 }
 
-- (void)appDidDie:(SBApplication*)app_ {
+- (void)appDidDie:(SBApplication *)app_ {
   if (app_ != self.app) {
     return;
   }
@@ -415,11 +415,11 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   return isContained;
 }
 
-- (SBApplication*)app {
+- (SBApplication *)app {
   return app;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
   return app.displayName;
 }
 @end

@@ -8,7 +8,7 @@
 	SHARED_INSTANCE2(RASnapshotProvider, sharedInstance->imageCache = [[NSCache alloc] init]);
 }
 
-- (UIImage*)snapshotForIdentifier:(NSString*)identifier orientation:(UIInterfaceOrientation)orientation {
+- (UIImage *)snapshotForIdentifier:(NSString *)identifier orientation:(UIInterfaceOrientation)orientation {
 	/*if (![NSThread isMainThread])
 	{
 		__block id result = nil;
@@ -89,19 +89,19 @@
 	}
 }
 
-- (UIImage*)snapshotForIdentifier:(NSString*)identifier {
+- (UIImage *)snapshotForIdentifier:(NSString *)identifier {
 	return [self snapshotForIdentifier:identifier orientation:[UIApplication sharedApplication].statusBarOrientation];
 }
 
-- (void)forceReloadOfSnapshotForIdentifier:(NSString*)identifier {
+- (void)forceReloadOfSnapshotForIdentifier:(NSString *)identifier {
 	[imageCache removeObjectForKey:identifier];
 }
 
-- (UIImage*)storedSnapshotOfMissionControl {
+- (UIImage *)storedSnapshotOfMissionControl {
 	return [imageCache objectForKey:@"missioncontrol"];
 }
 
-- (void)storeSnapshotOfMissionControl:(UIWindow*)window {
+- (void)storeSnapshotOfMissionControl:(UIWindow *)window {
 	UIGraphicsBeginImageContextWithOptions(window.bounds.size, YES, 0);
 
 	[window.layer renderInContext:UIGraphicsGetCurrentContext()];
@@ -114,11 +114,11 @@
 	}
 }
 
-- (NSString*)createKeyForDesktop:(RADesktopWindow*)desktop {
+- (NSString *)createKeyForDesktop:(RADesktopWindow *)desktop {
 	return [NSString stringWithFormat:@"desktop-%tu", desktop.hash];
 }
 
-- (UIImage*)snapshotForDesktop:(RADesktopWindow*)desktop {
+- (UIImage *)snapshotForDesktop:(RADesktopWindow *)desktop {
 	NSString *key = [self createKeyForDesktop:desktop];
 	if ([imageCache objectForKey:key]) {
 		return [imageCache objectForKey:key];
@@ -131,11 +131,11 @@
 	return img;
 }
 
-- (void)forceReloadSnapshotOfDesktop:(RADesktopWindow*)desktop {
+- (void)forceReloadSnapshotOfDesktop:(RADesktopWindow *)desktop {
 	[imageCache removeObjectForKey:[self createKeyForDesktop:desktop]];
 }
 
-- (UIImage*)rotateImageToMatchOrientation:(UIImage*)oldImage {
+- (UIImage *)rotateImageToMatchOrientation:(UIImage *)oldImage {
 	CGFloat degrees;
 	switch ([UIApplication sharedApplication].statusBarOrientation) {
 		case UIInterfaceOrientationLandscapeRight:
@@ -188,7 +188,7 @@
 	return newImage;
 }
 
-- (UIImage*)renderPreviewForDesktop:(RADesktopWindow*)desktop {
+- (UIImage *)renderPreviewForDesktop:(RADesktopWindow *)desktop {
 	@autoreleasepool {
 		UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, 0);
 		CGContextRef context = UIGraphicsGetCurrentContext();
@@ -238,11 +238,11 @@
 	}
 }
 
-- (UIImage*)wallpaperImage {
+- (UIImage *)wallpaperImage {
 	return [self wallpaperImage:YES];
 }
 
-- (UIImage*)wallpaperImage:(BOOL)blurred {
+- (UIImage *)wallpaperImage:(BOOL)blurred {
 	NSString *key = blurred ? @"wallpaperImageBlurred" : @"wallpaperImage";
 	if ([imageCache objectForKey:key]) {
 		return [imageCache objectForKey:key];

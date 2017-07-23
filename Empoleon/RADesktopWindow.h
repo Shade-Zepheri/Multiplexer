@@ -8,23 +8,23 @@
 }
 @property (strong, nonatomic) NSMutableArray *appViews;
 
-- (RAWindowBar*)addAppWithView:(RAHostedAppView*)view animated:(BOOL)animated;
-- (RAWindowBar*)createAppWindowForSBApplication:(SBApplication*)app animated:(BOOL)animated;
-- (RAWindowBar*)createAppWindowWithIdentifier:(NSString*)identifier animated:(BOOL)animated;
+- (RAWindowBar *)addAppWithView:(RAHostedAppView *)view animated:(BOOL)animated;
+- (RAWindowBar *)createAppWindowForSBApplication:(SBApplication *)app animated:(BOOL)animated;
+- (RAWindowBar *)createAppWindowWithIdentifier:(NSString *)identifier animated:(BOOL)animated;
 
-- (void)addExistingWindow:(RAWindowBar*)window;
-- (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated;
-- (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force;
+- (void)addExistingWindow:(RAWindowBar *)window;
+- (void)removeAppWithIdentifier:(NSString *)identifier animated:(BOOL)animated;
+- (void)removeAppWithIdentifier:(NSString *)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force;
 
-- (BOOL)isAppOpened:(NSString*)identifier;
-- (RAWindowBar*)windowForIdentifier:(NSString*)identifier;
+- (BOOL)isAppOpened:(NSString *)identifier;
+- (RAWindowBar *)windowForIdentifier:(NSString *)identifier;
 
 - (UIInterfaceOrientation)currentOrientation;
 - (CGFloat)baseRotationForOrientation;
 - (UIInterfaceOrientation)appOrientationRelativeToThisOrientation:(CGFloat)currentRotation;
 - (void)updateRotationOnClients:(UIInterfaceOrientation)orientation;
 
-- (void)updateWindowSizeForApplication:(NSString*)identifier;
+- (void)updateWindowSizeForApplication:(NSString *)identifier;
 
 - (void)unloadApps;
 - (void)loadApps;

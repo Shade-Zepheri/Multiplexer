@@ -21,13 +21,13 @@ typedef struct {
 - (void)saveInfo;
 
 // Desktop
-- (void)saveDesktopInformation:(RADesktopWindow*)desktop;
+- (void)saveDesktopInformation:(RADesktopWindow *)desktop;
 - (BOOL)hasDesktopInformationAtIndex:(NSInteger)index;
 - (RAPreservedDesktopInformation)desktopInformationForIndex:(NSInteger)index;
 
 // Window
-- (void)saveWindowInformation:(RAWindowBar*)window;
-- (BOOL)hasWindowInformationForIdentifier:(NSString*)appIdentifier;
-- (RAPreservedWindowInformation) windowInformationForAppIdentifier:(NSString*)identifier;
-- (void)removeWindowInformationForIdentifier:(NSString*)appIdentifier;
+- (void)saveWindowInformation:(RAWindowBar *)window;
+- (BOOL)hasWindowInformationForIdentifier:(NSString *)appIdentifier;
+- (RAPreservedWindowInformation) windowInformationForAppIdentifier:(NSString *)identifier;
+- (void)removeWindowInformationForIdentifier:(NSString *)appIdentifier;
 @end

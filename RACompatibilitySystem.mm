@@ -18,7 +18,7 @@
 	return ret;
 }
 
-+ (void)showWarning:(NSString*)info {
++ (void)showWarning:(NSString *)info {
 	NSString *message = [NSString stringWithFormat:@"System info: %@\n\nWARNING: POTENTIAL INCOMPATIBILITY DETECTED\n%@", [self aggregateSystemInfo], info];
 
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer Compatibility" message:message preferredStyle:UIAlertControllerStyleAlert];
@@ -26,7 +26,7 @@
 	[alert show];
 }
 
-+ (void)showError:(NSString*)info {
++ (void)showError:(NSString *)info {
 	NSString *message = [NSString stringWithFormat:@"System info: %@\n\n***ERROR***: POTENTIAL INCOMPATIBILITY DETECTED\n%@", [self aggregateSystemInfo], info];
 
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer Compatibility" message:message preferredStyle:UIAlertControllerStyleAlert];

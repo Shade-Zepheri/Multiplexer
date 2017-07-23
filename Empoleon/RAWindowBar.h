@@ -26,8 +26,8 @@ typedef NS_ENUM(NSInteger, RAWindowBarButtonType) {
 - (void)hideOverlay;
 - (BOOL)isOverlayShowing;
 
-- (RAHostedAppView*)attachedView;
-- (void)attachView:(RAHostedAppView*)view;
+- (RAHostedAppView *)attachedView;
+- (void)attachView:(RAHostedAppView *)view;
 
 - (void)updateClientRotation;
 - (void)updateClientRotation:(UIInterfaceOrientation)orientation;

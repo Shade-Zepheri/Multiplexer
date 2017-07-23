@@ -3,7 +3,7 @@
 @class RAAppSelectorView;
 
 @protocol RAAppSelectorViewDelegate
-- (void)appSelector:(RAAppSelectorView*)view appWasSelected:(NSString*)bundleIdentifier;
+- (void)appSelector:(RAAppSelectorView *)view appWasSelected:(NSString *)bundleIdentifier;
 @end
 
 @interface RAAppSelectorView : UIScrollView

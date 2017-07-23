@@ -14,6 +14,7 @@
 	if (self) {
 		cachedViews = [NSMutableDictionary dictionary];
 	}
+
 	return self;
 }
 
@@ -25,7 +26,7 @@
 	return availableIdentifiers.count > currentIndex + 1;
 }
 
-- (RAHostedAppView*)viewToTheLeft {
+- (RAHostedAppView *)viewToTheLeft {
 	if (self.canGoLeft) {
 		return nil;
 	}
@@ -45,7 +46,7 @@
 
 }
 
-- (RAHostedAppView*)viewToTheRight {
+- (RAHostedAppView *)viewToTheRight {
 	if (self.canGoRight) {
 		return nil;
 	}
@@ -64,7 +65,7 @@
 	return view;
 }
 
-- (RAHostedAppView*)viewAtCurrentIndex {
+- (RAHostedAppView *)viewAtCurrentIndex {
 	NSString *ident = [availableIdentifiers objectAtIndex:currentIndex];
 
 	if (!ident) {

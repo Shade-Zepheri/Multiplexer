@@ -7,6 +7,7 @@
 		self.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.7];
 		self.scrollEnabled = YES;
 	}
+
 	return self;
 }
 
@@ -26,7 +27,7 @@
 	padding = (self.frame.size.width - (numIconsPerLine * fullSize.width)) / (numIconsPerLine + 1);
 
 	CGSize contentSize = CGSizeMake(padding, 10);
-	int horizontal = 0;
+	NSInteger horizontal = 0;
 
 	static NSMutableArray *allApps = nil;
 	if (!allApps) {

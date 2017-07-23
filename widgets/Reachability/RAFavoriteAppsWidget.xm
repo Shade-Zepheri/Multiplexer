@@ -18,11 +18,11 @@
 	return 2;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
 	return LOCALIZE(@"FAVORITES", @"Localizable");
 }
 
-- (NSString*)identifier {
+- (NSString *)identifier {
 	return @"com.efrederickson.reachapp.widgets.sections.favoriteapps";
 }
 
@@ -30,7 +30,7 @@
 	return savedX;
 }
 
-- (UIView*)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
+- (UIView *)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
 	CGSize size = [%c(SBIconView) defaultIconSize];
 	spacing = (frame.size.width - (iconsPerLine * size.width)) / iconsPerLine;
 	NSString *currentBundleIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
@@ -105,7 +105,7 @@
 	return favoritesView;
 }
 
-- (void)appViewItemTap:(UIGestureRecognizer*)gesture {
+- (void)appViewItemTap:(UIGestureRecognizer *)gesture {
 	[GET_SBWORKSPACE appViewItemTap:gesture];
 	//[[RAReachabilityManager sharedInstance] launchTopAppWithIdentifier:gesture.view.restorationIdentifier];
 }

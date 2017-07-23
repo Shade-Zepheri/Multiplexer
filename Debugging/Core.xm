@@ -41,6 +41,7 @@ Class hook$objc_getClass(const char *name)
 
 		return;
 	}
+
 	%init;
 	//LogDebug(@"[ReachApp] %s", class_getImageName(orig$objc_getClass("RAMissionControlManager")));
 }

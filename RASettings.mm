@@ -123,6 +123,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	if (self) {
 		[self reloadSettings];
 	}
+
 	return self;
 }
 
@@ -266,7 +267,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return BOOL(@"shouldShowStatusBarNativeIcons", NO);
 }
 
-- (NSMutableArray*)favoriteApps {
+- (NSMutableArray *)favoriteApps {
 	NSMutableArray *favorites = [[NSMutableArray alloc] init];
 	for (NSString *key in _settings.allKeys) {
 		if ([key hasPrefix:@"Favorites-"]) {
@@ -287,7 +288,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return BOOL(@"flipTopAndBottom", NO);
 }
 
-- (NSString*)NCApp {
+- (NSString *)NCApp {
 	return ![_settings objectForKey:@"NCApp"] ? @"com.apple.Preferences" : _settings[@"NCApp"];
 }
 
@@ -347,7 +348,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return BOOL(@"shouldShowStatusBarIcons", YES);
 }
 
-- (NSDictionary*)_createAndCacheBackgrounderSettingsForIdentifier:(NSString*)identifier {
+- (NSDictionary *)_createAndCacheBackgrounderSettingsForIdentifier:(NSString *)identifier {
 	NSMutableDictionary *ret = [NSMutableDictionary dictionary];
 
 	ret[@"enabled"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-enabled",identifier]] ?: @NO;
@@ -377,7 +378,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return ret;
 }
 
-- (NSDictionary*)rawCompiledBackgrounderSettingsForIdentifier:(NSString*)identifier {
+- (NSDictionary *)rawCompiledBackgrounderSettingsForIdentifier:(NSString *)identifier {
 	return [backgrounderSettingsCache objectForKey:identifier] ?: [self _createAndCacheBackgrounderSettingsForIdentifier:identifier];
 }
 
@@ -412,7 +413,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return BOOL(@"windowedMultitaskingCompleteAnimations", NO);
 }
 
-- (NSString*)currentThemeIdentifier {
+- (NSString *)currentThemeIdentifier {
 	return _settings[@"currentThemeIdentifier"] ?: @"com.eljahandandrew.multiplexer.themes.default";
 }
 

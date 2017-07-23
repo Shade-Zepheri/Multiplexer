@@ -1,11 +1,11 @@
 #import "RAWindowSnapDataProvider.h"
 
 @implementation RAWindowSnapDataProvider
-+ (BOOL)shouldSnapWindow:(RAWindowBar*)bar {
++ (BOOL)shouldSnapWindow:(RAWindowBar *)bar {
 	return [RAWindowSnapDataProvider snapLocationForWindow:bar] != RAWindowSnapLocationInvalid;
 }
 
-+ (RAWindowSnapLocation)snapLocationForWindow:(RAWindowBar*)windowBar {
++ (RAWindowSnapLocation)snapLocationForWindow:(RAWindowBar *)windowBar {
 	CGRect location = windowBar.frame;
 
 	// Convienence values
@@ -112,7 +112,7 @@ try_bottom:
 	return RAWindowSnapLocationNone;
 }
 
-+ (CGPoint)snapCenterForWindow:(RAWindowBar*)window toLocation:(RAWindowSnapLocation)location {
++ (CGPoint)snapCenterForWindow:(RAWindowBar *)window toLocation:(RAWindowSnapLocation)location {
 	// Convienence values
 	CGFloat width = CGRectGetWidth([UIScreen mainScreen]._referenceBounds);
 	CGFloat height = CGRectGetHeight([UIScreen mainScreen]._referenceBounds);
@@ -179,7 +179,7 @@ try_bottom:
 	return newCenter;
 }
 
-+ (void)snapWindow:(RAWindowBar*)window toLocation:(RAWindowSnapLocation)location animated:(BOOL)animated {
++ (void)snapWindow:(RAWindowBar *)window toLocation:(RAWindowSnapLocation)location animated:(BOOL)animated {
 	/*
 	// Convienence values
 	CGFloat width = UIScreen.mainScreen.bounds.size.width;
@@ -236,7 +236,7 @@ try_bottom:
 	[self snapWindow:window toLocation:location animated:animated completion:nil];
 }
 
-+ (void)snapWindow:(RAWindowBar*)window toLocation:(RAWindowSnapLocation)location animated:(BOOL)animated completion:(dispatch_block_t)completionBlock {
++ (void)snapWindow:(RAWindowBar *)window toLocation:(RAWindowSnapLocation)location animated:(BOOL)animated completion:(dispatch_block_t)completionBlock {
 	CGPoint newCenter = [RAWindowSnapDataProvider snapCenterForWindow:window toLocation:location];
 
 	if (animated) {

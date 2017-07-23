@@ -15,5 +15,5 @@
 - (void)hideMissionControl:(BOOL)animated;
 - (void)toggleMissionControl:(BOOL)animated;
 
-- (RAMissionControlWindow*)missionControlWindow;
+- (RAMissionControlWindow *)missionControlWindow;
 @end

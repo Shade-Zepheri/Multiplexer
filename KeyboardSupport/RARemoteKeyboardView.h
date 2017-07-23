@@ -9,5 +9,5 @@
 }
 @property (copy, nonatomic) NSString *identifier;
 @property (strong, nonatomic) CALayerHost *layerHost;
-- (void)connectToKeyboardWindowForApp:(NSString*)identifier;
+- (void)connectToKeyboardWindowForApp:(NSString *)identifier;
 @end

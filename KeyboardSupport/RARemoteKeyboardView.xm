@@ -12,7 +12,7 @@
 @implementation RARemoteKeyboardView
 @synthesize layerHost = _layerHost;
 
-- (void)connectToKeyboardWindowForApp:(NSString*)identifier {
+- (void)connectToKeyboardWindowForApp:(NSString *)identifier {
   if (!identifier) {
     self.layerHost.contextId = 0;
     cancelFetchingContextId = YES;

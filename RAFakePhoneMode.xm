@@ -38,7 +38,7 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
   return forcePhoneModeSize;
 }
 
-+ (CGSize)fakeSizeForAppWithIdentifier:(NSString*)identifier {
++ (CGSize)fakeSizeForAppWithIdentifier:(NSString *)identifier {
   return forcePhoneModeSize;
 }
 
@@ -48,7 +48,7 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
   UIWindow.keyWindow.frame = f;
 }
 
-+ (BOOL)shouldFakeForAppWithIdentifier:(NSString*)identifier {
++ (BOOL)shouldFakeForAppWithIdentifier:(NSString* )identifier {
   IF_NOT_SPRINGBOARD {
     LogWarn(@"[ReachApp] WARNING: +[RAFakePhoneMode shouldFakeForAppWithIdentifier:] called from outside SpringBoard!");
     return NO;

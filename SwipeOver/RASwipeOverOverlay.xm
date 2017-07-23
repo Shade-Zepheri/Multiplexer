@@ -79,24 +79,24 @@
 	[self longPress:nil];
 }
 
-- (UIView*)currentView {
-	return [self viewWithTag:RASWIPEOVER_VIEW_TAG];
+- (UIView *)currentView {
+	return [self viewWithTag:SwipeOverViewTag];
 }
 
 - (BOOL)isShowingAppSelector {
 	return [self.currentView isKindOfClass:[RAAppSelectorView class]];
 }
 
-- (void)darkenerViewTap:(UITapGestureRecognizer*)gesture {
+- (void)darkenerViewTap:(UITapGestureRecognizer *)gesture {
 	[RASwipeOverManager.sharedInstance convertSwipeOverViewToSideBySide];
 }
 
-- (void)handlePan:(UIPanGestureRecognizer*)gesture {
+- (void)handlePan:(UIPanGestureRecognizer *)gesture {
 	CGPoint newPoint = [gesture translationInView:gesture.view];
 	[RASwipeOverManager.sharedInstance sizeViewForTranslation:newPoint state:gesture.state];
 }
 
-- (void)longPress:(UILongPressGestureRecognizer*)gesture {
+- (void)longPress:(UILongPressGestureRecognizer *)gesture {
 	[RASwipeOverManager.sharedInstance closeCurrentView];
 	if ([[self currentView] isKindOfClass:[RAAppSelectorView class]]) {
 		[(RAAppSelectorView*)[self currentView] relayoutApps];
@@ -104,20 +104,20 @@
 		return;
 	}
 	RAAppSelectorView *appSelector = [[RAAppSelectorView alloc] initWithFrame:CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height)];
-	appSelector.tag = RASWIPEOVER_VIEW_TAG;
+	appSelector.tag = SwipeOverViewTag;
 	appSelector.target = self;
 	[appSelector relayoutApps];
 	[self addSubview:appSelector];
 }
 
-- (void)appSelector:(RAAppSelectorView*)view appWasSelected:(NSString*)bundleIdentifier {
+- (void)appSelector:(RAAppSelectorView *)view appWasSelected:(NSString*)bundleIdentifier {
 	grabberView.alpha = 1;
 	[self.currentView removeFromSuperview];
 	[RASwipeOverManager.sharedInstance showApp:bundleIdentifier];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {
-	UIView *v = [self viewWithTag:RASWIPEOVER_VIEW_TAG];
+	UIView *v = [self viewWithTag:SwipeOverViewTag];
 	if ([v isKindOfClass:[RAAppSelectorView class]]) {
 		return NO;
 	}

@@ -22,11 +22,11 @@
 	}];
 }
 
-- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString*)identifier {
+- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier {
 	[self addGestureRecognizer:callbackBlock withCondition:conditionBlock forEdge:screenEdge identifier:identifier priority:RAGesturePriorityDefault];
 }
 
-- (void)addGesture:(RAGestureCallback*)callback {
+- (void)addGesture:(RAGestureCallback *)callback {
 	BOOL found = NO;
 	for (RAGestureCallback *callback_ in gestures) {
 		if ([callback_.identifier isEqual:callback.identifier]) {
@@ -41,7 +41,7 @@
 	}
 }
 
-- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString*)identifier priority:(NSUInteger)priority {
+- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(NSUInteger)priority {
 	RAGestureCallback *callback = [[RAGestureCallback alloc] init];
 	callback.callbackBlock = [callbackBlock copy];
 	callback.conditionBlock = [conditionBlock copy];
@@ -52,11 +52,11 @@
 	[self addGesture:callback];
 }
 
-- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol>*)target forEdge:(UIRectEdge)screenEdge identifier:(NSString*)identifier {
+- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier {
 	[self addGestureRecognizerWithTarget:target forEdge:screenEdge identifier:identifier priority:RAGesturePriorityDefault];
 }
 
-- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol>*)target forEdge:(UIRectEdge)screenEdge identifier:(NSString*)identifier priority:(NSUInteger)priority {
+- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(NSUInteger)priority {
 	RAGestureCallback *callback = [[RAGestureCallback alloc] init];
 	callback.target = target;
 	callback.screenEdge = screenEdge;
@@ -66,7 +66,7 @@
 	[self addGesture:callback];
 }
 
-- (void)removeGestureWithIdentifier:(NSString*)identifier {
+- (void)removeGestureWithIdentifier:(NSString *)identifier {
 	int i = 0;
 	while (i < gestures.count) {
 		RAGestureCallback *callback = [self callbackAtIndex:i];
@@ -79,7 +79,7 @@
 	}
 }
 
-- (RAGestureCallback*)callbackAtIndex:(NSUInteger)index {
+- (RAGestureCallback *)callbackAtIndex:(NSUInteger)index {
 	RAGestureCallback *ret = gestures[index];
 	//[gestures[index] getValue:&ret];
 	return ret;
@@ -162,15 +162,15 @@
 	return ret;
 }
 
-- (void)ignoreSwipesBeginningInRect:(CGRect)area forIdentifier:(NSString*)identifier {
+- (void)ignoreSwipesBeginningInRect:(CGRect)area forIdentifier:(NSString *)identifier {
 	[ignoredAreas setObject:[NSValue valueWithCGRect:area] forKey:identifier];
 }
 
-- (void)stopIgnoringSwipesForIdentifier:(NSString*)identifier {
+- (void)stopIgnoringSwipesForIdentifier:(NSString *)identifier {
 	[ignoredAreas removeObjectForKey:identifier];
 }
 
-- (void)ignoreSwipesBeginningOnSide:(UIRectEdge)side aboveYAxis:(NSUInteger)axis forIdentifier:(NSString*)identifier {
+- (void)ignoreSwipesBeginningOnSide:(UIRectEdge)side aboveYAxis:(NSUInteger)axis forIdentifier:(NSString *)identifier {
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}
@@ -178,7 +178,7 @@
 	[self ignoreSwipesBeginningInRect:r forIdentifier:identifier];
 }
 
-- (void)ignoreSwipesBeginningOnSide:(UIRectEdge)side belowYAxis:(NSUInteger)axis forIdentifier:(NSString*)identifier {
+- (void)ignoreSwipesBeginningOnSide:(UIRectEdge)side belowYAxis:(NSUInteger)axis forIdentifier:(NSString *)identifier {
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}

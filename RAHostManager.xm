@@ -2,7 +2,7 @@
 #import "RACompatibilitySystem.h"
 
 @implementation RAHostManager
-+ (UIView*)systemHostViewForApplication:(SBApplication*)app {
++ (UIView *)systemHostViewForApplication:(SBApplication *)app {
 	if (!app) {
 		return nil;
 	}
@@ -15,7 +15,7 @@
 	return nil;
 }
 
-+ (UIView*)enabledHostViewForApplication:(SBApplication*)app {
++ (UIView *)enabledHostViewForApplication:(SBApplication *)app {
 	if (!app) {
 		return nil;
 	}
@@ -41,14 +41,14 @@
 	return nil;
 }
 
-+ (NSObject*)hostManagerForApp:(SBApplication*)app {
++ (NSObject *)hostManagerForApp:(SBApplication *)app {
 	if (!app) {
 		return nil;
 	}
 
 	if ([app respondsToSelector:@selector(mainScene)]) {
 	  FBScene *scene = [app mainScene];
-	  return (NSObject*)scene.contextHostManager;
+	  return (NSObject *)scene.contextHostManager;
 	}
 
 	[RACompatibilitySystem showWarning:@"Unable to find valid method for accessing context host view managers"];

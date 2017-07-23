@@ -62,7 +62,7 @@
 	return frame;
 }
 
-- (NSString*)currentBundleIdentifier {
+- (NSString *)currentBundleIdentifier {
 	return currentView ? currentView.bundleIdentifier : nil;
 }
 

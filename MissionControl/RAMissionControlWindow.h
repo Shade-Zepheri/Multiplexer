@@ -8,6 +8,6 @@
 
 - (void)reloadDesktopSection;
 - (void)reloadWindowedAppsSection;
-- (void)reloadWindowedAppsSection:(NSArray*)runningApplications;
+- (void)reloadWindowedAppsSection:(NSArray *)runningApplications;
 - (void)reloadOtherAppsSection;
 @end

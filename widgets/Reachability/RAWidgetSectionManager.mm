@@ -14,10 +14,11 @@
 	if (self = [super init]) {
 		_sections = [NSMutableDictionary dictionary];
 	}
+
 	return self;
 }
 
-- (void)registerSection:(RAWidgetSection*)section {
+- (void)registerSection:(RAWidgetSection *)section {
 	if (!section || !section.identifier) {
 		return;
 	}
@@ -29,11 +30,11 @@
 	_sections[section.identifier] = section;
 }
 
-- (NSArray*)sections {
+- (NSArray *)sections {
 	return _sections.allValues;
 }
 
-- (NSArray*)enabledSections {
+- (NSArray *)enabledSections {
 	NSMutableArray *arr = [NSMutableArray array];
 	for (RAWidgetSection* section in _sections.allValues) {
 		if ([section enabled]) {
@@ -58,7 +59,7 @@
 	return arr;
 }
 
-- (UIView*)createViewForEnabledSectionsWithBaseFrame:(CGRect)frame preferredIconSize:(CGSize)iconSize iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
+- (UIView *)createViewForEnabledSectionsWithBaseFrame:(CGRect)frame preferredIconSize:(CGSize)iconSize iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
 	// vertical scroll view?
 	UIView *view = [[UIView alloc] initWithFrame:frame];
 	view.backgroundColor = [UIColor clearColor];

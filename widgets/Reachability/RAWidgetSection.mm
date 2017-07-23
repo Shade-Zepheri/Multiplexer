@@ -8,6 +8,7 @@
 	if (self = [super init]) {
 		_widgets = [NSMutableArray array];
 	}
+
 	return self;
 }
 
@@ -23,19 +24,19 @@
 	return 10;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
 	@throw @"This is an abstract method and should be overriden.";
 }
 
-- (NSString*)identifier {
+- (NSString *)identifier {
 	@throw @"This is an abstract method and should be overriden.";
 }
 
-- (void)addWidget:(RAWidget*)widget {
+- (void)addWidget:(RAWidget *)widget {
 	[_widgets addObject:widget];
 }
 
-- (UIView*)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
+- (UIView *)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
 	UIView *view = [[UIView alloc] initWithFrame:frame];
 	view.userInteractionEnabled = YES;
 	CGPoint origin = CGPointMake(10, 10);
@@ -62,7 +63,7 @@
 	return view;
 }
 
-- (void)widgetIconTap:(UITapGestureRecognizer*)gesture {
+- (void)widgetIconTap:(UITapGestureRecognizer *)gesture {
 	NSInteger widgetIndex = gesture.view.tag;
 	[[objc_getClass("RAReachabilityManager") sharedInstance] launchWidget:_widgets[widgetIndex]];
 }

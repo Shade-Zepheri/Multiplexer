@@ -66,7 +66,7 @@ extern BOOL allowClosingReachabilityNatively;
 	}
 }
 
-- (void)alertUser:(NSString*)description {
+- (void)alertUser:(NSString *)description {
 #if DEBUG
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
 	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
@@ -74,7 +74,7 @@ extern BOOL allowClosingReachabilityNatively;
 #endif
 }
 
-- (void)_requestUpdateFromServerWithTries:(int)tries {
+- (void)_requestUpdateFromServerWithTries:(NSInteger)tries {
 	/*if (!NSBundle.mainBundle.bundleIdentifier ||
 		IS_PROCESS("assertiond") ||  // Don't need to load into this anyway
 		IS_PROCESS("searchd") ||  // safe-mode crash fix
@@ -142,7 +142,7 @@ extern BOOL allowClosingReachabilityNatively;
 	allowClosingReachabilityNatively = YES;
 }
 
-- (void)notifyServerWithKeyboardContextId:(unsigned int)cid {
+- (void)notifyServerWithKeyboardContextId:(NSUInteger)cid {
 	NSDictionary *dict = @{ @"contextId": @(cid), @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
 	[serverCenter sendMessageName:RAMessagingUpdateKeyboardContextIdMessageName userInfo:dict];
 }
@@ -161,7 +161,7 @@ extern BOOL allowClosingReachabilityNatively;
 	[serverCenter sendMessageName:RAMessagingUpdateKeyboardSizeMessageName userInfo:dict];
 }
 
-- (BOOL)notifyServerToOpenURL:(NSURL*)url openInWindow:(BOOL)openWindow {
+- (BOOL)notifyServerToOpenURL:(NSURL *)url openInWindow:(BOOL)openWindow {
 	NSDictionary *dict = @{
 		@"url": url.absoluteString,
 		@"openInWindow": @(openWindow)
@@ -218,6 +218,7 @@ static inline void updateFrontmostApp(CFNotificationCenterRef center, void *obse
 	IF_SPRINGBOARD {
 		return;
 	}
+
 	[RAMessagingClient sharedInstance];
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &reloadClientData, (__bridge CFStringRef)[NSString stringWithFormat:@"com.efrederickson.reachapp.clientupdate-%@",NSBundle.mainBundle.bundleIdentifier], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, &updateFrontmostApp, CFSTR("com.efrederickson.reachapp.frontmostAppDidUpdate"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);

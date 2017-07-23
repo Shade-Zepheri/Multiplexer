@@ -1,7 +1,7 @@
 #import <UIKit/UIKit.h>
 
 %hook UIApplication
-- (BOOL)openURL:(NSURL*)url {
+- (BOOL)openURL:(NSURL *)url {
 	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.elijahandandrew.multiplexer.tutorial.open_settings"), nil, nil, YES);
 	return YES;
 }

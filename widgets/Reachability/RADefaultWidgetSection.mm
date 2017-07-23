@@ -8,11 +8,11 @@
 	SHARED_INSTANCE2(RADefaultWidgetSection, [[RAWidgetSectionManager sharedInstance] registerSection:sharedInstance]);
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
 	return LOCALIZE(@"WIDGETS", @"Localizable");
 }
 
-- (NSString*)identifier {
+- (NSString *)identifier {
 	return @"com.efrederickson.reachapp.widgets.sections.default";
 }
 @end

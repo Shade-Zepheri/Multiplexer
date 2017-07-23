@@ -10,7 +10,7 @@
 	SHARED_INSTANCE2(Multiplexer, sharedInstance->activeExtensions = [NSMutableArray array]);
 }
 
-- (NSString*)currentVersion {
+- (NSString *)currentVersion {
 	return @"1.0";
 }
 
@@ -18,7 +18,7 @@
 	return IS_IOS_BETWEEN(iOS_8_0, iOS_10_2);
 }
 
-- (void)registerExtension:(NSString*)name forMultiplexerVersion:(NSString*)version {
+- (void)registerExtension:(NSString *)name forMultiplexerVersion:(NSString *)version {
 	if ([self.currentVersion compare:version options:NSNumericSearch] == NSOrderedDescending) {
 		[RACompatibilitySystem showWarning:[NSString stringWithFormat:@"Extension %@ was built for Multiplexer version %@, which is above the current version. Compliancy issues may occur.", name, version]];
 	}
@@ -29,7 +29,7 @@
 	[activeExtensions addObject:ext];
 }
 
-+ (SBAppToAppWorkspaceTransaction*)createSBAppToAppWorkspaceTransactionForExitingApp:(SBApplication*)app {
++ (SBAppToAppWorkspaceTransaction *)createSBAppToAppWorkspaceTransactionForExitingApp:(SBApplication *)app {
 	if ([%c(SBAppToAppWorkspaceTransaction) respondsToSelector:@selector(initWithAlertManager:exitedApp:)]) {
 		return [[%c(SBAppToAppWorkspaceTransaction) alloc] initWithAlertManager:nil exitedApp:app];
 	} else {

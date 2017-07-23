@@ -153,7 +153,7 @@ int rotationDegsForOrientation(int o) {
 	}
 }
 
-- (RAHostedAppView*)hostedApp {
+- (RAHostedAppView *)hostedApp {
 	return appView;
 }
 

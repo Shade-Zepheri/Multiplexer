@@ -18,10 +18,11 @@
   return hexComponent / 255.0;
 }
 
-+ (UIColor*)RA_colorWithHexString:(NSString*)hexString {
++ (UIColor *)RA_colorWithHexString:(NSString *)hexString {
   if (hexString.length == 0) {
     return nil;
   }
+
   NSString *colorString = [[hexString stringByReplacingOccurrencesOfString:@"#" withString:@""] uppercaseString];
   CGFloat alpha, red, blue, green;
   switch ([colorString length]) {
@@ -56,6 +57,7 @@
     default:
       return nil;
   }
+
   return [UIColor colorWithRed:red green:green blue:blue alpha:alpha];
 }
 

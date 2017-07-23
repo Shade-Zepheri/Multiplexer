@@ -11,7 +11,7 @@
 @property (nonatomic) BOOL isSwipeable;
 
 - (CGRect)clientFrame;
-- (NSString*)currentBundleIdentifier;
+- (NSString *)currentBundleIdentifier;
 
 - (void)goToTheLeft;
 - (void)goToTheRight;

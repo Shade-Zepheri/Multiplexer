@@ -5,18 +5,18 @@
 	SHARED_INSTANCE2(RAWidgetHostManager, sharedInstance->widgets = [NSMutableArray array]);
 }
 
-- (void)addWidget:(RAWidgetBase*)widget {
+- (void)addWidget:(RAWidgetBase *)widget {
 	if ([widgets containsObject:widget]) {
 		return;
 	}
 	[widgets addObject:widget];
 }
 
-- (void)removeWidget:(RAWidgetBase*)widget {
+- (void)removeWidget:(RAWidgetBase *)widget {
 	[self removeWidgetWithIdentifier:widget.identifier];
 }
 
-- (void)removeWidgetWithIdentifier:(NSString*)identifier {
+- (void)removeWidgetWithIdentifier:(NSString *)identifier {
 	for (RAWidgetBase *w in widgets) {
 		if ([w.identifier isEqual:identifier]) {
 			[widgets removeObject:w];
@@ -25,7 +25,7 @@
 	}
 }
 
-- (RAWidgetBase*)widgetForIdentifier:(NSString*)identifier {
+- (RAWidgetBase*)widgetForIdentifier:(NSString *)identifier {
 	for (RAWidgetBase *w in widgets) {
 		if ([w.identifier isEqual:identifier]) {
 			return w;

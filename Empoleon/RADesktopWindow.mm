@@ -16,7 +16,7 @@
 	return self;
 }
 
-- (RAWindowBar*)addAppWithView:(RAHostedAppView*)view animated:(BOOL)animated {
+- (RAWindowBar *)addAppWithView:(RAHostedAppView *)view animated:(BOOL)animated {
 	// Avoid adding duplicates - if it already exists as a window, return the existing window
 	for (RAWindowBar *bar in self.subviews) {
 		if ([bar isKindOfClass:[RAWindowBar class]] && bar.attachedView.app == view.app) {// Just verify
@@ -80,7 +80,7 @@
 	return windowBar;
 }
 
-- (void)addExistingWindow:(RAWindowBar*)window {
+- (void)addExistingWindow:(RAWindowBar *)window {
 	[self.appViews addObject:window.attachedView];
 	[self addSubview:window];
 
@@ -88,21 +88,21 @@
 	((UIView*)self.subviews[self.subviews.count - 1]).transform = window.transform;
 }
 
-- (RAWindowBar*)createAppWindowForSBApplication:(SBApplication*)app animated:(BOOL)animated {
+- (RAWindowBar *)createAppWindowForSBApplication:(SBApplication *)app animated:(BOOL)animated {
 	return [self createAppWindowWithIdentifier:app.bundleIdentifier animated:animated];
 }
 
-- (RAWindowBar*)createAppWindowWithIdentifier:(NSString*)identifier animated:(BOOL)animated {
+- (RAWindowBar *)createAppWindowWithIdentifier:(NSString *)identifier animated:(BOOL)animated {
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:identifier];
 	view.renderWallpaper = YES;
 	return [self addAppWithView:view animated:animated];
 }
 
-- (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated {
+- (void)removeAppWithIdentifier:(NSString *)identifier animated:(BOOL)animated {
 	[self removeAppWithIdentifier:identifier animated:animated forceImmediateUnload:NO];
 }
 
-- (void)removeAppWithIdentifier:(NSString*)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force {
+- (void)removeAppWithIdentifier:(NSString *)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force {
 	for (RAHostedAppView *view in self.appViews) {
 		if ([view.bundleIdentifier isEqual:identifier]) {
 			void (^destructor)() = ^{
@@ -135,7 +135,7 @@
 	}
 }
 
-- (void)updateWindowSizeForApplication:(NSString*)identifier {
+- (void)updateWindowSizeForApplication:(NSString *)identifier {
 	NSArray *tempArrayToAvoidMutationCrash = [self.appViews copy];
 	for (RAHostedAppView *view in tempArrayToAvoidMutationCrash) {
 		if ([view.bundleIdentifier isEqual:identifier]) {
@@ -188,7 +188,7 @@
 	}
 }
 
-- (BOOL)isAppOpened:(NSString*)identifier {
+- (BOOL)isAppOpened:(NSString *)identifier {
 	for (RAHostedAppView *app in self.appViews) {
 		if ([app.app.bundleIdentifier isEqual:identifier]) {
 			return YES;
@@ -197,11 +197,11 @@
 	return NO;
 }
 
-- (RAWindowBar*)windowForIdentifier:(NSString*)identifier {
+- (RAWindowBar *)windowForIdentifier:(NSString *)identifier {
 	for (UIView *view in self.subviews) {
 		if ([view isKindOfClass:[RAWindowBar class]]) {
 			RAWindowBar *bar = (RAWindowBar*)view;
-			if ([bar.attachedView.app.bundleIdentifier isEqual:identifier]) {
+			if ([bar.attachedView.app.bundleIdentifier isEqualToString:identifier]) {
 				return bar;
 			}
 		}

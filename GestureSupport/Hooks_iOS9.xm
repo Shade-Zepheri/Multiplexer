@@ -71,7 +71,7 @@ typedef struct {
   return self;
 }
 
-- (void)screenEdgePanRecognizerStateDidChange:(_UIScreenEdgePanRecognizer*)screenEdgePanRecognizer {
+- (void)screenEdgePanRecognizerStateDidChange:(_UIScreenEdgePanRecognizer *)screenEdgePanRecognizer {
   if (screenEdgePanRecognizer.state != UIGestureRecognizerStateBegan) {
     return;
   }
@@ -95,7 +95,7 @@ typedef struct {
 }
 @end
 
-static void touch_event(void* target, void* refcon, IOHIDServiceRef service, IOHIDEventRef event) {
+static void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOHIDEventRef event) {
   if (IOHIDEventGetType(event) != kIOHIDEventTypeDigitizer) {
     return;
   }

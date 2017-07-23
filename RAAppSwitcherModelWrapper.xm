@@ -1,7 +1,7 @@
 #import "RAAppSwitcherModelWrapper.h"
 
 @implementation RAAppSwitcherModelWrapper
-+ (void)addToFront:(SBApplication*)app {
++ (void)addToFront:(SBApplication *)app {
 	SBAppSwitcherModel *model = [%c(SBAppSwitcherModel) sharedInstance];
 	if ([model respondsToSelector:@selector(addToFront:)]) { // iOS 7 + 8
 		SBDisplayLayout *layout = [%c(SBDisplayLayout) fullScreenDisplayLayoutForApplication:app];
@@ -12,11 +12,11 @@
 	}
 }
 
-+ (void)addIdentifierToFront:(NSString*)ident {
++ (void)addIdentifierToFront:(NSString *)ident {
 	[RAAppSwitcherModelWrapper addToFront:[[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:ident]];
 }
 
-+ (NSArray*)appSwitcherAppIdentiferList {
++ (NSArray *)appSwitcherAppIdentiferList {
 	SBAppSwitcherModel *model = [%c(SBAppSwitcherModel) sharedInstance];
 
 	if ([model respondsToSelector:@selector(snapshotOfFlattenedArrayOfAppIdentifiersWhichIsOnlyTemporary)]) {
@@ -35,7 +35,7 @@
 	return ret;
 }
 
-+ (void)removeItemWithIdentifier:(NSString*)ident {
++ (void)removeItemWithIdentifier:(NSString *)ident {
 	SBDisplayItem *item = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:ident];
 	SBAppSwitcherModel *appSwitcherModel = [%c(SBAppSwitcherModel) sharedInstance];
 	if ([appSwitcherModel respondsToSelector:@selector(removeDisplayItem:)]) {

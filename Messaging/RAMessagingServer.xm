@@ -96,7 +96,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[messagingCenter registerForMessageName:RAMessagingDetachCurrentAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
 }
 
-- (NSDictionary*)handleMessageNamed:(NSString*)identifier userInfo:(NSDictionary*)info {
+- (NSDictionary *)handleMessageNamed:(NSString *)identifier userInfo:(NSDictionary *)info {
 	if ([identifier isEqualToString:RAMessagingShowKeyboardMessageName]) {
 		[self receiveShowKeyboardForAppWithIdentifier:info[@"bundleIdentifier"]];
 	} else if ([identifier isEqualToString:RAMessagingHideKeyboardMessageName]) {
@@ -163,7 +163,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	return nil;
 }
 
-- (void)handleKeyboardEvent:(NSString*)identifier userInfo:(NSDictionary*)info {
+- (void)handleKeyboardEvent:(NSString *)identifier userInfo:(NSDictionary *)info {
 	if ([identifier isEqualToString:RAMessagingDetachCurrentAppMessageName]) {
 		SBApplication *topApp = [[UIApplication sharedApplication] _accessibilityFrontMostApplication];
 
@@ -220,7 +220,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	}
 }
 
-- (void)alertUser:(NSString*)description {
+- (void)alertUser:(NSString *)description {
 #if DEBUG
 	if (![RASettings.sharedInstance debug_showIPCMessages]) {
 		return;
@@ -231,7 +231,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 #endif
 }
 
-- (RAMessageAppData)getDataForIdentifier:(NSString*)identifier {
+- (RAMessageAppData)getDataForIdentifier:(NSString *)identifier {
 	RAMessageAppData ret;
 	if ([dataForApps objectForKey:identifier]) {
 		[dataForApps[identifier] getValue:&ret];
@@ -254,14 +254,14 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	return ret;
 }
 
-- (void)setData:(RAMessageAppData)data forIdentifier:(NSString*)identifier {
+- (void)setData:(RAMessageAppData)data forIdentifier:(NSString *)identifier {
 	if (!identifier) {
 		return;
 	}
 	dataForApps[identifier] = [NSValue valueWithBytes:&data objCType:@encode(RAMessageAppData)];
 }
 
-- (void)checkIfCompletionStillExitsForIdentifierAndFailIt:(NSString*)identifier {
+- (void)checkIfCompletionStillExitsForIdentifierAndFailIt:(NSString *)identifier {
 	if (![waitingCompletions objectForKey:identifier]) {
 		return;
 	}
@@ -373,7 +373,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 */
 }
 
-- (void)sendStoredDataToApp:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)sendStoredDataToApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	if (!identifier || identifier.length == 0) {
 		return;
 	}
@@ -381,7 +381,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendDataWithCurrentTries:0 toAppWithBundleIdentifier:identifier completion:callback];
 }
 
-- (void)resizeApp:(NSString*)identifier toSize:(CGSize)size completion:(RAMessageCompletionCallback)callback {
+- (void)resizeApp:(NSString *)identifier toSize:(CGSize)size completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.wantedClientWidth = size.width;
 	data.wantedClientHeight = size.height;
@@ -390,7 +390,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)moveApp:(NSString*)identifier toOrigin:(CGPoint)origin completion:(RAMessageCompletionCallback)callback {
+- (void)moveApp:(NSString *)identifier toOrigin:(CGPoint)origin completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.wantedClientOriginX = (float)origin.x;
 	data.wantedClientOriginY = (float)origin.y;
@@ -399,7 +399,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)endResizingApp:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)endResizingApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	//data.wantedClientSize = CGSizeMake(-1, -1);
 	data.shouldForceSize = NO;
@@ -407,7 +407,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)rotateApp:(NSString*)identifier toOrientation:(UIInterfaceOrientation)orientation completion:(RAMessageCompletionCallback)callback {
+- (void)rotateApp:(NSString *)identifier toOrientation:(UIInterfaceOrientation)orientation completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 
 	if (data.forcePhoneMode) {
@@ -420,7 +420,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)unRotateApp:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)unRotateApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.forcedOrientation = UIApplication.sharedApplication.statusBarOrientation;
 	data.shouldForceOrientation = NO;
@@ -428,7 +428,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)forceStatusBarVisibility:(BOOL)visibility forApp:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)forceStatusBarVisibility:(BOOL)visibility forApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.shouldForceStatusBar = YES;
 	data.statusBarVisibility = visibility;
@@ -436,28 +436,28 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)unforceStatusBarVisibilityForApp:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)unforceStatusBarVisibilityForApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.shouldForceStatusBar = NO;
 	[self setData:data forIdentifier:identifier];
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)setShouldUseExternalKeyboard:(BOOL)value forApp:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)setShouldUseExternalKeyboard:(BOOL)value forApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.shouldUseExternalKeyboard = value;
 	[self setData:data forIdentifier:identifier];
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)setHosted:(BOOL)value forIdentifier:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)setHosted:(BOOL)value forIdentifier:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 	data.isBeingHosted = value;
 	[self setData:data forIdentifier:identifier];
 	[self sendStoredDataToApp:identifier completion:callback];
 }
 
-- (void)forcePhoneMode:(BOOL)value forIdentifier:(NSString*)identifier andRelaunchApp:(BOOL)relaunch {
+- (void)forcePhoneMode:(BOOL)value forIdentifier:(NSString *)identifier andRelaunchApp:(BOOL)relaunch {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
 
 	data.forcePhoneMode = value;
@@ -470,7 +470,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	}
 }
 
-- (void)receiveShowKeyboardForAppWithIdentifier:(NSString*)identifier {
+- (void)receiveShowKeyboardForAppWithIdentifier:(NSString *)identifier {
 	[[RASpringBoardKeyboardActivation sharedInstance] showKeyboardForAppWithIdentifier:identifier];
 }
 
@@ -478,12 +478,12 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	[[RASpringBoardKeyboardActivation sharedInstance] hideKeyboard];
 }
 
-- (void)setKeyboardContextId:(unsigned int)id forIdentifier:(NSString*)identifier {
-	LogDebug(@"[ReachApp] got c id %u", id);
+- (void)setKeyboardContextId:(NSUInteger)id forIdentifier:(NSString *)identifier {
+	LogDebug(@"[ReachApp] got c id %tu", id);
 	contextIds[identifier] = @(id);
 }
 
-- (unsigned int)getStoredKeyboardContextIdForApp:(NSString*)identifier {
+- (NSUInteger)getStoredKeyboardContextIdForApp:(NSString *)identifier {
 	return ![contextIds objectForKey:identifier] ? 0 : [contextIds[identifier] unsignedIntValue];
 }
 @end

@@ -14,11 +14,11 @@
 
 - (void)requestUpdateFromServer;
 
-- (void)notifyServerWithKeyboardContextId:(unsigned int)cid;
+- (void)notifyServerWithKeyboardContextId:(NSUInteger)cid;
 - (void)notifyServerOfKeyboardSizeUpdate:(CGSize)size;
 - (void)notifyServerToShowKeyboard;
 - (void)notifyServerToHideKeyboard;
-- (BOOL)notifyServerToOpenURL:(NSURL*)url openInWindow:(BOOL)openWindow;
+- (BOOL)notifyServerToOpenURL:(NSURL *)url openInWindow:(BOOL)openWindow;
 - (void)notifySpringBoardOfFrontAppChangeToSelf;
 
 // Methods to ease the currentData usage

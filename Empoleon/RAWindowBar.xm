@@ -44,7 +44,7 @@ extern BOOL allowOpenApp;
 @end
 
 @implementation RAWindowBar
-- (void)attachView:(RAHostedAppView*)view {
+- (void)attachView:(RAHostedAppView *)view {
 	height = 40;
 	if (IS_IPAD) {
 	    height = 45;
@@ -333,15 +333,15 @@ extern BOOL allowOpenApp;
 	}];
 }
 
-- (void)closeButtonTap:(id)arg1 {
+- (void)closeButtonTap:(id)button {
 	[self close];
 }
 
-- (void)maximizeButtonTap:(id)arg1 {
+- (void)maximizeButtonTap:(id)button {
 	[self maximize];
 }
 
-- (void)minimizeButtonTap:(id)arg1 {
+- (void)minimizeButtonTap:(id)button {
 	[self minimize];
 }
 
@@ -360,7 +360,7 @@ extern BOOL allowOpenApp;
 	}
 }
 
-- (void)sizingLockButtonTap:(id)arg1 {
+- (void)sizingLockButtonTap:(id)button {
 	if ([[RASettings sharedInstance] windowRotationLockMode] == 0) {
 		sizingLocked = !sizingLocked;
 	} else {
@@ -469,7 +469,7 @@ extern BOOL allowOpenApp;
 	enableLongPress = YES;
 }
 
-- (void)swapOrientationButtonTap:(id)arg1 {
+- (void)swapOrientationButtonTap:(id)button {
 	[self addRotation:DEGREES_TO_RADIANS(90) updateApp:YES];
 }
 
@@ -487,7 +487,7 @@ extern BOOL allowOpenApp;
 	}
 }
 
-- (void)handleLongPress:(UILongPressGestureRecognizer*)sender {
+- (void)handleLongPress:(UILongPressGestureRecognizer *)sender {
 	if (!enableLongPress) {
 		return;
 	}
@@ -526,7 +526,7 @@ extern BOOL allowOpenApp;
 	return [self viewWithTag:465982] != nil;
 }
 
-- (void)handleTap:(UITapGestureRecognizer*)tap {
+- (void)handleTap:(UITapGestureRecognizer *)tap {
 	if (self.isOverlayShowing) {
 		return;
 	}
@@ -534,21 +534,21 @@ extern BOOL allowOpenApp;
 	[self showOverlay];
 }
 
-- (void)handleDoubleTap:(UITapGestureRecognizer*)tap {
+- (void)handleDoubleTap:(UITapGestureRecognizer *)tap {
 	[attachedView rotateToOrientation:UIInterfaceOrientationPortrait];
 	[UIView animateWithDuration:0.7 animations:^{
 		self.transform = CGAffineTransformMakeScale(0.6, 0.6);
 	}];
 }
 
-- (void)handleTripleTap:(UITapGestureRecognizer*)tap {
+- (void)handleTripleTap:(UITapGestureRecognizer *)tap {
 	if (!IS_IPAD) {
 		return;
 	}
 	[[RAMessagingServer sharedInstance] forcePhoneMode:![RAFakePhoneMode shouldFakeForAppWithIdentifier:attachedView.app.bundleIdentifier] forIdentifier:attachedView.app.bundleIdentifier andRelaunchApp:YES];
 }
 
-- (void)handlePan:(UIPanGestureRecognizer*)sender {
+- (void)handlePan:(UIPanGestureRecognizer *)sender {
 	if (!enableDrag) {
 		[self removePotentialSnapShadow];
 		return;

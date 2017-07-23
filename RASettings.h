@@ -44,13 +44,13 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 - (BOOL)showAllAppsInWidgetSelector;
 - (BOOL)showRecentAppsInWidgetSelector;
 - (BOOL)pagingEnabled;
-- (NSMutableArray*)favoriteApps;
+- (NSMutableArray *)favoriteApps;
 - (BOOL)unifyStatusBar;
 - (BOOL)flipTopAndBottom;
 - (BOOL)showFavorites;
 
 - (BOOL)NCAppEnabled;
-- (NSString*)NCApp;
+- (NSString *)NCApp;
 - (BOOL)ncAppHideOnLS;
 
 - (BOOL)alwaysEnableGestures;
@@ -67,7 +67,7 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 - (BOOL)backgrounderEnabled;
 - (BOOL)shouldShowIconIndicatorsGlobally;
 - (BOOL)showNativeStateIconIndicators;
-- (NSDictionary*)rawCompiledBackgrounderSettingsForIdentifier:(NSString*)identifier;
+- (NSDictionary *)rawCompiledBackgrounderSettingsForIdentifier:(NSString *)identifier;
 
 - (BOOL)missionControlEnabled;
 - (BOOL)replaceAppSwitcherWithMC;
@@ -95,5 +95,5 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 - (RAGrabArea)swipeOverGrabArea;
 - (BOOL)onlyShowWindowBarIconsOnOverlay;
 
-- (NSString*)currentThemeIdentifier;
+- (NSString *)currentThemeIdentifier;
 @end

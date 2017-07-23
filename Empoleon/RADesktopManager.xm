@@ -38,7 +38,7 @@ BOOL overrideUIWindow = NO;
 	[windows removeObjectAtIndex:index];
 }
 
-- (BOOL)isAppOpened:(NSString*)identifier {
+- (BOOL)isAppOpened:(NSString *)identifier {
 	for (RADesktopWindow *desktop in windows) {
 		if ([desktop isAppOpened:identifier]) {
 			return YES;
@@ -79,17 +79,17 @@ BOOL overrideUIWindow = NO;
 	//[newDesktop updateForOrientation:UIApplication.sharedApplication.statusBarOrientation];
 }
 
-- (void)removeAppWithIdentifier:(NSString*)bundleIdentifier animated:(BOOL)animated {
+- (void)removeAppWithIdentifier:(NSString *)bundleIdentifier animated:(BOOL)animated {
 	[self removeAppWithIdentifier:bundleIdentifier animated:animated forceImmediateUnload:NO];
 }
 
-- (void)removeAppWithIdentifier:(NSString*)bundleIdentifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force {
+- (void)removeAppWithIdentifier:(NSString *)bundleIdentifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force {
 	for (RADesktopWindow *window in windows) {
 		[window removeAppWithIdentifier:bundleIdentifier animated:animated forceImmediateUnload:force];
 	}
 }
 
-- (RAWindowBar*)windowForIdentifier:(NSString*)identifier {
+- (RAWindowBar *)windowForIdentifier:(NSString *)identifier {
 	for (RADesktopWindow *desktop in windows) {
 		if ([desktop isAppOpened:identifier]) {
 			return [desktop windowForIdentifier:identifier];
@@ -138,11 +138,11 @@ BOOL overrideUIWindow = NO;
 	//self.lastUsedWindow = nil;
 }
 
-- (RADesktopWindow*)desktopAtIndex:(NSUInteger)index {
+- (RADesktopWindow *)desktopAtIndex:(NSUInteger)index {
 	return windows[index];
 }
 
-- (NSArray*)availableDesktops {
+- (NSArray *)availableDesktops {
 	return windows;
 }
 
@@ -150,7 +150,7 @@ BOOL overrideUIWindow = NO;
 	return currentDesktopIndex;
 }
 
-- (RADesktopWindow*)currentDesktop {
+- (RADesktopWindow *)currentDesktop {
 	return currentDesktop;
 }
 @end
@@ -195,5 +195,6 @@ BOOL overrideUIWindow = NO;
 	IF_NOT_SPRINGBOARD {
 		return;
 	}
+
 	%init;
 }

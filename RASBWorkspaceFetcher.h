@@ -2,5 +2,5 @@
 
 @interface RASBWorkspaceFetcher : NSObject
 + (Class)SBWorkspaceClass;
-+ (SBWorkspace*)getCurrentSBWorkspaceImplementationInstanceForThisOS;
++ (SBWorkspace *)getCurrentSBWorkspaceImplementationInstanceForThisOS;
 @end

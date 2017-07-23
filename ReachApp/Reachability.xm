@@ -45,6 +45,7 @@ BOOL wasEnabled = NO;
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return;
   }
+
   %orig;
 }
 
@@ -52,6 +53,7 @@ BOOL wasEnabled = NO;
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return;
   }
+
   %orig;
 }
 
@@ -59,6 +61,7 @@ BOOL wasEnabled = NO;
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return;
   }
+
   %orig;
 }
 
@@ -66,6 +69,7 @@ BOOL wasEnabled = NO;
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return;
   }
+
   %orig;
 }
 
@@ -104,6 +108,7 @@ BOOL wasEnabled = NO;
   if (overrideDisableForStatusBar) {
     return;
   }
+
   %orig;
 }
 
@@ -111,6 +116,7 @@ BOOL wasEnabled = NO;
   if (overrideDisableForStatusBar) {
     return;
   }
+
   %orig;
 }
 %end
@@ -120,6 +126,7 @@ BOOL wasEnabled = NO;
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return 9999999999;
   }
+
   return %orig;
 }
 
@@ -127,6 +134,7 @@ BOOL wasEnabled = NO;
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return 9999999999;
   }
+
   return %orig;
 }
 
@@ -202,7 +210,7 @@ id SBWorkspace$sharedInstance;
     }
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
       if (lastBundleIdentifier && lastBundleIdentifier.length > 0) {
-        if (app && [app pid] && [app mainScene]) {
+        if (app && app.pid && [app mainScene]) {
           FBScene *scene = [app mainScene];
           FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
           settings.backgrounded = YES;
@@ -226,7 +234,7 @@ id SBWorkspace$sharedInstance;
   }
 }
 
-- (void)_disableReachabilityImmediately:(_Bool)arg1 {
+- (void)_disableReachabilityImmediately:(BOOL)immediately {
   //Disable for keyboard here
   if (overrideDisableForStatusBar) {
     return;
@@ -238,7 +246,7 @@ id SBWorkspace$sharedInstance;
     return;
   }
 
-  if (arg1 && wasEnabled) {
+  if (immediately && wasEnabled) {
     wasEnabled = NO;
 
     // Notify both top and bottom apps Reachability is closing
@@ -424,7 +432,7 @@ id SBWorkspace$sharedInstance;
 }
 
 CGFloat startingY = -1;
-%new - (void)handlePan:(UIPanGestureRecognizer*)sender {
+%new - (void)handlePan:(UIPanGestureRecognizer *)sender {
   UIView *view = draggerView; //sender.view;
 
   if (sender.state == UIGestureRecognizerStateBegan) {
@@ -460,11 +468,11 @@ CGFloat startingY = -1;
   }
 }
 
-%new - (void)RA_handleLongPress:(UILongPressGestureRecognizer*)gesture {
+%new - (void)RA_handleLongPress:(UILongPressGestureRecognizer *)gesture {
   [self RA_showWidgetSelector];
 }
 
-%new - (void)RA_detachAppAndClose:(UITapGestureRecognizer*)gesture {
+%new - (void)RA_detachAppAndClose:(UITapGestureRecognizer *)gesture {
   NSString *ident = lastBundleIdentifier;
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
     RAAppSliderProviderView *temp = (RAAppSliderProviderView*)view;
@@ -637,7 +645,7 @@ CGFloat startingY = -1;
   }
 }
 
-%new - (void)RA_launchTopAppWithIdentifier:(NSString*)bundleIdentifier {
+%new - (void)RA_launchTopAppWithIdentifier:(NSString *)bundleIdentifier {
   UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:lastBundleIdentifier];
   FBScene *scene = app.mainScene;
@@ -720,7 +728,7 @@ CGFloat startingY = -1;
   overrideDisableForStatusBar = NO;
 }
 
-%new - (void)RA_setView:(UIView*)view_ preferredHeight:(CGFloat)pHeight {
+%new - (void)RA_setView:(UIView *)view_ preferredHeight:(CGFloat)pHeight {
   view_.hidden = NO;
   UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   if (view) {
@@ -761,7 +769,7 @@ CGFloat startingY = -1;
   completion:completion];
 }
 
-%new - (void)appViewItemTap:(UITapGestureRecognizer*)sender {
+%new - (void)appViewItemTap:(UITapGestureRecognizer *)sender {
   int pid = [sender.view tag];
   SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithPid:pid];
   if (!app) {

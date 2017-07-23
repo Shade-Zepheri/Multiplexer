@@ -3,8 +3,8 @@
 
 @protocol RARunningAppsProviderDelegate
 @optional
-- (void)appDidStart:(__unsafe_unretained SBApplication*)app;
-- (void)appDidDie:(__unsafe_unretained SBApplication*)app;
+- (void)appDidStart:(SBApplication *)app;
+- (void)appDidDie:(SBApplication *)app;
 @end
 
 @interface RARunningAppsProvider : NSObject {
@@ -14,11 +14,11 @@
 }
 + (instancetype)sharedInstance;
 
-- (void)addRunningApp:(__unsafe_unretained SBApplication*)app;
-- (void)removeRunningApp:(__unsafe_unretained SBApplication*)app;
+- (void)addRunningApp:(SBApplication *)app;
+- (void)removeRunningApp:(SBApplication *)app;
 
-- (void)addTarget:(__weak NSObject<RARunningAppsProviderDelegate>*)target;
-- (void)removeTarget:(__weak NSObject<RARunningAppsProviderDelegate>*)target;
+- (void)addTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target;
+- (void)removeTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target;
 
-- (NSArray*)runningApplications;
+- (NSArray *)runningApplications;
 @end

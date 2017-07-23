@@ -16,7 +16,7 @@ RAKeyboardWindow *keyboardWindow;
   );
 }
 
-- (void)showKeyboardForAppWithIdentifier:(NSString*)identifier {
+- (void)showKeyboardForAppWithIdentifier:(NSString *)identifier {
   if (keyboardWindow) {
     [self hideKeyboard];
     //NSLog(@"[ReachApp] springboard cancelling - keyboardWindow exists");
@@ -39,14 +39,14 @@ RAKeyboardWindow *keyboardWindow;
   _currentIdentifier = nil;
 }
 
-- (void)appDidDie:(SBApplication*)app {
+- (void)appDidDie:(SBApplication *)app {
   if (![_currentIdentifier isEqual:app.bundleIdentifier]) {
     return;
   }
   [self hideKeyboard];
 }
 
-- (UIWindow*)keyboardWindow {
+- (UIWindow *)keyboardWindow {
   return keyboardWindow;
 }
 @end

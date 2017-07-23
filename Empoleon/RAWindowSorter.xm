@@ -4,7 +4,7 @@
 #import "RAWindowSnapDataProvider.h"
 
 @implementation RAWindowSorter
-+ (void)sortWindowsOnDesktop:(RADesktopWindow*)desktop resizeIfNecessary:(BOOL)resize {
++ (void)sortWindowsOnDesktop:(RADesktopWindow *)desktop resizeIfNecessary:(BOOL)resize {
 	NSInteger numberOfWindows = desktop.appViews.count;
 
 	if (numberOfWindows == 0) {

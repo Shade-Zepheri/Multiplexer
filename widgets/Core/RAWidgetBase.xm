@@ -1,11 +1,11 @@
 #import "RAWidgetBase.h"
 
 @implementation RAWidgetBase
-- (NSString*)identifier {
+- (NSString *)identifier {
   return nil;
 }
 
-- (NSString*)displayName {
+- (NSString *)displayName {
   return nil;
 }
 
