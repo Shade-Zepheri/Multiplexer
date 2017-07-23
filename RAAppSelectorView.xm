@@ -81,9 +81,11 @@
 	self.contentSize = contentSize;
 }
 
-- (void)appViewItemTap:(UITapGestureRecognizer*)recognizer {
-	if (self.target && [self.target respondsToSelector:@selector(appSelector:appWasSelected:)]) {
-		[self.target appSelector:self appWasSelected:recognizer.view.restorationIdentifier];
+- (void)appViewItemTap:(UITapGestureRecognizer *)recognizer {
+	if (!self.target || ![self.target respondsToSelector:@selector(appSelector:appWasSelected:)]) {
+		return;
 	}
+
+	[self.target appSelector:self appWasSelected:recognizer.view.restorationIdentifier];
 }
 @end

@@ -77,11 +77,13 @@ extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSStrin
 	[[RARunningAppsProvider sharedInstance] addTarget:self];
 }
 
-- (void)appDidDie:(__unsafe_unretained SBApplication*)app {
-	if (completionDictionary && [completionDictionary objectForKey:app.bundleIdentifier]) {
-		dispatch_block_t block = completionDictionary[app.bundleIdentifier];
-		block();
-		[completionDictionary removeObjectForKey:app.bundleIdentifier];
+- (void)appDidDie:(SBApplication *)app {
+	if (!completionDictionary || ![completionDictionary objectForKey:app.bundleIdentifier]) {
+		return;
 	}
+
+	dispatch_block_t block = completionDictionary[app.bundleIdentifier];
+	block();
+	[completionDictionary removeObjectForKey:app.bundleIdentifier];
 }
 @end
