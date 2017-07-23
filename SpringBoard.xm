@@ -21,7 +21,7 @@
 BOOL overrideDisableForStatusBar = NO;
 
 %hook SBUIController
-- (_Bool)clickedMenuButton {
+- (BOOL)clickedMenuButton {
 	if ([[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver]) {
 		[[%c(RASwipeOverManager) sharedInstance] stopUsingSwipeOver];
 		return YES;
@@ -147,14 +147,14 @@ BOOL overrideDisableForStatusBar = NO;
 */
 
 %hook SpringBoard
-- (void)noteInterfaceOrientationChanged:(int)arg1 duration:(float)arg2 {
+- (void)noteInterfaceOrientationChanged:(NSInteger)orientation duration:(CGFloat)duration {
 	%orig;
 	[[RASnapshotProvider sharedInstance] forceReloadEverything];
 }
 %end
 
 %hook SBApplication
-- (void)didActivateWithTransactionID:(unsigned long long)arg1 {
+- (void)didActivateWithTransactionID:(NSUInteger)transactionID {
 	dispatch_async(dispatch_get_main_queue(), ^{
 	  [[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
 	});
@@ -164,13 +164,11 @@ BOOL overrideDisableForStatusBar = NO;
 %end
 
 %hook SBLockScreenManager
-- (void)_postLockCompletedNotification:(_Bool)arg1 {
+- (void)_postLockCompletedNotification:(BOOL)value {
 	%orig;
 
-	if (arg1) {
-		if ([[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver]) {
-			[[%c(RASwipeOverManager) sharedInstance] stopUsingSwipeOver];
-		}
+	if (value && [[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver]) {
+		[[%c(RASwipeOverManager) sharedInstance] stopUsingSwipeOver];
 	}
 }
 %end

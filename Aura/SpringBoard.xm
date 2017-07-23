@@ -43,7 +43,7 @@
 %end
 
 %hook FBSSceneImpl
-- (id)_initWithQueue:(id)queue callOutQueue:(id)callOutQueue identifier:(NSString *)identifier display:(id)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)clientSettings {
+- (instancetype)_initWithQueue:(id)queue callOutQueue:(id)callOutQueue identifier:(NSString *)identifier display:(FBSDisplay *)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)clientSettings {
   if ([[RABackgrounder sharedInstance] shouldKeepInForeground:identifier]) {
     // what?
     if (!settings) {
@@ -52,10 +52,11 @@
     }
     settings.backgrounded = NO;
   }
+
   return %orig(queue, callOutQueue, identifier, display, settings, clientSettings);
 }
 
-- (id)initWithQueue:(id)queue identifier:(NSString *)identifier display:(id)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)arg5 {
+- (instancetype)initWithQueue:(id)queue identifier:(NSString *)identifier display:(FBSDisplay *)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)clientSettings {
   if ([[RABackgrounder sharedInstance] shouldKeepInForeground:identifier]) {
     // what?
     if (!settings) {
@@ -64,12 +65,13 @@
     }
     settings.backgrounded = NO;
   }
-  return %orig(queue, identifier, display, settings, arg5);
+
+  return %orig(queue, identifier, display, settings, clientSettings);
 }
 %end
 
 %hook FBUIApplicationWorkspaceScene
-- (void)host:(FBScene *)scene didUpdateSettings:(FBSSceneSettings *)settings withDiff:(unsafe_id)diff transitionContext:(unsafe_id)context completion:(void (^)(BOOL))completion {
+- (void)host:(FBScene *)scene didUpdateSettings:(FBSSceneSettings *)settings withDiff:(id)diff transitionContext:(id)context completion:(void (^)(BOOL))completion {
   if (scene && scene.identifier && settings && scene.clientProcess) {
     if (settings.backgrounded) {
       if ([[RABackgrounder sharedInstance] killProcessOnExit:scene.identifier]) {
@@ -116,11 +118,12 @@
 
 // PREVENT KILLING
 %hook FBApplicationProcess
-- (void)killForReason:(NSInteger)reason andReport:(BOOL)report withDescription:(NSString *)description completion:(unsafe_id/*block*/)completion {
+- (void)killForReason:(NSInteger)reason andReport:(BOOL)report withDescription:(NSString *)description completion:(id)completion {
   if ([[RABackgrounder sharedInstance] preventKillingOfIdentifier:self.bundleIdentifier]) {
     [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:self.bundleIdentifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier]];
     return;
   }
+
   %orig;
 }
 %end

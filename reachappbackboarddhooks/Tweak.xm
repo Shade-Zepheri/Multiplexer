@@ -92,13 +92,13 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 	eventCallback(target, refcon, service, event);
 }
 
-%hookf(Boolean, "_IOHIDEventSystemOpen", IOHIDEventSystemRef system, IOHIDEventSystemCallback callback, void* target, void* refcon, void* unused) {
+%hookf(Boolean, "_IOHIDEventSystemOpen", IOHIDEventSystemRef system, IOHIDEventSystemCallback callback, void *target, void *refcon, void *unused) {
 	eventCallback = callback;
 	return %orig(system, handle_event, target, refcon, unused);
 }
 
 @interface BKEventDestination : NSObject
-- (instancetype)initWithPid:(NSUInteger)arg1 clientID:(NSString*)arg2;
+- (instancetype)initWithPid:(NSUInteger)pid clientID:(NSString*)clientID;
 @end
 
 %hook BKEventFocusManager

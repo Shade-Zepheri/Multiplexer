@@ -2,12 +2,12 @@
 #import "RASettings.h"
 
 %hook SBLockScreenViewController
-- (void)finishUIUnlockFromSource:(int)arg1 {
+- (void)finishUIUnlockFromSource:(NSInteger)source {
 	%orig;
 	if (![[RASettings sharedInstance] isFirstRun]) {
 		return;
 	}
-	
+
 	BBBulletinRequest *request = [[%c(BBBulletinRequest) alloc] init];
 	request.title = LOCALIZE(@"MULTIPLEXER", @"Localizable");
 	request.message = LOCALIZE(@"THANK_YOU_TEXT", @"Localizable");

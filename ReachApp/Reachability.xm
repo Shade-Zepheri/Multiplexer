@@ -62,7 +62,7 @@ BOOL wasEnabled = NO;
   %orig;
 }
 
-- (void)_setKeepAliveTimerForDuration:(double)arg1 {
+- (void)_setKeepAliveTimerForDuration:(CGFloat)duration {
   if ([[RASettings sharedInstance] disableAutoDismiss]) {
     return;
   }

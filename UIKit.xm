@@ -43,28 +43,28 @@ BOOL allowClosingReachabilityNatively = NO;
   %orig(frame);
 }
 
-- (void)_rotateWindowToOrientation:(UIInterfaceOrientation)arg1 updateStatusBar:(BOOL)arg2 duration:(double)arg3 skipCallbacks:(BOOL)arg4 {
-  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && arg1 != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:arg1]) {
+- (void)_rotateWindowToOrientation:(UIInterfaceOrientation)orientation updateStatusBar:(BOOL)update duration:(CGFloat)duration skipCallbacks:(BOOL)skip {
+  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return;
   }
 
   %orig;
 }
 
-- (BOOL)_shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)arg1 checkForDismissal:(BOOL)arg2 isRotationDisabled:(BOOL*)arg3 {
-  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && arg1 != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:arg1]) {
+- (BOOL)_shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation checkForDismissal:(BOOL)check isRotationDisabled:(BOOL)disabled {
+  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return NO;
   }
 
   return %orig;
 }
 
-- (void)_setWindowInterfaceOrientation:(UIInterfaceOrientation)arg1 {
-  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && arg1 != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:arg1]) {
+- (void)_setWindowInterfaceOrientation:(UIInterfaceOrientation)orientation {
+  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return;
   }
 
-  %orig([[RAMessagingClient sharedInstance] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient sharedInstance] forcedOrientation]] ? [[RAMessagingClient sharedInstance] forcedOrientation] : arg1);
+  %orig([[RAMessagingClient sharedInstance] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient sharedInstance] forcedOrientation]] ? [[RAMessagingClient sharedInstance] forcedOrientation] : orientation);
 }
 
 - (void)_sendTouchesForEvent:(id)event {
@@ -108,15 +108,15 @@ BOOL allowClosingReachabilityNatively = NO;
 - (void)_setStatusBarHidden:(BOOL)hidden animationParameters:(id)parameters changeApplicationFlag:(BOOL)change {
   //if ([RASettings.sharedInstance unifyStatusBar])
   if ([[RAMessagingClient sharedInstance] shouldHideStatusBar]) {
-    arg1 = YES;
-    arg3 = YES;
+    hidden = YES;
+    change = YES;
   } else if ([[RAMessagingClient sharedInstance] shouldShowStatusBar]) {
-    arg1 = NO;
-    arg3 = YES;
+    hidden = NO;
+    change = YES;
   }
   //arg1 = ((forcingRotation&&NO) || overrideDisplay) ? (isTopApp ? NO : YES) : arg1;
 
-  %orig(arg1, arg2, arg3);
+  %orig(hidden, parameters, change);
 }
 
 /*
@@ -211,12 +211,12 @@ BOOL allowClosingReachabilityNatively = NO;
   }
 }
 
-- (void)setNetworkActivityIndicatorVisible:(BOOL)arg1 {
-  %orig(arg1);
+- (void)setNetworkActivityIndicatorVisible:(BOOL)visible {
+  %orig(visible);
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
-    self.RA_networkActivity = arg1;
+    self.RA_networkActivity = visible;
     StatusBarData *data = [UIStatusBarServer getStatusBarData];
-    data->itemIsEnabled[26] = arg1; // 26 = activity indicator TODO: check if ios 8
+    data->itemIsEnabled[26] = visible; // 26 = activity indicator TODO: check if ios 8
     [[UIApplication sharedApplication].statusBar forceUpdateToData:data animated:YES];
   }
 }
@@ -230,9 +230,9 @@ BOOL allowClosingReachabilityNatively = NO;
 %end
 
 %hook UIStatusBar
-- (void)statusBarServer:(unsafe_id)arg1 didReceiveStatusBarData:(StatusBarData*)arg2 withActions:(int)arg3 {
+- (void)statusBarServer:(id)server didReceiveStatusBarData:(StatusBarData *)data withActions:(NSInteger)actions {
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
-    arg2->itemIsEnabled[26] = [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible];
+    data->itemIsEnabled[26] = [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible];
   }
   %orig;
 }

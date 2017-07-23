@@ -27,7 +27,7 @@ typedef struct {
 } VelocityData;
 
 %hook _UIScreenEdgePanRecognizer
-- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(double)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation forceState:(int)arg5 {
+- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(CGFloat)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation forceState:(NSInteger)state {
   %orig;
 
   VelocityData newData;

@@ -12,8 +12,8 @@ BOOL willShowMissionControl = NO;
 BOOL toggleOrActivate = NO;
 
 %hook SBUIController
-- (void)_showNotificationsGestureBeganWithLocation:(CGPoint)arg1 {
-	if ([[[%c(SBUIController) sharedInstance] switcherWindow] isKeyWindow] && CGRectContainsPoint([[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999].frame, arg1)) {
+- (void)_showNotificationsGestureBeganWithLocation:(CGPoint)point {
+	if ([[[%c(SBUIController) sharedInstance] switcherWindow] isKeyWindow] && CGRectContainsPoint([[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999].frame, point)) {
 		return;
 	}
 
@@ -24,7 +24,7 @@ BOOL toggleOrActivate = NO;
 	%orig;
 }
 
-- (_Bool)_activateAppSwitcher {
+- (BOOL)_activateAppSwitcher {
 	statusBarVisibility = [UIApplication sharedApplication].statusBarHidden;
 	willShowMissionControl = NO;
 
@@ -60,12 +60,12 @@ BOOL toggleOrActivate = NO;
 	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = NO;
 }
 
-- (void)_hideNotificationsGestureEndedWithCompletionType:(long long)arg1 velocity:(CGPoint)arg2 {
+- (void)_hideNotificationsGestureEndedWithCompletionType:(long long)type velocity:(CGPoint)velocity {
 	%orig;
 	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = NO;
 }
 
-- (void)_hideNotificationsGestureBegan:(CGFloat)arg1 {
+- (void)_hideNotificationsGestureBegan:(CGFloat)point {
 	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = YES;
 	%orig;
 }
@@ -84,8 +84,8 @@ BOOL toggleOrActivate = NO;
 %end
 
 %hook SBNotificationCenterController
--(void)_showNotificationCenterGestureBeganWithGestureRecognizer:(id)arg1 {
-	CGPoint location = [arg1 locationInView:[[%c(SBMainSwitcherViewController) sharedInstance] view]];
+- (void)_showNotificationCenterGestureBeganWithGestureRecognizer:(UIGestureRecognizer *)recognizer {
+	CGPoint location = [recognizer locationInView:[[%c(SBMainSwitcherViewController) sharedInstance] view]];
 	if ([[RASettings sharedInstance] missionControlEnabled] && [[%c(SBUIController) sharedInstance] isAppSwitcherShowing] && CGRectContainsPoint([[[[%c(SBMainSwitcherViewController) sharedInstance] valueForKey:@"_contentView"] contentView] viewWithTag:999].frame, location)) {
 		return;
 	}
@@ -96,7 +96,7 @@ BOOL toggleOrActivate = NO;
 
 %hook SBAppSwitcherController
 // iOS 8
-- (void)switcherWillBeDismissed:(_Bool)arg1 {
+- (void)switcherWillBeDismissed:(BOOL)animated {
 	if (!willShowMissionControl) {
 		[[%c(RADesktopManager) sharedInstance] reshowDesktop];
 		//[[[%c(RADesktopManager) sharedInstance] currentDesktop] loadApps];
@@ -109,8 +109,8 @@ BOOL toggleOrActivate = NO;
 	%orig;
 }
 
-- (void)switcherScroller:(id)arg1 itemTapped:(__unsafe_unretained SBDisplayLayout*)arg2 {
-	SBDisplayItem *item = [arg2 displayItems][0];
+- (void)switcherScroller:(id)scroller itemTapped:(SBDisplayLayout *)layout {
+	SBDisplayItem *item = [layout displayItems][0];
 	NSString *identifier = item.displayIdentifier;
 
 	[[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:identifier animated:NO forceImmediateUnload:YES];
@@ -127,7 +127,7 @@ BOOL toggleOrActivate = NO;
 %hook SBAppSwitcherController
 //-(void) addSubview:(UIView*)view
 
-- (void)_layoutInOrientation:(long long)arg1 {
+- (void)_layoutInOrientation:(NSInteger)orientation {
 	%orig;
 
 	UIView *view = [self valueForKey:@"_contentView"];
@@ -163,7 +163,7 @@ BOOL toggleOrActivate = NO;
 }
 
 // iOS 8
-- (void)viewDidAppear:(BOOL)a {
+- (void)viewDidAppear:(BOOL)animated {
 	%orig;
 	UIView *view = [self valueForKey:@"_contentView"];
 
@@ -566,7 +566,7 @@ BOOL toggleOrActivate = NO;
 %end
 
 %hook SBMainSwitcherViewController
-- (void)viewDidAppear:(BOOL)arg1 {
+- (void)viewDidAppear:(BOOL)animated {
 	statusBarVisibility = [UIApplication sharedApplication].statusBarHidden;
 	willShowMissionControl = NO;
 
@@ -587,7 +587,7 @@ BOOL toggleOrActivate = NO;
 	[[%c(RADesktopManager) sharedInstance] performSelectorOnMainThread:@selector(hideDesktop) withObject:nil waitUntilDone:NO];
 }
 
-- (void)viewWillDisappear:(BOOL)arg1 {
+- (void)viewWillDisappear:(BOOL)animated {
 	if (!willShowMissionControl) {
 		[[%c(RADesktopManager) sharedInstance] reshowDesktop];
 		//[[[%c(RADesktopManager) sharedInstance] currentDesktop] loadApps];
