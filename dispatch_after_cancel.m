@@ -1,7 +1,7 @@
 #include "dispatch_after_cancel.h"
 
-struct dispatch_async_handle *dispatch_after_cancellable(dispatch_time_t when, dispatch_queue_t queue, dispatch_block_t payload) {
-  struct dispatch_async_handle *handle = malloc(sizeof(struct dispatch_async_handle));
+dispatch_async_handle *dispatch_after_cancellable(dispatch_time_t when, dispatch_queue_t queue, dispatch_block_t payload) {
+  dispatch_async_handle *handle = malloc(sizeof(dispatch_async_handle));
 
   handle->didFire = 0;
   handle->shouldCall = 1; // initially, payload should be called
@@ -19,7 +19,7 @@ struct dispatch_async_handle *dispatch_after_cancellable(dispatch_time_t when, d
   return handle; // to owner
 }
 
-void dispatch_after_cancel(struct dispatch_async_handle *handle) {
+void dispatch_after_cancel(dispatch_async_handle *handle) {
   if (handle->didFire && handle->shouldFree == 0) {
     //printf("[%p] (owner) too late, freeing myself\n", handle);
     handle->didFree = 1;

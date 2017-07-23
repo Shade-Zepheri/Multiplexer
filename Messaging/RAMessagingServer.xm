@@ -120,7 +120,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 
 		// Got the message, cancel the re-sender
 		if ([asyncHandles objectForKey:identifier]) {
-			struct dispatch_async_handle *handle = (struct dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
+			dispatch_async_handle *handle = (dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
 			dispatch_after_cancel(handle);
 			[asyncHandles removeObjectForKey:identifier];
 		}
@@ -267,7 +267,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	}
 	// We timed out, remove the re-sender
 	if ([asyncHandles objectForKey:identifier]) {
-		struct dispatch_async_handle *handle = (struct dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
+		dispatch_async_handle *handle = (dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
 		dispatch_after_cancel(handle);
 		[asyncHandles removeObjectForKey:identifier];
 	}
@@ -292,12 +292,12 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		}
 
 		if ([asyncHandles objectForKey:identifier]) {
-			struct dispatch_async_handle *handle = (struct dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
+			dispatch_async_handle *handle = (dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
 			dispatch_after_cancel(handle);
 			[asyncHandles removeObjectForKey:identifier];
 		}
 
-		struct dispatch_async_handle *handle = dispatch_after_cancellable(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+		dispatch_async_handle *handle = dispatch_after_cancellable(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 			[self sendDataWithCurrentTries:tries + 1 toAppWithBundleIdentifier:identifier completion:callback];
 		});
 		asyncHandles[identifier] = [NSValue valueWithPointer:handle];
@@ -308,12 +308,12 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 
 	if (tries <= 4) {
 		if ([asyncHandles objectForKey:identifier]) {
-			struct dispatch_async_handle *handle = (struct dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
+			dispatch_async_handle *handle = (dispatch_async_handle *)[asyncHandles[identifier] pointerValue];
 			dispatch_after_cancel(handle);
 			[asyncHandles removeObjectForKey:identifier];
 		}
 
-		struct dispatch_async_handle *handle = dispatch_after_cancellable(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+		dispatch_async_handle *handle = dispatch_after_cancellable(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
 			[self sendDataWithCurrentTries:tries + 1 toAppWithBundleIdentifier:identifier completion:callback];
 		});
 		asyncHandles[identifier] = [NSValue valueWithPointer:handle];
