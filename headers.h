@@ -48,7 +48,7 @@ static NSString * const MultiplexerBasePath =  @"/Library/Multiplexer";
 #import "RASBWorkspaceFetcher.h"
 #define GET_SBWORKSPACE [RASBWorkspaceFetcher getCurrentSBWorkspaceImplementationInstanceForThisOS]
 
-#define GET_STATUSBAR_ORIENTATION (![UIApplication sharedApplication]._accessibilityFrontMostApplication ? [UIApplication sharedApplication].statusBarOrientation : [UIApplication sharedApplication]._accessibilityFrontMostApplication.statusBarOrientation)
+#define GET_STATUSBAR_ORIENTATION ![[UIApplication sharedApplication] _accessibilityFrontMostApplication] ? [UIApplication sharedApplication].statusBarOrientation : [[UIApplication sharedApplication] _accessibilityFrontMostApplication].statusBarOrientation;
 
 #if DEBUG
 #define LogDebug HBLogDebug

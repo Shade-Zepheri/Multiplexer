@@ -126,12 +126,12 @@ static void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOH
       rotatedY = [UIScreen mainScreen].bounds.size.height - y;
       break;
     case UIInterfaceOrientationLandscapeLeft:
-      rotatedX = [UIScreen mainScreen].bounds.size.width - y;
+      rotatedX = [UIScreen mainScreen]._referenceBounds.size.height - y;
       rotatedY = x;
       break;
     case UIInterfaceOrientationLandscapeRight:
       rotatedX = y;
-      rotatedY = [UIScreen mainScreen].bounds.size.height - x;
+      rotatedY = [UIScreen mainScreen]._referenceBounds.size.width - x;
       break;
   }
 
