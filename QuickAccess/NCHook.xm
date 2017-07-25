@@ -7,14 +7,6 @@
 - (id)_newBulletinObserverViewControllerOfClass:(Class)aClass;
 @end
 
-@interface SBNotificationCenterLayoutViewController
-@end
-
-@interface SBModeViewController
-- (void)_addBulletinObserverViewController:(id)arg1;
-- (void)addViewController:(id)arg1;
-@end
-
 NSString *getAppName() {
 	NSString *ident = [[RASettings sharedInstance] NCApp] ?: @"com.apple.Preferences";
 	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:ident];
@@ -31,7 +23,7 @@ RANCViewController *ncAppViewController;
 	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [[RASettings sharedInstance] ncAppHideOnLS] : NO;
 
 	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
-		SBModeViewController* modeVC = [self valueForKey:@"_modeController"];
+		SBModeViewController *modeVC = [self valueForKey:@"_modeController"];
 		if (!ncAppViewController) {
 			ncAppViewController = [self _newBulletinObserverViewControllerOfClass:[RANCViewController class]];
 		}
@@ -61,7 +53,7 @@ RANCViewController *ncAppViewController;
 	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [[RASettings sharedInstance] ncAppHideOnLS] : NO;
 
 	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
-		SBModeViewController* modeVC = [self valueForKey:@"_modeViewController"];
+		SBModeViewController *modeVC = self.modeViewController;
 		if (!ncAppViewController) {
 			ncAppViewController = [[RANCViewController alloc] init];
 		}
@@ -86,7 +78,7 @@ RANCViewController *ncAppViewController;
 
 	for (UIView *view in [[self valueForKey:@"_headerView"] subviews]) {
 		if ([view isKindOfClass:[UISegmentedControl class]]) {
-			UISegmentedControl *segment = (UISegmentedControl*)view;
+			UISegmentedControl *segment = (UISegmentedControl *)view;
 			if (segment.numberOfSegments > 2) {
 				[segment setTitle:text forSegmentAtIndex:2];
 			}

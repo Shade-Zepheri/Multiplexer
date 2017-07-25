@@ -432,7 +432,18 @@ typedef struct {
 @end
 
 @interface UIStatusBarServer
-+(StatusBarData*) getStatusBarData;
++ (StatusBarData*)getStatusBarData;
+@end
+
+@interface SBModeViewController : UIViewController {
+    UIView* _headerView;
+}
+- (void)_addBulletinObserverViewController:(id)controller;
+- (void)addViewController:(id)controller;
+@end
+
+@interface SBNotificationCenterLayoutViewController : UIViewController
+@property (nonatomic,retain,readonly) SBModeViewController * modeViewController;
 @end
 
 @interface SBNotificationCenterViewController : UIViewController
@@ -737,9 +748,17 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 + (instancetype)eventWithName:(NSString *)label handler:(id)handler;
 @end
 
+@interface FBSDisplay : NSObject
+@property (nonatomic,readonly) double scale;                                 //@synthesize scale=_scale - In the implementation block
+@property (nonatomic,readonly) double orientation;                           //@synthesize orientation=_orientation - In the implementation block
+@property (nonatomic,readonly) unsigned long long type;                      //@synthesize type=_type - In the implementation block
+@property (nonatomic,readonly) int pid;                                      //@synthesize pid=_pid - In the implementation block
+@property (nonatomic,readonly) CGRect referenceBounds;
+@end
+
 @interface FBDisplayManager : NSObject
-+(id)sharedInstance;
-+(id)mainDisplay;
++ (instancetype)sharedInstance;
++ (FBSDisplay *)mainDisplay;
 @end
 
 @interface SBWorkspaceApplicationTransitionContext : NSObject
