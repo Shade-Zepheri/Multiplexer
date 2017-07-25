@@ -77,6 +77,7 @@ BOOL overrideDisableForStatusBar = NO;
 }*/
 
 // This should help fix the problems where closing an app with Tage or the iPad Gesture would cause the app to suspend(?) and lock up the device.
+// Seems like unneeded on iOS 9+
 - (void)_suspendGestureBegan {
   %orig;
   [[UIApplication sharedApplication]._accessibilityFrontMostApplication clearDeactivationSettings];
@@ -147,7 +148,12 @@ BOOL overrideDisableForStatusBar = NO;
 */
 
 %hook SpringBoard
-- (void)noteInterfaceOrientationChanged:(NSInteger)orientation duration:(CGFloat)duration {
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation duration:(CGFloat)duration {
+	%orig;
+	[[RASnapshotProvider sharedInstance] forceReloadEverything];
+}
+
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation duration:(CGFloat)duration logMessage:(NSString *)message {
 	%orig;
 	[[RASnapshotProvider sharedInstance] forceReloadEverything];
 }
@@ -157,6 +163,14 @@ BOOL overrideDisableForStatusBar = NO;
 - (void)didActivateWithTransactionID:(NSUInteger)transactionID {
 	dispatch_async(dispatch_get_main_queue(), ^{
 	  [[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
+	});
+
+	%orig;
+}
+
+- (void)didActivateForScene:(FBScene *)scene transactionID:(NSUInteger)transactionID {
+	dispatch_async(dispatch_get_main_queue(), ^{
+		[[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
 	});
 
 	%orig;
