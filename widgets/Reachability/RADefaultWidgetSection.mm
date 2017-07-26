@@ -19,5 +19,5 @@
 
 static __attribute__((constructor)) void cant_believe_i_forgot_this_before() {
 	static id _widget = [RADefaultWidgetSection sharedDefaultWidgetSection];
-	[RAWidgetSectionManager.sharedInstance registerSection:_widget];
+	[[RAWidgetSectionManager sharedInstance] registerSection:_widget];
 }

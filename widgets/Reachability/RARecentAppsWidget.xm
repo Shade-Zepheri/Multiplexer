@@ -16,7 +16,7 @@
 
 @implementation RARecentAppsWidget
 - (BOOL)enabled {
-	return [RASettings.sharedInstance showRecentAppsInWidgetSelector];
+	return [[RASettings sharedInstance] showRecentAppsInWidgetSelector];
 }
 
 - (NSInteger)sortOrder {
@@ -62,7 +62,7 @@
 
 	UIScrollView *recentsView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 200)];
 	recentsView.backgroundColor = [UIColor clearColor];
-	recentsView.pagingEnabled = [RASettings.sharedInstance pagingEnabled];
+	recentsView.pagingEnabled = [[RASettings sharedInstance] pagingEnabled];
 
 	for (NSString *str in recents) {
 		@autoreleasepool {
@@ -133,5 +133,5 @@
 
 %ctor {
 	static id _widget = [[RARecentAppsWidget alloc] init];
-	[RAWidgetSectionManager.sharedInstance registerSection:_widget];
+	[[RAWidgetSectionManager sharedInstance] registerSection:_widget];
 }

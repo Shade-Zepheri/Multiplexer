@@ -11,7 +11,7 @@
 
 @implementation RAFavoriteAppsWidget
 - (BOOL)enabled {
-	return [RASettings.sharedInstance showFavorites];
+	return [[RASettings sharedInstance] showFavorites];
 }
 
 - (NSInteger)sortOrder {
@@ -46,7 +46,7 @@
 	CGFloat width = interval;
 	savedX = spacing / 2.0;
 
-	NSMutableArray *favorites = [RASettings.sharedInstance favoriteApps];
+	NSMutableArray *favorites = [[RASettings sharedInstance] favoriteApps];
 	[favorites removeObject:currentBundleIdentifier];
 	if (favorites.count == 0) {
 		return nil;
@@ -54,7 +54,7 @@
 
 	UIScrollView *favoritesView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 200)];
 	favoritesView.backgroundColor = [UIColor clearColor];
-	favoritesView.pagingEnabled = [RASettings.sharedInstance pagingEnabled];
+	favoritesView.pagingEnabled = [[RASettings sharedInstance] pagingEnabled];
 	for (NSString *str in favorites) {
 		@autoreleasepool {
 			app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
@@ -113,5 +113,5 @@
 
 %ctor {
 	static id _widget = [[RAFavoriteAppsWidget alloc] init];
-	[RAWidgetSectionManager.sharedInstance registerSection:_widget];
+	[[RAWidgetSectionManager sharedInstance] registerSection:_widget];
 }

@@ -11,7 +11,7 @@
 
 @implementation RAAllAppsWidget
 - (BOOL)enabled {
-	return [RASettings.sharedInstance showAllAppsInWidgetSelector];
+	return [[RASettings sharedInstance] showAllAppsInWidgetSelector];
 }
 
 - (NSInteger)sortOrder {
@@ -48,7 +48,7 @@
 	savedX = spacing / 2.0;
 
 	allAppsView.backgroundColor = [UIColor clearColor];
-	allAppsView.pagingEnabled = [RASettings.sharedInstance pagingEnabled];
+	allAppsView.pagingEnabled = [[RASettings sharedInstance] pagingEnabled];
 
 	static NSMutableArray *allApps = nil;
 	if (!allApps) {
@@ -125,5 +125,5 @@
 
 %ctor {
 	static id _widget = [[RAAllAppsWidget alloc] init];
-	[RAWidgetSectionManager.sharedInstance registerSection:_widget];
+	[[RAWidgetSectionManager sharedInstance] registerSection:_widget];
 }
