@@ -85,6 +85,7 @@
 	if (!self.canGoLeft) {
 		return;
 	}
+
 	currentIndex--;
 }
 
@@ -92,6 +93,7 @@
 	if (!self.canGoRight) {
 		return;
 	}
+
 	currentIndex++;
 }
 @end
