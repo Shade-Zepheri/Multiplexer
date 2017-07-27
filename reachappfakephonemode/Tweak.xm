@@ -25,6 +25,12 @@
 }
 %end
 
+%hook UIApplication
+- (BOOL)_isClassic {
+  return [%c(RAFakePhoneMode) shouldFakeForThisProcess] ? YES : %orig;
+}
+%end
+
 /*
 %hook UIScreen
 - (CGRect)_unjailedReferenceBounds {

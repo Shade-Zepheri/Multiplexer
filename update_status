@@ -11,7 +11,7 @@ MissionControl: working
 NCApp: working
 assertiond hooks: working
 backboardd hooks: working
-fake phone mode: semi working
+fake phone mode: working (hacky tho)
 
 Bugs:
 - Fix KeyboardSupport
@@ -19,7 +19,7 @@ Bugs:
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
-- FakePhoneMode wrong dimensions
+- Make FakePhoneMode use Classic Modes
 - Empoleon windows dont properly rotate in some (most) apps
 - MC gives black screen when in apps
 

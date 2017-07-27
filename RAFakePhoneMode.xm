@@ -12,7 +12,7 @@ I split them apart when i was trying to find some issue with app resizing/touche
 #define RA_6S_SIZE CGSizeMake(375, 667)
 #define RA_6P_SIZE CGSizeMake(414, 736)
 
-CGSize forcePhoneModeSize = RA_6P_SIZE;
+CGSize forcePhoneModeSize = RA_6S_SIZE;
 
 @implementation RAFakePhoneMode
 + (void)load {
@@ -23,10 +23,9 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
 
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.2 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{ // somehow, this is needed to make sure that both force resizing and Fake Phone Mode work. Without the dispatch_after, even if fake phone mode is disabled,
     // force resizing seems to render touches incorrectly ¯\_(ツ)_/¯
-    IF_NOT_SPRINGBOARD {
-      if ([RAFakePhoneMode shouldFakeForThisProcess]) {
-        dlopen("/Library/MobileSubstrate/DynamicLibraries/ReachAppFakePhoneMode.dylib", RTLD_NOW);
-      }
+    if (!IS_SPRINGBOARD && [RAFakePhoneMode shouldFakeForThisProcess]) {
+      dlopen("/Library/MobileSubstrate/DynamicLibraries/ReachAppFakePhoneMode.dylib", RTLD_NOW);
+      [RAFakePhoneMode updateAppSizing];
     }
   });
 }
@@ -43,9 +42,9 @@ CGSize forcePhoneModeSize = RA_6P_SIZE;
 }
 
 + (void)updateAppSizing {
-  CGRect f = UIWindow.keyWindow.frame;
-  f.origin = CGPointZero;
-  UIWindow.keyWindow.frame = f;
+  CGSize fakeSize = [RAFakePhoneMode fakedSize];
+  CGRect fakeFrame = CGRectMake(0, 0, fakeSize.width, fakeSize.height);
+  UIWindow.keyWindow.frame = fakeFrame;
 }
 
 + (BOOL)shouldFakeForAppWithIdentifier:(NSString* )identifier {
