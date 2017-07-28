@@ -57,7 +57,7 @@ CGSize forcePhoneModeSize = RA_6S_SIZE;
 }
 
 + (BOOL)shouldFakeForThisProcess {
-  static char fakeFlag = 0;
+  static BOOL fakeFlag = NO;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
     if (![RAMessagingClient sharedInstance].hasRecievedData) {

@@ -19,14 +19,12 @@ Bugs:
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
-- Make FakePhoneMode use Classic Modes
 - Empoleon windows dont properly rotate in some (most) apps
 - MC gives black screen when in apps
 
 Minor Things/Bugs to note:
-- (some of these are leftover from the original release lol: eg MC lag)
 - SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard, which nothing seems to work)
-- Something is running in the background and increasing background usage (Thought it was NCApp but more testing required)
+- Optimize FakePhoneMode (use Classic Modes)
 
 Things to do/Features to add:
 - 3D Touch actions?
