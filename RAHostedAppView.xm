@@ -118,8 +118,8 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   _isCurrentlyHosting = YES;
 
   appsBeingHosted[app.bundleIdentifier] = [appsBeingHosted objectForKey:app.bundleIdentifier] ? @([appsBeingHosted[app.bundleIdentifier] intValue] + 1) : @1;
-  view = (FBWindowContextHostWrapperView*)[RAHostManager enabledHostViewForApplication:app];
-  contextHostManager = (FBWindowContextHostManager*)[RAHostManager hostManagerForApp:app];
+  view = (FBWindowContextHostWrapperView *)[RAHostManager enabledHostViewForApplication:app];
+  contextHostManager = (FBWindowContextHostManager *)[RAHostManager hostManagerForApp:app];
   view.backgroundColorWhileNotHosting = [UIColor clearColor];
   view.backgroundColorWhileHosting = [UIColor clearColor];
 
@@ -215,7 +215,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
       [splashScreenImageView removeFromSuperview];
       splashScreenImageView = nil;
     }
-    UIImage *img = [RASnapshotProvider.sharedInstance snapshotForIdentifier:self.bundleIdentifier];
+    UIImage *img = [[RASnapshotProvider sharedInstance] snapshotForIdentifier:self.bundleIdentifier];
     splashScreenImageView = [[UIImageView alloc] initWithFrame:CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height)];
     splashScreenImageView.image = img;
     [self insertSubview:splashScreenImageView atIndex:0];
@@ -264,7 +264,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   if (!_renderWallpaper) {
     return;
   }
-  [[RASnapshotProvider.sharedInstance wallpaperImage] drawInRect:rect];
+  [[[RASnapshotProvider sharedInstance] wallpaperImage] drawInRect:rect];
 }
 
 - (void)setFrame:(CGRect)frame {
@@ -390,12 +390,13 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   [[RAMessagingServer sharedInstance] rotateApp:self.bundleIdentifier toOrientation:orientation completion:nil];
 }
 
-+ (void)iPad_iOS83_fixHosting {
++ (void)iPad_iOS83_fixHosting {\
+  //Doesnt appear to be necessary on iOS 10 (check if necessary on iOS 9)? Causes problems on iPhone and FPM 
   for (NSString *bundleIdentifier in appsBeingHosted.allKeys) {
     NSNumber *num = appsBeingHosted[bundleIdentifier];
     if (num.intValue > 0) {
       SBApplication *app_ = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:bundleIdentifier];
-      FBWindowContextHostManager *manager = (FBWindowContextHostManager*)[RAHostManager hostManagerForApp:app_];
+      FBWindowContextHostManager *manager = (FBWindowContextHostManager *)[RAHostManager hostManagerForApp:app_];
       if (manager) {
         LogDebug(@"[ReachApp] rehosting for iPad: %@", bundleIdentifier);
         [manager enableHostingForRequester:@"reachapp" priority:1];

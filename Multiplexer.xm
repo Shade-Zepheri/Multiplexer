@@ -59,6 +59,7 @@
 	if ([%c(SBUIController) respondsToSelector:@selector(shouldShowControlCenterTabControlOnFirstSwipe)]) {
 		[[%c(SBUIController) sharedInstance] shouldShowControlCenterTabControlOnFirstSwipe];
 	}
+
 	return [[%c(SBControlCenterController) sharedInstance] _shouldShowGrabberOnFirstSwipe];
 }
 @end

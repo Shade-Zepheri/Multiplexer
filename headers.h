@@ -390,7 +390,7 @@ return sharedInstance;
 @end
 
 typedef struct {
-    BOOL itemIsEnabled[29];
+    BOOL itemIsEnabled[34];
     char timeString[64];
     int gsmSignalStrengthRaw;
     int gsmSignalStrengthBars;
@@ -419,20 +419,24 @@ typedef struct {
     unsigned tetheringConnectionCount;
     unsigned batterySaverModeActive : 1;
     unsigned deviceIsRTL : 1;
+    unsigned lock : 1;
     char breadcrumbTitle[256];
     char breadcrumbSecondaryTitle[256];
     char personName[100];
+    char returnToAppBundleIdentifier[100];
+    unsigned electronicTollCollectionAvailable : 1;
+    unsigned wifiLinkWarning : 1;
 } StatusBarData;
 
 @interface UIStatusBar : UIView
 + (CGFloat)heightForStyle:(int)arg1 orientation:(int)arg2;
 - (void)setOrientation:(int)arg1;
 - (void)requestStyle:(int)arg1;
--(void) forceUpdateToData:(StatusBarData*)arg1 animated:(BOOL)arg2;
+- (void)forceUpdateToData:(StatusBarData *)arg1 animated:(BOOL)arg2;
 @end
 
 @interface UIStatusBarServer
-+ (StatusBarData*)getStatusBarData;
++ (StatusBarData *)getStatusBarData;
 @end
 
 @interface SBModeViewController : UIViewController {

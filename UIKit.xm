@@ -216,24 +216,26 @@ BOOL allowClosingReachabilityNatively = NO;
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
     self.RA_networkActivity = visible;
     StatusBarData *data = [UIStatusBarServer getStatusBarData];
-    data->itemIsEnabled[26] = visible; // 26 = activity indicator TODO: check if ios 8
+    data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = visible; // 26 = activity indicator TODO: check if ios 8
     [[UIApplication sharedApplication].statusBar forceUpdateToData:data animated:YES];
   }
 }
 
-- (BOOL)openURL:(__unsafe_unretained NSURL*)url {
+- (BOOL)openURL:(NSURL *)url {
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) { // || [RASettings.sharedInstance openLinksInWindows])
     return [[RAMessagingClient sharedInstance] notifyServerToOpenURL:url openInWindow:[[RASettings sharedInstance] openLinksInWindows]];
   }
+
   return %orig;
 }
 %end
 
 %hook UIStatusBar
-- (void)statusBarServer:(id)server didReceiveStatusBarData:(StatusBarData *)data withActions:(NSInteger)actions {
+- (void)statusBarServer:(UIStatusBarServer *)server didReceiveStatusBarData:(StatusBarData *)data withActions:(NSInteger)actions {
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
     data->itemIsEnabled[26] = [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible];
   }
+
   %orig;
 }
 %end
