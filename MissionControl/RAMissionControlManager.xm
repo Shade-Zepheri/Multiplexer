@@ -314,11 +314,11 @@ CGRect swappedForOrientation2(CGRect in) {
 				window.center = CGPointMake(window.center.x, location.y - initialCenter.y);
 				break;
 			case UIInterfaceOrientationLandscapeLeft:
-				frame.origin.x = -[UIScreen mainScreen].bounds.size.width + location.y;
+				frame.origin.x = -[UIScreen mainScreen].bounds.size.height + location.y;
 				window.frame = frame;
 				break;
 			case UIInterfaceOrientationLandscapeRight:
-				frame.origin.x = [UIScreen mainScreen].bounds.size.width - location.y;
+				frame.origin.x = [UIScreen mainScreen].bounds.size.height - location.y;
 				window.frame = frame;
 				break;
 		}

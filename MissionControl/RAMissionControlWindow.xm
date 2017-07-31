@@ -572,7 +572,7 @@
 	[self.manager hideMissionControl:YES];
 	__block __strong NSString *identifier = [[[gesture view] performSelector:@selector(application)] bundleIdentifier];
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-		[UIApplication.sharedApplication launchApplicationWithIdentifier:identifier suspended:NO];
+		[[UIApplication sharedApplication] launchApplicationWithIdentifier:identifier suspended:NO];
 		identifier = nil;
 	});
 }
