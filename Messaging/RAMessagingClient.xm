@@ -22,14 +22,14 @@ extern BOOL allowClosingReachabilityNatively;
 		[sharedInstance loadMessagingCenter];
 		sharedInstance.hasRecievedData = NO;
 
-		if ([NSBundle.mainBundle.executablePath hasPrefix:@"/Applications"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/var/stash/appsstash"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/var/containers/Bundle/Application"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/private/var/db/stash"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/var/mobile/Applications"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/private/var/mobile/Applications"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/var/mobile/Containers/Bundle/Application"] ||
-			[NSBundle.mainBundle.executablePath hasPrefix:@"/private/var/mobile/Containers/Bundle/Application"])
+		if ([[NSBundle mainBundle].executablePath hasPrefix:@"/Applications"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/stash/appsstash"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/containers/Bundle/Application"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/private/var/db/stash"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/mobile/Applications"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/private/var/mobile/Applications"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/mobile/Containers/Bundle/Application"] ||
+			[[NSBundle mainBundle].executablePath hasPrefix:@"/private/var/mobile/Containers/Bundle/Application"])
 		{
 			LogDebug(@"[ReachApp] valid process for RAMessagingClient");
 			sharedInstance->allowedProcess = YES;
@@ -58,9 +58,9 @@ extern BOOL allowClosingReachabilityNatively;
 
 	serverCenter = [%c(CPDistributedMessagingCenter) centerNamed:@"com.efrederickson.reachapp.messaging.server"];
 
-	void* handle = dlopen("/usr/lib/librocketbootstrap.dylib", RTLD_LAZY);
+	void *handle = dlopen("/usr/lib/librocketbootstrap.dylib", RTLD_LAZY);
 	if (handle) {
-		void (*rocketbootstrap_distributedmessagingcenter_apply)(CPDistributedMessagingCenter*) = (void(*)(CPDistributedMessagingCenter*))dlsym(handle, "rocketbootstrap_distributedmessagingcenter_apply");
+		void (*rocketbootstrap_distributedmessagingcenter_apply)(CPDistributedMessagingCenter *) = (void(*)(CPDistributedMessagingCenter *))dlsym(handle, "rocketbootstrap_distributedmessagingcenter_apply");
 		rocketbootstrap_distributedmessagingcenter_apply(serverCenter);
 		dlclose(handle);
 	}
@@ -75,7 +75,7 @@ extern BOOL allowClosingReachabilityNatively;
 }
 
 - (void)_requestUpdateFromServerWithTries:(NSInteger)tries {
-	/*if (!NSBundle.mainBundle.bundleIdentifier ||
+	/*if (![NSBundle mainBundle].bundleIdentifier ||
 		IS_PROCESS("assertiond") ||  // Don't need to load into this anyway
 		IS_PROCESS("searchd") ||  // safe-mode crash fix
 		IS_PROCESS("gputoolsd") || // iMohkles found this crashes (no uikit)
@@ -104,7 +104,7 @@ extern BOOL allowClosingReachabilityNatively;
 		if (tries <= 4) {
 			[self _requestUpdateFromServerWithTries:tries + 1];
 		} else {
-			[self alertUser:[NSString stringWithFormat:@"App \"%@\" is unable to communicate with messaging server", [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] ?: NSBundle.mainBundle.bundleIdentifier]];
+			[self alertUser:[NSString stringWithFormat:@"App \"%@\" is unable to communicate with messaging server", [[[NSBundle mainBundle] localizedInfoDictionary] objectForKey:@"CFBundleDisplayName"] ?: [NSBundle mainBundle].bundleIdentifier]];
 		}
 	}
 }
@@ -122,21 +122,21 @@ extern BOOL allowClosingReachabilityNatively;
 	_currentData = data;
 
 	if (didStatusBarVisibilityChange && !data.shouldForceStatusBar) {
-		[UIApplication.sharedApplication RA_forceStatusBarVisibility:_currentData.statusBarVisibility orRevert:YES];
+		[[UIApplication sharedApplication] RA_forceStatusBarVisibility:_currentData.statusBarVisibility orRevert:YES];
 	} else if (data.shouldForceStatusBar) {
-		[UIApplication.sharedApplication RA_forceStatusBarVisibility:_currentData.statusBarVisibility orRevert:NO];
+		[[UIApplication sharedApplication] RA_forceStatusBarVisibility:_currentData.statusBarVisibility orRevert:NO];
 	}
 
 	if (didSizingChange && !data.shouldForceSize) {
-		[UIApplication.sharedApplication RA_updateWindowsForSizeChange:CGSizeMake(data.wantedClientWidth, data.wantedClientHeight) isReverting:YES];
+		[[UIApplication sharedApplication] RA_updateWindowsForSizeChange:CGSizeMake(data.wantedClientWidth, data.wantedClientHeight) isReverting:YES];
 	} else if (data.shouldForceSize) {
-		[UIApplication.sharedApplication RA_updateWindowsForSizeChange:CGSizeMake(data.wantedClientWidth, data.wantedClientHeight) isReverting:NO];
+		[[UIApplication sharedApplication] RA_updateWindowsForSizeChange:CGSizeMake(data.wantedClientWidth, data.wantedClientHeight) isReverting:NO];
 	}
 
 	if (didOrientationChange && !data.shouldForceOrientation) {
-		[UIApplication.sharedApplication RA_forceRotationToInterfaceOrientation:data.forcedOrientation isReverting:YES];
+		[[UIApplication sharedApplication] RA_forceRotationToInterfaceOrientation:data.forcedOrientation isReverting:YES];
 	} else if (data.shouldForceOrientation) {
-		[UIApplication.sharedApplication RA_forceRotationToInterfaceOrientation:data.forcedOrientation isReverting:NO];
+		[[UIApplication sharedApplication] RA_forceRotationToInterfaceOrientation:data.forcedOrientation isReverting:NO];
 	}
 
 	allowClosingReachabilityNatively = YES;
@@ -220,6 +220,6 @@ static inline void updateFrontmostApp(CFNotificationCenterRef center, void *obse
 	}
 
 	[RAMessagingClient sharedInstance];
-	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &reloadClientData, (__bridge CFStringRef)[NSString stringWithFormat:@"com.efrederickson.reachapp.clientupdate-%@",NSBundle.mainBundle.bundleIdentifier], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
+	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &reloadClientData, (__bridge CFStringRef)[NSString stringWithFormat:@"com.efrederickson.reachapp.clientupdate-%@",[NSBundle mainBundle].bundleIdentifier], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, &updateFrontmostApp, CFSTR("com.efrederickson.reachapp.frontmostAppDidUpdate"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 }

@@ -177,7 +177,7 @@ static void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOH
 static void initializeGestures(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   clientCreatePointer clientCreate;
   void *handle = dlopen(0, 9);
-  *(void**)(&clientCreate) = dlsym(handle,"IOHIDEventSystemClientCreate");
+  *(void**)(&clientCreate) = dlsym(handle, "IOHIDEventSystemClientCreate");
   IOHIDEventSystemClientRef ioHIDEventSystem = (__IOHIDEventSystemClient *)clientCreate(kCFAllocatorDefault);
   IOHIDEventSystemClientScheduleWithRunLoop(ioHIDEventSystem, CFRunLoopGetCurrent(), kCFRunLoopDefaultMode);
   IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);

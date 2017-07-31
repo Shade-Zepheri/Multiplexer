@@ -23,10 +23,10 @@ BOOL isShowing = NO;
 
   IF_NOT_SPRINGBOARD {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("com.efrederickson.reachapp.keyboard.didShow"), NULL, NULL, true);
-    [RAMessagingClient.sharedInstance notifyServerOfKeyboardSizeUpdate:_size];
+    [[RAMessagingClient sharedInstance] notifyServerOfKeyboardSizeUpdate:_size];
 
-    if ([RAMessagingClient.sharedInstance shouldUseExternalKeyboard]) {
-      [RAMessagingClient.sharedInstance notifyServerToShowKeyboard];
+    if ([[RAMessagingClient sharedInstance] shouldUseExternalKeyboard]) {
+      [[RAMessagingClient sharedInstance] notifyServerToShowKeyboard];
       isShowing = YES;
     }
   }
@@ -38,9 +38,9 @@ BOOL isShowing = NO;
 
   IF_NOT_SPRINGBOARD {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.keyboard.didHide"), NULL, NULL, true);
-    if ([RAMessagingClient.sharedInstance shouldUseExternalKeyboard] || isShowing) {
+    if ([[RAMessagingClient sharedInstance] shouldUseExternalKeyboard] || isShowing) {
       isShowing = NO;
-      [RAMessagingClient.sharedInstance notifyServerToHideKeyboard];
+      [[RAMessagingClient sharedInstance] notifyServerToHideKeyboard];
     }
   }
 }

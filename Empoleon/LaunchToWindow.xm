@@ -17,7 +17,7 @@ BOOL allowOpenApp = NO;
 	%orig;
 }
 
-- (void)_launchIcon:(unsafe_id)icon {
+- (void)_launchIcon:(SBApplicationIcon *)icon {
 	if (!override) {
 		%orig;
 	} else {

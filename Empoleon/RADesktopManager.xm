@@ -107,21 +107,22 @@ BOOL overrideUIWindow = NO;
 }
 
 - (void)updateRotationOnClients:(UIInterfaceOrientation)orientation {
-	for (RADesktopWindow *w in windows) {
-		[w updateRotationOnClients:orientation];
+	for (RADesktopWindow *window in windows) {
+		[window updateRotationOnClients:orientation];
 	}
 }
 
-- (void)updateWindowSizeForApplication:(NSString*)identifier {
-	for (RADesktopManager *w in windows) {
-		[w updateWindowSizeForApplication:identifier];
+- (void)updateWindowSizeForApplication:(NSString *)identifier {
+	for (RADesktopManager *window in windows) {
+		[window updateWindowSizeForApplication:identifier];
 	}
 }
 
-- (void)setLastUsedWindow:(RAWindowBar*)window {
+- (void)setLastUsedWindow:(RAWindowBar *)window {
 	if (_lastUsedWindow) {
 		[_lastUsedWindow resignForemostApp];
 	}
+
 	_lastUsedWindow = window;
 	[_lastUsedWindow becomeForemostApp];
 }
@@ -185,7 +186,7 @@ BOOL overrideUIWindow = NO;
 	[[RADesktopManager sharedInstance] updateRotationOnClients:orientation];
 }
 
-- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation duration:(CGFloat)duration logMessage:(id)message {
+- (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation duration:(CGFloat)duration logMessage:(NSString *)message {
 	%orig;
 	[[RADesktopManager sharedInstance] updateRotationOnClients:orientation];
 }

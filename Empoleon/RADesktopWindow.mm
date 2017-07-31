@@ -25,7 +25,8 @@
 	}
 
 	if ([RAFakePhoneMode shouldFakeForAppWithIdentifier:view.app.bundleIdentifier]) {
-		view.frame = (CGRect){ { 0, 100 }, [RAFakePhoneMode fakeSizeForAppWithIdentifier:view.app.bundleIdentifier] };
+		CGSize fakeSize = [RAFakePhoneMode fakeSizeForAppWithIdentifier:view.app.bundleIdentifier];
+		view.frame = CGRectMake(0, 100, fakeSize.width, fakeSize.height);
 	} else {
 		view.frame = CGRectMake(0, 100, [UIScreen mainScreen]._referenceBounds.size.width, [UIScreen mainScreen]._referenceBounds.size.height);
 	}
@@ -104,57 +105,61 @@
 
 - (void)removeAppWithIdentifier:(NSString *)identifier animated:(BOOL)animated forceImmediateUnload:(BOOL)force {
 	for (RAHostedAppView *view in self.appViews) {
-		if ([view.bundleIdentifier isEqual:identifier]) {
-			void (^destructor)() = ^{
-				//view.shouldUseExternalKeyboard = NO;
-				[view unloadApp:force];
-				[view.superview removeFromSuperview];
-				[view removeFromSuperview];
-				[self.appViews removeObject:view];
-				[self saveInfo];
-
-				if (!dontClearForcedPhoneState && [RAFakePhoneMode shouldFakeForAppWithIdentifier:identifier]) {
-					[RAMessagingServer.sharedInstance forcePhoneMode:NO forIdentifier:identifier andRelaunchApp:YES];
-				}
-			};
-			if (animated) {
-				[UIView animateWithDuration:0.3 animations:^{
-					view.superview.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
-					view.superview.layer.position = CGPointMake([UIScreen mainScreen]._referenceBounds.size.width / 2, [UIScreen mainScreen]._referenceBounds.size.height);
-					view.superview.layer.opacity = 0.0f;
-					[[RADesktopManager sharedInstance] findNewForemostApp];
-				//view.superview.alpha = 0;
-				} completion:^(BOOL _) {
-					destructor();
-				}];
-			} else {
-				destructor();
-			}
-			return;
+		if (![view.bundleIdentifier isEqualToString:identifier]) {
+			continue;
 		}
+
+		void (^destructor)() = ^{
+			//view.shouldUseExternalKeyboard = NO;
+			[view unloadApp:force];
+			[view.superview removeFromSuperview];
+			[view removeFromSuperview];
+			[self.appViews removeObject:view];
+			[self saveInfo];
+
+			if (!dontClearForcedPhoneState && [RAFakePhoneMode shouldFakeForAppWithIdentifier:identifier]) {
+				[[RAMessagingServer sharedInstance] forcePhoneMode:NO forIdentifier:identifier andRelaunchApp:YES];
+			}
+		};
+		if (animated) {
+			[UIView animateWithDuration:0.3 animations:^{
+				view.superview.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);
+				view.superview.layer.position = CGPointMake([UIScreen mainScreen]._referenceBounds.size.width / 2, [UIScreen mainScreen]._referenceBounds.size.height);
+				view.superview.layer.opacity = 0.0f;
+				[[RADesktopManager sharedInstance] findNewForemostApp];
+			//view.superview.alpha = 0;
+			} completion:^(BOOL _) {
+				destructor();
+			}];
+		} else {
+			destructor();
+		}
+		return;
 	}
 }
 
 - (void)updateWindowSizeForApplication:(NSString *)identifier {
 	NSArray *tempArrayToAvoidMutationCrash = [self.appViews copy];
 	for (RAHostedAppView *view in tempArrayToAvoidMutationCrash) {
-		if ([view.bundleIdentifier isEqual:identifier]) {
-			dontClearForcedPhoneState = YES;
-			[self removeAppWithIdentifier:identifier animated:NO forceImmediateUnload:YES];
-			[self createAppWindowWithIdentifier:identifier animated:NO];
-			dontClearForcedPhoneState = NO;
-
-			/*CGAffineTransform t = view.transform;
-			CGPoint origin = view.frame.origin;
-
-			view.transform = CGAffineTransformIdentity;
-			if ([RAFakePhoneMode shouldFakeForAppWithIdentifier:view.app.bundleIdentifier])
-				view.frame = (CGRect){ origin, [RAFakePhoneMode fakeSizeForAppWithIdentifier:view.app.bundleIdentifier] };
-			else
-				view.frame = CGRectMake(origin.x, origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
-
-			view.transform = t;*/
+		if (![view.bundleIdentifier isEqualToString:identifier]) {
+			continue;
 		}
+
+		dontClearForcedPhoneState = YES;
+		[self removeAppWithIdentifier:identifier animated:NO forceImmediateUnload:YES];
+		[self createAppWindowWithIdentifier:identifier animated:NO];
+		dontClearForcedPhoneState = NO;
+
+		/*CGAffineTransform t = view.transform;
+		CGPoint origin = view.frame.origin;
+
+		view.transform = CGAffineTransformIdentity;
+		if ([RAFakePhoneMode shouldFakeForAppWithIdentifier:view.app.bundleIdentifier])
+			view.frame = (CGRect){ origin, [RAFakePhoneMode fakeSizeForAppWithIdentifier:view.app.bundleIdentifier] };
+		else
+			view.frame = CGRectMake(origin.x, origin.y, [UIScreen mainScreen].bounds.size.width, [UIScreen mainScreen].bounds.size.height);
+
+		view.transform = t;*/
 	}
 }
 
@@ -182,7 +187,7 @@
 	lastKnownOrientation = orientation;
 
 	for (RAWindowBar *app in self.subviews) {
-		if ([app isKindOfClass:[RAWindowBar class]]){ // could be a diferent kind of UIView actually
+		if ([app isKindOfClass:[RAWindowBar class]]) { // could be a diferent kind of UIView actually
 			[app updateClientRotation:orientation];
 		}
 	}
@@ -190,7 +195,7 @@
 
 - (BOOL)isAppOpened:(NSString *)identifier {
 	for (RAHostedAppView *app in self.appViews) {
-		if ([app.app.bundleIdentifier isEqual:identifier]) {
+		if ([app.app.bundleIdentifier isEqualToString:identifier]) {
 			return YES;
 		}
 	}

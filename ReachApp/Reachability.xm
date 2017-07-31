@@ -140,7 +140,7 @@ BOOL wasEnabled = NO;
 
 %end
 
-id SBWorkspace$sharedInstance;
+SBWorkspace *SBWorkspace$sharedInstance;
 %hook SB_WORKSPACE_CLASS
 %new + (instancetype)sharedInstance {
   return SBWorkspace$sharedInstance;
@@ -801,6 +801,14 @@ CGFloat startingY = -1;
 %hook SpringBoard
 - (UIInterfaceOrientation)activeInterfaceOrientation {
   return overrideOrientation ? UIInterfaceOrientationPortrait : %orig;
+}
+
+- (void)_deactivateReachability {
+  if (overrideDisableForStatusBar) {
+    return;
+  }
+
+  %orig;
 }
 %end
 

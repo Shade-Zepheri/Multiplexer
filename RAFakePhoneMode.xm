@@ -44,7 +44,7 @@ CGSize forcePhoneModeSize = RA_6S_SIZE;
 + (void)updateAppSizing {
   CGSize fakeSize = [RAFakePhoneMode fakedSize];
   CGRect fakeFrame = CGRectMake(0, 0, fakeSize.width, fakeSize.height);
-  UIWindow.keyWindow.frame = fakeFrame;
+  [UIWindow keyWindow].frame = fakeFrame;
 }
 
 + (BOOL)shouldFakeForAppWithIdentifier:(NSString* )identifier {

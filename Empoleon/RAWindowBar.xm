@@ -456,6 +456,7 @@ extern BOOL allowOpenApp;
 	if (appRotationLocked) {
 		return;
 	}
+
 	[attachedView rotateToOrientation:orientation];
 }
 

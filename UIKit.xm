@@ -36,7 +36,7 @@ BOOL allowClosingReachabilityNatively = NO;
     }
 
     if (self.subviews.count > 0) {
-      ((UIView*)self.subviews[0]).frame = frame;
+      ((UIView *)self.subviews[0]).frame = frame;
     }
   }
 
@@ -129,13 +129,11 @@ BOOL allowClosingReachabilityNatively = NO;
 */
 
 %new - (void)RA_forceRotationToInterfaceOrientation:(UIInterfaceOrientation)orientation isReverting:(BOOL)reverting {
-  if (!reverting) {
-    if (!setPreviousOrientation) {
-      setPreviousOrientation = YES;
-      prevousOrientation = [UIApplication sharedApplication].statusBarOrientation;
-      if (wasStatusBarHidden == -1) {
-        wasStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
-      }
+  if (!reverting && !setPreviousOrientation) {
+    setPreviousOrientation = YES;
+    prevousOrientation = [UIApplication sharedApplication].statusBarOrientation;
+    if (wasStatusBarHidden == -1) {
+      wasStatusBarHidden = [UIApplication sharedApplication].statusBarHidden;
     }
   } else if (setPreviousOrientation) {
     orientation = prevousOrientation;
