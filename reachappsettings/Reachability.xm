@@ -11,8 +11,6 @@
 #import "RAHeaderView.h"
 #import "PDFImage.h"
 
-#define PLIST_NAME @"/var/mobile/Library/Preferences/com.efrederickson.reachapp.settings.plist"
-
 @interface PSViewController (Protean)
 - (void) viewDidLoad;
 - (void) viewWillDisappear:(BOOL)animated;
@@ -20,7 +18,7 @@
 @end
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
@@ -29,11 +27,11 @@
 - (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
 @end
 
-@interface ReachAppReachabilitySettingsListController: SKTintedListController<SKListControllerProtocol>
+@interface ReachAppReachabilitySettingsListController: SKTintedListController <SKListControllerProtocol>
 @end
 
 @implementation ReachAppReachabilitySettingsListController
-- (UIView*)headerView {
+- (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
   header.colors = @[
     (id) [UIColor colorWithRed:29/255.0f green:119/255.0f blue:239/255.0f alpha:1.0f].CGColor,
@@ -49,15 +47,15 @@
   return notHeader;
 }
 
-- (UIColor*)tintColor {
+- (UIColor *)tintColor {
   return [UIColor colorWithRed:29/255.0f green:119/255.0f blue:239/255.0f alpha:1.0f];
 }
 
-- (UIColor*)switchTintColor {
+- (UIColor *)switchTintColor {
   return [[UISwitch alloc] init].tintColor;
 }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return LOCALIZE(@"REACHAPP", @"Root");
 }
 
@@ -70,7 +68,7 @@
   [super performSelector:@selector(setupHeader)];
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"ReachApp") },
            @{
@@ -191,7 +189,7 @@
   return NO;
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{ @"footerText": LOCALIZE(@"AUTOSIZE_CHOOSER_FOOTER", @"ReachApp") },
            @{
@@ -267,8 +265,8 @@
 @end
 
 @interface RAFavoritesAppSelectorView : PSViewController <UITableViewDelegate> {
-  UITableView* _tableView;
-  ALApplicationTableDataSource* _dataSource;
+  UITableView *_tableView;
+  ALApplicationTableDataSource *_dataSource;
 }
 @end
 
@@ -292,7 +290,7 @@
   if (!keyList) {
     return cell;
   }
-  prefs = (__bridge_transfer NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  prefs = (__bridge_transfer NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   if (!prefs) {
     return cell;
   }
@@ -302,7 +300,7 @@
     NSString *dn = [self displayIdentifierForIndexPath:indexPath];
     NSString *key = [NSString stringWithFormat:@"Favorites-%@",dn];
     BOOL value = [prefs[key] boolValue];
-    [(ALCheckCell*)cell loadValue:@(value)];
+    [(ALCheckCell *)cell loadValue:@(value)];
   }
   return cell;
 }
@@ -310,7 +308,7 @@
 
 @implementation RAFavoritesAppSelectorView
 
--(void)updateDataSource:(NSString*)searchText {
+-(void)updateDataSource:(NSString *)searchText {
   _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: @"not bundleIdentifier in { }"}];
   [_tableView reloadData];
 }
@@ -328,6 +326,7 @@
     _dataSource.tableView = _tableView;
     [self updateDataSource:nil];
   }
+
   return self;
 }
 
@@ -337,9 +336,9 @@
   [super viewDidLoad];
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   [tableView deselectRowAtIndexPath:indexPath animated:true];
-  ALCheckCell* cell = (ALCheckCell*)[tableView cellForRowAtIndexPath:indexPath];
+  ALCheckCell *cell = (ALCheckCell *)[tableView cellForRowAtIndexPath:indexPath];
   [cell didSelect];
 
   UITableViewCellAccessoryType type = [cell accessoryType];

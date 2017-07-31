@@ -6,13 +6,13 @@
 extern void RA_BGAppsControllerNeedsToReload();
 
 @implementation RABGPerAppDetailsController
-- (instancetype)initWithAppName:(NSString*)appName identifier:(NSString*)identifier {
+- (instancetype)initWithAppName:(NSString *)appName identifier:(NSString *)identifier {
 	_appName = appName;
 	_identifier = identifier;
 	return [self init];
 }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
 	return _appName;
 }
 
@@ -20,15 +20,15 @@ extern void RA_BGAppsControllerNeedsToReload();
 	return NO;
 }
 
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
 	return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
 
-- (id)isBackgroundModeActive:(NSString*)mode withAppInfo:(NSArray*)info {
+- (id)isBackgroundModeActive:(NSString *)mode withAppInfo:(NSArray *)info {
 	return [info containsObject:mode] ? @YES : @NO;
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
 	LSApplicationProxy *appInfo = [%c(LSApplicationProxy) applicationProxyForIdentifier:_identifier];
 	NSArray *bgModes = appInfo.UIBackgroundModes;
 
@@ -186,7 +186,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 					 ];
 }
 
-- (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {
+- (void)setPreferenceValue:(id)value specifier:(PSSpecifier *)specifier {
 	//[super setPreferenceValue:value specifier:specifier];
 
 	if ([[specifier propertyForKey:@"key"] isEqualToString:@"UIApplicationExitsOnSuspend"]) {
@@ -227,7 +227,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 	}
 }
 
-- (id)getActualPrefValue:(NSString*)basename {
+- (id)getActualPrefValue:(NSString *)basename {
 	CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
 	NSString *key = [NSString stringWithFormat:@"backgrounder-%@-%@",_identifier,basename];
 
@@ -236,7 +236,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 	return (__bridge id)value;
 }
 
-- (id)readPreferenceValue:(PSSpecifier*)specifier {
+- (id)readPreferenceValue:(PSSpecifier *)specifier {
 	CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
 	CFArrayRef keyList = CFPreferencesCopyKeyList(appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 	if (!keyList) {

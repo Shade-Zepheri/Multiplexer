@@ -14,8 +14,6 @@
 #import "RABackgrounder.h"
 #import <libactivator/libactivator.h>
 
-#define PLIST_NAME @"/var/mobile/Library/Preferences/com.efrederickson.reachapp.settings.plist"
-
 @interface PSViewController (Protean)
 - (void)viewDidLoad;
 - (void)viewWillDisappear:(BOOL)animated;
@@ -23,7 +21,7 @@
 @end
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
@@ -32,11 +30,11 @@
 - (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
 @end
 
-@interface ReachAppBackgrounderSettingsListController: SKTintedListController<SKListControllerProtocol>
+@interface ReachAppBackgrounderSettingsListController: SKTintedListController <SKListControllerProtocol>
 @end
 
 @implementation ReachAppBackgrounderSettingsListController
-- (UIView*)headerView {
+- (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
   header.colors = @[
     (id) [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f].CGColor,
@@ -51,15 +49,15 @@
   return notHeader;
 }
 
-- (UIColor*)tintColor {
+- (UIColor *)tintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
 
-- (UIColor*)switchTintColor {
+- (UIColor *)switchTintColor {
   return [[UISwitch alloc] init].tintColor;
 }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return LOCALIZE(@"AURA", @"Root");
 }
 
@@ -72,7 +70,7 @@
   [super performSelector:@selector(setupHeader)];
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"Aura") },
            @{
@@ -154,7 +152,7 @@
 @end
 
 @implementation RABackgrounderIconIndicatorOptionsListController
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
 
@@ -162,7 +160,7 @@
   return NO;
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{
               @"cell": @"PSSwitchCell",
@@ -188,7 +186,7 @@
 @end
 
 @implementation RABackgrounderStatusbarOptionsListController
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
 
@@ -196,7 +194,7 @@
   return NO;
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{
               @"cell": @"PSSwitchCell",

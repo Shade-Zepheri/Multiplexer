@@ -26,7 +26,7 @@
 @end
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
@@ -35,11 +35,11 @@
 - (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
 @end
 
-@interface ReachAppSettingsListController: SKTintedListController<SKListControllerProtocol, MFMailComposeViewControllerDelegate>
+@interface ReachAppSettingsListController: SKTintedListController <SKListControllerProtocol, MFMailComposeViewControllerDelegate>
 @end
 
 @implementation ReachAppSettingsListController
-- (UIView*)headerView {
+- (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 95)];
   header.colors = @[
     (id) [UIColor colorWithRed:234/255.0f green:152/255.0f blue:115/255.0f alpha:1.0f].CGColor,
@@ -61,11 +61,11 @@
   return notHeader;
 }
 
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:190/255.0f green:83/255.0f blue:184/255.0f alpha:1.0f];
 }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return LOCALIZE(@"Multiplexer", @"Localizable");
 }
 
@@ -73,11 +73,11 @@
   return YES;
 }
 
-- (NSString*)shareMessage {
+- (NSString *)shareMessage {
   return @"I'm multitasking with Multiplexer, by @daementor and @drewplex";
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"Root") },
            @{
@@ -104,7 +104,7 @@
 
            @{
               @"cell": @"PSLinkListCell",
-              @"default": [RASettings.sharedInstance currentThemeIdentifier],
+              @"default": [[RASettings sharedInstance] currentThemeIdentifier],
               @"defaults": @"com.efrederickson.reachapp.settings",
               @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
               @"label": LOCALIZE(@"THEME", @"Root"),
@@ -223,11 +223,11 @@
 }
 
 - (void)openThemingDocumentation {
-  [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"https://elijahandandrew.com/multiplexer/ThemingDocumentation.html"]];
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://elijahandandrew.com/multiplexer/ThemingDocumentation.html"]];
 }
 
-- (NSArray*)getThemeTitles:(id)target {
-  NSArray *themes = [RAThemeManager.sharedInstance allThemes];
+- (NSArray *)getThemeTitles:(id)target {
+  NSArray *themes = [[RAThemeManager sharedInstance] allThemes];
   NSMutableArray *ret = [NSMutableArray array];
   for (RATheme *theme in themes) {
     [ret addObject:theme.themeName];
@@ -235,8 +235,8 @@
   return ret;
 }
 
-- (NSArray*)getThemeValues:(id)target {
-  NSArray *themes = [RAThemeManager.sharedInstance allThemes];
+- (NSArray *)getThemeValues:(id)target {
+  NSArray *themes = [[RAThemeManager sharedInstance] allThemes];
   NSMutableArray *ret = [NSMutableArray array];
   for (RATheme *theme in themes) {
     [ret addObject:theme.themeIdentifier];
@@ -302,11 +302,11 @@
   return enabled;
 }
 
-- (void)mailComposeController:(MFMailComposeViewController*)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError*)error {
+- (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
   [self dismissViewControllerAnimated:YES completion:NULL];
 }
 
 - (void)showTutorial {
-  [UIApplication.sharedApplication launchApplicationWithIdentifier:@"com.andrewabosh.Multiplexer" suspended:NO];
+  [[UIApplication sharedApplication] launchApplicationWithIdentifier:@"com.andrewabosh.Multiplexer" suspended:NO];
 }
 @end

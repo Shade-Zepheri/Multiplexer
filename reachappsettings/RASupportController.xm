@@ -8,7 +8,7 @@
 #import <SettingsKit/SKPersonCell.h>
 #import <SettingsKit/SKSharedHelper.h>
 
-@interface RAMakersController : SKTintedListController<SKListControllerProtocol, MFMailComposeViewControllerDelegate>
+@interface RAMakersController : SKTintedListController <SKListControllerProtocol, MFMailComposeViewControllerDelegate>
 @end
 
 @implementation RAMakersController
@@ -16,20 +16,20 @@
   return NO;
 }
 
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
   return [UIColor blackColor];
 }
 
-- (UIColor*)switchOnTintColor {
+- (UIColor *)switchOnTintColor {
   return self.navigationTintColor;
 }
 //-(UIColor*) iconColor { return self.navigationTintColor; }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return @"Creators";
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{ @"cell": @"PSGroupCell", @"label": @"Developed and Designed by" },
            @{
@@ -165,15 +165,15 @@ Crafted with love in 🇨🇦 and 🇺🇸. \n\
 - (void)openAndrewTwitter { [SKSharedHelper openTwitter:@"drewplex"]; }
 - (void)openShadeTwitter { [SKSharedHelper openTwitter:@"ShadeZepheri"]; }
 - (void)openAndiTwitter { [SKSharedHelper openTwitter:@"Nexuist"]; }
-- (void)openBetaPage { [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"https://www.reddit.com/user/beta382"]]; }
+- (void)openBetaPage { [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.reddit.com/user/beta382"]]; }
 - (void)openChonTwitter { [SKSharedHelper openTwitter:@"HikoMitsuketa"]; }
 - (void)openDavidTwitter { [SKSharedHelper openTwitter:@"djaovx"]; }
 - (void)openJackTwitter { [SKSharedHelper openTwitter:@"JackHaal"]; }
 - (void)openMosheTwitter { [SKSharedHelper openTwitter:@"oniconpack"]; }
-- (void)openBindersPAge { [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"https://www.reddit.com/user/_BindersFullOfWomen_"]]; }
+- (void)openBindersPAge { [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.reddit.com/user/_BindersFullOfWomen_"]]; }
 - (void)openWilsonTwitter { [SKSharedHelper openTwitter:@"xTM3x"]; }
 - (void)openZiph0nTwitter { [SKSharedHelper openTwitter:@"ziph0n"]; }
 - (void)openSharedRoutineTwitter { [SKSharedHelper openTwitter:@"sharedRoutine"]; }
 - (void)openEthanTwitter { [SKSharedHelper openTwitter:@"its_not_herpes"]; }
-- (void)openSite { [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"https://elijahandandrew.com"]]; }
+- (void)openSite { [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://elijahandandrew.com"]]; }
 @end

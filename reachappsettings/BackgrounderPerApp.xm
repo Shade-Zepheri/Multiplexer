@@ -9,7 +9,7 @@
 #import "BackgroundPerAppDetailsController.h"
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
@@ -44,14 +44,14 @@ void RA_BGAppsControllerNeedsToReload() {
 }
 
 @interface RABGPerAppController : PSViewController <UITableViewDelegate> {
-	UITableView* _tableView;
-	ALApplicationTableDataSource* _dataSource;
+	UITableView *_tableView;
+	ALApplicationTableDataSource *_dataSource;
 }
 @end
 
 @implementation RABGPerAppController
 
-- (void)updateDataSource:(NSString*)searchText {
+- (void)updateDataSource:(NSString *)searchText {
 	NSNumber *iconSize = [NSNumber numberWithUnsignedInteger:ALApplicationIconSizeSmall];
 
 	NSString *enabledList = @"";
@@ -130,8 +130,8 @@ void RA_BGAppsControllerNeedsToReload() {
 }
 
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
-	UITableViewCell* cell = [tableView cellForRowAtIndexPath:indexPath];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+	UITableViewCell *cell = [tableView cellForRowAtIndexPath:indexPath];
 
 	// Need to mimic what PSListController does when it handles didSelectRowAtIndexPath
 	// otherwise the child controller won't load
@@ -143,14 +143,14 @@ void RA_BGAppsControllerNeedsToReload() {
 	[tableView deselectRowAtIndexPath:indexPath animated:true];
 }
 
-- (UIColor*)tintColor {
+- (UIColor *)tintColor {
 	return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
 	[super viewWillDisappear:animated];
 
-	((UIView*)self.view).tintColor = nil;
+	((UIView *)self.view).tintColor = nil;
 	self.navigationController.navigationBar.tintColor = nil;
 }
 

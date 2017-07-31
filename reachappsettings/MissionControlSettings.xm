@@ -12,8 +12,6 @@
 #import "PDFImage.h"
 #import <libactivator/libactivator.h>
 
-#define PLIST_NAME @"/var/mobile/Library/Preferences/com.efrederickson.reachapp.settings.plist"
-
 @interface PSViewController (Protean)
 - (void)viewDidLoad;
 - (void)viewWillDisappear:(BOOL)animated;
@@ -21,7 +19,7 @@
 @end
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
@@ -30,11 +28,11 @@
 - (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
 @end
 
-@interface ReachAppMCSettingsListController: SKTintedListController<SKListControllerProtocol>
+@interface ReachAppMCSettingsListController: SKTintedListController <SKListControllerProtocol>
 @end
 
 @implementation ReachAppMCSettingsListController
-- (UIView*)headerView {
+- (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
   header.colors = @[
     (id) [UIColor colorWithRed:255/255.0f green:205/255.0f blue:2/255.0f alpha:1.0f].CGColor,
@@ -49,15 +47,15 @@
   return notHeader;
 }
 
-- (UIColor*)tintColor {
+- (UIColor *)tintColor {
   return [UIColor colorWithRed:255/255.0f green:205/255.0f blue:2/255.0f alpha:1.0f];
 }
 
-- (UIColor*)switchTintColor {
+- (UIColor *)switchTintColor {
   return [[UISwitch alloc] init].tintColor;
 }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return LOCALIZE(@"MISSION_CONTROL", @"Root");
 }
 
@@ -70,7 +68,7 @@
   [super performSelector:@selector(setupHeader)];
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
     return @[
              @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"MissionControl") },
              @{

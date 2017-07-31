@@ -11,8 +11,6 @@
 #import "RAHeaderView.h"
 #import "PDFImage.h"
 
-#define PLIST_NAME @"/var/mobile/Library/Preferences/com.efrederickson.reachapp.settings.plist"
-
 @interface PSViewController (Protean)
 - (void)viewDidLoad;
 - (void)viewWillDisappear:(BOOL)animated;
@@ -20,7 +18,7 @@
 @end
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
@@ -29,11 +27,11 @@
 - (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
 @end
 
-@interface ReachAppNCAppSettingsListController: SKTintedListController<SKListControllerProtocol>
+@interface ReachAppNCAppSettingsListController: SKTintedListController <SKListControllerProtocol>
 @end
 
 @implementation ReachAppNCAppSettingsListController
-- (UIView*)headerView {
+- (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50)];
   header.colors = @[
     (id) [UIColor colorWithRed:90/255.0f green:212/255.0f blue:39/255.0f alpha:1.0f].CGColor,
@@ -48,15 +46,15 @@
   return notHeader;
 }
 
-- (UIColor*)tintColor {
+- (UIColor *)tintColor {
   return [UIColor colorWithRed:90/255.0f green:212/255.0f blue:39/255.0f alpha:1.0f];
 }
 
-- (UIColor*)switchTintColor {
+- (UIColor *)switchTintColor {
   return [[UISwitch alloc] init].tintColor;
 }
 
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return LOCALIZE(@"QUICK_ACCESS", @"Root");
 }
 
@@ -69,7 +67,7 @@
   [super performSelector:@selector(setupHeader)];
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
   return @[
            @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"QuickAccess") },
            @{
@@ -110,8 +108,8 @@
 
 
 @interface RANCAppSelectorView : PSViewController <UITableViewDelegate> {
-  UITableView* _tableView;
-  ALApplicationTableDataSource* _dataSource;
+  UITableView *_tableView;
+  ALApplicationTableDataSource *_dataSource;
 }
 @end
 
@@ -135,7 +133,7 @@
   if (!keyList) {
     return cell;
   }
-  prefs = (__bridge_transfer NSDictionary*)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  prefs = (__bridge_transfer NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   if (!prefs) {
     return cell;
   }
@@ -154,7 +152,7 @@
 
 @implementation RANCAppSelectorView
 
-- (void)updateDataSource:(NSString*)searchText {
+- (void)updateDataSource:(NSString *)searchText {
   _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: @"not bundleIdentifier in { }", @"ALSingleEnabledMode": @YES}];
   [_tableView reloadData];
 }
@@ -173,6 +171,7 @@
     _dataSource.tableView = _tableView;
     [self updateDataSource:nil];
   }
+
   return self;
 }
 
@@ -182,9 +181,9 @@
   [super viewDidLoad];
 }
 
-- (void)tableView:(UITableView*)tableView didSelectRowAtIndexPath:(NSIndexPath*)indexPath {
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
   [tableView deselectRowAtIndexPath:indexPath animated:true];
-  ALCheckCell* cell = (ALCheckCell*)[tableView cellForRowAtIndexPath:indexPath];
+  ALCheckCell *cell = (ALCheckCell *)[tableView cellForRowAtIndexPath:indexPath];
   [cell didSelect];
 
   UITableViewCellAccessoryType type = [cell accessoryType];

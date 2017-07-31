@@ -45,30 +45,31 @@
     self.blendMode = kCGBlendModeOverlay;
     self.shouldBlend = YES;
   }
+
   return self;
 }
 
 - (void)setFrame:(CGRect)frame {
   [super setFrame:frame];
-  ((CAGradientLayer*)self.layer).frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
+  ((CAGradientLayer *)self.layer).frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
 }
 
-- (void)setColors:(NSArray*)c {
-  ((CAGradientLayer*)self.layer).colors = c;
+- (void)setColors:(NSArray *)c {
+  ((CAGradientLayer *)self.layer).colors = c;
 }
 
-- (void)setTitle:(NSString*)title {
+- (void)setTitle:(NSString *)title {
   label.text = title;
 }
 
-- (void)setImage:(UIImage*)image {
+- (void)setImage:(UIImage *)image {
   if (label.text.length > 0) {
     imageView.frame = (CGRect) { { self.frame.size.width - image.size.width - 20, (self.frame.size.height - image.size.height) / 2.0 }, image.size };
   } else {
     imageView.frame = (CGRect) { { (self.frame.size.width - image.size.width) / 2.0, (self.frame.size.height - image.size.height) / 2.0 }, image.size };
   }
   if (self.shouldBlend) {
-  	UIColor *color = [UIColor colorWithCGColor:(CGColorRef)((CAGradientLayer*)self.layer).colors[0]];
+  	UIColor *color = [UIColor colorWithCGColor:(CGColorRef)((CAGradientLayer *)self.layer).colors[0]];
   	image = [image tintedImageWithColor:color blendingMode:self.blendMode];
   }
   imageView.image = image;

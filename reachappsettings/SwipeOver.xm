@@ -12,8 +12,6 @@
 #import "PDFImage.h"
 #import "RASettings.h"
 
-#define PLIST_NAME @"/var/mobile/Library/Preferences/com.efrederickson.reachapp.settings.plist"
-
 @interface PSViewController (Protean)
 - (void)viewDidLoad;
 - (void)viewWillDisappear:(BOOL)animated;
@@ -21,16 +19,16 @@
 @end
 
 @interface PSViewController (SettingsKit2)
-- (UINavigationController*)navigationController;
+- (UINavigationController *)navigationController;
 - (void)viewWillAppear:(BOOL)animated;
 - (void)viewWillDisappear:(BOOL)animated;
 @end
 
-@interface ReachAppSwipeOverSettingsListController: SKTintedListController<SKListControllerProtocol>
+@interface ReachAppSwipeOverSettingsListController: SKTintedListController <SKListControllerProtocol>
 @end
 
 @implementation ReachAppSwipeOverSettingsListController
-- (UIView*)headerView {
+- (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
   header.colors = @[
     (id) [UIColor colorWithRed:88/255.0f green:86/255.0f blue:214/255.0f alpha:1.0f].CGColor,
@@ -44,15 +42,15 @@
 
   return notHeader;
 }
-- (NSString*)customTitle {
+- (NSString *)customTitle {
   return LOCALIZE(@"SWIPE_OVER", @"Root");
 }
 
-- (UIColor*)tintColor {
+- (UIColor *)tintColor {
   return [UIColor colorWithRed:88/255.0f green:86/255.0f blue:214/255.0f alpha:1.0f];
 }
 
-- (UIColor*)switchTintColor {
+- (UIColor *)switchTintColor {
   return [[UISwitch alloc] init].tintColor;
 }
 
@@ -65,7 +63,7 @@
   [super performSelector:@selector(setupHeader)];
 }
 
-- (NSArray*)customSpecifiers {
+- (NSArray *)customSpecifiers {
     return @[
              @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"SwipeOver") },
              @{

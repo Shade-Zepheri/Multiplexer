@@ -15,7 +15,7 @@
 @end
 
 @implementation RAListItemsController
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
   return [UIColor blackColor];
 }
 
@@ -33,26 +33,20 @@
   self.navigationController.navigationBar.tintColor = nil;
 }
 
-- (NSArray*)specifiers {
+- (NSArray *)specifiers {
   if (!_specifiers) {
-    PSSpecifier* themeSpecifier = [PSSpecifier preferenceSpecifierNamed:@"Documentation"
-                                    target:self
-                                       set:NULL
-                                       get:NULL
-                                    detail:Nil
-                                      cell:PSButtonCell
-                                      edit:Nil];
+    PSSpecifier *themeSpecifier = [PSSpecifier preferenceSpecifierNamed:@"Documentation" target:self set:NULL get:NULL detail:Nil cell:PSButtonCell edit:Nil];
     [themeSpecifier setProperty:SK_RSIMG(@"tutorial.png") forKey:@"iconImage"];
     [themeSpecifier setProperty:@"poop" forKey:@"isTheming"];
     _specifiers = [super specifiers];
-    [(NSMutableArray*)_specifiers addObject:[PSSpecifier emptyGroupSpecifier]];
-    [(NSMutableArray*)_specifiers addObject:themeSpecifier];
+    [(NSMutableArray *)_specifiers addObject:[PSSpecifier emptyGroupSpecifier]];
+    [(NSMutableArray *)_specifiers addObject:themeSpecifier];
   }
   return _specifiers;
 }
 
 - (void)openThemingDocumentation {
-  [UIApplication.sharedApplication openURL:[NSURL URLWithString:@"https://elijahandandrew.com/multiplexer/ThemingDocumentation.html"]];
+  [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://elijahandandrew.com/multiplexer/ThemingDocumentation.html"]];
 }
 
 - (void)tableView:(id)arg1 didSelectRowAtIndexPath:(id)arg2 {
@@ -71,7 +65,7 @@
 @end
 
 @implementation RABackgroundingListItemsController
-- (UIColor*)navigationTintColor {
+- (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
 
