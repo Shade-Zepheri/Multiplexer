@@ -260,7 +260,7 @@ CGRect swappedForOrientation2(CGRect in) {
 				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
 				break;
 			case UIInterfaceOrientationPortraitUpsideDown:
-				dismiss = window.frame.origin.y + window.frame.size.height - velocity.y > [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
+				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y > [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
 				break;
 			case UIInterfaceOrientationLandscapeLeft:
 				dismiss = window.frame.origin.x + window.frame.size.width < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 2.0;
