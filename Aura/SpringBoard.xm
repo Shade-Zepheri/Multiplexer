@@ -43,19 +43,6 @@
 %end
 
 %hook FBSSceneImpl
-- (instancetype)_initWithQueue:(id)queue callOutQueue:(id)callOutQueue identifier:(NSString *)identifier display:(FBSDisplay *)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)clientSettings {
-  if ([[RABackgrounder sharedInstance] shouldKeepInForeground:identifier]) {
-    // what?
-    if (!settings) {
-      UIMutableApplicationSceneSettings *fakeSettings = [[%c(UIMutableApplicationSceneSettings) alloc] init];
-      settings = fakeSettings;
-    }
-    settings.backgrounded = NO;
-  }
-
-  return %orig(queue, callOutQueue, identifier, display, settings, clientSettings);
-}
-
 - (instancetype)initWithQueue:(id)queue identifier:(NSString *)identifier display:(FBSDisplay *)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)clientSettings {
   if ([[RABackgrounder sharedInstance] shouldKeepInForeground:identifier]) {
     // what?
