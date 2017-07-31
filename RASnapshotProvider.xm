@@ -34,7 +34,7 @@
 				view = [[[%c(SBUIController) sharedInstance] switcherController] performSelector:@selector(_snapshotViewForDisplayItem:) withObject:item];
 				[view setOrientation:orientation orientationBehavior:0];
 			} else {
-				view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:NO withQueue:nil];
+				view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:YES withQueue:nil];
 			}
 		});
 
@@ -46,7 +46,7 @@
 				image = [(UIImageView *)[view valueForKey:@"_snapshotImageView"] image];
 			} else {
 				// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
-				_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:0 preferringDownscaled:NO defaultImageOnly:NO];
+				_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:nil preferringDownscaled:NO defaultImageOnly:NO];
 				image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
 			}
 		}
