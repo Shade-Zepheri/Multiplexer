@@ -15,12 +15,12 @@ fake phone mode: working (hacky tho)
 
 Bugs:
 - Fix KeyboardSupport
-- Individual app force foregrounding is broken when used in conjunction with auto (re)launch (cant seeem to reproduce anymore);
+- Individual app force foregrounding is broken when used in conjunction with auto (re)launch (Seems that it requires nil settings while FF manually provides);
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - Empoleon windows dont properly rotate in some (most) apps
-- MC slides in from wrong orientation
+- MC window doesnt change orientation when in apps
 
 Minor Things/Bugs to note:
 - SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard, which nothing seems to work)

@@ -30,14 +30,21 @@
 @end
 
 CGRect swappedForOrientation(CGRect input) {
-	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-		CGFloat x = input.origin.x;
-		input.origin.x = input.origin.y;
-		input.origin.y = x;
-	} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
-		CGFloat x = input.origin.x;
-		input.origin.x = fabs(input.origin.y) + [UIScreen mainScreen].bounds.size.width;
-		input.origin.y = x;
+	CGFloat x = input.origin.x;
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationPortrait:
+			break;
+		case UIInterfaceOrientationPortraitUpsideDown:
+			input.origin.y = fabs(input.origin.y);
+			break;
+		case UIInterfaceOrientationLandscapeLeft:
+			input.origin.x = input.origin.y;
+			input.origin.y = x;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			input.origin.x = fabs(input.origin.y) + [UIScreen mainScreen].bounds.size.width;
+			input.origin.y = x;
+			break;
 	}
 
 	return input;
@@ -84,7 +91,7 @@ CGRect swappedForOrientation2(CGRect in) {
 	[self createWindow];
 
 	if (animated) {
-		window.frame = CGRectMake(0, -window.frame.size.height, window.frame.size.width, window.frame.size.height);
+		window.frame = swappedForOrientation(CGRectMake(0, -window.frame.size.height, window.frame.size.width, window.frame.size.height));
 	}
 		//window.alpha = 0;
 
