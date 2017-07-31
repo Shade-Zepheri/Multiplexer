@@ -252,6 +252,9 @@ CGRect swappedForOrientation2(CGRect in) {
 			case UIInterfaceOrientationPortrait:
 				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
 				break;
+			case UIInterfaceOrientationPortraitUpsideDown:
+				dismiss = window.frame.origin.y + window.frame.size.height - velocity.y > [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
+				break;
 			case UIInterfaceOrientationLandscapeLeft:
 				dismiss = window.frame.origin.x + window.frame.size.width < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 2.0;
 				break;
@@ -270,6 +273,9 @@ CGRect swappedForOrientation2(CGRect in) {
 				switch ([UIApplication sharedApplication].statusBarOrientation) {
 					case UIInterfaceOrientationPortrait:
 						window.center = CGPointMake(window.center.x, -initialCenter.y);
+						break;
+					case UIInterfaceOrientationPortraitUpsideDown:
+						window.center = CGPointMake(window.center.x, [UIScreen mainScreen].bounds.size.height + initialCenter.y);
 						break;
 					case UIInterfaceOrientationLandscapeLeft:
 						frame.origin.x = -[UIScreen mainScreen].bounds.size.width;
@@ -312,6 +318,9 @@ CGRect swappedForOrientation2(CGRect in) {
 		switch ([UIApplication sharedApplication].statusBarOrientation) {
 			case UIInterfaceOrientationPortrait:
 				window.center = CGPointMake(window.center.x, location.y - initialCenter.y);
+				break;
+			case UIInterfaceOrientationPortraitUpsideDown:
+				window.center = CGPointMake(window.center.x, initialCenter.y + [UIScreen mainScreen].bounds.size.height - location.y);
 				break;
 			case UIInterfaceOrientationLandscapeLeft:
 				frame.origin.x = -[UIScreen mainScreen].bounds.size.height + location.y;
