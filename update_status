@@ -20,7 +20,6 @@ Bugs:
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - Empoleon windows dont properly rotate in some (most) apps
-- MC window doesnt change orientation when in apps
 
 Minor Things/Bugs to note:
 - SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard, which nothing seems to work)

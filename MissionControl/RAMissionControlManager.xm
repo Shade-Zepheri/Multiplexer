@@ -30,8 +30,9 @@
 @end
 
 CGRect swappedForOrientation(CGRect input) {
+	UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
 	CGFloat x = input.origin.x;
-	switch ([UIApplication sharedApplication].statusBarOrientation) {
+	switch (interfaceOrientation) {
 		case UIInterfaceOrientationPortrait:
 			break;
 		case UIInterfaceOrientationPortraitUpsideDown:
@@ -42,26 +43,12 @@ CGRect swappedForOrientation(CGRect input) {
 			input.origin.y = x;
 			break;
 		case UIInterfaceOrientationLandscapeRight:
-			input.origin.x = fabs(input.origin.y) + [UIScreen mainScreen].bounds.size.width;
+			input.origin.x = fabs(input.origin.y);
 			input.origin.y = x;
 			break;
 	}
 
 	return input;
-}
-
-CGRect swappedForOrientation2(CGRect in) {
-	if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-		CGFloat x = in.origin.x;
-		in.origin.x = in.origin.y;
-		in.origin.y = x;
-	} else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
-		CGFloat x = in.origin.x;
-		in.origin.x = -in.size.width;
-		in.origin.y = x;
-	}
-
-	return in;
 }
 
 @implementation RAMissionControlManager
@@ -115,7 +102,8 @@ CGRect swappedForOrientation2(CGRect in) {
 		originalAppView.frame = CGRectMake(originalAppFrame.origin.x, originalAppView.frame.size.height, originalAppFrame.size.width, originalAppFrame.size.height);
 	}
 
-	[window updateForOrientation:[UIApplication sharedApplication].statusBarOrientation];
+	UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
+	[window updateForOrientation:orientation];
 	[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:self forEdge:UIRectEdgeBottom identifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture" priority:RAGesturePriorityHigh];
 	[[RAGestureManager sharedInstance] ignoreSwipesBeginningInRect:[UIScreen mainScreen].bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
 	[[RARunningAppsProvider sharedInstance] addTarget:window];
@@ -142,7 +130,14 @@ CGRect swappedForOrientation2(CGRect in) {
 		window = nil;
 	}
 
-	window = [[RAMissionControlWindow alloc] initWithFrame:[UIScreen mainScreen].RA_interfaceOrientedBounds];
+	UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
+	CGRect baseBounds = [UIScreen mainScreen]._referenceBounds;
+	if (UIInterfaceOrientationIsLandscape(orientation)) {
+		//need to adjust frame manually because using sb orientation which doesnt change when in apps;
+		baseBounds.size = CGSizeMake(baseBounds.size.height, baseBounds.size.width);
+	}
+
+	window = [[RAMissionControlWindow alloc] initWithFrame:baseBounds];
 	window.manager = self;
 	//[window _rotateWindowToOrientation:[UIApplication sharedApplication].statusBarOrientation updateStatusBar:YES duration:1 skipCallbacks:NO];
 
@@ -152,7 +147,6 @@ CGRect swappedForOrientation2(CGRect in) {
 	[window addSubview:blurView];
 
 	int statusBarStyle = 0x12F; //Normal notification center style
-	UIInterfaceOrientation orientation = [UIApplication sharedApplication].statusBarOrientation;
 	statusBar = [[UIStatusBar alloc] initWithFrame:CGRectMake(0, 0, [UIApplication sharedApplication].statusBar.bounds.size.width, [UIStatusBar heightForStyle:statusBarStyle orientation:orientation])];
 	[statusBar requestStyle:statusBarStyle];
 	statusBar.autoresizingMask = UIViewAutoresizingFlexibleWidth;
@@ -249,47 +243,48 @@ CGRect swappedForOrientation2(CGRect in) {
 - (RAGestureCallbackResult)RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge {
 	static CGPoint initialCenter;
 	static CGRect initialAppFrame;
+	UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
 
 	if (state == UIGestureRecognizerStateEnded) {
 		hasMoved = NO;
 		[RAControlCenterInhibitor setInhibited:NO];
 
 		BOOL dismiss = NO;
-		switch ([UIApplication sharedApplication].statusBarOrientation) {
+		switch (orientation) {
 			case UIInterfaceOrientationPortrait:
-				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
+				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < [UIScreen mainScreen]._referenceBounds.size.height / 2;
 				break;
 			case UIInterfaceOrientationPortraitUpsideDown:
-				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y > [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2;
+				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y > [UIScreen mainScreen]._referenceBounds.size.height / 2;
 				break;
 			case UIInterfaceOrientationLandscapeLeft:
-				dismiss = window.frame.origin.x + window.frame.size.width < [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 2.0;
+				dismiss = window.frame.origin.x + window.frame.size.width < [UIScreen mainScreen]._referenceBounds.size.width / 2.0;
 				break;
 			case UIInterfaceOrientationLandscapeRight:
-				dismiss = window.frame.origin.x + velocity.y > [UIScreen mainScreen].bounds.size.width / 2.0;
+				dismiss = window.frame.origin.x + velocity.y > [UIScreen mainScreen]._referenceBounds.size.width / 2.0;
 				break;
 		}
 
 		if (dismiss) {
 			// Close
-			CGFloat distance = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - (window.frame.origin.y + window.frame.size.height);
+			CGFloat distance = window.frame.size.height - (window.frame.origin.y + window.frame.size.height);
 			CGFloat duration = MIN(distance / velocity.y, 0.3);
 
 			[UIView animateWithDuration:duration animations:^{
 				CGRect frame = window.frame;
-				switch ([UIApplication sharedApplication].statusBarOrientation) {
+				switch (orientation) {
 					case UIInterfaceOrientationPortrait:
 						window.center = CGPointMake(window.center.x, -initialCenter.y);
 						break;
 					case UIInterfaceOrientationPortraitUpsideDown:
-						window.center = CGPointMake(window.center.x, [UIScreen mainScreen].bounds.size.height + initialCenter.y);
+						window.center = CGPointMake(window.center.x, [UIScreen mainScreen]._referenceBounds.size.height + initialCenter.y);
 						break;
 					case UIInterfaceOrientationLandscapeLeft:
-						frame.origin.x = -[UIScreen mainScreen].bounds.size.width;
+						frame.origin.x = -[UIScreen mainScreen]._referenceBounds.size.width;
 						window.frame = frame;
 						break;
 					case UIInterfaceOrientationLandscapeRight:
-						frame.origin.x = [UIScreen mainScreen].bounds.size.width;
+						frame.origin.x = [UIScreen mainScreen]._referenceBounds.size.width;
 						window.frame = frame;
 						break;
 				}
@@ -322,19 +317,19 @@ CGRect swappedForOrientation2(CGRect in) {
 		}
 	} else {
 		CGRect frame = window.frame;
-		switch ([UIApplication sharedApplication].statusBarOrientation) {
+		switch (orientation) {
 			case UIInterfaceOrientationPortrait:
 				window.center = CGPointMake(window.center.x, location.y - initialCenter.y);
 				break;
 			case UIInterfaceOrientationPortraitUpsideDown:
-				window.center = CGPointMake(window.center.x, initialCenter.y + [UIScreen mainScreen].bounds.size.height - location.y);
+				window.center = CGPointMake(window.center.x, initialCenter.y + [UIScreen mainScreen]._referenceBounds.size.height - location.y);
 				break;
 			case UIInterfaceOrientationLandscapeLeft:
-				frame.origin.x = -[UIScreen mainScreen].bounds.size.height + location.y;
+				frame.origin.x = -[UIScreen mainScreen]._referenceBounds.size.width + location.y;
 				window.frame = frame;
 				break;
 			case UIInterfaceOrientationLandscapeRight:
-				frame.origin.x = [UIScreen mainScreen].bounds.size.height - location.y;
+				frame.origin.x = [UIScreen mainScreen]._referenceBounds.size.width - location.y;
 				window.frame = frame;
 				break;
 		}
