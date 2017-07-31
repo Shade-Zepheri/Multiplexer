@@ -329,7 +329,7 @@ id SBWorkspace$sharedInstance;
       while (!scene && bundleIdentifiers.count > 0) {
         lastBundleIdentifier = bundleIdentifiers[0];
 
-        if ([lastBundleIdentifier isEqual:currentBundleIdentifier]) {
+        if ([lastBundleIdentifier isEqualToString:currentBundleIdentifier]) {
           [bundleIdentifiers removeObjectAtIndex:0];
           continue;
         }

@@ -29,7 +29,7 @@
 - (void)addGesture:(RAGestureCallback *)callback {
 	BOOL found = NO;
 	for (RAGestureCallback *callback_ in gestures) {
-		if ([callback_.identifier isEqual:callback.identifier]) {
+		if ([callback_.identifier isEqualToString:callback.identifier]) {
 			found = YES;
 			break;
 		}
@@ -70,7 +70,7 @@
 	int i = 0;
 	while (i < gestures.count) {
 		RAGestureCallback *callback = [self callbackAtIndex:i];
-		if ([callback.identifier isEqual:identifier]) {
+		if ([callback.identifier isEqualToString:identifier]) {
 			[gestures removeObjectAtIndex:i];
 			i--; // offset for the change
 		}

@@ -175,7 +175,7 @@ extern BOOL allowClosingReachabilityNatively;
 		return;
 	}
 
-	if ([self isBeingHosted] && (!self.knownFrontmostApp || ![self.knownFrontmostApp isEqual:ident])) {
+	if ([self isBeingHosted] && (!self.knownFrontmostApp || ![self.knownFrontmostApp isEqualToString:ident])) {
 		[serverCenter sendMessageName:RAMessagingChangeFrontMostAppMessageName userInfo:@{ @"bundleIdentifier": ident }];
 	}
 }

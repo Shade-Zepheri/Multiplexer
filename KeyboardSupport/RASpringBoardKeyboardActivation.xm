@@ -40,7 +40,7 @@ RAKeyboardWindow *keyboardWindow;
 }
 
 - (void)appDidDie:(SBApplication *)app {
-  if (![_currentIdentifier isEqual:app.bundleIdentifier]) {
+  if (![_currentIdentifier isEqualToString:app.bundleIdentifier]) {
     return;
   }
   [self hideKeyboard];
