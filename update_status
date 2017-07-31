@@ -20,11 +20,12 @@ Bugs:
 - Aura breaks calls? (kill on exit)
 - Apps crashes due to hook of _sendTouchesForEvent in UIWindow
 - Empoleon windows dont properly rotate in some (most) apps
-- MC gives black screen when in apps
+- MC slides in from wrong orientation
 
 Minor Things/Bugs to note:
 - SwipeOver grabber doesnt always show when supposed to (eg on SpringBoard, which nothing seems to work)
 - Optimize FakePhoneMode (use Classic Modes)
+- Fix Suspend Immediately resetting switcher cards
 
 Things to do/Features to add:
 - 3D Touch actions?

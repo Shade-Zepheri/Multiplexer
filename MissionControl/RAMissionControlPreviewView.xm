@@ -57,7 +57,7 @@
 }
 
 - (void)generateDesktopPreviewAsync:(id)desktop_ completion:(dispatch_block_t)completionBlock {
-  RADesktopWindow *desktop = (RADesktopWindow*)desktop_;
+  RADesktopWindow *desktop = (RADesktopWindow *)desktop_;
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     UIImage *image = [[RASnapshotProvider sharedInstance] snapshotForDesktop:desktop];
 
@@ -75,6 +75,7 @@
   if (!iconView) {
     return;
   }
+
   [self bringSubviewToFront:iconView];
   iconView.frame = CGRectMake( (self.frame.size.width / 2) - (iconView.frame.size.width / 2), (self.frame.size.height / 2) - (iconView.frame.size.height / 2), iconView.frame.size.width, iconView.frame.size.height );
 }

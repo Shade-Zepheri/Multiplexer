@@ -632,6 +632,7 @@
 	if (CGRectContainsPoint(self.frame, point)) {
 		return YES;
 	}
+
 	return [super pointInside:point withEvent:event];
 }
 @end
