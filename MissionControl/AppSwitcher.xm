@@ -60,7 +60,7 @@ BOOL toggleOrActivate = NO;
 	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = NO;
 }
 
-- (void)_hideNotificationsGestureEndedWithCompletionType:(long long)type velocity:(CGPoint)velocity {
+- (void)_hideNotificationsGestureEndedWithCompletionType:(NSInteger)type velocity:(CGPoint)velocity {
 	%orig;
 	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = NO;
 }
@@ -84,12 +84,16 @@ BOOL toggleOrActivate = NO;
 %end
 
 %hook SBNotificationCenterController
-- (void)_showNotificationCenterGestureBeganWithGestureRecognizer:(UIGestureRecognizer *)recognizer {
-	CGPoint location = [recognizer locationInView:[[%c(SBMainSwitcherViewController) sharedInstance] view]];
+- (void)beginPresentationWithTouchLocation:(CGPoint)location presentationBegunHandler:(id)handler {
 	if ([[RASettings sharedInstance] missionControlEnabled] && [[%c(SBUIController) sharedInstance] isAppSwitcherShowing] && CGRectContainsPoint([[[[%c(SBMainSwitcherViewController) sharedInstance] valueForKey:@"_contentView"] contentView] viewWithTag:999].frame, location)) {
 		return;
 	}
 
+	%orig;
+}
+
+- (void)_beginDismissalWithTouchLocation:(CGPoint)location {
+	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = YES;
 	%orig;
 }
 %end
@@ -120,7 +124,7 @@ BOOL toggleOrActivate = NO;
 %end
 
 @interface SBAppSwitcherController ()
-- (UIView*)view;
+- (UIView *)view;
 @end
 
 //%hook SBAppSwitcherWindow
@@ -158,7 +162,7 @@ BOOL toggleOrActivate = NO;
 
 		[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)self forEdge:UIRectEdgeTop identifier:@"com.efrederickson.reachapp.appswitchergrabber"];
 	} else {
-		((UIView*)[view viewWithTag:999]).center = CGPointMake(view.frame.size.width / 2, 20/2);
+		((UIView *)[view viewWithTag:999]).center = CGPointMake(view.frame.size.width / 2, 20/2);
 	}
 }
 
@@ -198,7 +202,7 @@ BOOL toggleOrActivate = NO;
 
 		[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)self forEdge:UIRectEdgeTop identifier:@"com.efrederickson.reachapp.appswitchergrabber"];
 	} else {
-		((UIView*)[view viewWithTag:999]).center = CGPointMake(view.frame.size.width / 2, 20/2);
+		((UIView *)[view viewWithTag:999]).center = CGPointMake(view.frame.size.width / 2, 20/2);
 	}
 }
 
@@ -224,7 +228,7 @@ BOOL toggleOrActivate = NO;
 
 		if (snapshot) {
 			fakeView = [[UIImageView alloc] initWithFrame:view.frame];
-			((UIImageView*)fakeView).image = snapshot;
+			((UIImageView *)fakeView).image = snapshot;
 			[view addSubview:fakeView];
 		} else {
 			fakeView = [[UIView alloc] initWithFrame:view.frame];
@@ -362,12 +366,9 @@ BOOL toggleOrActivate = NO;
 		  height = 40;
 		}
 
-		if ([%c(SBControlCenterGrabberView) class]) {
+		if (%c(SBControlCenterGrabberView)) {
 			SBControlCenterGrabberView *grabber = [[%c(SBControlCenterGrabberView) alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-
 			grabber.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
-
-
 			grabber.backgroundColor = [UIColor clearColor];
 			//grabber.chevronView.vibrantSettings = [%c(_SBFVibrantSettings) vibrantSettingsWithReferenceColor:UIColor.whiteColor referenceContrast:0.5 legibilitySettings:nil];
 
@@ -385,7 +386,6 @@ BOOL toggleOrActivate = NO;
 
 		} else {
 			UIView *grabber = [[UIView alloc] initWithFrame:CGRectMake(0, 0, width, height)];
-
 			grabber.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
 
 			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithStyle:2060];
@@ -409,7 +409,7 @@ BOOL toggleOrActivate = NO;
 		}
 		[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)self forEdge:UIRectEdgeTop identifier:@"com.efrederickson.reachapp.appswitchergrabber"];
 	} else {
-		((UIView*)[view viewWithTag:999]).center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
+		((UIView *)[view viewWithTag:999]).center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
 	}
 }
 
@@ -435,7 +435,7 @@ BOOL toggleOrActivate = NO;
 
 		if (snapshot) {
 			fakeView = [[UIImageView alloc] initWithFrame:view.frame];
-			((UIImageView*)fakeView).image = snapshot;
+			((UIImageView *)fakeView).image = snapshot;
 			[view addSubview:fakeView];
 		} else {
 			fakeView = [[UIView alloc] initWithFrame:view.frame];
