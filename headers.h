@@ -36,7 +36,7 @@
 #import <IOKit/hid/IOHIDEvent.h>
 #import <version.h>
 
-static NSString * const MultiplexerBasePath =  @"/Library/Multiplexer";
+static NSString * const MultiplexerBasePath = @"/Library/Multiplexer";
 
 #import "RALocalizer.h"
 #define LOCALIZE(key, local) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:key table:local]
@@ -95,7 +95,7 @@ void BKSHIDServicesCancelTouchesOnMainDisplay();
 #endif
 
 #define RADIANS_TO_DEGREES(radians) (radians * 180.0 / M_PI)
-#define DEGREES_TO_RADIANS(radians) (radians * M_PI / 180)
+#define DEGREES_TO_RADIANS(degrees) (degrees * M_PI / 180)
 
 //void SET_BACKGROUNDED(id settings, BOOL val);
 
@@ -345,6 +345,7 @@ return sharedInstance;
 @class _SBAppSwitcherSnapshotContext;
 
 @interface SBAppSwitcherSnapshotView : UIView
+@property (nonatomic,copy,readonly) SBDisplayItem *displayItem;
 @property (assign,nonatomic) BOOL shouldTransitionToDefaultPng;
 + (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(long long)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
 - (void)setOrientation:(long long)arg1 orientationBehavior:(int)arg2;

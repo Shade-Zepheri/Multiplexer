@@ -67,7 +67,7 @@ BOOL allowClosingReachabilityNatively = NO;
   %orig([[RAMessagingClient sharedInstance] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient sharedInstance] forcedOrientation]] ? [[RAMessagingClient sharedInstance] forcedOrientation] : orientation);
 }
 
-- (void)_sendTouchesForEvent:(id)event {
+- (void)_sendTouchesForEvent:(UIEvent *)event {
   %orig;
 
   dispatch_async(dispatch_get_main_queue(), ^{

@@ -1,7 +1,7 @@
 export TARGET = iphone:9.2
 
 ifeq ($(IPAD),1)
-export THEOS_DEVICE_IP=192.168.254.3
+export THEOS_DEVICE_IP=192.168.254.8
 export THEOS_DEVICE_PORT=22
 endif
 

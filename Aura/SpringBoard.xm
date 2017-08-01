@@ -16,6 +16,16 @@
 }
 %end
 
+%hook SBAppSwitcherSnapshotView
+- (void)invalidate {
+  if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:self.displayItem.displayIdentifier]) {
+    return;
+  }
+
+  %orig;
+}
+%end
+
 // STAY IN "FOREGROUND"
 %hook FBUIApplicationResignActiveManager
 - (void)_sendResignActiveForReason:(NSInteger)reason toProcess:(FBApplicationProcess *)process {
