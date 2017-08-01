@@ -88,21 +88,22 @@
 }
 
 - (void)darkenerViewTap:(UITapGestureRecognizer *)gesture {
-	[RASwipeOverManager.sharedInstance convertSwipeOverViewToSideBySide];
+	[[RASwipeOverManager sharedInstance] convertSwipeOverViewToSideBySide];
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)gesture {
 	CGPoint newPoint = [gesture translationInView:gesture.view];
-	[RASwipeOverManager.sharedInstance sizeViewForTranslation:newPoint state:gesture.state];
+	[[RASwipeOverManager sharedInstance] sizeViewForTranslation:newPoint state:gesture.state];
 }
 
 - (void)longPress:(UILongPressGestureRecognizer *)gesture {
-	[RASwipeOverManager.sharedInstance closeCurrentView];
+	[[RASwipeOverManager sharedInstance] closeCurrentView];
 	if ([[self currentView] isKindOfClass:[RAAppSelectorView class]]) {
-		[(RAAppSelectorView*)[self currentView] relayoutApps];
+		[(RAAppSelectorView *)[self currentView] relayoutApps];
 		[self currentView].frame = CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height);
 		return;
 	}
+
 	RAAppSelectorView *appSelector = [[RAAppSelectorView alloc] initWithFrame:CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height)];
 	appSelector.tag = SwipeOverViewTag;
 	appSelector.target = self;
@@ -110,10 +111,10 @@
 	[self addSubview:appSelector];
 }
 
-- (void)appSelector:(RAAppSelectorView *)view appWasSelected:(NSString*)bundleIdentifier {
+- (void)appSelector:(RAAppSelectorView *)view appWasSelected:(NSString *)bundleIdentifier {
 	grabberView.alpha = 1;
 	[self.currentView removeFromSuperview];
-	[RASwipeOverManager.sharedInstance showApp:bundleIdentifier];
+	[[RASwipeOverManager sharedInstance] showApp:bundleIdentifier];
 }
 
 - (BOOL)gestureRecognizer:(UIGestureRecognizer *)gestureRecognizer shouldRecognizeSimultaneouslyWithGestureRecognizer:(UIGestureRecognizer *)otherGestureRecognizer {

@@ -23,11 +23,11 @@ CGRect adjustFrameForRotation() {
   CGFloat width = CGRectGetWidth([UIScreen mainScreen].RA_interfaceOrientedBounds);
   CGFloat height = CGRectGetHeight([UIScreen mainScreen].RA_interfaceOrientedBounds);
 
-  switch ([[[UIApplication sharedApplication] _accessibilityFrontMostApplication] statusBarOrientation]) {
+  UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
+  switch (orientation) {
     case UIInterfaceOrientationPortrait: {
       LogDebug(@"[ReachApp] portrait");
       return CGRectMake(width - portraitWidth + 5, (height - portraitHeight) / 2, portraitWidth, portraitHeight);
-
     }
     case UIInterfaceOrientationPortraitUpsideDown: {
       LogDebug(@"[ReachApp] portrait upside down");
@@ -49,7 +49,8 @@ CGPoint adjustCenterForOffscreenSlide(CGPoint center) {
   CGFloat portraitWidth = 30;
   //CGFloat portraitHeight = 50;
 
-  switch ([[[UIApplication sharedApplication] _accessibilityFrontMostApplication] statusBarOrientation]) {
+  UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
+  switch (orientation) {
     case UIInterfaceOrientationPortrait:
       return CGPointMake(center.x + portraitWidth, center.y);
     case UIInterfaceOrientationPortraitUpsideDown:
@@ -63,7 +64,8 @@ CGPoint adjustCenterForOffscreenSlide(CGPoint center) {
 }
 
 CGAffineTransform adjustTransformRotation() {
-  switch ([[[UIApplication sharedApplication] _accessibilityFrontMostApplication] statusBarOrientation]) {
+  UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
+  switch (orientation) {
     case UIInterfaceOrientationPortrait:
       return CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(0));
     case UIInterfaceOrientationPortraitUpsideDown:
@@ -96,7 +98,7 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 }
 
 %ctor {
-  [[%c(RAGestureManager) sharedInstance] addGestureRecognizer:^RAGestureCallbackResult(UIGestureRecognizerState state, CGPoint location, CGPoint velocity) {
+  [[RAGestureManager sharedInstance] addGestureRecognizer:^RAGestureCallbackResult(UIGestureRecognizerState state, CGPoint location, CGPoint velocity) {
     startTime = CACurrentMediaTime();
 
     if ([Multiplexer shouldShowControlCenterGrabberOnFirstSwipe] || [[RASettings sharedInstance] alwaysShowSOGrabber]) {
@@ -106,8 +108,8 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
         grabberView = [[UIView alloc] initWithFrame:adjustFrameForRotation()];
 
-        _UIBackdropView *bgView = [[%c(_UIBackdropView) alloc] initWithStyle:1];
-        bgView.frame = CGRectMake(0, 0, grabberView.frame.size.width, grabberView.frame.size.height);
+        _UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:1 graphicsQuality:10];
+        _UIBackdropView *bgView = [[%c(_UIBackdropView) alloc] initWithFrame:CGRectMake(0, 0, grabberView.frame.size.width, grabberView.frame.size.height) autosizesToFitSuperview:YES settings:blurSettings];
         [grabberView addSubview:bgView];
 
         //grabberView.backgroundColor = UIColor.redColor;
@@ -120,12 +122,12 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
         grabberView.transform = adjustTransformRotation();
         //[UIWindow.keyWindow addSubview:grabberView]; // The desktop view most likely
-        if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
-          [[[RAHostManager systemHostViewForApplication:[UIApplication sharedApplication]._accessibilityFrontMostApplication] superview] addSubview:grabberView];
+        if ([[UIApplication sharedApplication] _accessibilityFrontMostApplication]) {
+          UIView *appView = [[RAHostManager systemHostViewForApplication:[[UIApplication sharedApplication] _accessibilityFrontMostApplication]] superview];
+          [appView addSubview:grabberView];
         } else {
-          //Nothing seems to work
-          UIWindow *window = [[%c(SBUIController) sharedInstance] window];
-          [window addSubview:grabberView];
+          UIView *contentView = [[%c(SBUIController) sharedInstance] contentView];
+          [contentView addSubview:grabberView];
         }
 
         static void (^dismisser)() = ^{ // top kek, needs "static" so it's not a local, self-retaining block
