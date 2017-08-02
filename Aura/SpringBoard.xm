@@ -105,11 +105,21 @@
 
 %hook FBSceneManager
 - (void)_noteSceneMovedToForeground:(FBScene *)scene {
-  if ([scene.clientProcess isKindOfClass:[%c(FBApplicationProcess) class]]) {
+  if ([scene.clientProcess isKindOfClass:%c(FBApplicationProcess)]) {
     [[RABackgrounder sharedInstance] removeTemporaryOverrideForIdentifier:scene.identifier];
   }
 
   %orig;
+}
+
+- (void)_noteSceneMovedToBackground:(FBScene *)scene {
+  %orig;
+
+  if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:scene.identifier] && [scene.clientProcess isKindOfClass:%c(FBApplicationProcess)]) {
+    FBApplicationProcess *process = (FBApplicationProcess *)scene.clientProcess;
+    BKSProcess *bkProcess = [process valueForKey:@"_bksProcess"];
+    [process processWillExpire:bkProcess];
+  }
 }
 %end
 

@@ -25,8 +25,8 @@
 
 	NSString *identifier = [NSBundle mainBundle].bundleIdentifier;
 
-	if (!identifier) {
-		goto ORIGINAL;
+	if (!identifier || [identifier isEqualToString:@"net.whatsapp.WhatsApp"]) {
+		return %orig;
 	}
 
 	//LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", pid, flags, reason, name, handler, identifier);
@@ -37,7 +37,6 @@
 	  }
 	}
 
-ORIGINAL:
 	return %orig(pid, flags, reason, name, handler);
 }
 %end
