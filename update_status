@@ -16,7 +16,6 @@ fake phone mode: working (hacky tho)
 Bugs:
 - Keyboard Dismisses reachability
   - Pt. 1: activate overrideDisableForStatusBar before keyboard shows
-  - Pt. 2: disable overrideDisableForStatusBar once everything setup
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch (Seems that it requires nil settings while FF manually provides);
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Aura breaks calls? (kill on exit)
