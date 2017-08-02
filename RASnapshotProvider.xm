@@ -138,18 +138,18 @@
 - (UIImage *)rotateImageToMatchOrientation:(UIImage *)oldImage {
 	CGFloat degrees;
 	switch ([UIApplication sharedApplication].statusBarOrientation) {
-		case UIInterfaceOrientationLandscapeRight:
-			degrees = 270;
-			break;
-		case UIInterfaceOrientationLandscapeLeft:
-			degrees = 90;
+		case UIInterfaceOrientationUnknown:
+		case UIInterfaceOrientationPortrait:
+			degrees = 0;
 			break;
 		case UIInterfaceOrientationPortraitUpsideDown:
 			degrees = 180;
 			break;
-		case UIInterfaceOrientationPortrait:
-		case UIInterfaceOrientationUnknown:
-			degrees = 0;
+		case UIInterfaceOrientationLandscapeLeft:
+			degrees = 90;
+			break;
+		case UIInterfaceOrientationLandscapeRight:
+			degrees = 270;
 			break;
 	}
 
@@ -174,10 +174,10 @@
 	CGContextRef bitmap = UIGraphicsGetCurrentContext();
 
 	//Move the origin to the middle of the image so we will rotate and scale around the center.
-	CGContextTranslateCTM(bitmap, rotatedSize.width/2, rotatedSize.height/2);
+	CGContextTranslateCTM(bitmap, rotatedSize.width / 2, rotatedSize.height / 2);
 
 	//Rotate the image context
-	CGContextRotateCTM(bitmap, (degrees * M_PI / 180));
+	CGContextRotateCTM(bitmap, DEGREES_TO_RADIANS(degrees));
 
 	//Now, draw the rotated/scaled image into the context
 	CGContextScaleCTM(bitmap, 1.0, -1.0);
@@ -214,7 +214,7 @@
 			if (![view isKindOfClass:[%c(RAWindowBar) class]]) {
 				continue;
 			}
-			RAHostedAppView *hostedView = [((RAWindowBar*)view) attachedView];
+			RAHostedAppView *hostedView = [((RAWindowBar *)view) attachedView];
 
 			UIImage *image = [self snapshotForIdentifier:hostedView.bundleIdentifier orientation:hostedView.orientation];
 			CIImage *coreImage = image.CIImage;
