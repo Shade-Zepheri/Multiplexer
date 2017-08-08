@@ -189,7 +189,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
     UIWindow *window = [self valueForKey:@"_reachabilityEffectWindow"];
     [window _setRotatableViewOrientation:UIInterfaceOrientationPortrait updateStatusBar:YES duration:0.0 force:YES];
     window.rootViewController = nil;
-    SBNotificationCenterViewController *viewController = [[%c(SBNotificationCenterController) performSelector:@selector(sharedInstance)] performSelector:@selector(viewController)];
+    SBNotificationCenterViewController *viewController = [[%c(SBNotificationCenterController) sharedInstance] viewController];
     if ([viewController respondsToSelector:@selector(hostWillDismiss)]) {
       [viewController performSelector:@selector(hostWillDismiss)];
       [viewController performSelector:@selector(hostDidDismiss)];
@@ -201,7 +201,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
     SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:lastBundleIdentifier];
 
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-      [((RAAppSliderProviderView*)view) unload];
+      [((RAAppSliderProviderView *)view) unload];
     }
 
     // Give them a little time to receive the notifications...
@@ -299,7 +299,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
     if (!ncViewController) {
       ncViewController = [[%c(SBNotificationCenterViewController) alloc] init];
     }
-    ncViewController.view.frame = (CGRect) { { 0, 0 }, w.frame.size };
+    ncViewController.view.frame = CGRectMake(0, 0, w.frame.size.width, w.frame.size.height);
     w.rootViewController = ncViewController;
     [w addSubview:ncViewController.view];
 
@@ -499,7 +499,7 @@ CGFloat startingY = -1;
     // Open in window
     [[[%c(RADesktopManager) sharedInstance] currentDesktop] createAppWindowWithIdentifier:ident animated:YES];
   }];
-  [(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
+  [(FBWorkspaceEventQueue *)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
 
   // Pop forced foreground backgrounding
   [[%c(RABackgrounder) sharedInstance] queueRemoveTemporaryOverrideForIdentifier:ident];
@@ -526,15 +526,13 @@ CGFloat startingY = -1;
   CGRect topFrame = CGRectMake(topWindow.frame.origin.x, topWindow.frame.origin.y, topWindow.frame.size.width, center.y);
   CGRect bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, UIScreen.mainScreen._referenceBounds.size.height - center.y);
 
-  if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
+  if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
     topFrame = CGRectMake(topWindow.frame.origin.x, 0, topWindow.frame.size.width, center.y);
     bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, UIScreen.mainScreen._referenceBounds.size.height - center.y);
-  } else if (UIApplication.sharedApplication.statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown) {
-
   }
 
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-    RAAppSliderProviderView *sliderView = (RAAppSliderProviderView*)view;
+    RAAppSliderProviderView *sliderView = (RAAppSliderProviderView *)view;
     sliderView.frame = topFrame;
   }
 
@@ -562,14 +560,14 @@ CGFloat startingY = -1;
   }
 
   if ([[RASettings sharedInstance] showNCInstead] && ncViewController) {
-    ncViewController.view.frame = (CGRect) { { 0, 0 }, topFrame.size };
+    ncViewController.view.frame = CGRectMake(0, 0, topFrame.size.width, topFrame.size.height);;
   } else if (lastBundleIdentifier || [view isKindOfClass:[RAAppSliderProviderView class]]) {
     // Notify clients
 
     CGFloat width = - 1, height = -1;
 
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-      RAAppSliderProviderView *sliderView = (RAAppSliderProviderView*)view;
+      RAAppSliderProviderView *sliderView = (RAAppSliderProviderView *)view;
       //width = sliderView.clientFrame.size.width;
       //height = sliderView.clientFrame.size.height;
 
@@ -610,7 +608,7 @@ CGFloat startingY = -1;
     [[RAMessagingServer sharedInstance] resizeApp:targetIdentifier toSize:CGSizeMake(width, height) completion:nil];
   }
 
-  if (![view isKindOfClass:[%c(FBWindowContextHostWrapperView) class]] && ![view isKindOfClass:[RAAppSliderProviderView class]] && IS_IOS_OR_OLDER(iOS_8_4)) {
+  if (![view isKindOfClass:[%c(FBWindowContextHostWrapperView) class]] && ![view isKindOfClass:[RAAppSliderProviderView class]] && !IS_IOS_OR_NEWER(iOS_9_0)) {
     return; // only resize when the app is being shown. That way it's more like native Reachability
   }
 

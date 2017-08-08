@@ -8,15 +8,15 @@
 	SHARED_INSTANCE2(RAThemeManager, [sharedInstance invalidateCurrentThemeAndReload:nil]); // will be reloaded by RASettings
 }
 
-- (RATheme*)currentTheme {
+- (RATheme *)currentTheme {
 	return currentTheme;
 }
 
-- (NSArray*)allThemes {
+- (NSArray *)allThemes {
 	return allThemes.allValues;
 }
 
-- (void)invalidateCurrentThemeAndReload:(NSString*)currentIdentifier {
+- (void)invalidateCurrentThemeAndReload:(NSString *)currentIdentifier {
 #if DEBUG
 	LogDebug(@"[ReachApp] loading themes...");
 	NSDate *startTime = [NSDate date];
@@ -27,7 +27,7 @@
 	[allThemes removeAllObjects];
 	allThemes = [NSMutableDictionary dictionary];
 
-	NSString *folderName = [NSString stringWithFormat:@"%@/Themes/", RA_BASE_PATH];
+	NSString *folderName = [NSString stringWithFormat:@"%@/Themes/", MultiplexerBasePath];
 	NSArray *themeFileNames = [NSFileManager.defaultManager subpathsAtPath:folderName];
 
 	for (NSString *themeName in themeFileNames) {
@@ -40,7 +40,7 @@
 			//LogDebug(@"[ReachApp] adding %@", theme.themeIdentifier);
 			allThemes[theme.themeIdentifier] = theme;
 
-			if ([theme.themeIdentifier isEqual:currentIdentifier]) {
+			if ([theme.themeIdentifier isEqualToString:currentIdentifier]) {
 				currentTheme = theme;
 			}
 		}
@@ -53,8 +53,7 @@
 	}
 
 #if DEBUG
-	NSDate *endTime = [NSDate date];
-	LogDebug(@"[ReachApp] loaded %ld themes in %f seconds.", (long)allThemes.count, [endTime timeIntervalSinceDate:startTime]);
+	LogDebug(@"[ReachApp] loaded %zd themes in %f seconds.", allThemes.count, fabs([startTime timeIntervalSinceNow]));
 #endif
 }
 @end

@@ -56,7 +56,7 @@
 				icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
 				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 			}
-			if (!iconView || ![icon isKindOfClass:[%c(SBApplicationIcon) class]]) {
+			if (!iconView || ![icon isKindOfClass:%c(SBApplicationIcon)]) {
 				continue;
 			}
 

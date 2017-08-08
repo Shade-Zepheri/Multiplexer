@@ -723,7 +723,7 @@ extern BOOL allowOpenApp;
 	return YES;
 }
 
-- (RAHostedAppView*)attachedView {
+- (RAHostedAppView *)attachedView {
 	return attachedView;
 }
 @end

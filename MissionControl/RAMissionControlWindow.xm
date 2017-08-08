@@ -468,7 +468,7 @@
 				}
 				if (CGRectContainsPoint((CGRect){ [desktopScrollView convertPoint:subview.frame.origin toView:self], subview.frame.size }, center) || (CGRectContainsPoint((CGRect){ [windowedAppScrollView convertPoint:subview.frame.origin toView:self], windowedAppScrollView.frame.size }, center) && gesture.view.superview != windowedAppScrollView)) {
 					RADesktopWindow *desktop = [[%c(RADesktopManager) sharedInstance] desktopAtIndex:subview.tag];
-					SBApplication *app = ((RAMissionControlPreviewView*)gesture.view).application;
+					SBApplication *app = ((RAMissionControlPreviewView *)gesture.view).application;
 
 					[[[%c(RADesktopManager) sharedInstance] currentDesktop] removeAppWithIdentifier:app.bundleIdentifier animated:NO];
 
@@ -551,13 +551,13 @@
 }
 
 - (void)activateDesktop:(UITapGestureRecognizer *)gesture {
-	int desktop = gesture.view.tag;
+	NSInteger desktop = gesture.view.tag;
 	[[%c(RADesktopManager) sharedInstance] switchToDesktop:desktop];
 	[self.manager hideMissionControl:YES];
 }
 
 - (void)handleSingleDesktopTap:(UITapGestureRecognizer *)gesture {
-	int desktop = gesture.view.tag;
+	NSInteger desktop = gesture.view.tag;
 	[[%c(RADesktopManager) sharedInstance] switchToDesktop:desktop actuallyShow:NO];
 	[self reloadDesktopSection];
 	[self reloadWindowedAppsSection];

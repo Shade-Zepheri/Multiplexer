@@ -6,7 +6,7 @@
 #import <Anemone/ANEMSettingsManager.h>
 
 NSMutableDictionary *indicatorStateDict = [[NSMutableDictionary alloc] init];
-#define SET_INFO_(x, y)    indicatorStateDict[x] = [NSNumber numberWithInt:y]
+#define SET_INFO_(x, y)    indicatorStateDict[x] = @(y)
 #define GET_INFO_(x)       [indicatorStateDict[x] intValue]
 #define SET_INFO(y)        if (self.icon && self.icon.application) SET_INFO_(self.icon.application.bundleIdentifier, y);
 #define GET_INFO           (self.icon && self.icon.application ? GET_INFO_(self.icon.application.bundleIdentifier) : RAIconIndicatorViewInfoNone)
@@ -74,7 +74,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 			return;
 		}
 
-		UILabel *badge = (UILabel*)[self viewWithTag:9962];
+		UILabel *badge = (UILabel *)[self viewWithTag:9962];
 		if (!badge) {
 			badge = [[UILabel alloc] init];
 			badge.tag = 9962;
@@ -132,7 +132,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 		}
 
 		if (%c(ANEMSettingsManager) && [[[%c(ANEMSettingsManager) sharedManager] themeSettings] containsObject:@"ModernBadges"]) {
-			UIImageView *textImageView = (UIImageView*)[badge viewWithTag:42];
+			UIImageView *textImageView = (UIImageView *)[badge viewWithTag:42];
 			if (!textImageView) {
 				CGFloat padding = [%c(SBIconBadgeView) _textPadding];
 
@@ -258,7 +258,7 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 %end
 
 %hook SBIconViewMap
-- (id)_iconViewForIcon:(id)icon {
+- (SBIconView *)_iconViewForIcon:(SBIcon *)icon {
 	SBIconView *iconView = %orig;
 
 	[iconView RA_updateIndicatorViewWithExistingInfo];

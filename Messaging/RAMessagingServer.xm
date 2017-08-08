@@ -19,7 +19,7 @@ BOOL launchNextOpenIntoWindow = NO;
 
 //hack so I can compile
 RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen() {
-	switch (UIApplication.sharedApplication.statusBarOrientation) {
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
 		case UIInterfaceOrientationPortrait:
 			return RAWindowSnapLocationLeft;
 		case UIInterfaceOrientationLandscapeRight:
@@ -33,7 +33,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen() {
 }
 
 RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
-	switch (UIApplication.sharedApplication.statusBarOrientation) {
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
 		case UIInterfaceOrientationPortrait:
 			return RAWindowSnapLocationRight;
 		case UIInterfaceOrientationLandscapeRight:
@@ -107,7 +107,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		return @{ @"contextId": @([self getStoredKeyboardContextIdForApp:info[@"bundleIdentifier"]]) };
 	} else if ([identifier isEqualToString:RAMessagingUpdateKeyboardSizeMessageName]) {
 		CGSize size = CGSizeFromString(info[@"size"]);
-		[RAKeyboardStateListener.sharedInstance _setSize:size];
+		[[RAKeyboardStateListener sharedInstance] _setSize:size];
 	} else if ([identifier isEqualToString:RAMessagingUpdateAppInfoMessageName]) {
 		NSString *identifier = info[@"bundleIdentifier"];
 		RAMessageAppData data = [self getDataForIdentifier:identifier];
@@ -130,12 +130,12 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		};
 	} else if ([identifier isEqualToString:RAMessagingOpenURLKMessageName]) {
 		NSURL *url = [NSURL URLWithString:info[@"url"]];
-		BOOL openInWindow = [RASettings.sharedInstance openLinksInWindows]; // [info[@"openInWindow"] boolValue];
+		BOOL openInWindow = [[RASettings sharedInstance] openLinksInWindows]; // [info[@"openInWindow"] boolValue];
 		if (openInWindow) {
 			launchNextOpenIntoWindow = YES;
 		}
 
-		BOOL success = [UIApplication.sharedApplication openURL:url];
+		BOOL success = [[UIApplication sharedApplication] openURL:url];
 		return @{ @"success": @(success) };
 	} else if ([identifier isEqualToString:RAMessagingGetFrontMostAppInfoMessageName]) {
 		if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
@@ -186,18 +186,18 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 				  SBAppToAppWorkspaceTransaction *transaction = [Multiplexer createSBAppToAppWorkspaceTransactionForExitingApp:topApp];
 				  [transaction begin];
 				}];
-				[(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
+				[(FBWorkspaceEventQueue *)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
 				[[[%c(RADesktopManager) sharedInstance] currentDesktop] createAppWindowForSBApplication:topApp animated:YES];
 		  }];
 		}
 	} else if ([identifier isEqualToString:RAMessagingGoToDesktopOnTheLeftMessageName]) {
-		int newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] - 1;
+		NSInteger newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] - 1;
 		BOOL isValid = newIndex >= 0 && newIndex <= [[%c(RADesktopManager) sharedInstance] numberOfDesktops];
 		if (isValid) {
 			[[%c(RADesktopManager) sharedInstance] switchToDesktop:newIndex];
 		}
 	} else if ([identifier isEqualToString:RAMessagingGoToDesktopOnTheRightMessageName]) {
-		int newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] + 1;
+		NSInteger newIndex = [[%c(RADesktopManager) sharedInstance] currentDesktopIndex] + 1;
 		BOOL isValid = newIndex >= 0 && newIndex < [[%c(RADesktopManager) sharedInstance] numberOfDesktops];
 		if (isValid)
 			[[%c(RADesktopManager) sharedInstance] switchToDesktop:newIndex];
@@ -222,7 +222,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 
 - (void)alertUser:(NSString *)description {
 #if DEBUG
-	if (![RASettings.sharedInstance debug_showIPCMessages]) {
+	if (![[RASettings sharedInstance] debug_showIPCMessages]) {
 		return;
 	}
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
@@ -280,7 +280,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	callback(NO);
 }
 
-- (void)sendDataWithCurrentTries:(int)tries toAppWithBundleIdentifier:(NSString*)identifier completion:(RAMessageCompletionCallback)callback {
+- (void)sendDataWithCurrentTries:(NSInteger)tries toAppWithBundleIdentifier:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
 	if (!app.isRunning || ![app mainScene]) {
 		if (tries > 4) {
@@ -422,7 +422,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 
 - (void)unRotateApp:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
 	RAMessageAppData data = [self getDataForIdentifier:identifier];
-	data.forcedOrientation = UIApplication.sharedApplication.statusBarOrientation;
+	data.forcedOrientation = [UIApplication sharedApplication].statusBarOrientation;
 	data.shouldForceOrientation = NO;
 	[self setData:data forIdentifier:identifier];
 	[self sendStoredDataToApp:identifier completion:callback];

@@ -12,7 +12,7 @@ static RAActivatorSortWindowsListener *sharedInstance$RAActivatorSortWindowsList
 
 @implementation RAActivatorSortWindowsListener
 - (void)activator:(LAActivator *)activator receiveEvent:(LAEvent *)event {
-  RADesktopWindow *desktop = RADesktopManager.sharedInstance.currentDesktop;
+  RADesktopWindow *desktop = [RADesktopManager sharedInstance].currentDesktop;
 
   [RAWindowSorter sortWindowsOnDesktop:desktop resizeIfNecessary:YES];
 }

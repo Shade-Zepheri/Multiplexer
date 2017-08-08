@@ -34,7 +34,7 @@ static RAActivatorCreateWindowListener *sharedInstance$RAActivatorCreateWindowLi
       [RADesktopManager sharedInstance].lastUsedWindow = windowBar;
     }
   }];
-  [(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
+  [(FBWorkspaceEventQueue *)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
 
   // Pop forced foreground backgrounding
   [[%c(RABackgrounder) sharedInstance] queueRemoveTemporaryOverrideForIdentifier:topApp.bundleIdentifier];

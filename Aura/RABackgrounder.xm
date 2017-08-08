@@ -80,7 +80,7 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 }
 
 - (RABackgroundMode)globalBackgroundMode {
-	return (RABackgroundMode)[(RASettings*)[RASettings sharedInstance] globalBackgroundMode];
+	return (RABackgroundMode)[[RASettings sharedInstance] globalBackgroundMode];
 }
 
 - (BOOL)shouldKeepInForeground:(NSString *)identifier {
@@ -142,16 +142,16 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 	return [self backgroundModeForIdentifier:identifier] == RABackgroundModeForceNone;
 }
 
-- (void)temporarilyApplyBackgroundingMode:(RABackgroundMode)mode forApplication:(SBApplication*)app andCloseForegroundApp:(BOOL)close {
+- (void)temporarilyApplyBackgroundingMode:(RABackgroundMode)mode forApplication:(SBApplication *)app andCloseForegroundApp:(BOOL)close {
 	temporaryOverrides[app.bundleIdentifier] = @(mode);
 	[temporaryShouldPop removeObjectForKey:app.bundleIdentifier];
 
 	if (close) {
 		FBWorkspaceEvent *event = [%c(FBWorkspaceEvent) eventWithName:@"ActivateSpringBoard" handler:^{
-			SBAppToAppWorkspaceTransaction *transaction = [%c(Multiplexer) createSBAppToAppWorkspaceTransactionForExitingApp:app];
+			SBAppToAppWorkspaceTransaction *transaction = [Multiplexer createSBAppToAppWorkspaceTransactionForExitingApp:app];
 			[transaction begin];
 		}];
-		[(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
+		[(FBWorkspaceEventQueue *)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
 	}
 }
 

@@ -1,9 +1,4 @@
-#import <substrate.h>
-#import <objc/runtime.h>
 #import "RACompatibilitySystem.h"
-#include <execinfo.h>
-#include <stdio.h>
-#include <stdlib.h>
 #import "headers.h"
 
 %hook NSObject

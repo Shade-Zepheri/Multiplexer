@@ -6,13 +6,13 @@
 //#define COLOR(name) [UIColor RA_colorWithHexString:dict[name]]
 
 @implementation RAThemeLoader
-+ (RATheme*)loadFromFile:(NSString*)baseName {
-	NSString *fullPath = [NSString stringWithFormat:@"%@/Themes/%@.plist",RA_BASE_PATH,[[baseName lastPathComponent] stringByDeletingPathExtension]];
++ (RATheme *)loadFromFile:(NSString *)baseName {
+	NSString *fullPath = [NSString stringWithFormat:@"%@/Themes/%@.plist", MultiplexerBasePath, [[baseName lastPathComponent] stringByDeletingPathExtension]];
 	NSDictionary *dict = [NSDictionary dictionaryWithContentsOfFile:fullPath];
 	return [RAThemeLoader themeFromDictionary:dict];
 }
 
-+ (RATheme*)themeFromDictionary:(NSDictionary*)dict {
++ (RATheme *)themeFromDictionary:(NSDictionary *)dict {
 	RATheme *ret = [[RATheme alloc] init];
 
 	ret.themeIdentifier = dict[@"identifier"];
@@ -66,7 +66,7 @@
 	return ret;
 }
 
-+ (NSTextAlignment)getTextAlignment:(NSObject*)value {
++ (NSTextAlignment)getTextAlignment:(NSObject *)value {
 	if ([value isKindOfClass:[NSString class]]) {
 		if ([value isEqual:@"NSTextAlignmentLeft"] || [value isEqual:@"0"] || [value isEqual:@"Left"]) {
 			return NSTextAlignmentLeft;
@@ -84,7 +84,7 @@
 			return NSTextAlignmentNatural;
 		}
 	} else if ([value isKindOfClass:[NSNumber class]]) {
-		int actualValue = [((NSNumber*)value) intValue]; //TODO: make into switch statement?
+		NSInteger actualValue = [((NSNumber *)value) intValue]; //TODO: make into switch statement?
 		switch (actualValue) {
 			case 0:
 				return NSTextAlignmentLeft;
@@ -98,12 +98,13 @@
 				return NSTextAlignmentNatural;
 		}
 	}
+
 	return NSTextAlignmentCenter;
 }
 
-+ (UIColor*)tryGetColorFromThemeImageName:(NSString*)name {
-	NSString *expandedPath = [NSString stringWithFormat:@"%@/ThemingImages/%@.png",RA_BASE_PATH,[[name lastPathComponent] stringByDeletingPathExtension]];
-	BOOL exists = [NSFileManager.defaultManager fileExistsAtPath:expandedPath];
++ (UIColor *)tryGetColorFromThemeImageName:(NSString *)name {
+	NSString *expandedPath = [NSString stringWithFormat:@"%@/ThemingImages/%@.png", MultiplexerBasePath, [[name lastPathComponent] stringByDeletingPathExtension]];
+	BOOL exists = [[NSFileManager defaultManager] fileExistsAtPath:expandedPath];
 	if (!exists) {
 		return nil;
 	}

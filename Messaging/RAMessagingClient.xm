@@ -211,7 +211,7 @@ static inline void reloadClientData(CFNotificationCenterRef center, void *observ
 }
 
 static inline void updateFrontmostApp(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-	[RAMessagingClient sharedInstance].knownFrontmostApp = ((__bridge NSDictionary*)userInfo)[@"bundleIdentifier"];
+	[RAMessagingClient sharedInstance].knownFrontmostApp = ((__bridge NSDictionary *)userInfo)[@"bundleIdentifier"];
 }
 
 %ctor {

@@ -119,7 +119,7 @@ BOOL locationIsInValidArea(CGFloat x) {
               [RADesktopManager sharedInstance].lastUsedWindow = windowBar;
             }
           }];
-          [(FBWorkspaceEventQueue*)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
+          [(FBWorkspaceEventQueue *)[%c(FBWorkspaceEventQueue) sharedInstance] executeOrAppendEvent:event];
           [[%c(SBWallpaperController) sharedInstance] endRequiringWithReason:@"BeautifulAnimation"];
 
           // Pop forced foreground backgrounding

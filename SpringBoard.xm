@@ -27,7 +27,7 @@ BOOL overrideDisableForStatusBar = NO;
 		return YES;
 	}
 
-	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
+	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
 		overrideDisableForStatusBar = NO;
 		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
 		return YES;
@@ -47,7 +47,7 @@ BOOL overrideDisableForStatusBar = NO;
 		return YES;
 	}
 
-	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
+	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
 		overrideDisableForStatusBar = NO;
 		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
 		return YES;
