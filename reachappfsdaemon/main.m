@@ -2,9 +2,7 @@
 #include <notify.h>
 #include <stdio.h>
 #include <stdlib.h>
-#import <Foundation/Foundation.h>
 #import "headers.h"
-#import <objc/runtime.h>
 
 int main(int argc, char **argv, char **envp) {
 	@autoreleasepool {

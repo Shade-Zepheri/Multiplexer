@@ -28,7 +28,7 @@ MultiplexerCore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.
 MultiplexerCore_FRAMEWORKS = UIKit QuartzCore CoreGraphics CoreImage
 MultiplexerCore_PRIVATE_FRAMEWORKS = GraphicsServices FrontBoardServices BackBoardServices IOKit
 MultiplexerCore_EXTRA_FRAMEWORKS = CydiaSubstrate
-MultiplexerCore_LIBRARIES = rocketbootstrap applist
+MultiplexerCore_LIBRARIES = applist
 
 SUBPROJECTS = reachappfakephonemode reachappassertiondhooks reachappbackboarddhooks reachappsettings reachappflipswitch reachappfsdaemon
 

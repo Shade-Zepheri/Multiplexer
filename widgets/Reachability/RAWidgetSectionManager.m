@@ -2,7 +2,7 @@
 #import "RAWidgetSectionManager.h"
 #import "headers.h"
 
-#define VERTICAL_PADDING (5)
+static CGFloat const RAWidgetVerticalPadding = 5.0;
 
 @implementation RAWidgetSectionManager
 
@@ -66,14 +66,14 @@
 	view.clipsToBounds = YES;
 	//view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-	CGFloat currentY = VERTICAL_PADDING;
+	CGFloat currentY = RAWidgetVerticalPadding;
 
 	for (RAWidgetSection* section in [self enabledSections]) {
 		if (!section.enabled) {
 			continue;
 		}
 		@try {
-			UIView *sectionView = [section viewForFrame:CGRectMake(0, currentY, view.frame.size.width, iconSize.height + VERTICAL_PADDING) preferredIconSize:iconSize iconsThatFitPerLine:iconsPerLine spacing:spacing];
+			UIView *sectionView = [section viewForFrame:CGRectMake(0, currentY, view.frame.size.width, iconSize.height + RAWidgetVerticalPadding) preferredIconSize:iconSize iconsThatFitPerLine:iconsPerLine spacing:spacing];
 			if (sectionView) {
 				if (section.showTitle) {
 					CGFloat x = [section respondsToSelector:@selector(titleOffset)] ? section.titleOffset : 10;
@@ -83,7 +83,7 @@
 					titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
 					[titleView sizeToFit];
 					[view addSubview:titleView];
-					currentY += titleView.frame.size.height + VERTICAL_PADDING;
+					currentY += titleView.frame.size.height + RAWidgetVerticalPadding;
 				}
 
 				//sectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -94,7 +94,7 @@
 				//frame.origin.x = 0;
 				frame.origin.y = currentY;
 				sectionView.frame = frame;
-				currentY += frame.size.height + VERTICAL_PADDING;
+				currentY += frame.size.height + RAWidgetVerticalPadding;
 
 				sectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.1];
 				[view addSubview:sectionView];

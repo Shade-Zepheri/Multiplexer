@@ -9,6 +9,7 @@
 	}
 }
 
+
 + (void)unlockOrientation {
 	if ([%c(SBUIController) instancesRespondToSelector:@selector(releaseSwitcherOrientationLock)]) {
 		[[%c(SBUIController) sharedInstance] releaseSwitcherOrientationLock]; // iOS 8
