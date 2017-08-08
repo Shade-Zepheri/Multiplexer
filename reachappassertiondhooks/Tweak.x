@@ -1,4 +1,3 @@
-#import <Foundation/Foundation.h>
 #import <version.h>
 
 %group iOS8

@@ -2,6 +2,7 @@
 #import <BulletinBoard/BBBulletinRequest.h>
 #import <FrontBoard/FBApplicationProcess.h>
 #import <FrontBoard/FBProcessManager.h>
+#import <FrontBoard/FBProcessState.h>
 #import <FrontBoard/FBScene.h>
 #import <FrontBoard/FBSceneManager.h>
 #import <FrontBoardServices/FBSMutableSceneSettings.h>
@@ -72,7 +73,7 @@ extern BOOL $__IS_SPRINGBOARD;
 #define ON_MAIN_THREAD(block) \
     { \
       dispatch_block_t _blk = block; \
-      if (NSThread.isMainThread) { \
+      if ([NSThread isMainThread]) { \
         _blk(); \
       } else { \
         dispatch_sync(dispatch_get_main_queue(), _blk); \
@@ -451,7 +452,14 @@ typedef struct {
 @property (nonatomic,retain,readonly) SBModeViewController * modeViewController;
 @end
 
-@interface SBNotificationCenterViewController : UIViewController
+@interface SBNotificationCenterViewController : UIViewController {
+    UIView *_clippingView;
+    UIView *_containerView;
+    UIView *_contentClippingView;
+    UIView *_contentView;
+    UIView *_backgroundView;
+    UIView *_tintView;
+}
 @property (nonatomic,readonly) UIPageControl * pageControl;
 @property (nonatomic,readonly) CGRect contentFrame;
 - (CGRect)_containerFrame;
