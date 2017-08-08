@@ -8,10 +8,11 @@
 @end
 
 @interface RARunningAppsProvider : NSObject {
-	NSMutableArray *apps;
-	NSMutableArray *targets;
 	pthread_mutex_t mutex;
 }
+@property (strong, nonatomic) NSMutableArray *runningApps;
+@property (strong, nonatomic) NSMutableArray *targets;
+
 + (instancetype)sharedInstance;
 
 - (void)addRunningApp:(SBApplication *)app;
@@ -20,5 +21,4 @@
 - (void)addTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target;
 - (void)removeTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target;
 
-- (NSArray *)runningApplications;
 @end

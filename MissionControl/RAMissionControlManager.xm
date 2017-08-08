@@ -168,7 +168,7 @@ CGRect swappedForOrientation(CGRect input) {
 }
 
 - (void)reloadWindowedAppsSection {
-	[window reloadWindowedAppsSection:[[RARunningAppsProvider sharedInstance] runningApplications]];
+	[window reloadWindowedAppsSection:[RARunningAppsProvider sharedInstance].runningApps];
 }
 
 - (void)reloadOtherAppsSection {

@@ -584,9 +584,9 @@
 		}
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
 		SBApplication *app = realView.application;
-		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
+		[RAAppKiller killAppWithSBApplication:app completion:^{
 			[runningApplications removeObject:app];
-			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[[%c(RARunningAppsProvider) sharedInstance] runningApplications] waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[RARunningAppsProvider sharedInstance].runningApps waitUntilDone:YES];
 			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
 		}];
 	}
@@ -599,15 +599,15 @@
 		}
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
 		SBApplication *app = realView.application;
-		[%c(RAAppKiller) killAppWithSBApplication:app completion:^{
-			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[[%c(RARunningAppsProvider) sharedInstance] runningApplications] waitUntilDone:YES];
+		[RAAppKiller killAppWithSBApplication:app completion:^{
+			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[RARunningAppsProvider sharedInstance].runningApps waitUntilDone:YES];
 			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
 		}];
 	}
 }
 
 - (void)appDidStart:(SBApplication *)app {
-	[self reloadWindowedAppsSection:[[%c(RARunningAppsProvider) sharedInstance] runningApplications]];
+	[self reloadWindowedAppsSection:[RARunningAppsProvider sharedInstance].runningApps];
 	[self reloadOtherAppsSection];
 }
 

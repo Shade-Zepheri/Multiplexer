@@ -3,8 +3,8 @@
 @implementation RARunningAppsProvider
 + (instancetype)sharedInstance {
 	SHARED_INSTANCE2(RARunningAppsProvider,
-		sharedInstance->apps = [NSMutableArray array];
-		sharedInstance->targets = [NSMutableArray array];
+		sharedInstance.runningApps = [NSMutableArray array];
+		sharedInstance.targets = [NSMutableArray array];
 	);
 }
 
@@ -20,8 +20,8 @@
 - (void)addRunningApp:(SBApplication *)app {
 	pthread_mutex_lock(&mutex);
 
-	[apps addObject:app];
-	for (NSObject<RARunningAppsProviderDelegate>* target in targets) {
+	[self.runningApps addObject:app];
+	for (NSObject<RARunningAppsProviderDelegate>* target in self.targets) {
 		if ([target respondsToSelector:@selector(appDidStart:)]) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[target appDidStart:app];
@@ -35,9 +35,9 @@
 - (void)removeRunningApp:(SBApplication *)app {
 	pthread_mutex_lock(&mutex);
 
-	[apps removeObject:app];
+	[self.runningApps removeObject:app];
 
-	for (NSObject<RARunningAppsProviderDelegate>* target in targets) {
+	for (NSObject<RARunningAppsProviderDelegate>* target in self.targets) {
 		if ([target respondsToSelector:@selector(appDidDie:)]) {
 			dispatch_async(dispatch_get_main_queue(), ^{
 				[target appDidDie:app];
@@ -51,8 +51,8 @@
 - (void)addTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target {
 	pthread_mutex_lock(&mutex);
 
-	if (![targets containsObject:target]) {
-		[targets addObject:target];
+	if (![self.targets containsObject:target]) {
+		[self.targets addObject:target];
 	}
 
 	pthread_mutex_unlock(&mutex);
@@ -61,7 +61,7 @@
 - (void)removeTarget:(__weak NSObject<RARunningAppsProviderDelegate> *)target {
 	pthread_mutex_lock(&mutex);
 
-	[targets removeObject:target];
+	[self.targets removeObject:target];
 
 	pthread_mutex_unlock(&mutex);
 }
@@ -70,22 +70,15 @@
 	pthread_mutex_destroy(&mutex);
 }
 
-- (NSArray *)runningApplications {
-	return apps;
-}
-
-- (NSMutableArray *)mutableRunningApplications {
-	return apps;
-}
 @end
 
 %hook SBApplication
-- (void)updateProcessState:(id)state {
+- (void)updateProcessState:(FBProcessState *)state {
 	%orig;
 
-	if (self.isRunning && ![[RARunningAppsProvider sharedInstance].mutableRunningApplications containsObject:self]) {
+	if (self.isRunning && ![[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
 		[[RARunningAppsProvider sharedInstance] addRunningApp:self];
-	} else if (!self.isRunning && [[RARunningAppsProvider sharedInstance].mutableRunningApplications containsObject:self]) {
+	} else if (!self.isRunning && [[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
 		[[RARunningAppsProvider sharedInstance] removeRunningApp:self];
 	}
 }
