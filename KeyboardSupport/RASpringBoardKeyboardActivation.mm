@@ -26,11 +26,8 @@ RAKeyboardWindow *keyboardWindow;
   keyboardWindow = [[RAKeyboardWindow alloc] init];
   overrideDisableForStatusBar = YES;
   [keyboardWindow setupForKeyboardAndShow:identifier];
+  overrideDisableForStatusBar = NO;
   _currentIdentifier = identifier;
-
-  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-    overrideDisableForStatusBar = NO;
-  });
 }
 
 - (void)hideKeyboard {

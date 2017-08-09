@@ -80,23 +80,25 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
   %orig;
 
   void (^block)() = ^{
-    IF_NOT_SPRINGBOARD {
-      NSUInteger contextID = 0;
-      if (%c(UIRemoteKeyboardWindow) && [UIKeyboard activeKeyboard] && [[UIKeyboard activeKeyboard] window]) {
-        contextID = [[[UIKeyboard activeKeyboard] window] _contextId]; // ((UITextEffectsWindow*)[%c(UIRemoteKeyboardWindow) remoteKeyboardWindowForScreen:UIScreen.mainScreen create:NO])._contextId;
-      } else {
-        contextID = [UITextEffectsWindow sharedTextEffectsWindow]._contextId;
-      }
-      [[RAMessagingClient sharedInstance] notifyServerWithKeyboardContextId:contextID];
+    IF_SPRINGBOARD {
+      return;
+    }
+
+    NSUInteger contextID = 0;
+    if (%c(UIRemoteKeyboardWindow) && [UIKeyboard activeKeyboard] && [[UIKeyboard activeKeyboard] window]) {
+      contextID = [[[UIKeyboard activeKeyboard] window] _contextId]; // ((UITextEffectsWindow*)[%c(UIRemoteKeyboardWindow) remoteKeyboardWindowForScreen:UIScreen.mainScreen create:NO])._contextId;
+    } else {
+      contextID = [UITextEffectsWindow sharedTextEffectsWindow]._contextId;
+    }
+    [[RAMessagingClient sharedInstance] notifyServerWithKeyboardContextId:contextID];
 
 #if DEBUG && NO
-      NSCAssert([[[UIKeyboard activeKeyboard] window] _contextId]);
-      NSCAssert(contextID != 0);
-      NSCAssert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
+    NSCAssert([[[UIKeyboard activeKeyboard] window] _contextId]);
+    NSCAssert(contextID != 0);
+    NSCAssert(contextID == [[[UIKeyboard activeKeyboard] window] _contextId]);
 #endif
 
-      LogDebug(@"[ReachApp] c id %tu", contextID);
-    }
+    LogDebug(@"[ReachApp] c id %tu", contextID);
   };
 
   if (IS_IOS_OR_NEWER(iOS_9_0)) {
