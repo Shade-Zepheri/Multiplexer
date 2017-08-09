@@ -1,7 +1,7 @@
 Package: com.shade.aura
 Name: Aura
 Depends: mobilesubstrate, com.shade.multiplexercore
-Version: 0.1
+Version: 1.0.0~rc1
 Architecture: iphoneos-arm
 Description: Customizable backgrounding for Multiplexer.
 Depiction: https://shade-zepheri.github.io/depic/index.html?p=com.shade.aura
