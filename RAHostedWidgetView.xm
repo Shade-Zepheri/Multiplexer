@@ -37,4 +37,5 @@
 	[widget didDisappear];
 	[widget removeFromSuperview];
 }
+
 @end
