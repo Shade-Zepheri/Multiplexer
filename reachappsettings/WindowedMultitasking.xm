@@ -92,6 +92,11 @@
                @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
                },
            @{
+               @"cell": @"PSLinkListCell",
+               @"detail": @"RADisabledAppsSelectorView",
+               @"label": LOCALIZE(@"DISABLED_APPS", @"Empoleon"),
+               },
+           @{
                @"cell": @"PSSwitchCell",
                @"default": @NO,
                @"defaults": @"com.efrederickson.reachapp.settings",
@@ -238,5 +243,95 @@
     vc.listenerName = @"com.efrederickson.reachapp.windowedmultitasking.createWindow";
     [self.rootController pushController:vc animate:YES];
   }
+}
+@end
+
+@interface RADisabledAppsSelectorView : PSViewController <UITableViewDelegate> {
+  UITableView *_tableView;
+  ALApplicationTableDataSource *_dataSource;
+}
+@end
+
+@interface RAApplicationTableDataSource : ALApplicationTableDataSource
+@end
+
+@interface ALApplicationTableDataSource (Private_ReachApp)
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRow:(NSInteger)row;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
+@end
+
+@implementation RAApplicationTableDataSource
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
+    //NSInteger row = indexPath.row;
+  UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
+
+  NSDictionary *prefs = nil;
+
+  CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
+  CFArrayRef keyList = CFPreferencesCopyKeyList(appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  if (!keyList) {
+    return cell;
+  }
+  prefs = (__bridge_transfer NSDictionary *)CFPreferencesCopyMultiple(keyList, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
+  if (!prefs) {
+    return cell;
+  }
+  CFRelease(keyList);
+
+  if ([cell isKindOfClass:[ALCheckCell class]]) {
+    NSString *dn = [self displayIdentifierForIndexPath:indexPath];
+    NSString *key = [NSString stringWithFormat:@"Disabled-%@",dn];
+    BOOL value = [prefs[key] boolValue];
+    [(ALCheckCell *)cell loadValue:@(value)];
+  }
+  return cell;
+}
+@end
+
+@implementation RADisabledAppsSelectorView
+
+-(void)updateDataSource:(NSString *)searchText {
+  _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: @"not bundleIdentifier in { }"}];
+  [_tableView reloadData];
+}
+
+- (instancetype)init {
+  self = [super init];
+  if (self) {
+    CGRect bounds = [UIScreen mainScreen].bounds;
+
+    _dataSource = [[RAApplicationTableDataSource alloc] init];
+
+    _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height) style:UITableViewStyleGrouped];
+    _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
+    _tableView.delegate = self;
+    _tableView.dataSource = _dataSource;
+    _dataSource.tableView = _tableView;
+    [self updateDataSource:nil];
+  }
+
+  return self;
+}
+
+- (void)viewDidLoad {
+  ((UIViewController *)self).title = LOCALIZE(@"APPLICATIONS", @"Root");
+  [self.view addSubview:_tableView];
+  [super viewDidLoad];
+}
+
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  [tableView deselectRowAtIndexPath:indexPath animated:true];
+  ALCheckCell *cell = (ALCheckCell *)[tableView cellForRowAtIndexPath:indexPath];
+  [cell didSelect];
+
+  UITableViewCellAccessoryType type = [cell accessoryType];
+  BOOL selected = type == UITableViewCellAccessoryCheckmark;
+
+  NSString *identifier = [_dataSource displayIdentifierForIndexPath:indexPath];
+  CFPreferencesSetAppValue((__bridge CFStringRef)[NSString stringWithFormat:@"Disabled-%@", identifier], (CFPropertyListRef)(@(selected)), CFSTR("com.efrederickson.reachapp.settings"));
+
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.7 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+    CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.settings/reloadSettings"), nil, nil, YES);
+  });
 }
 @end

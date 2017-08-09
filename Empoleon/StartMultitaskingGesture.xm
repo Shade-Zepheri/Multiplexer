@@ -14,6 +14,11 @@ BOOL locationIsInValidArea(CGFloat x) {
     return YES;
   }
 
+  NSString *bundleIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
+  if ([[[RASettings sharedInstance] disabledApps] containsObject:bundleIdentifier]) {
+    return NO;
+  }
+
   switch ([[RASettings sharedInstance] windowedMultitaskingGrabArea]) {
     case RAGrabAreaBottomLeftThird:
       LogDebug(@"[ReachApp] StartMultitaskingGesture: %f %f", x, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width);

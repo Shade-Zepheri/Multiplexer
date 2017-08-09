@@ -413,6 +413,19 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	return BOOL(@"windowedMultitaskingCompleteAnimations", NO);
 }
 
+- (NSMutableArray *)disabledApps {
+	NSMutableArray *favorites = [[NSMutableArray alloc] init];
+	for (NSString *key in _settings.allKeys) {
+		if ([key hasPrefix:@"Disabled-"]) {
+			NSString *ident = [key substringFromIndex:9];
+			if ([_settings[key] boolValue]) {
+				[favorites addObject:ident];
+			}
+		}
+	}
+	return favorites;
+}
+
 - (NSString *)currentThemeIdentifier {
 	return _settings[@"currentThemeIdentifier"] ?: @"com.eljahandandrew.multiplexer.themes.default";
 }

@@ -14,18 +14,18 @@ backboardd hooks: working
 fake phone mode: working (hacky tho)
 
 Bugs:
-- Individual app force foregrounding is broken when used in conjunction with auto (re)launch (Seems that it requires nil settings while FF manually provides);
+- Fix Aura ForceForegrounding
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Aura breaks calls? (kill on exit)
 - Empoleon windows dont properly rotate in some (most) apps
 
 Minor Things/Bugs to note:
-- Force Foreground stops video recordings
 - Optimize FakePhoneMode (use Classic Modes)
 - Keyboard Dismisses reachability (apparently a feature?)
 
 Things to do/Features to add:
 - 3D Touch actions?
+- Unify StatusBar in SO side by side
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?

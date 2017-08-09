@@ -13,6 +13,8 @@
     <string>Middle</string>
     <key>RIGHT</key>
     <string>Right</string>
+    <key>DISABLED_APPS</key>
+    <string>Disabled Apps</string>
     <key>LAUNCH_INTO_WINDOW</key>
     <string>Launch Into Window</string>
     <key>SWIPE_UP_FROM_FOOTER</key>

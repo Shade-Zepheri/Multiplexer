@@ -181,7 +181,7 @@
 }
 @end
 
-@interface RAAppChooserOptionsListController : SKTintedListController<SKListControllerProtocol>
+@interface RAAppChooserOptionsListController : SKTintedListController <SKListControllerProtocol>
 @end
 
 @implementation RAAppChooserOptionsListController
@@ -270,7 +270,7 @@
 }
 @end
 
-@interface RAApplicationTableDataSource : ALApplicationTableDataSource
+@interface RAFavoriteApplicationTableDataSource : ALApplicationTableDataSource
 @end
 
 @interface ALApplicationTableDataSource (Private_ReachApp)
@@ -278,7 +278,7 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
-@implementation RAApplicationTableDataSource
+@implementation RAFavoriteApplicationTableDataSource
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath {
     //NSInteger row = indexPath.row;
   UITableViewCell *cell = [super tableView:tableView cellForRowAtIndexPath:indexPath];
@@ -314,10 +314,11 @@
 }
 
 - (instancetype)init {
-  if (self = [super init]) {
-    CGRect bounds = [[UIScreen mainScreen] bounds];
+  self = [super init];
+  if (self) {
+    CGRect bounds = [UIScreen mainScreen].bounds;
 
-    _dataSource = [[RAApplicationTableDataSource alloc] init];
+    _dataSource = [[RAFavoriteApplicationTableDataSource alloc] init];
 
     _tableView = [[UITableView alloc] initWithFrame:CGRectMake(0, 0, bounds.size.width, bounds.size.height) style:UITableViewStyleGrouped];
     _tableView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
