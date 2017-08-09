@@ -2,7 +2,7 @@
 #import "UIAlertController+Window.h"
 
 extern const char *__progname;
-extern BOOL allowClosingReachabilityNatively;
+BOOL allowClosingReachabilityNatively = NO;;
 
 #define IS_PROCESS(x) (strcmp(__progname, x) == 0)
 
