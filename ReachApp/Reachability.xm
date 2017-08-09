@@ -73,6 +73,30 @@ BOOL wasEnabled = NO;
   %orig;
 }
 
+- (void)_pingKeepAliveWithDuration:(CGFloat)duration interactedBeforePing:(BOOL)interacted initialKeepAliveTime:(CGFloat)time {
+  if ([[RASettings sharedInstance] disableAutoDismiss]) {
+    return;
+  }
+
+  %orig;
+}
+
+- (void)_setKeepAliveTimer {
+  if ([[RASettings sharedInstance] disableAutoDismiss]) {
+    return;
+  }
+
+  %orig;
+}
+
+- (void)toggleReachability {
+  if (self.reachabilityModeActive && overrideDisableForStatusBar) {
+    return;
+  }
+
+  %orig;
+}
+
 - (void)deactivateReachabilityModeForObserver:(id)observer {
   //Disable for keyboard here (keyboardsupport's fault since broken)
   if (overrideDisableForStatusBar) {
@@ -84,10 +108,10 @@ BOOL wasEnabled = NO;
     wasEnabled = NO;
     // Notify both top and bottom apps Reachability is closing
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-      [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [(RAAppSliderProviderView*)view unload];
+      [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [(RAAppSliderProviderView *)view unload];
       [view removeFromSuperview];
       view = nil;
     }
@@ -173,10 +197,10 @@ SBWorkspace *SBWorkspace$sharedInstance;
 
 %new - (void)RA_closeCurrentView {
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-    [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-    [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-    [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-    [(RAAppSliderProviderView*)view unload];
+    [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+    [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+    [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+    [(RAAppSliderProviderView *)view unload];
     [view removeFromSuperview];
     view = nil;
   }
@@ -234,6 +258,14 @@ SBWorkspace *SBWorkspace$sharedInstance;
   }
 }
 
+- (void)handleCancelReachabilityRecognizer:(id)recognizer {
+  if (overrideDisableForStatusBar) {
+    return;
+  }
+
+  %orig;
+}
+
 - (void)_disableReachabilityImmediately:(BOOL)immediately {
   //Disable for keyboard here
   if (overrideDisableForStatusBar) {
@@ -251,10 +283,10 @@ SBWorkspace *SBWorkspace$sharedInstance;
 
     // Notify both top and bottom apps Reachability is closing
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-      [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [(RAAppSliderProviderView*)view unload];
+      [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [(RAAppSliderProviderView *)view unload];
       [view removeFromSuperview];
       view = nil;
     }
@@ -475,7 +507,7 @@ CGFloat startingY = -1;
 %new - (void)RA_detachAppAndClose:(UITapGestureRecognizer *)gesture {
   NSString *ident = lastBundleIdentifier;
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-    RAAppSliderProviderView *temp = (RAAppSliderProviderView*)view;
+    RAAppSliderProviderView *temp = (RAAppSliderProviderView *)view;
     ident = temp.currentBundleIdentifier;
     [temp unload];
   }
@@ -598,7 +630,7 @@ CGFloat startingY = -1;
 
     NSString *targetIdentifier = lastBundleIdentifier;
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-      targetIdentifier = [((RAAppSliderProviderView*)view) currentBundleIdentifier];
+      targetIdentifier = [((RAAppSliderProviderView *)view) currentBundleIdentifier];
     }
 
     if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
@@ -731,10 +763,10 @@ CGFloat startingY = -1;
   UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   if (view) {
     if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-      [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView*)view) currentBundleIdentifier] completion:nil];
-      [(RAAppSliderProviderView*)view unload];
+      [[RAMessagingServer sharedInstance] endResizingApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:NO forApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [[RAMessagingServer sharedInstance] unforceStatusBarVisibilityForApp:[((RAAppSliderProviderView *)view) currentBundleIdentifier] completion:nil];
+      [(RAAppSliderProviderView *)view unload];
     }
     [view removeFromSuperview];
     view = nil;
@@ -751,7 +783,7 @@ CGFloat startingY = -1;
   draggerView.center = center;
 
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
-    NSString *targetIdentifier = ((RAAppSliderProviderView*)view).currentBundleIdentifier;
+    NSString *targetIdentifier = ((RAAppSliderProviderView *)view).currentBundleIdentifier;
     [[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:YES forApp:targetIdentifier completion:nil];
     [[RAMessagingServer sharedInstance] rotateApp:targetIdentifier toOrientation:[UIApplication sharedApplication].statusBarOrientation completion:nil];
     [[RAMessagingServer sharedInstance] forceStatusBarVisibility:YES forApp:targetIdentifier completion:nil];
