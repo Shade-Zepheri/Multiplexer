@@ -7,4 +7,4 @@ if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/
 	dlopen("/Library/MobileSubstrate/DynamicLibraries/MultiplexerCore.dylib", RTLD_NOW | RTLD_GLOBAL); \
 }
 
-#define IF_REACHAPP if (objc_getClass("RAWidget") != nil)
+#define IF_REACHAPP if (objc_getClass("RAWidget"))
