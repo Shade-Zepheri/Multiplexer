@@ -68,7 +68,7 @@ CGRect swappedForOrientation(CGRect input) {
 		return;
 	}
 
-	_isShowingMissionControl = YES;
+	_showingMissionControl = YES;
 
 	SBApplication *app = [UIApplication sharedApplication]._accessibilityFrontMostApplication;
 	if (app) {
@@ -210,7 +210,7 @@ CGRect swappedForOrientation(CGRect input) {
 		destructor();
 	}
 
-	_isShowingMissionControl = NO;
+	_showingMissionControl = NO;
 	[[%c(RADesktopManager) sharedInstance] reshowDesktop];
 	[[[%c(RADesktopManager) sharedInstance] currentDesktop] loadApps];
 	[[RAGestureManager sharedInstance] removeGestureWithIdentifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture"];
@@ -229,7 +229,7 @@ CGRect swappedForOrientation(CGRect input) {
 }
 
 - (void)toggleMissionControl:(BOOL)animated {
-	if (!self.isShowingMissionControl) {
+	if (!self.showingMissionControl) {
 		[self showMissionControl:animated];
 	} else {
 		[self hideMissionControl:animated];
@@ -237,7 +237,7 @@ CGRect swappedForOrientation(CGRect input) {
 }
 
 - (BOOL)RAGestureCallback_canHandle:(CGPoint)point velocity:(CGPoint)velocity {
-	return self.isShowingMissionControl && !self.inhibitDismissalGesture;
+	return self.showingMissionControl && !self.inhibitDismissalGesture;
 }
 
 - (RAGestureCallbackResult)RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge {
@@ -357,7 +357,7 @@ CGRect swappedForOrientation(CGRect input) {
 - (void)_updateLockState {
 	%orig;
 
-	if ([self hasAnyLockState] && [RAMissionControlManager sharedInstance].isShowingMissionControl) {
+	if ([self hasAnyLockState] && [RAMissionControlManager sharedInstance].showingMissionControl) {
 		[[RAMissionControlManager sharedInstance] hideMissionControl:NO];
 	}
 }

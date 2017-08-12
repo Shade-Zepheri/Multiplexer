@@ -11,56 +11,12 @@
 #import "headers.h"
 #import "RAWidgetSectionManager.h"
 #import "RASettings.h"
-#import "RASwipeOverManager.h"
-#import "RAMissionControlManager.h"
-#import "RADesktopManager.h"
-#import "RADesktopWindow.h"
 #import "Asphaleia.h"
 #import "RASnapshotProvider.h"
 
 BOOL overrideDisableForStatusBar = NO;
 
 %hook SBUIController
-- (BOOL)clickedMenuButton {
-	if ([[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver]) {
-		[[%c(RASwipeOverManager) sharedInstance] stopUsingSwipeOver];
-		return YES;
-	}
-
-	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
-		overrideDisableForStatusBar = NO;
-		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
-		return YES;
-	}
-
-	if ([[%c(RAMissionControlManager) sharedInstance] isShowingMissionControl]) {
-		[[%c(RAMissionControlManager) sharedInstance] hideMissionControl:YES];
-		return YES;
-	}
-
-	return %orig;
-}
-
-- (BOOL)handleHomeButtonSinglePressUp {
-	if ([[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver]) {
-		[[%c(RASwipeOverManager) sharedInstance] stopUsingSwipeOver];
-		return YES;
-	}
-
-	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [RASettings isReachAppInstalled] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
-		overrideDisableForStatusBar = NO;
-		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
-		return YES;
-	}
-
-	if ([[%c(RAMissionControlManager) sharedInstance] isShowingMissionControl]) {
-		[[%c(RAMissionControlManager) sharedInstance] hideMissionControl:YES];
-		return YES;
-	}
-
-	return %orig;
-}
-
 /*- (_Bool)handleMenuDoubleTap
 {
     if ([[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver])
@@ -84,17 +40,6 @@ BOOL overrideDisableForStatusBar = NO;
 }
 %end
 
-%hook SpringBoard
-- (void)_performDeferredLaunchWork {
-  %orig;
-  [%c(RADesktopManager) sharedInstance]; // load desktop (and previous windows!)
-
-  // No applications show in the mission control until they have been launched by the user.
-  // This prevents always-running apps like Mail or Pebble from perpetually showing in Mission Control.
-  //[[%c(RAMissionControlManager) sharedInstance] setInhibitedApplications:[[[%c(SBIconViewMap) homescreenMap] iconModel] visibleIconIdentifiers]];
-}
-%end
-
 %hook SBApplicationController
 %new - (SBApplication *)RA_applicationWithBundleIdentifier:(NSString *)bundleIdentifier {
   if ([self respondsToSelector:@selector(applicationWithBundleIdentifier:)]) {
@@ -109,18 +54,6 @@ BOOL overrideDisableForStatusBar = NO;
 %end
 
 %hook SBToAppsWorkspaceTransaction
-- (void)_willBegin {
-	@autoreleasepool {
-	  NSArray *apps = self.toApplications;
-	  for (SBApplication *app in apps) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:app.bundleIdentifier animated:NO forceImmediateUnload:YES];
-      });
-	  }
-	}
-	%orig;
-}
-
 // On iOS 8.3 and above, on the iPad, if a FBWindowContextWhatever creates a hosting context / enabled hosting, all the other hosted windows stop.
 // This fixes that.
 - (void)_didComplete {
@@ -174,16 +107,6 @@ BOOL overrideDisableForStatusBar = NO;
 	});
 
 	%orig;
-}
-%end
-
-%hook SBLockScreenManager
-- (void)_postLockCompletedNotification:(BOOL)value {
-	%orig;
-
-	if (value && [[%c(RASwipeOverManager) sharedInstance] isUsingSwipeOver]) {
-		[[%c(RASwipeOverManager) sharedInstance] stopUsingSwipeOver];
-	}
 }
 %end
 

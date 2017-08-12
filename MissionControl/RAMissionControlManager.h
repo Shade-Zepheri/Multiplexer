@@ -7,7 +7,7 @@
 }
 + (instancetype)sharedInstance;
 
-@property (nonatomic, readonly) BOOL isShowingMissionControl;
+@property (getter=isShowingMissionControl, nonatomic, readonly) BOOL showingMissionControl;
 @property (nonatomic) BOOL inhibitDismissalGesture;
 
 - (void)createWindow;

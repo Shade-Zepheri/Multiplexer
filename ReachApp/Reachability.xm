@@ -8,6 +8,7 @@
 #import "RAMessagingServer.h"
 #import "RAAppSwitcherModelWrapper.h"
 #import "RAKeyboardStateListener.h"
+#import "Multiplexer.h"
 
 /*FBWindowContextHostWrapperView*/ UIView *view = nil;
 NSString *lastBundleIdentifier = @"";
@@ -29,6 +30,28 @@ CGFloat old_grabberCenterY = -1;
 BOOL wasEnabled = NO;
 
 %group hooks
+
+%hook SBUIController
+- (BOOL)clickedMenuButton {
+	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
+		overrideDisableForStatusBar = NO;
+		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
+		return YES;
+	}
+
+	return %orig;
+}
+
+- (BOOL)handleHomeButtonSinglePressUp {
+	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
+		overrideDisableForStatusBar = NO;
+		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
+		return YES;
+	}
+
+	return %orig;
+}
+%end
 
 %hook SBReachabilityManager
 + (BOOL)reachabilitySupported {
@@ -317,7 +340,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
   CGFloat knobWidth = 60;
   CGFloat knobHeight = 25;
   draggerView = [[UIView alloc] initWithFrame:CGRectMake(
-      (UIScreen.mainScreen.bounds.size.width / 2) - (knobWidth / 2),
+      ([UIScreen mainScreen].bounds.size.width / 2) - (knobWidth / 2),
       [UIScreen mainScreen].bounds.size.height * .3,
       knobWidth, knobHeight)];
   draggerView.alpha = 0.3;
@@ -386,7 +409,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
     grabberCenter_Y = w.frame.size.height - (knobHeight / 2);
   }
   if (grabberCenter_Y < 0) {
-    grabberCenter_Y = UIScreen.mainScreen.bounds.size.height * 0.3;
+    grabberCenter_Y = [UIScreen mainScreen].bounds.size.height * 0.3;
   }
   draggerView.center = CGPointMake(grabberCenter_X, grabberCenter_Y);
   recognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
@@ -405,7 +428,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
 
   if ([[RASettings sharedInstance] showBottomGrabber]) {
     bottomDraggerView = [[UIView alloc] initWithFrame:CGRectMake(
-        (UIScreen.mainScreen.bounds.size.width / 2) - (knobWidth / 2),
+        ([UIScreen mainScreen].bounds.size.width / 2) - (knobWidth / 2),
         -(knobHeight / 2),
         knobWidth, knobHeight)];
     bottomDraggerView.alpha = 0.3;
@@ -452,7 +475,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
   if ([[RASettings sharedInstance] autoSizeWidgetSelector]) {
     CGFloat moddedHeight = widgetSelectorView.frame.size.height;
     if (old_grabberCenterY == -1) {
-      old_grabberCenterY = UIScreen.mainScreen.bounds.size.height * 0.3;
+      old_grabberCenterY = [UIScreen mainScreen].bounds.size.height * 0.3;
     }
     old_grabberCenterY = grabberCenter_Y;
     grabberCenter_Y = moddedHeight;
@@ -480,9 +503,9 @@ CGFloat startingY = -1;
     if (firstLocation.y + translation.y < 50) {
       view.center = CGPointMake(grabberCenter_X, 50);
       grabberCenter_Y = 50;
-    } else if (firstLocation.y + translation.y > UIScreen.mainScreen.bounds.size.height - 30) {
-      view.center = CGPointMake(grabberCenter_X, UIScreen.mainScreen.bounds.size.height - 30);
-      grabberCenter_Y = UIScreen.mainScreen.bounds.size.height - 30;
+    } else if (firstLocation.y + translation.y > [UIScreen mainScreen].bounds.size.height - 30) {
+      view.center = CGPointMake(grabberCenter_X, [UIScreen mainScreen].bounds.size.height - 30);
+      grabberCenter_Y = [UIScreen mainScreen].bounds.size.height - 30;
     } else {
       view.center = CGPointMake(grabberCenter_X, firstLocation.y + translation.y);
       grabberCenter_Y = [sender locationInView:view.superview].y;
@@ -556,11 +579,11 @@ CGFloat startingY = -1;
   UIWindow *bottomWindow = [self valueForKey:@"_reachabilityWindow"];
 
   CGRect topFrame = CGRectMake(topWindow.frame.origin.x, topWindow.frame.origin.y, topWindow.frame.size.width, center.y);
-  CGRect bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, UIScreen.mainScreen._referenceBounds.size.height - center.y);
+  CGRect bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, [UIScreen mainScreen]._referenceBounds.size.height - center.y);
 
   if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
     topFrame = CGRectMake(topWindow.frame.origin.x, 0, topWindow.frame.size.width, center.y);
-    bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, UIScreen.mainScreen._referenceBounds.size.height - center.y);
+    bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, [UIScreen mainScreen]._referenceBounds.size.height - center.y);
   }
 
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
@@ -731,7 +754,7 @@ CGFloat startingY = -1;
     [[RAMessagingServer sharedInstance] rotateApp:currentBundleIdentifier toOrientation:UIInterfaceOrientationPortrait completion:nil];
 
     // Scale app
-    CGFloat scale = view.frame.size.width / UIScreen.mainScreen.bounds.size.height;
+    CGFloat scale = view.frame.size.width / [UIScreen mainScreen].bounds.size.height;
     pre_topAppTransform = MSHookIvar<FBWindowContextHostView*>([app mainScene].contextHostManager, "_hostView").transform;
     MSHookIvar<FBWindowContextHostView*>([app mainScene].contextHostManager, "_hostView").transform = CGAffineTransformConcat(CGAffineTransformMakeScale(scale, scale), CGAffineTransformMakeRotation(M_PI_2));
     pre_topAppFrame = MSHookIvar<FBWindowContextHostView*>([app mainScene].contextHostManager, "_hostView").frame;
@@ -817,7 +840,7 @@ CGFloat startingY = -1;
 
       if ([[RASettings sharedInstance] autoSizeWidgetSelector]) {
         if (old_grabberCenterY == -1) {
-          old_grabberCenterY = UIScreen.mainScreen.bounds.size.height * 0.3;
+          old_grabberCenterY = [UIScreen mainScreen].bounds.size.height * 0.3;
         }
         grabberCenter_Y = old_grabberCenterY;
         draggerView.center = CGPointMake(grabberCenter_X, grabberCenter_Y);

@@ -26,6 +26,7 @@ Minor Things/Bugs to note:
 Things to do/Features to add:
 - 3D Touch actions?
 - Unify StatusBar in SO side by side
+- Make Modules more independent (have them use current extensions system?)
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?

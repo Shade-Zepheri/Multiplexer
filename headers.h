@@ -603,7 +603,7 @@ typedef enum {
 - (id) switcherController;
 - (id)_appSwitcherController;
 - (void) activateApplicationAnimated:(SBApplication*)app;
-- (id)switcherWindow;
+- (UIWindow *)switcherWindow;
 - (void)_animateStatusBarForSuspendGesture;
 - (void)_showControlCenterGestureCancelled;
 - (void)_showControlCenterGestureFailed;

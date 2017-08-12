@@ -5,15 +5,35 @@
 #import "RASettings.h"
 #import "RASnapshotProvider.h"
 #import "RADesktopManager.h"
+#import "Multiplexer.h"
 
 BOOL allowMissionControlActivationFromSwitcher = YES;
 BOOL statusBarVisibility;
 BOOL willShowMissionControl = NO;
 BOOL toggleOrActivate = NO;
 
+%hook SBHomeHardwareButton
+- (void)singlePressUp:(id)button {
+	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
+	}
+	
+	%orig;
+}
+%end
+
 %hook SBUIController
+- (BOOL)clickedMenuButton {
+	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
+		return YES;
+	}
+
+	return %orig;
+}
+
 - (void)_showNotificationsGestureBeganWithLocation:(CGPoint)point {
-	if ([[[%c(SBUIController) sharedInstance] switcherWindow] isKeyWindow] && CGRectContainsPoint([[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999].frame, point)) {
+	if ([self switcherWindow].keyWindow && CGRectContainsPoint([[self switcherWindow] viewWithTag:999].frame, point)) {
 		return;
 	}
 
@@ -29,23 +49,21 @@ BOOL toggleOrActivate = NO;
 	willShowMissionControl = NO;
 
 	if ([[RASettings sharedInstance] replaceAppSwitcherWithMC] && [[RASettings sharedInstance] missionControlEnabled]) {
-		if (![RAMissionControlManager sharedInstance].isShowingMissionControl) {
+		if (![RAMissionControlManager sharedInstance].showingMissionControl) {
 			[[RAMissionControlManager sharedInstance] showMissionControl:YES];
 		} else {
 			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 
 		return YES;
-	} else {
-		if ([[RAMissionControlManager sharedInstance] isShowingMissionControl]) {
-			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
-		}
+	} else if ([RAMissionControlManager sharedInstance].showingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 	}
 
 	BOOL s = %orig;
-	if (s && [[RASettings sharedInstance] missionControlEnabled] && [[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999]) {
+	if (s && [[RASettings sharedInstance] missionControlEnabled] && [[self switcherWindow] viewWithTag:999]) {
 		[UIView animateWithDuration:0.3 animations:^{
-			[[[%c(SBUIController) sharedInstance] switcherWindow] viewWithTag:999].alpha = 1;
+			[[self switcherWindow] viewWithTag:999].alpha = 1;
 		}];
 	}
 	if (s) {
@@ -70,12 +88,12 @@ BOOL toggleOrActivate = NO;
 	%orig;
 }
 
-- (_Bool)isAppSwitcherShowing {
-	return %orig || [RAMissionControlManager sharedInstance].isShowingMissionControl;
+- (BOOL)isAppSwitcherShowing {
+	return %orig || [RAMissionControlManager sharedInstance].showingMissionControl;
 }
 
 - (void) _dismissSwitcherAnimated:(BOOL)animated {
-	if ([RAMissionControlManager sharedInstance].isShowingMissionControl) {
+	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
 		[[RAMissionControlManager sharedInstance] hideMissionControl:animated];
 	}
 
@@ -571,15 +589,13 @@ BOOL toggleOrActivate = NO;
 	willShowMissionControl = NO;
 
 	if ([[RASettings sharedInstance] replaceAppSwitcherWithMC] && [[RASettings sharedInstance] missionControlEnabled]) {
-		if (![RAMissionControlManager sharedInstance].isShowingMissionControl) {
+		if (![RAMissionControlManager sharedInstance].showingMissionControl) {
 			[[RAMissionControlManager sharedInstance] showMissionControl:YES];
 	  } else {
 			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
-	} else {
-		if ([[RAMissionControlManager sharedInstance] isShowingMissionControl]) {
-			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
-		}
+	} else if ([RAMissionControlManager sharedInstance].showingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 	}
 
 	%orig;
@@ -606,17 +622,15 @@ BOOL toggleOrActivate = NO;
 
 - (BOOL)activateSwitcherNoninteractively {
 	if ([[RASettings sharedInstance] replaceAppSwitcherWithMC] && [[RASettings sharedInstance] missionControlEnabled]) {
-		if (![RAMissionControlManager sharedInstance].isShowingMissionControl) {
+		if (![RAMissionControlManager sharedInstance].showingMissionControl) {
 			[[RAMissionControlManager sharedInstance] showMissionControl:YES];
 		} else {
 			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		}
 
 		return YES;
-	} else {
-		if ([[RAMissionControlManager sharedInstance] isShowingMissionControl]) {
-			[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
-		}
+	} else if ([RAMissionControlManager sharedInstance].showingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 	}
 
 	return %orig;
