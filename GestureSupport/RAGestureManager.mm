@@ -1,6 +1,5 @@
 #import "headers.h"
 #import "RAGestureManager.h"
-#import "RASwipeOverManager.h"
 #import "RAGestureCallback.h"
 
 @implementation RAGestureManager
@@ -174,7 +173,7 @@
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}
-	CGRect r = CGRectMake(side == UIRectEdgeLeft ? 0 : UIScreen.mainScreen.bounds.size.width / 2.0 , 0, UIScreen.mainScreen.bounds.size.width / 2.0, axis);
+	CGRect r = CGRectMake(side == UIRectEdgeLeft ? 0 : [UIScreen mainScreen].bounds.size.width / 2.0 , 0, [UIScreen mainScreen].bounds.size.width / 2.0, axis);
 	[self ignoreSwipesBeginningInRect:r forIdentifier:identifier];
 }
 
@@ -182,7 +181,7 @@
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}
-	CGRect r = CGRectMake(side == UIRectEdgeLeft ? 0 : UIScreen.mainScreen.bounds.size.width / 2.0 , axis, UIScreen.mainScreen.bounds.size.width / 2.0, UIScreen.mainScreen.bounds.size.height - axis);
+	CGRect r = CGRectMake(side == UIRectEdgeLeft ? 0 : [UIScreen mainScreen].bounds.size.width / 2.0 , axis, [UIScreen mainScreen].bounds.size.width / 2.0, [UIScreen mainScreen].bounds.size.height - axis);
 	[self ignoreSwipesBeginningInRect:r forIdentifier:identifier];
 }
 @end

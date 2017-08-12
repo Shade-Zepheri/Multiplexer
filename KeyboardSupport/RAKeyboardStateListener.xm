@@ -8,7 +8,6 @@
 #import "RARemoteKeyboardView.h"
 #import "RADesktopManager.h"
 
-extern BOOL overrideDisableForStatusBar;
 BOOL isShowing = NO;
 
 @implementation RAKeyboardStateListener

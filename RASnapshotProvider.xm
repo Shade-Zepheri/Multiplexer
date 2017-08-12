@@ -211,7 +211,7 @@
 		});
 
 		for (UIView *view in desktop.subviews) { // Application views
-			if (![view isKindOfClass:[%c(RAWindowBar) class]]) {
+			if (![view isKindOfClass:%c(RAWindowBar)]) {
 				continue;
 			}
 			RAHostedAppView *hostedView = [((RAWindowBar *)view) attachedView];
