@@ -2,6 +2,7 @@
 #import "RAHostedAppView.h"
 #import "RASettings.h"
 #import "headers.h"
+#import "Multiplexer.h"
 
 @interface SBNotificationCenterViewController () <UITextFieldDelegate>
 - (id)_newBulletinObserverViewControllerOfClass:(Class)aClass;
@@ -140,4 +141,6 @@ BOOL shouldLoadView = NO;
 	} else {
 		%init(iOS8);
 	}
+
+	[[Multiplexer sharedInstance] registerExtension:@"QuickAccess" forMultiplexerVersion:@"1.0.0"];
 }

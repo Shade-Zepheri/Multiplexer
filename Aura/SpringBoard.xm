@@ -1,6 +1,7 @@
 #import "headers.h"
 #import "RABackgrounder.h"
 #import "RAAppSwitcherModelWrapper.h"
+#import "Multiplexer.h"
 
 %hook SBApplication
 - (BOOL)shouldAutoRelaunchAfterExit {
@@ -74,7 +75,7 @@
       if ([[RABackgrounder sharedInstance] killProcessOnExit:scene.identifier]) {
         FBProcess *proc = scene.clientProcess;
 
-        if ([proc isKindOfClass:[%c(FBApplicationProcess) class]]) {
+        if ([proc isKindOfClass:%c(FBApplicationProcess)]) {
           FBApplicationProcess *proc2 = (FBApplicationProcess*)proc;
           [proc2 killForReason:1 andReport:NO withDescription:@"ReachApp.Backgrounder.killOnExit" completion:nil];
           [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:RAIconIndicatorViewInfoForceDeath];
@@ -140,5 +141,6 @@
     return;
   }
 
+  [[Multiplexer sharedInstance] registerExtension:@"Aura" forMultiplexerVersion:@"1.0.0"];
   %init;
 }

@@ -636,3 +636,8 @@ BOOL toggleOrActivate = NO;
 	return %orig;
 }
 %end
+
+%ctor {
+	[[Multiplexer sharedInstance] registerExtension:@"MissionControl" forMultiplexerVersion:@"1.0.0"];
+	%init;
+}
