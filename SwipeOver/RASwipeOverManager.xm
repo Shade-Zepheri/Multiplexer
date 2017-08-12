@@ -23,15 +23,14 @@ extern int rotationDegsForOrientation(int o);
 
 	BOOL didWantOrientationEvents;
 }
+
+@property (strong, nonatomic) UIView *fakeStatusBar;
+
 @end
 
 @implementation RASwipeOverManager
 + (instancetype)sharedInstance {
 	SHARED_INSTANCE(RASwipeOverManager);
-}
-
-- (BOOL)isUsingSwipeOver {
-	return isUsingSwipeOver;
 }
 
 - (void)showAppSelector {
@@ -44,7 +43,7 @@ extern int rotationDegsForOrientation(int o);
 
 - (void)startUsingSwipeOver {
 	start = 0;
-	isUsingSwipeOver = YES;
+	_usingSwipeOver = YES;
 	currentAppIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
 
 	[self createEdgeView];
@@ -61,7 +60,7 @@ extern int rotationDegsForOrientation(int o);
 
 	[RAOrientationLocker unlockOrientation];
 
-	isUsingSwipeOver = NO;
+	_usingSwipeOver = NO;
 	currentAppIdentifier = nil;
 
 	CGRect frame = overlayWindow.frame;
@@ -141,7 +140,7 @@ extern int rotationDegsForOrientation(int o);
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:identifier];
 	view.autosizesApp = NO;
-	if (!overlayWindow.isHidingUnderlyingApp) {
+	if (!overlayWindow.hidingUnderlyingApp) {
 		view.autosizesApp = YES;
 	}
 	view.shouldUseExternalKeyboard = YES;
@@ -163,7 +162,7 @@ extern int rotationDegsForOrientation(int o);
 	detachView.tag = 9903553;
 	[view addSubview:detachView];
 
-	if (!overlayWindow.isHidingUnderlyingApp) { // side-by-side
+	if (!overlayWindow.hidingUnderlyingApp) { // side-by-side
 		view.frame = CGRectMake(10, 0, view.frame.size.width, view.frame.size.height);
 	} else { // overlay
 		view.frame = CGRectMake(SCREEN_WIDTH - 50, 0, view.frame.size.width, view.frame.size.height);
@@ -207,7 +206,7 @@ extern int rotationDegsForOrientation(int o);
 	}
 	[overlayWindow currentView].transform = CGAffineTransformIdentity;
 	[overlayWindow removeOverlayFromUnderlyingApp];
-	[overlayWindow currentView].frame = (CGRect) { { 10, 0 }, [overlayWindow currentView].frame.size };
+	[overlayWindow currentView].frame = CGRectMake(10, 0, [overlayWindow currentView].frame.size.width, [overlayWindow currentView].frame.size.height);
 	overlayWindow.frame = CGRectOffset(overlayWindow.frame, SCREEN_WIDTH / 2, 0);
 	[self sizeViewForTranslation:CGPointZero state:UIGestureRecognizerStateEnded]; // force it
 	[self updateClientSizes:YES];
@@ -222,14 +221,14 @@ extern int rotationDegsForOrientation(int o);
 }
 
 - (void)updateClientSizes:(BOOL)reloadAppSelectorSizeNow {
-	if (currentAppIdentifier && !overlayWindow.isHidingUnderlyingApp) {
-		CGFloat underWidth = [overlayWindow isHidingUnderlyingApp] ? -1 : overlayWindow.frame.origin.x;
+	if (currentAppIdentifier && !overlayWindow.hidingUnderlyingApp) {
+		CGFloat underWidth = overlayWindow.hidingUnderlyingApp ? -1 : overlayWindow.frame.origin.x;
 		[[RAMessagingServer sharedInstance] resizeApp:currentAppIdentifier toSize:CGSizeMake(underWidth, -1) completion:nil];
 	}
 
 	if (overlayWindow.isShowingAppSelector && reloadAppSelectorSizeNow) {
 		[self showAppSelector];
-	} else if (!overlayWindow.isHidingUnderlyingApp) { // Update swiped-over app in side-by-side mode. RAHostedAppView takes care of the app sizing if we resize the RAHostedAppView.
+	} else if (!overlayWindow.hidingUnderlyingApp) { // Update swiped-over app in side-by-side mode. RAHostedAppView takes care of the app sizing if we resize the RAHostedAppView.
 		overlayWindow.currentView.frame = CGRectMake(10, 0, SCREEN_WIDTH - overlayWindow.frame.origin.x - 10, overlayWindow.currentView.frame.size.height);
 	}
 }
@@ -237,7 +236,7 @@ extern int rotationDegsForOrientation(int o);
 - (void)sizeViewForTranslation:(CGPoint)translation state:(UIGestureRecognizerState)state {
 	static CGFloat lastX = -1;
 	static CGFloat overlayOriginX = -1;
-	UIView *targetView = [overlayWindow isHidingUnderlyingApp] ? [overlayWindow viewWithTag:SwipeOverViewTag] : overlayWindow;
+	UIView *targetView = overlayWindow.hidingUnderlyingApp ? [overlayWindow viewWithTag:SwipeOverViewTag] : overlayWindow;
 	LogDebug(@"sizeViewForTranslation");
 
 	if (start == 0) {
@@ -260,7 +259,7 @@ extern int rotationDegsForOrientation(int o);
 		//if (start + translation.x + targetView.frame.size.width - (targetView.frame.size.width / 2) < 0 && [overlayWindow isHidingUnderlyingApp] == NO)
 		//	return;
 
-		if (overlayWindow.isHidingUnderlyingApp) {
+		if (overlayWindow.hidingUnderlyingApp) {
 			if (![[overlayWindow currentView] isKindOfClass:[RAAppSelectorView class]]) {
 				if (lastX == -1) {
 					lastX = translation.x;

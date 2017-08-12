@@ -12,7 +12,7 @@
 UIView *grabberView;
 BOOL isShowingGrabber = NO;
 BOOL isPastGrabber = NO;
-CFTimeInterval startTime; //maybe use  mach_absolute_time cuz y not
+CFTimeInterval startTime;
 CGPoint startingPoint;
 BOOL firstSwipe = NO;
 
@@ -184,7 +184,7 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
       }
     }
 
-    if (![[RASwipeOverManager sharedInstance] isUsingSwipeOver]) {
+    if (![RASwipeOverManager sharedInstance].usingSwipeOver]) {
       [[RASwipeOverManager sharedInstance] startUsingSwipeOver];
     }
 
@@ -193,8 +193,8 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
     return RAGestureCallbackResultSuccess;
   } withCondition:^BOOL(CGPoint location, CGPoint velocity) {
-    if ([[RAKeyboardStateListener sharedInstance] visible] && ![[RASwipeOverManager sharedInstance] isUsingSwipeOver]) {
-      CGRect realKBFrame = CGRectMake(0, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height, [[RAKeyboardStateListener sharedInstance] size].width, [[RAKeyboardStateListener sharedInstance] size].height);
+    if ([RAKeyboardStateListener sharedInstance].visible && ![RASwipeOverManager sharedInstance].usingSwipeOver) {
+      CGRect realKBFrame = CGRectMake(0, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height, [RAKeyboardStateListener sharedInstance].size.width, [RAKeyboardStateListener sharedInstance].size.height);
       realKBFrame = CGRectOffset(realKBFrame, 0, -realKBFrame.size.height);
 
       if (CGRectContainsPoint(realKBFrame, location) || realKBFrame.size.height > 50) {

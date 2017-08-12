@@ -4,7 +4,7 @@
 
 %hook SBUIController
 - (BOOL)clickedMenuButton {
-  if ([[RASwipeOverManager sharedInstance] isUsingSwipeOver]) {
+  if ([RASwipeOverManager sharedInstance].usingSwipeOver) {
     [[RASwipeOverManager sharedInstance] stopUsingSwipeOver];
     return YES;
   }
@@ -13,7 +13,7 @@
 }
 
 - (BOOL)handleHomeButtonSinglePressUp {
-  if ([[RASwipeOverManager sharedInstance] isUsingSwipeOver]) {
+  if ([RASwipeOverManager sharedInstance].usingSwipeOver) {
     [[RASwipeOverManager sharedInstance] stopUsingSwipeOver];
     return YES;
   }
@@ -26,7 +26,7 @@
 - (void)_postLockCompletedNotification:(BOOL)value {
   %orig;
 
-  if (value && [[RASwipeOverManager sharedInstance] isUsingSwipeOver]) {
+  if (value && [RASwipeOverManager sharedInstance].usingSwipeOver) {
     [[RASwipeOverManager sharedInstance] stopUsingSwipeOver];
   }
 }

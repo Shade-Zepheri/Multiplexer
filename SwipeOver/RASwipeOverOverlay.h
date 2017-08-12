@@ -2,12 +2,11 @@
 #import "RAAppSelectorView.h"
 
 @interface RASwipeOverOverlay : UIAutoRotatingWindow <UIGestureRecognizerDelegate, RAAppSelectorViewDelegate> {
-	BOOL isHidingUnderlyingApp;
 	UIVisualEffectView *darkenerView;
 }
 @property (strong, nonatomic) UIView *grabberView;
+@property (getter=isHidingUnderlyingApp, nonatomic, readonly) BOOL hidingUnderlyingApp;
 
-- (BOOL)isHidingUnderlyingApp;
 - (void)showEnoughToDarkenUnderlyingApp;
 - (void)removeOverlayFromUnderlyingApp;
 - (void)removeOverlayFromUnderlyingAppImmediately;

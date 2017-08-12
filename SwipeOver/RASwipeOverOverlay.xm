@@ -31,15 +31,11 @@
 	return self;
 }
 
-- (BOOL)isHidingUnderlyingApp {
-	return isHidingUnderlyingApp;
-}
-
 - (void)showEnoughToDarkenUnderlyingApp {
-	if (isHidingUnderlyingApp) {
+	if (self.hidingUnderlyingApp) {
 		return;
 	}
-	isHidingUnderlyingApp = YES;
+	_hidingUnderlyingApp = YES;
 
 	UIBlurEffect *blurEffect = [UIBlurEffect effectWithStyle:UIBlurEffectStyleDark];
 	darkenerView = [[UIVisualEffectView alloc] initWithEffect:blurEffect];
@@ -51,10 +47,10 @@
 }
 
 - (void)removeOverlayFromUnderlyingApp {
-	if (!isHidingUnderlyingApp) {
+	if (!self.hidingUnderlyingApp) {
 		return;
 	}
-	isHidingUnderlyingApp = NO;
+	_hidingUnderlyingApp = NO;
 
 	[UIView animateWithDuration:0.3 animations:^{
 		darkenerView.alpha = 0;
@@ -66,10 +62,10 @@
 }
 
 - (void)removeOverlayFromUnderlyingAppImmediately {
-	if (!isHidingUnderlyingApp) {
+	if (!self.hidingUnderlyingApp) {
 		return;
 	}
-	isHidingUnderlyingApp = NO;
+	_hidingUnderlyingApp = NO;
 
 	[darkenerView removeFromSuperview];
 	darkenerView = nil;
@@ -100,11 +96,11 @@
 	[[RASwipeOverManager sharedInstance] closeCurrentView];
 	if ([[self currentView] isKindOfClass:[RAAppSelectorView class]]) {
 		[(RAAppSelectorView *)[self currentView] relayoutApps];
-		[self currentView].frame = CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height);
+		[self currentView].frame = CGRectMake(self.hidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (self.hidingUnderlyingApp ? 0 : 10), self.frame.size.height);
 		return;
 	}
 
-	RAAppSelectorView *appSelector = [[RAAppSelectorView alloc] initWithFrame:CGRectMake(isHidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (isHidingUnderlyingApp ? 0 : 10), self.frame.size.height)];
+	RAAppSelectorView *appSelector = [[RAAppSelectorView alloc] initWithFrame:CGRectMake(self.hidingUnderlyingApp ? 0 : 10, 0, self.frame.size.width - (self.hidingUnderlyingApp ? 0 : 10), self.frame.size.height)];
 	appSelector.tag = SwipeOverViewTag;
 	appSelector.target = self;
 	[appSelector relayoutApps];

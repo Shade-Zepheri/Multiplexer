@@ -2,13 +2,13 @@
 
 @interface RASwipeOverManager : NSObject {
 	NSString *currentAppIdentifier;
-	BOOL isUsingSwipeOver;
 }
+@property (getter=isUsingSwipeOver, nonatomic, readonly) BOOL usingSwipeOver;
+
 + (instancetype)sharedInstance;
 
 - (void)startUsingSwipeOver;
 - (void)stopUsingSwipeOver;
-- (BOOL)isUsingSwipeOver;
 
 - (void)createEdgeView;
 
