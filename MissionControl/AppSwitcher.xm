@@ -17,7 +17,7 @@ BOOL toggleOrActivate = NO;
 	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
 		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 	}
-	
+
 	%orig;
 }
 %end
@@ -638,6 +638,6 @@ BOOL toggleOrActivate = NO;
 %end
 
 %ctor {
-	[[Multiplexer sharedInstance] registerExtension:@"MissionControl" forMultiplexerVersion:@"1.0.0"];
+	[[Multiplexer sharedInstance] registerExtension:@"com.shade.missioncontrol" forMultiplexerVersion:@"1.0.0"];
 	%init;
 }

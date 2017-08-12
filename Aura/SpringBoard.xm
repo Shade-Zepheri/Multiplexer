@@ -141,6 +141,6 @@
     return;
   }
 
-  [[Multiplexer sharedInstance] registerExtension:@"Aura" forMultiplexerVersion:@"1.0.0"];
+  [[Multiplexer sharedInstance] registerExtension:@"com.shade.aura" forMultiplexerVersion:@"1.0.0"];
   %init;
 }

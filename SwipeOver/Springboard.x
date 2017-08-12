@@ -37,6 +37,6 @@
     return;
   }
 
-  [[Multiplexer sharedInstance] registerExtension:@"SwipeOver" forMultiplexerVersion:@"1.0.0"];
+  [[Multiplexer sharedInstance] registerExtension:@"com.shade.swipeover" forMultiplexerVersion:@"1.0.0"];
   %init;
 }

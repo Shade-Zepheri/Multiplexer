@@ -33,6 +33,6 @@
     return;
   }
 
-  [[Multiplexer sharedInstance] registerExtension:@"Empoleon" forMultiplexerVersion:@"1.0.0"];
+  [[Multiplexer sharedInstance] registerExtension:@"com.shade.empoleon" forMultiplexerVersion:@"1.0.0"];
   %init;
 }

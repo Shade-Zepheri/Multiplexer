@@ -872,7 +872,7 @@ CGFloat startingY = -1;
     return;
   }
 
-	[[Multiplexer sharedInstance] registerExtension:@"ReachApp" forMultiplexerVersion:@"1.0.0"];
+	[[Multiplexer sharedInstance] registerExtension:@"com.shade.reachapp" forMultiplexerVersion:@"1.0.0"];
   Class c = %c(SBMainWorkspace) ?: %c(SBWorkspace);
   %init(hooks, SB_WORKSPACE_CLASS=c);
 }

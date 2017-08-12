@@ -142,5 +142,5 @@ BOOL shouldLoadView = NO;
 		%init(iOS8);
 	}
 
-	[[Multiplexer sharedInstance] registerExtension:@"QuickAccess" forMultiplexerVersion:@"1.0.0"];
+	[[Multiplexer sharedInstance] registerExtension:@"com.shade.quickaccess" forMultiplexerVersion:@"1.0.0"];
 }
