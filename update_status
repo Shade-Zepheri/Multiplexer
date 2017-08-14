@@ -14,9 +14,12 @@ backboardd hooks: working
 fake phone mode: working (hacky tho)
 
 Bugs:
-- Fix Aura ForceForegrounding
+- 'Fix' Aura
+  - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
+  - Aura breaks calls? (kill on exit)
+  - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
+  - Prevent Death broken
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
-- Aura breaks calls? (kill on exit)
 - Empoleon windows dont properly rotate in some (most) apps
 
 Minor Things/Bugs to note:
