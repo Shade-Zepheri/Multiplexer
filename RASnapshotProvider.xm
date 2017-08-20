@@ -159,8 +159,7 @@
 
 	ON_MAIN_THREAD(^{
 		//Calculate the size of the rotated view's containing box for our drawing space
-		static UIView *rotatedViewBox = [[UIView alloc] init];
-		rotatedViewBox.frame = CGRectMake(0,0,oldImage.size.width, oldImage.size.height);
+		static UIView *rotatedViewBox = [[UIView alloc] initWithFrame:CGRectMake(0,0,oldImage.size.width, oldImage.size.height)];
 		CGAffineTransform t = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(degrees));
 		rotatedViewBox.transform = t;
 		rotatedSize = rotatedViewBox.frame.size;

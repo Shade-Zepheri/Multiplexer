@@ -1,6 +1,3 @@
-#import <UIKit/UIKit.h>
-#import <substrate.h>
-#import <SpringBoard/SBApplication.h>
 #import "headers.h"
 #import "RAWidgetSectionManager.h"
 #import "RASettings.h"

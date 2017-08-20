@@ -1,8 +1,6 @@
 #import "RAAppKiller.h"
 #import "RARunningAppsProvider.h"
 
-extern "C" void BKSTerminateApplicationForReasonAndReportWithDescription(NSString *app, int reasonID, BOOL report, NSString *description);
-
 @interface RAAppKiller () {
 	NSMutableDictionary *completionDictionary;
 }

@@ -20,6 +20,7 @@ BOOL launchNextOpenIntoWindow = NO;
 //hack so I can compile
 RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen() {
 	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationUnknown:
 		case UIInterfaceOrientationPortrait:
 			return RAWindowSnapLocationLeft;
 		case UIInterfaceOrientationLandscapeRight:
@@ -34,6 +35,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetLeftOfScreen() {
 
 RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationUnknown:
 		case UIInterfaceOrientationPortrait:
 			return RAWindowSnapLocationRight;
 		case UIInterfaceOrientationLandscapeRight:

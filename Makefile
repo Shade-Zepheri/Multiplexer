@@ -13,17 +13,17 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 FRAMEWORK_NAME = MultiplexerCore
-MultiplexerCore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m) \
+MultiplexerCore_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.x) $(wildcard *.m) \
 	$(wildcard widgets/*.xm) $(wildcard widgets/*.mm) $(wildcard widgets/*.m) \
 	$(wildcard widgets/Core/*.xm) $(wildcard widgets/Core/*.mm) $(wildcard widgets/Core/*.m) \
 	$(wildcard widgets/Reachability/*.xm) $(wildcard widgets/Reachability/*.mm) $(wildcard widgets/Reachability/*.m) \
-	$(wildcard KeyboardSupport/*.xm) $(wildcard KeyboardSupport/*.mm) $(wildcard KeyboardSupport/*.m) \
-	$(wildcard GestureSupport/*.xm) $(wildcard GestureSupport/*.mm) $(wildcard GestureSupport/*.m) \
-	$(wildcard IntroTutorial/*.xm) $(wildcard IntroTutorial/*.mm) $(wildcard IntroTutorial/*.m) \
-	$(wildcard Messaging/*.xm) $(wildcard Messaging/*.mm) $(wildcard Messaging/*.m) \
-	$(wildcard DRM/*.xm) $(wildcard DRM/*.mm) $(wildcard DRM/*.m) \
+	$(wildcard KeyboardSupport/*.mm) $(wildcard KeyboardSupport/*.x) $(wildcard KeyboardSupport/*.m) \
+	$(wildcard GestureSupport/*.xm) $(wildcard GestureSupport/*.mm) $(wildcard GestureSupport/*.x) \
+	$(wildcard IntroTutorial/*.x) \
+	$(wildcard Messaging/*.x) \
+	$(wildcard DRM/*.x) \
 	$(wildcard Theming/*.xm) $(wildcard Theming/*.mm) $(wildcard Theming/*.m) \
-	$(wildcard Debugging/*.xm) $(wildcard Debugging/*.mm) $(wildcard Debugging/*.m)
+	$(wildcard Debugging/*.x)
 
 MultiplexerCore_FRAMEWORKS = UIKit QuartzCore CoreGraphics
 MultiplexerCore_PRIVATE_FRAMEWORKS = FrontBoardServices BackBoardServices IOKit

@@ -18,7 +18,7 @@ Bugs:
   - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
   - Aura breaks calls? (kill on exit)
   - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
-  - Prevent Death broken
+  - Prevent Death doesnt protect from system killing
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Empoleon windows dont properly rotate in some (most) apps
 

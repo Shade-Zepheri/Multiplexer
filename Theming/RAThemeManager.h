@@ -2,13 +2,10 @@
 
 @interface RAThemeManager : NSObject {
 	NSMutableDictionary *allThemes;
-	RATheme *currentTheme;
 }
-
+@property (strong, nonatomic, readonly) RATheme *currentTheme;
 + (instancetype)sharedInstance;
 
-- (RATheme *)currentTheme;
 - (NSArray *)allThemes;
-
 - (void)invalidateCurrentThemeAndReload:(NSString *)currentIdentifier;
 @end

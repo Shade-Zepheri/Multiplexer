@@ -19,11 +19,11 @@ static NSInteger const ARROW_UP_KEY = 82;
 static NSInteger const ARROW_DOWN_KEY = 81;
 static NSInteger const EQUALS_OR_PLUS_KEY = 46;
 
-IOHIDEventSystemCallback eventCallback = NULL;
-BOOL isControlKeyDown = NO;
-BOOL isWindowsKeyDown = NO;
-BOOL isShiftKeyDown = NO;
-BOOL isAltKeyDown = NO;
+static IOHIDEventSystemCallback eventCallback = NULL;
+static BOOL isControlKeyDown = NO;
+static BOOL isWindowsKeyDown = NO;
+static BOOL isShiftKeyDown = NO;
+static BOOL isAltKeyDown = NO;
 
 static CPDistributedMessagingCenter *center;
 
@@ -66,7 +66,7 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 				case BKSPCE_KEY:
 					[center sendMessageName:RAMessagingDetachCurrentAppMessageName userInfo:nil];
 					break;
-				case D_KEY:
+				case D_KEY: //Conflicts with define selected word
 				case EQUALS_OR_PLUS_KEY:
 					[center sendMessageName:RAMessagingAddNewDesktopMessageName userInfo:nil];
 					break;

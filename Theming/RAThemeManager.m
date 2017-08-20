@@ -8,10 +8,6 @@
 	SHARED_INSTANCE2(RAThemeManager, [sharedInstance invalidateCurrentThemeAndReload:nil]); // will be reloaded by RASettings
 }
 
-- (RATheme *)currentTheme {
-	return currentTheme;
-}
-
 - (NSArray *)allThemes {
 	return allThemes.allValues;
 }
@@ -23,7 +19,7 @@
 #endif
 
 
-	currentTheme = nil;
+	_currentTheme = nil;
 	[allThemes removeAllObjects];
 	allThemes = [NSMutableDictionary dictionary];
 
@@ -41,14 +37,14 @@
 			allThemes[theme.themeIdentifier] = theme;
 
 			if ([theme.themeIdentifier isEqualToString:currentIdentifier]) {
-				currentTheme = theme;
+				_currentTheme = theme;
 			}
 		}
 	}
-	if (!currentTheme) {
-		currentTheme = [allThemes objectForKey:@"com.eljahandandrew.multiplexer.themes.default"];
-		if (!currentTheme && allThemes.allKeys.count > 0) {
-			currentTheme = allThemes[allThemes.allKeys[0]];
+	if (!_currentTheme) {
+		_currentTheme = [allThemes objectForKey:@"com.eljahandandrew.multiplexer.themes.default"];
+		if (!_currentTheme && allThemes.allKeys.count > 0) {
+			_currentTheme = allThemes[allThemes.allKeys[0]];
 		}
 	}
 

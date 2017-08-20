@@ -90,6 +90,7 @@ extern "C" {
 
 CFNotificationCenterRef CFNotificationCenterGetDistributedCenter(void);
 void BKSHIDServicesCancelTouchesOnMainDisplay();
+void BKSTerminateApplicationForReasonAndReportWithDescription(NSString *app, int reasonID, BOOL report, NSString *description);
 
 #ifdef __cplusplus
 }

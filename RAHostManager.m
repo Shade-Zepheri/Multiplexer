@@ -27,7 +27,7 @@
 			return nil;
 		}
 
-		[[%c(FBSSystemService) sharedService] openApplication:app.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:^{
+		[[FBSSystemService sharedService] openApplication:app.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:^{
 			settings.backgrounded = NO;
 			[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
 		}];

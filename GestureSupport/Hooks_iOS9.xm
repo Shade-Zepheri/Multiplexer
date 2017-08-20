@@ -10,7 +10,6 @@
 
 typedef struct __IOHIDServiceClient * IOHIDServiceClientRef;
 typedef void* (*clientCreatePointer)(const CFAllocatorRef);
-extern "C" void BKSHIDServicesCancelTouchesOnMainDisplay();
 
 @interface _UIScreenEdgePanRecognizer (Velocity)
 - (CGPoint)RA_velocity;
