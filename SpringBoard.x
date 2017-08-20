@@ -1,12 +1,3 @@
-#import <UIKit/UIKit.h>
-#import <substrate.h>
-#import <SpringBoard/SBApplication.h>
-#include <mach/mach.h>
-#include <libkern/OSCacheControl.h>
-#include <stdbool.h>
-#include <dlfcn.h>
-#include <sys/sysctl.h>
-#import <notify.h>
 #import "RACompatibilitySystem.h"
 #import "headers.h"
 #import "RAWidgetSectionManager.h"
@@ -95,7 +86,7 @@ BOOL overrideDisableForStatusBar = NO;
 
 %hook SBApplication
 - (void)didActivateWithTransactionID:(NSUInteger)transactionID {
-  dispatch_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     [[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
   });
 
@@ -103,7 +94,7 @@ BOOL overrideDisableForStatusBar = NO;
 }
 
 - (void)didActivateForScene:(FBScene *)scene transactionID:(NSUInteger)transactionID {
-  dispatch_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     [[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
   });
 

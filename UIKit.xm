@@ -65,7 +65,7 @@ static Class $memorized$UITextEffectsWindow$class;
 - (void)_sendTouchesForEvent:(UIEvent *)event {
   %orig;
 
-  dispatch_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     [[RAMessagingClient sharedInstance] notifySpringBoardOfFrontAppChangeToSelf];
   });
 }
