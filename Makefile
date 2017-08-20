@@ -1,7 +1,7 @@
 export TARGET = iphone:9.2
 
 ifeq ($(IPAD),1)
-export THEOS_DEVICE_IP=192.168.254.4
+export THEOS_DEVICE_IP=192.168.254.7
 export THEOS_DEVICE_PORT=22
 endif
 
@@ -25,10 +25,9 @@ MultiplexerCore_FILES = Tweak.xm $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.
 	$(wildcard Theming/*.xm) $(wildcard Theming/*.mm) $(wildcard Theming/*.m) \
 	$(wildcard Debugging/*.xm) $(wildcard Debugging/*.mm) $(wildcard Debugging/*.m)
 
-MultiplexerCore_FRAMEWORKS = UIKit QuartzCore CoreGraphics CoreImage
-MultiplexerCore_PRIVATE_FRAMEWORKS = GraphicsServices FrontBoardServices BackBoardServices IOKit
+MultiplexerCore_FRAMEWORKS = UIKit QuartzCore CoreGraphics
+MultiplexerCore_PRIVATE_FRAMEWORKS = FrontBoardServices BackBoardServices IOKit
 MultiplexerCore_EXTRA_FRAMEWORKS = CydiaSubstrate
-MultiplexerCore_LIBRARIES = applist
 
 SUBPROJECTS = reachappfakephonemode reachappassertiondhooks reachappbackboarddhooks reachappsettings reachappflipswitch reachappfsdaemon
 
