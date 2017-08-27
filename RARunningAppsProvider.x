@@ -76,9 +76,9 @@
 - (void)updateProcessState:(FBProcessState *)state {
 	%orig;
 
-	if (self.isRunning && ![[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
+	if (state.running && ![[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
 		[[RARunningAppsProvider sharedInstance] addRunningApp:self];
-	} else if (!self.isRunning && [[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
+	} else if (!state.running && [[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
 		[[RARunningAppsProvider sharedInstance] removeRunningApp:self];
 	}
 }
