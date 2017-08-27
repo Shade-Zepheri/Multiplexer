@@ -15,16 +15,20 @@ fake phone mode: working (hacky tho)
 
 Bugs:
 - 'Fix' Aura
-  - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
-  - Aura breaks calls? (kill on exit)
+  - Aura breaks calls? (kill on exit / Needs testing)
   - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
   - Prevent Death doesnt protect from system killing
+  - SI messes with Apple Watch
+  - SI stil doesnt properly work?
+  - Fix AppSwitcher cards suspending
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Empoleon windows dont properly rotate in some (most) apps
+- RA broken on 9.0.2?
 
 Minor Things/Bugs to note:
 - Optimize FakePhoneMode (use Classic Modes)
 - Keyboard Dismisses reachability (apparently a feature?)
+- FF broken with camera app (Out of aura's scope. Because of AppDelegate)
 
 Things to do/Features to add:
 - 3D Touch actions?
