@@ -17,16 +17,6 @@
 }
 %end
 
-%hook SBAppSwitcherSnapshotView
-- (void)invalidate {
-  if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:self.displayItem.displayIdentifier]) {
-    return;
-  }
-
-  %orig;
-}
-%end
-
 // STAY IN "FOREGROUND"
 %hook FBUIApplicationResignActiveManager
 - (void)_sendResignActiveForReason:(NSInteger)reason toProcess:(FBApplicationProcess *)process {
@@ -53,6 +43,16 @@
 }
 %end
 
+%hook FBUIApplicationService
+- (void)handleSuspendApplicationProcess:(FBApplicationProcess *)process {
+  if ([[RABackgrounder sharedInstance] shouldKeepInForeground:process.bundleIdentifier]) {
+    return;
+  }
+
+  %orig;
+}
+%end
+
 %hook FBSSceneImpl
 - (instancetype)initWithQueue:(id)queue identifier:(NSString *)identifier display:(FBSDisplay *)display settings:(UIMutableApplicationSceneSettings *)settings clientSettings:(id)clientSettings {
   if ([[RABackgrounder sharedInstance] shouldKeepInForeground:identifier]) {
@@ -76,7 +76,7 @@
         FBProcess *proc = scene.clientProcess;
 
         if ([proc isKindOfClass:%c(FBApplicationProcess)]) {
-          FBApplicationProcess *proc2 = (FBApplicationProcess*)proc;
+          FBApplicationProcess *proc2 = (FBApplicationProcess *)proc;
           [proc2 killForReason:1 andReport:NO withDescription:@"ReachApp.Backgrounder.killOnExit" completion:nil];
           [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:RAIconIndicatorViewInfoForceDeath];
           if ([[RABackgrounder sharedInstance] shouldRemoveFromSwitcherWhenKilledOnExit:scene.identifier]) {

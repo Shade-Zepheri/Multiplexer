@@ -16,6 +16,7 @@ BKSProcessAssertion *keepAlive$temp;
       }
     }];
   }
+
   %orig(scene, settings, diff, context, completion);
 }
 %end
