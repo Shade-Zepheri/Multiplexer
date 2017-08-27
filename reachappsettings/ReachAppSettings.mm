@@ -245,22 +245,23 @@
 }
 
 - (void)showSupportDialog {
-  MFMailComposeViewController *mailViewController;
-  if ([MFMailComposeViewController canSendMail]) {
-    mailViewController = [[MFMailComposeViewController alloc] init];
-    mailViewController.mailComposeDelegate = self;
-    [mailViewController setSubject:@"Multiplexer"];
-
-    struct utsname systemInfo;
-    uname(&systemInfo);
-    NSString *sysInfo = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
-
-    NSString *msg = [NSString stringWithFormat:@"\n\n%@ %@\nModel: %@\n", [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion, sysInfo];
-    [mailViewController setMessageBody:msg isHTML:NO];
-    [mailViewController setToRecipients:@[@"ziroalpha@gmail.com"]];
-
-    [self.rootController presentViewController:mailViewController animated:YES completion:nil];
+  if (![MFMailComposeViewController canSendMail]) {
+    return;
   }
+
+  MFMailComposeViewController *mailViewController = [[MFMailComposeViewController alloc] init];
+  mailViewController.mailComposeDelegate = self;
+  [mailViewController setSubject:@"Multiplexer"];
+
+  struct utsname systemInfo;
+  uname(&systemInfo);
+  NSString *sysInfo = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+
+  NSString *msg = [NSString stringWithFormat:@"\n\n%@ %@\nModel: %@\n", [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion, sysInfo];
+  [mailViewController setMessageBody:msg isHTML:NO];
+  [mailViewController setToRecipients:@[@"ziroalpha@gmail.com"]];
+
+  [self.rootController presentViewController:mailViewController animated:YES completion:nil];;
 }
 
 - (void)setPreferenceValue:(id)value specifier:(PSSpecifier*)specifier {

@@ -22,7 +22,7 @@ MultiplexerCore_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.x) $(wild
 	$(wildcard IntroTutorial/*.x) \
 	$(wildcard Messaging/*.x) \
 	$(wildcard DRM/*.x) \
-	$(wildcard Theming/*.xm) $(wildcard Theming/*.mm) $(wildcard Theming/*.m) \
+	$(wildcard Theming/*.m) \
 	$(wildcard Debugging/*.x)
 
 MultiplexerCore_FRAMEWORKS = UIKit QuartzCore CoreGraphics

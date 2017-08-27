@@ -14,6 +14,8 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 @interface RASettings : NSObject {
 	NSDictionary *_settings;
 }
+@property (strong, nonatomic) NSCache *backgrounderCache;
+
 + (instancetype)sharedInstance;
 
 + (BOOL)isParagonInstalled;

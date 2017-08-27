@@ -6,8 +6,6 @@
 
 #define BOOL(key, default) ([_settings objectForKey:key] ? [_settings[key] boolValue] : default)
 
-NSCache *backgrounderSettingsCache = [NSCache new];
-
 @implementation RASettings
 + (BOOL)isParagonInstalled {
 	static BOOL installed = NO;
@@ -121,6 +119,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 - (instancetype)init {
 	self = [super init];
 	if (self) {
+		self.backgrounderCache = [[NSCache alloc] init];
 		[self reloadSettings];
 	}
 
@@ -177,7 +176,7 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 		}
 
 		[RAThemeManager.sharedInstance invalidateCurrentThemeAndReload:[self currentThemeIdentifier]];
-		[backgrounderSettingsCache removeAllObjects];
+		[self.backgrounderCache removeAllObjects];
 	}
 }
 
@@ -373,13 +372,13 @@ NSCache *backgrounderSettingsCache = [NSCache new];
 	ret[@"backgroundModes"][kBKSBackgroundModeBluetoothCentral] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeBluetoothCentral]] ?: @NO;
 	ret[@"backgroundModes"][kBKSBackgroundModeBluetoothPeripheral] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeBluetoothPeripheral]] ?: @NO;
 
-	[backgrounderSettingsCache setObject:ret forKey:identifier];
+	[self.backgrounderCache setObject:ret forKey:identifier];
 
 	return ret;
 }
 
 - (NSDictionary *)rawCompiledBackgrounderSettingsForIdentifier:(NSString *)identifier {
-	return [backgrounderSettingsCache objectForKey:identifier] ?: [self _createAndCacheBackgrounderSettingsForIdentifier:identifier];
+	return [self.backgrounderCache objectForKey:identifier] ?: [self _createAndCacheBackgrounderSettingsForIdentifier:identifier];
 }
 
 - (BOOL)isFirstRun {
