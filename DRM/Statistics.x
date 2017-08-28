@@ -27,7 +27,7 @@
 		NSURLSession *session = [NSURLSession sessionWithConfiguration:defaultConfiguration];
 		[[session dataTaskWithRequest:request completionHandler:^(NSData *data, NSURLResponse *response, NSError *error) {
 			NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse*)response;
-			NSInteger code = [httpResponse statusCode];
+			NSInteger code = httpResponse.statusCode;
 			if (!error && (code == 0 || code == 200)) {
 				[[NSFileManager defaultManager] createFileAtPath:statsPath contents:[NSData data] attributes:nil];
 			}

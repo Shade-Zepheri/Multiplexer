@@ -121,6 +121,7 @@
 				[[RAMessagingServer sharedInstance] forcePhoneMode:NO forIdentifier:identifier andRelaunchApp:YES];
 			}
 		};
+
 		if (animated) {
 			[UIView animateWithDuration:0.3 animations:^{
 				view.superview.layer.transform = CATransform3DMakeScale(0.1, 0.1, 1);

@@ -54,7 +54,7 @@ typedef struct {
 }
 %end
 
-@interface Hooks9$SBHandMotionExtractorReplacementByMultiplexer : NSObject
+@interface Hooks9$SBHandMotionExtractorReplacementByMultiplexer : NSObject <_UIScreenEdgePanRecognizerDelegate>
 
 @end
 
@@ -63,7 +63,7 @@ typedef struct {
   self = [super init];
   if (self) {
     for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
-      [recognizer setDelegate:(id<_UIScreenEdgePanRecognizerDelegate>)self];
+      recognizer.delegate = (id<_UIScreenEdgePanRecognizerDelegate>)self;
     }
   }
 
@@ -191,8 +191,6 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
 
   @autoreleasepool {
     CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &initializeGestures, CFSTR("SBSpringBoardDidLaunchNotification"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
-
-    class_addProtocol(%c(Hooks9$SBHandMotionExtractorReplacementByMultiplexer), @protocol(_UIScreenEdgePanRecognizerDelegate));
 
     UIRectEdge edgesToWatch[] = { UIRectEdgeBottom, UIRectEdgeLeft, UIRectEdgeRight, UIRectEdgeTop };
     int edgeCount = sizeof(edgesToWatch) / sizeof(UIRectEdge);

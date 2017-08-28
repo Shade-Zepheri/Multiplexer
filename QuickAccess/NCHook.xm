@@ -96,7 +96,7 @@ static BOOL hasEnteredPages = NO;
 - (void)layoutSubviews {
 	%orig;
 
-	if (!hasEnteredPages && [[RASettings sharedInstance] NCAppEnabled] && [self.superview isKindOfClass:[%c(SBSearchEtceteraLayoutView) class]] && [[%c(SBNotificationCenterController) sharedInstance] isVisible]) {
+	if (!hasEnteredPages && [[RASettings sharedInstance] NCAppEnabled] && [self.superview isKindOfClass:%c(SBSearchEtceteraLayoutView)] && [[%c(SBNotificationCenterController) sharedInstance] isVisible]) {
 		if (!ncAppViewController) {
 			ncAppViewController = [[RANCViewController alloc] init];
 		}

@@ -901,7 +901,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface FBSSystemService ()
-- (void)openApplication:(id)arg1 options:(id)arg2 withResult:(void (^)(void))arg3;
+- (void)openApplication:(NSString *)app options:(NSDictionary *)options withResult:(void (^)(void))result;
 @end
 
 @interface UIMutableApplicationSceneSettings : FBSMutableSceneSettings
@@ -978,6 +978,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)_handleReachabilityDeactivated;
 - (void)_handleReachabilityActivated;
 @end
+
 @interface SBAppSwitcherModel : NSObject
 + (id)sharedInstance;
 - (id)snapshotOfFlattenedArrayOfAppIdentifiersWhichIsOnlyTemporary;
@@ -1194,7 +1195,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 - (void) RA_updateIndicatorView:(NSInteger)info;
 - (void) RA_updateIndicatorViewWithExistingInfo;
-- (BOOL) RA_isIconIndicatorInhibited;
 - (void) RA_setIsIconIndicatorInhibited:(BOOL)value;
 - (void) RA_setIsIconIndicatorInhibited:(BOOL)value showAgainImmediately:(BOOL)value2;
 
@@ -1210,6 +1210,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)dealloc;
 
 @property(assign) id<SBIconViewDelegate> delegate;
+@property (nonatomic) BOOL RA_networkActivity;
 @property(assign) id<SBIconViewLocker> locker;
 @property(readonly, retain) SBIcon *icon;
 - (void)setIcon:(SBIcon *)icon;

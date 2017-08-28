@@ -15,10 +15,11 @@ int main(int argc, char **argv, char **envp) {
 		NSDictionary *contents = [NSDictionary dictionaryWithContentsOfFile:filePath];
 
 	  LSApplicationProxy *appInfo = [objc_getClass("LSApplicationProxy") applicationProxyForIdentifier:contents[@"bundleIdentifier"]];
-	  NSString *path = [NSString stringWithFormat:@"%@/Info.plist",appInfo.bundleURL.absoluteString];
-	  NSMutableDictionary *infoPlist = [NSMutableDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:path]];
+	  NSString *path = [NSString stringWithFormat:@"%@/Info.plist", appInfo.bundleURL.absoluteString];
+		NSURL *pathURL = [NSURL URLWithString:path];
+	  NSMutableDictionary *infoPlist = [NSMutableDictionary dictionaryWithContentsOfURL:pathURL];
 	  infoPlist[@"UIApplicationExitsOnSuspend"] = contents[@"UIApplicationExitsOnSuspend"];
-	  BOOL success = [infoPlist writeToURL:[NSURL URLWithString:path] atomically:YES];
+	  BOOL success = [infoPlist writeToURL:pathURL atomically:YES];
 
 	  if (!success) {
 			LogError(@"FS Daemon: error writing to plist: %@", path);

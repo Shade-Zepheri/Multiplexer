@@ -184,7 +184,7 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
       }
     }
 
-    if (![RASwipeOverManager sharedInstance].usingSwipeOver]) {
+    if (![RASwipeOverManager sharedInstance].usingSwipeOver) {
       [[RASwipeOverManager sharedInstance] startUsingSwipeOver];
     }
 

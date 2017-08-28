@@ -5,7 +5,7 @@
 #import "ColorBadges.h"
 #import <Anemone/ANEMSettingsManager.h>
 
-NSMutableDictionary *indicatorStateDict = [[NSMutableDictionary alloc] init];
+NSMutableDictionary *indicatorStateDict = [NSMutableDictionary dictionary];
 #define SET_INFO_(x, y)    indicatorStateDict[x] = @(y)
 #define GET_INFO_(x)       [indicatorStateDict[x] intValue]
 #define SET_INFO(y)        if (self.icon && self.icon.application) SET_INFO_(self.icon.application.bundleIdentifier, y);
@@ -64,8 +64,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 
 		NSString *text = stringFromIndicatorInfo(info);
 
-		if (
-			[self RA_isIconIndicatorInhibited] ||
+		if (self.RA_isIconIndicatorInhibited ||
 			(!text || text.length == 0) || // OR info == RAIconIndicatorViewInfoNone
 			(!self.icon || !self.icon.application || !self.icon.application.isRunning || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) ||
 			![[RASettings sharedInstance] backgrounderEnabled])
@@ -200,7 +199,7 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 %new - (void)RA_addStatusBarIconForSelfIfOneDoesNotExist {
 #if DEBUG
 	if (![lsbitems respondsToSelector:@selector(objectForKey:)]) {
-		LogError(@"ERROR: lsbitems is not NSDictionary it is %s", class_getName(lsbitems.class));
+		LogError(@"ERROR: lsbitems is not NSDictionary it is %@", NSStringFromClass([lsbitems class]));
 		//@throw [NSException exceptionWithName:@"OH POOP" reason:@"Expected NSDictionary" userInfo:nil];
 	}
 #endif
@@ -274,13 +273,10 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 @interface UIStatusBarCustomItem : UIStatusBarItem
 @end
 
-inline NSString *getAppNameFromIndicatorName(NSString *indicatorName) {
-	return [indicatorName substringFromIndex:(@"multiplexer-").length];
-}
-
 %subclass RAAppIconStatusBarIconView : UIStatusBarCustomItemView
 - (id)contentsImage {
-	UIImage *img = [ALApplicationList.sharedApplicationList iconOfSize:15 forDisplayIdentifier:getAppNameFromIndicatorName(self.item.indicatorName)];
+	NSString *identifier = [self.item.indicatorName substringFromIndex:(@"multiplexer-").length];
+	UIImage *img = [[ALApplicationList sharedApplicationList] iconOfSize:15 forDisplayIdentifier:identifier];
 	return [_UILegibilityImageSet imageFromImage:img withShadowImage:img];
 }
 

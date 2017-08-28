@@ -390,8 +390,8 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   [[RAMessagingServer sharedInstance] rotateApp:self.bundleIdentifier toOrientation:orientation completion:nil];
 }
 
-+ (void)iPad_iOS83_fixHosting {\
-  //Doesnt appear to be necessary on iOS 10 (check if necessary on iOS 9)? Causes problems on iPhone and FPM 
++ (void)iPad_iOS83_fixHosting {
+  //Doesnt appear to be necessary on iOS 10 (check if necessary on iOS 9)? Causes problems on iPhone and FPM
   for (NSString *bundleIdentifier in appsBeingHosted.allKeys) {
     NSNumber *num = appsBeingHosted[bundleIdentifier];
     if (num.intValue > 0) {
