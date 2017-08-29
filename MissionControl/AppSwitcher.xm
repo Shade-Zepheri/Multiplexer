@@ -167,7 +167,7 @@ BOOL toggleOrActivate = NO;
 		//grabber.chevronView.vibrantSettings = [%c(_SBFVibrantSettings) vibrantSettingsWithReferenceColor:UIColor.whiteColor referenceContrast:0.5 legibilitySettings:nil];
 
 		_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:2060 graphicsQuality:100];
-		_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:NO settings:blurSettings];;
+		_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:YES settings:blurSettings];;
 		[grabber insertSubview:blurView atIndex:0];
 
 		[grabber.chevronView setState:1 animated:NO];
@@ -203,7 +203,7 @@ BOOL toggleOrActivate = NO;
 		//grabber.chevronView.vibrantSettings = [%c(_SBFVibrantSettings) vibrantSettingsWithReferenceColor:UIColor.whiteColor referenceContrast:0.5 legibilitySettings:nil];
 
 		_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:2060 graphicsQuality:100];
-		_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:NO settings:blurSettings];;
+		_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:YES settings:blurSettings];;
 		[grabber insertSubview:blurView atIndex:0];
 
 		[grabber.chevronView setState:1 animated:NO];
@@ -255,7 +255,7 @@ BOOL toggleOrActivate = NO;
 			CGFloat height = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4.36;
 
 			_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:1 graphicsQuality:10];
-			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:fakeView.frame autosizesToFitSuperview:NO settings:blurSettings];;
+			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:fakeView.frame autosizesToFitSuperview:YES settings:blurSettings];;
 			[fakeView addSubview:blurView];
 
 			UILabel *desktopLabel, *windowedLabel, *otherLabel;
@@ -391,7 +391,7 @@ BOOL toggleOrActivate = NO;
 			//grabber.chevronView.vibrantSettings = [%c(_SBFVibrantSettings) vibrantSettingsWithReferenceColor:UIColor.whiteColor referenceContrast:0.5 legibilitySettings:nil];
 
 			_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:2060 graphicsQuality:100];
-			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:NO settings:blurSettings];;
+			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:YES settings:blurSettings];;
 			[grabber insertSubview:blurView atIndex:0];
 
 			[grabber.chevronView setState:1 animated:NO];
@@ -407,7 +407,7 @@ BOOL toggleOrActivate = NO;
 			grabber.center = CGPointMake([UIScreen mainScreen].bounds.size.width / 2, 20/2);
 
 			_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:2060 graphicsQuality:100];
-			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:NO settings:blurSettings];;
+			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:grabber.frame autosizesToFitSuperview:YES settings:blurSettings];;
 			blurView._blurRadius = 30;
 			[blurView _setCornerRadius:6];
 			[blurView _applyCornerRadiusToSubviews];
@@ -462,7 +462,7 @@ BOOL toggleOrActivate = NO;
 			CGFloat height = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4.36;
 
 			_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:1 graphicsQuality:10];
-			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:fakeView.frame autosizesToFitSuperview:NO settings:blurSettings];;
+			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:fakeView.frame autosizesToFitSuperview:YES settings:blurSettings];;
 			[fakeView addSubview:blurView];
 
 			UILabel *desktopLabel, *windowedLabel, *otherLabel;
