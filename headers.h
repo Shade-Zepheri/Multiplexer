@@ -25,8 +25,9 @@
 #import <SpringBoard/SBUIController.h>
 #import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>
-#import <UIKit/UIKit.h>
+#import <UIKit/_UIBackdropViewSettings.h>
 #import <UIKit/_UIBackdropView.h>
+#import <UIKit/UIKit.h>
 #import <substrate.h>
 #include <mach/mach.h>
 #include <libkern/OSCacheControl.h>
@@ -703,14 +704,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface UIDevice (UIDevicePrivate)
 - (void)setOrientation:(UIInterfaceOrientation)orientation animated:(BOOL)animated;
-@end
-
-@interface _UIBackdropViewSettings : NSObject
-@property (nonatomic) CGFloat grayscaleTintAlpha;
-@property (nonatomic) CGFloat grayscaleTintLevel;
-+ (instancetype)settingsForStyle:(NSInteger)style;
-+ (instancetype)settingsForStyle:(NSInteger)style graphicsQuality:(NSInteger)quality;
-- (void)setBlurRadius:(CGFloat)arg1;
 @end
 
 @interface _UIBackdropView ()
