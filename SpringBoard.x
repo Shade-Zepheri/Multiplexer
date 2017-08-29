@@ -116,7 +116,7 @@ static void respring_notification(CFNotificationCenterRef center, void *observer
     SBSRelaunchAction *restartAction = [%c(SBSRelaunchAction) actionWithReason:@"RestartRenderServer" options:SBSRelaunchOptionsFadeToBlack targetURL:nil];
     [[FBSSystemService sharedService] sendActions:[NSSet setWithObject:restartAction] withResult:nil];
   } else {
-    [[UIApplication sharedApplication] _relaunchSpringBoardNow];
+    [(SpringBoard *)[UIApplication sharedApplication] _relaunchSpringBoardNow];
   }
 }
 

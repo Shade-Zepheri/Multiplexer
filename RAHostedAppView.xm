@@ -53,7 +53,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 
   if ([app mainScene]) {
     isPreloading = NO;
-    if (((SBReachabilityManager*)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive && [GET_SBWORKSPACE respondsToSelector:@selector(RA_updateViewSizes)]) {
+    if (((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive && [GET_SBWORKSPACE respondsToSelector:@selector(RA_updateViewSizes)]) {
       [GET_SBWORKSPACE performSelector:@selector(RA_updateViewSizes) withObject:nil afterDelay:0.5]; // App is launched using ReachApp - animations commence. We have to wait for those animations to finish or this won't work.
     }
   } else if (![app mainScene]) {
@@ -95,7 +95,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   isPreloading = YES;
   FBScene *scene = [app mainScene];
   if (![app pid] || !scene) {
-    [[UIApplication sharedApplication] launchApplicationWithIdentifier:self.bundleIdentifier suspended:YES];
+    [(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:self.bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:self.bundleIdentifier]; // ummm...?
   }
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{

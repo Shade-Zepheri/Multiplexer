@@ -23,6 +23,7 @@
 #import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
 #import <SpringBoard/SBMainDisplaySystemGestureManager.h>
 #import <SpringBoard/SBUIController.h>
+#import <SpringBoard/SpringBoard.h>
 #import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>
 #import <UIKit/_UIBackdropViewSettings.h>
@@ -1023,16 +1024,14 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface UIApplication ()
 @property (nonatomic) BOOL RA_networkActivity;
+@property (nonatomic, retain, readonly) SBApplication *_accessibilityFrontMostApplication;
 - (void)_handleKeyUIEvent:(id)arg1;
 - (UIStatusBar*) statusBar;
 - (id)_mainScene;
 - (BOOL)_isSupportedOrientation:(int)arg1;
 
 // SpringBoard methods
-- (BOOL)launchApplicationWithIdentifier:(id)identifier suspended:(BOOL)suspended;
-- (SBApplication*) _accessibilityFrontMostApplication;
 - (void)setWantsOrientationEvents:(BOOL)events;
-- (void)_relaunchSpringBoardNow;
 
 - (void)_setStatusBarHidden:(BOOL)arg1 animationParameters:(id)arg2 changeApplicationFlag:(BOOL)arg3;
 
