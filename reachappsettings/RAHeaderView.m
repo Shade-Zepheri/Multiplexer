@@ -27,8 +27,11 @@
 - (instancetype)initWithFrame:(CGRect)frame {
   self = [super initWithFrame:frame];
   if (self) {
-    CAGradientLayer *gradient = (CAGradientLayer*)self.layer;
-    gradient.colors = @[ (id)[UIColor colorWithRed:255/255.0f green:124/255.0f blue:111/255.0f alpha:1.0f].CGColor, (id)[UIColor colorWithRed:231/255.0f green:76/255.0f blue:60/255.0f alpha:1.0f].CGColor ];
+    CAGradientLayer *gradient = (CAGradientLayer *)self.layer;
+    gradient.colors = @[
+      (id)[UIColor colorWithRed:255/255.0f green:124/255.0f blue:111/255.0f alpha:1.0f].CGColor,
+      (id)[UIColor colorWithRed:231/255.0f green:76/255.0f blue:60/255.0f alpha:1.0f].CGColor
+    ];
     gradient.locations = @[ @0, @1 ];
     gradient.bounds = CGRectMake(0, 0, frame.size.width, frame.size.height);
 
@@ -69,8 +72,8 @@
     imageView.frame = (CGRect) { { (self.frame.size.width - image.size.width) / 2.0, (self.frame.size.height - image.size.height) / 2.0 }, image.size };
   }
   if (self.shouldBlend) {
-  	UIColor *color = [UIColor colorWithCGColor:(CGColorRef)((CAGradientLayer *)self.layer).colors[0]];
-  	image = [image tintedImageWithColor:color blendingMode:self.blendMode];
+    UIColor *color = [UIColor colorWithCGColor:(CGColorRef)((CAGradientLayer *)self.layer).colors[0]];
+    image = [image tintedImageWithColor:color blendingMode:self.blendMode];
   }
   imageView.image = image;
 }

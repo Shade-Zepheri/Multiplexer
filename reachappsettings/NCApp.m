@@ -1,34 +1,4 @@
-#import <Preferences/PSListController.h>
-#import <Preferences/PSListItemsController.h>
-#import <Preferences/PSViewController.h>
-#import <Preferences/PSSpecifier.h>
-#import <SettingsKit/SKListControllerProtocol.h>
-#import <SettingsKit/SKTintedListController.h>
-#import <Preferences/PSSwitchTableCell.h>
-#import <AppList/AppList.h>
-#import <substrate.h>
-#import <notify.h>
-#import "RAHeaderView.h"
-#import "PDFImage.h"
-
-@interface PSViewController (Protean)
-- (void)viewDidLoad;
-- (void)viewWillDisappear:(BOOL)animated;
-- (void)viewDidAppear:(BOOL)animated;
-@end
-
-@interface PSViewController (SettingsKit2)
-- (UINavigationController *)navigationController;
-- (void)viewWillAppear:(BOOL)animated;
-- (void)viewWillDisappear:(BOOL)animated;
-@end
-
-@interface ALApplicationTableDataSource (Private)
-- (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
-@end
-
-@interface ReachAppNCAppSettingsListController: SKTintedListController <SKListControllerProtocol>
-@end
+#import "NCApp.h"
 
 @implementation ReachAppNCAppSettingsListController
 - (UIView *)headerView {
@@ -69,56 +39,41 @@
 
 - (NSArray *)customSpecifiers {
   return @[
-           @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"QuickAccess") },
-           @{
-               @"cell": @"PSSwitchCell",
-               @"default": @YES,
-               @"defaults": @"com.efrederickson.reachapp.settings",
-               @"key": @"ncAppEnabled",
-               @"label": LOCALIZE(@"ENABLED", @"Root"),
-               @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
-               },
-           @{ @"footerText": LOCALIZE(@"USE_GENERIC_TAB_FOOTER", @"QuickAccess") },
-           @{
-               @"cell": @"PSSwitchCell",
-               @"default": @NO,
-               @"defaults": @"com.efrederickson.reachapp.settings",
-               @"key": @"quickAccessUseGenericTabLabel",
-               @"label": LOCALIZE(@"USE_GENERIC_TAB", @"QuickAccess"),
-               @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
-               },
-           @{ @"footerText": LOCALIZE(@"HIDE_ON_LOCK_FOOTER", @"QuickAccess") },
-           @{
-               @"cell": @"PSSwitchCell",
-               @"default": @NO,
-               @"defaults": @"com.efrederickson.reachapp.settings",
-               @"key": @"ncAppHideOnLS",
-               @"label": LOCALIZE(@"HIDE_ON_LOCK", @"QuickAccess"),
-               @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
-               },
-               @{ },
-           @{
-               @"cell": @"PSLinkListCell",
-               @"detail": @"RANCAppSelectorView",
-               @"label": LOCALIZE(@"SELECTED_APP", @"QuickAccess"),
-               },
-           ];
+    @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"QuickAccess") },
+    @{
+      @"cell": @"PSSwitchCell",
+      @"default": @YES,
+      @"defaults": @"com.efrederickson.reachapp.settings",
+      @"key": @"ncAppEnabled",
+      @"label": LOCALIZE(@"ENABLED", @"Root"),
+      @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
+    },
+    @{ @"footerText": LOCALIZE(@"USE_GENERIC_TAB_FOOTER", @"QuickAccess") },
+    @{
+      @"cell": @"PSSwitchCell",
+      @"default": @NO,
+      @"defaults": @"com.efrederickson.reachapp.settings",
+      @"key": @"quickAccessUseGenericTabLabel",
+      @"label": LOCALIZE(@"USE_GENERIC_TAB", @"QuickAccess"),
+      @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
+    },
+    @{ @"footerText": LOCALIZE(@"HIDE_ON_LOCK_FOOTER", @"QuickAccess") },
+    @{
+      @"cell": @"PSSwitchCell",
+      @"default": @NO,
+      @"defaults": @"com.efrederickson.reachapp.settings",
+      @"key": @"ncAppHideOnLS",
+      @"label": LOCALIZE(@"HIDE_ON_LOCK", @"QuickAccess"),
+      @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
+    },
+    @{ },
+    @{
+      @"cell": @"PSLinkListCell",
+      @"detail": @"RANCAppSelectorView",
+      @"label": LOCALIZE(@"SELECTED_APP", @"QuickAccess"),
+    },
+  ];
 }
-@end
-
-
-@interface RANCAppSelectorView : PSViewController <UITableViewDelegate> {
-  UITableView *_tableView;
-  ALApplicationTableDataSource *_dataSource;
-}
-@end
-
-@interface RANCApplicationTableDataSource : ALApplicationTableDataSource
-@end
-
-@interface ALApplicationTableDataSource (Private_ReachApp)
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRow:(NSInteger)row;
-- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
 @implementation RANCApplicationTableDataSource
@@ -143,15 +98,15 @@
     NSString *dn = [self displayIdentifierForIndexPath:indexPath];
     NSString *key = @"NCApp";// [NSString stringWithFormat:@"NCApp-%@",dn];
     //BOOL value = [prefs[key] boolValue];
-    BOOL value = [dn isEqualToString:prefs[key] ?: @"com.apple.Preferences"];
-    [(ALCheckCell*)cell loadValue:@(value)];
+    BOOL value = [dn isEqualToString:prefs[key] ? : @"com.apple.Preferences"];
+    [(ALCheckCell *)cell loadValue:@(value)];
   }
+
   return cell;
 }
 @end
 
 @implementation RANCAppSelectorView
-
 - (void)updateDataSource:(NSString *)searchText {
   _dataSource.sectionDescriptors = @[@{ALSectionDescriptorTitleKey: @"", ALSectionDescriptorCellClassNameKey: @"ALCheckCell", ALSectionDescriptorIconSizeKey: @29, ALSectionDescriptorSuppressHiddenAppsKey: @YES, ALSectionDescriptorPredicateKey: @"not bundleIdentifier in { }", @"ALSingleEnabledMode": @YES}];
   [_tableView reloadData];

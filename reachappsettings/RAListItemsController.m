@@ -1,18 +1,4 @@
-#import <Preferences/PSListController.h>
-#import <Preferences/PSListItemsController.h>
-#import <Preferences/PSViewController.h>
-#import <Preferences/PSSpecifier.h>
-#import <SettingsKit/SKTintedListController.h>
-
-@interface PSListItemsController (tableView)
-- (void)tableView:(id)arg1 didSelectRowAtIndexPath:(id)arg2;
-- (void)listItemSelected:(id)arg1;
-- (id)tableView:(id)arg1 cellForRowAtIndexPath:(id)arg2;
-@end
-
-@interface RAListItemsController : PSListItemsController
-
-@end
+#import "RAListItemsController.h"
 
 @implementation RAListItemsController
 - (UIColor *)navigationTintColor {
@@ -23,13 +9,13 @@
   [super viewWillAppear:animated];
 
   self.navigationController.navigationBar.tintColor = self.navigationTintColor;
-  [[UIApplication sharedApplication] keyWindow].tintColor = self.navigationTintColor;
+  [UIWindow keyWindow].tintColor = self.navigationTintColor;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
   [super viewWillDisappear:animated];
 
-  [[UIApplication sharedApplication] keyWindow].tintColor = nil;
+  [UIWindow keyWindow].tintColor = nil;
   self.navigationController.navigationBar.tintColor = nil;
 }
 
@@ -42,6 +28,7 @@
     [(NSMutableArray *)_specifiers addObject:[PSSpecifier emptyGroupSpecifier]];
     [(NSMutableArray *)_specifiers addObject:themeSpecifier];
   }
+
   return _specifiers;
 }
 
@@ -49,19 +36,14 @@
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://elijahandandrew.com/multiplexer/ThemingDocumentation.html"]];
 }
 
-- (void)tableView:(id)arg1 didSelectRowAtIndexPath:(id)arg2 {
-  [super tableView:arg1 didSelectRowAtIndexPath:arg2];
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath {
+  [super tableView:tableView didSelectRowAtIndexPath:indexPath];
 
-  PSTableCell *cell = [self tableView:arg1 cellForRowAtIndexPath:arg2];
+  PSTableCell *cell = [self tableView:tableView cellForRowAtIndexPath:indexPath];
   if ([cell.specifier propertyForKey:@"isTheming"]) {
     [self openThemingDocumentation];
   }
 }
-@end
-
-
-@interface RABackgroundingListItemsController : PSListItemsController
-
 @end
 
 @implementation RABackgroundingListItemsController
@@ -73,13 +55,13 @@
   [super viewWillAppear:animated];
 
   self.navigationController.navigationBar.tintColor = self.navigationTintColor;
-  [[UIApplication sharedApplication] keyWindow].tintColor = self.navigationTintColor;
+  [UIWindow keyWindow].tintColor = self.navigationTintColor;
 }
 
 - (void)viewWillDisappear:(BOOL)animated {
   [super viewWillDisappear:animated];
 
-  [[UIApplication sharedApplication] keyWindow].tintColor = nil;
+  [UIWindow keyWindow].tintColor = nil;
   self.navigationController.navigationBar.tintColor = nil;
 }
 @end
