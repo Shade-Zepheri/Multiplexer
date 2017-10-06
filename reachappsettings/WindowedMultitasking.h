@@ -7,12 +7,29 @@
 
 @end
 
-@interface RADisabledAppsSelectorView : PSViewController <UITableViewDelegate> {
-  UITableView *_tableView;
-  ALApplicationTableDataSource *_dataSource;
-}
+@interface RADisabledAppsSelectorView : PSViewController <UITableViewDelegate>
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) ALApplicationTableDataSource *dataSource;
+@end
+
+@interface RAAlwaysWindowedAppsSelectorView : PSViewController <UITableViewDelegate>
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) ALApplicationTableDataSource *dataSource;
+@end
+
+@interface RAAlwaysLockedAppsSelectorView : PSViewController <UITableViewDelegate>
+@property (strong, nonatomic) UITableView *tableView;
+@property (strong, nonatomic) ALApplicationTableDataSource *dataSource;
 @end
 
 @interface RAApplicationTableDataSource : ALApplicationTableDataSource
+
+@end
+
+@interface RAWindowedApplicationTableDataSource : ALApplicationTableDataSource
+
+@end
+
+@interface RALockedApplicationTableDataSource : ALApplicationTableDataSource
 
 @end

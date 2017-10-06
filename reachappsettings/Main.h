@@ -16,16 +16,8 @@
 #import <libactivator/libactivator.h>
 #import <UIKit/UISearchBar.h>
 
-@interface PSViewController (Protean)
-- (void)viewDidLoad;
-- (void)viewWillDisappear:(BOOL)animated;
-- (void)viewDidAppear:(BOOL)animated;
-@end
-
 @interface PSViewController (SettingsKit2)
 - (UINavigationController *)navigationController;
-- (void)viewWillAppear:(BOOL)animated;
-- (void)viewWillDisappear:(BOOL)animated;
 @end
 
 @interface ALApplicationTableDataSource (Private_ReachApp)
@@ -33,12 +25,8 @@
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 @end
 
-@interface ALApplicationTableDataSource (Private)
-- (void)sectionRequestedSectionReload:(id)section animated:(BOOL)animated;
-@end
-
 @interface PSListItemsController (tableView)
-- (void)tableView:(id)arg1 didSelectRowAtIndexPath:(id)arg2;
+- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath;
 - (void)listItemSelected:(id)arg1;
-- (id)tableView:(id)arg1 cellForRowAtIndexPath:(id)arg2;
+- (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath;
 @end

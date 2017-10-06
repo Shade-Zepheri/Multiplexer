@@ -2,15 +2,15 @@
 
 @implementation ReachAppBackgrounderSettingsListController
 - (UIView *)headerView {
-  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
+  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 50)];
   header.colors = @[
-    (id) [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f].CGColor,
-    (id) [UIColor colorWithRed:255/255.0f green:111/255.0f blue:124/255.0f alpha:1.0f].CGColor
+    (id)[UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f].CGColor,
+    (id)[UIColor colorWithRed:255/255.0f green:111/255.0f blue:124/255.0f alpha:1.0f].CGColor
   ];
   header.shouldBlend = NO;
   header.image = [[RAPDFImage imageWithContentsOfFile:@"/Library/PreferenceBundles/ReachAppSettings.bundle/BackgrounderHeader.pdf"] imageWithOptions:[RAPDFImageOptions optionsWithSize:CGSizeMake(15, 33)]];
 
-  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
+  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 70)];
   [notHeader addSubview:header];
 
   return notHeader;
@@ -34,7 +34,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  [super performSelector:@selector(setupHeader)];
+  [super setupHeader];
 }
 
 - (NSArray *)customSpecifiers {

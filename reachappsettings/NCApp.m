@@ -2,15 +2,15 @@
 
 @implementation ReachAppNCAppSettingsListController
 - (UIView *)headerView {
-  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 50)];
+  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 50)];
   header.colors = @[
-    (id) [UIColor colorWithRed:90/255.0f green:212/255.0f blue:39/255.0f alpha:1.0f].CGColor,
-    (id) [UIColor colorWithRed:164/255.0f green:231/255.0f blue:134/255.0f alpha:1.0f].CGColor,
+    (id)[UIColor colorWithRed:90/255.0f green:212/255.0f blue:39/255.0f alpha:1.0f].CGColor,
+    (id)[UIColor colorWithRed:164/255.0f green:231/255.0f blue:134/255.0f alpha:1.0f].CGColor,
   ];
   header.shouldBlend = NO;
   header.image = [[RAPDFImage imageWithContentsOfFile:@"/Library/PreferenceBundles/ReachAppSettings.bundle/NCAppHeader.pdf"] imageWithOptions:[RAPDFImageOptions optionsWithSize:CGSizeMake(53, 32)]];
 
-  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.bounds.size.width, 70)];
+  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 70)];
   [notHeader addSubview:header];
 
   return notHeader;
@@ -34,7 +34,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  [super performSelector:@selector(setupHeader)];
+  [super setupHeader];
 }
 
 - (NSArray *)customSpecifiers {
@@ -115,7 +115,7 @@
 - (instancetype)init {
   self = [super init];
   if (self) {
-    CGRect bounds = [[UIScreen mainScreen] bounds];
+    CGRect bounds = [UIScreen mainScreen].bounds;
 
     _dataSource = [[RANCApplicationTableDataSource alloc] init];
 

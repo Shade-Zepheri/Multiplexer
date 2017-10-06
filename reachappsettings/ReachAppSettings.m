@@ -2,10 +2,10 @@
 
 @implementation ReachAppSettingsListController
 - (UIView *)headerView {
-  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 95)];
+  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 95)];
   header.colors = @[
-    (id) [UIColor colorWithRed:234/255.0f green:152/255.0f blue:115/255.0f alpha:1.0f].CGColor,
-    (id) [UIColor colorWithRed:190/255.0f green:83/255.0f blue:184/255.0f alpha:1.0f].CGColor
+    (id)[UIColor colorWithRed:234/255.0f green:152/255.0f blue:115/255.0f alpha:1.0f].CGColor,
+    (id)[UIColor colorWithRed:190/255.0f green:83/255.0f blue:184/255.0f alpha:1.0f].CGColor
   ];
 #if DEBUG
   if (arc4random_uniform(1000000) == 11) {
@@ -17,7 +17,7 @@
   header.blendMode = kCGBlendModeSoftLight;
   header.image = [[RAPDFImage imageWithContentsOfFile:@"/Library/PreferenceBundles/ReachAppSettings.bundle/MainHeader.pdf"] imageWithOptions:[RAPDFImageOptions optionsWithSize:CGSizeMake(109.33, 41)]];
 
-  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 115)];
+  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 115)];
   [notHeader addSubview:header];
 
   return notHeader;
@@ -234,6 +234,7 @@
 }
 
 - (BOOL)getEnabledForPane:(NSInteger)pane {
+  //Probably refactor this
   CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
   CFArrayRef keyList = CFPreferencesCopyKeyList(appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
   if (!keyList) {
@@ -268,7 +269,7 @@
 }
 
 - (void)mailComposeController:(MFMailComposeViewController *)controller didFinishWithResult:(MFMailComposeResult)result error:(NSError *)error {
-  [self dismissViewControllerAnimated:YES completion:NULL];
+  [self dismissViewControllerAnimated:YES completion:nil];
 }
 
 - (void)showTutorial {

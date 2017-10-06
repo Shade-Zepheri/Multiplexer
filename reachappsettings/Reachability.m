@@ -2,16 +2,16 @@
 
 @implementation ReachAppReachabilitySettingsListController
 - (UIView *)headerView {
-  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 50)];
+  RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 50)];
   header.colors = @[
-    (id) [UIColor colorWithRed:29/255.0f green:119/255.0f blue:239/255.0f alpha:1.0f].CGColor,
-    (id) [UIColor colorWithRed:82/255.0f green:191/255.0f blue:232/255.0f alpha:1.0f].CGColor
+    (id)[UIColor colorWithRed:29/255.0f green:119/255.0f blue:239/255.0f alpha:1.0f].CGColor,
+    (id)[UIColor colorWithRed:82/255.0f green:191/255.0f blue:232/255.0f alpha:1.0f].CGColor
   ];
   header.shouldBlend = NO;
   //header.title = @"ReachApp";
   header.image = [[RAPDFImage imageWithContentsOfFile:@"/Library/PreferenceBundles/ReachAppSettings.bundle/ReachAppHeader.pdf"] imageWithOptions:[RAPDFImageOptions optionsWithSize:CGSizeMake(27.15, 32)]];
 
-  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, self.view.frame.size.width, 70)];
+  UIView *notHeader = [[UIView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 70)];
   [notHeader addSubview:header];
 
   return notHeader;
@@ -35,7 +35,7 @@
 
 - (void)viewDidAppear:(BOOL)animated {
   [super viewDidAppear:animated];
-  [super performSelector:@selector(setupHeader)];
+  [super setupHeader];
 }
 
 - (NSArray *)customSpecifiers {

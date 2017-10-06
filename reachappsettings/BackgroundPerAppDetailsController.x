@@ -32,7 +32,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 	LSApplicationProxy *appInfo = [%c(LSApplicationProxy) applicationProxyForIdentifier:self.identifier];
 	NSArray *bgModes = appInfo.UIBackgroundModes;
 
-	BOOL exitsOnSuspend = [[NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/Info.plist",appInfo.bundleURL.absoluteString]]][@"UIApplicationExitsOnSuspend"] boolValue];
+	BOOL exitsOnSuspend = [[NSDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:[NSString stringWithFormat:@"%@/Info.plist", appInfo.bundleURL.absoluteString]]][@"UIApplicationExitsOnSuspend"] boolValue];
 
 	BOOL preventDeath = [[self getActualPrefValue:@"preventDeath"] boolValue]; // Default is NO so it should work fine
 

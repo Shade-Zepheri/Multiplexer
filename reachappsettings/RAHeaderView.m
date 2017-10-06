@@ -57,8 +57,8 @@
   ((CAGradientLayer *)self.layer).frame = CGRectMake(0, 0, frame.size.width, frame.size.height);
 }
 
-- (void)setColors:(NSArray *)c {
-  ((CAGradientLayer *)self.layer).colors = c;
+- (void)setColors:(NSArray *)colors {
+  ((CAGradientLayer *)self.layer).colors = colors;
 }
 
 - (void)setTitle:(NSString *)title {
@@ -67,9 +67,9 @@
 
 - (void)setImage:(UIImage *)image {
   if (label.text.length > 0) {
-    imageView.frame = (CGRect) { { self.frame.size.width - image.size.width - 20, (self.frame.size.height - image.size.height) / 2.0 }, image.size };
+    imageView.frame = CGRectMake(self.frame.size.width - image.size.width - 20, (self.frame.size.height - image.size.height) / 2.0, image.size.width, image.size.height);
   } else {
-    imageView.frame = (CGRect) { { (self.frame.size.width - image.size.width) / 2.0, (self.frame.size.height - image.size.height) / 2.0 }, image.size };
+    imageView.frame = CGRectMake((self.frame.size.width - image.size.width) / 2, (self.frame.size.height - image.size.height) / 2.0, image.size.width, image.size.height);
   }
   if (self.shouldBlend) {
     UIColor *color = [UIColor colorWithCGColor:(CGColorRef)((CAGradientLayer *)self.layer).colors[0]];
