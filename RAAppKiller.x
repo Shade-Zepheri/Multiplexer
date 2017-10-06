@@ -18,7 +18,7 @@
 }
 
 + (void)killAppWithIdentifier:(NSString *)identifier completion:(void(^)())handler {
-	return [RAAppKiller killAppWithSBApplication:[[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier] completion:handler];
+	return [RAAppKiller checkAppDead:identifier withTries:0 andCompletion:handler];
 }
 
 + (void)killAppWithSBApplication:(SBApplication *)app {
@@ -26,10 +26,10 @@
 }
 
 + (void)killAppWithSBApplication:(SBApplication *)app completion:(void(^)())handler {
-	return [RAAppKiller checkAppDead:app withTries:0 andCompletion:handler];
+	return [RAAppKiller killAppWithIdentifier:app.bundleIdentifier completion:handler];
 }
 
-+ (void)checkAppDead:(SBApplication *)app withTries:(NSInteger)tries andCompletion:(void(^)())handler {
++ (void)checkAppDead:(NSString *)identifier withTries:(NSInteger)tries andCompletion:(void(^)())handler {
 	/*
 	BOOL isDeadOrMaxed = (app.pid == 0 || app.isRunning == NO) && tries < 5;
 	if (isDeadOrMaxed)
@@ -66,8 +66,8 @@
 	}
 	*/
 
-	[[RAAppKiller sharedInstance]->completionDictionary setObject:[handler copy] forKey:app.bundleIdentifier];
-	BKSTerminateApplicationForReasonAndReportWithDescription(app.bundleIdentifier, 5, true, @"Multiplexer requested this process to be slayed.");
+	[[RAAppKiller sharedInstance]->completionDictionary setObject:[handler copy] forKey:identifier];
+	BKSTerminateApplicationForReasonAndReportWithDescription(identifier, 5, true, @"Multiplexer requested this process to be slayed.");
 }
 
 - (void)initialize {
