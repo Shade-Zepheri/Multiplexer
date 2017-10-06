@@ -13,7 +13,8 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Aura
 Aura_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
-Aura_FRAMEWORKS = UIKit CoreGraphics MultiplexerCore
+Aura_FRAMEWORKS = UIKit CoreGraphics
+Aura_EXTRA_FRAMEWORKS = MultiplexerCore
 Aura_LIBRARIES = applist
 SpringBoard_UIAppCustomBackgroundModes.xm_CFLAGS = -fno-objc-arc
 

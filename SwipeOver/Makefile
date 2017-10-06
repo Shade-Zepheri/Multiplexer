@@ -13,6 +13,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = SwipeOver
 SwipeOver_FILES = $(wildcard *.xm) $(wildcard *.x)
-SwipeOver_FRAMEWORKS = UIKit CoreGraphics MultiplexerCore
+SwipeOver_FRAMEWORKS = UIKit CoreGraphics
+SwipeOver_EXTRA_FRAMEWORKS = MultiplexerCore
 
 include $(THEOS_MAKE_PATH)/tweak.mk

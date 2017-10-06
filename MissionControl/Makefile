@@ -13,6 +13,7 @@ include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = MissionControl
 MissionControl_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
-MissionControl_FRAMEWORKS = UIKit CoreGraphics MultiplexerCore
+MissionControl_FRAMEWORKS = UIKit CoreGraphics
+MissionControl_EXTRA_FRAMEWORKS = MultiplexerCore
 
 include $(THEOS_MAKE_PATH)/tweak.mk
