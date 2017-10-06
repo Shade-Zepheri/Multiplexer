@@ -2,7 +2,7 @@
 #import "RAHostedAppView.h"
 
 @interface RAAppSliderProvider () {
-	NSMutableDictionary *cachedViews;
+	NSCache *cachedViews;
 }
 @end
 
@@ -12,7 +12,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		cachedViews = [NSMutableDictionary dictionary];
+		cachedViews = [[NSCache alloc] init];
 	}
 
 	return self;
@@ -36,12 +36,12 @@
 		return nil;
 	}
 	if ([cachedViews objectForKey:ident]) {
-		return cachedViews[ident];
+		return [cachedViews objectForKey:ident];
 	}
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 	[view preloadApp];
-	cachedViews[ident] = view;
+	[cachedViews setObject:view forKey:ident];
 	return view;
 
 }
@@ -56,12 +56,12 @@
 		return nil;
 	}
 	if ([cachedViews objectForKey:ident]) {
-		return cachedViews[ident];
+		return [cachedViews objectForKey:ident];
 	}
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 	[view preloadApp];
-	cachedViews[ident] = view;
+	[cachedViews setObject:view forKey:ident];
 	return view;
 }
 
@@ -72,12 +72,12 @@
 		return nil;
 	}
 	if ([cachedViews objectForKey:ident]) {
-		return cachedViews[ident];
+		return [cachedViews objectForKey:ident];
 	}
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 	[view preloadApp];
-	cachedViews[ident] = view;
+	[cachedViews setObject:view forKey:ident];
 	return view;
 }
 

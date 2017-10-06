@@ -3,7 +3,7 @@
 @class RAHostedAppView;
 
 @interface RAAppSliderProvider : NSObject
-@property (strong, nonatomic) NSArray *availableIdentifiers;
+@property (copy, nonatomic) NSArray *availableIdentifiers;
 @property (nonatomic) NSInteger currentIndex;
 
 - (BOOL)canGoLeft;
