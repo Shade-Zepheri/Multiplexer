@@ -15,6 +15,6 @@
 }
 
 - (CGFloat)preferredHeight {
-	return self.view.frame.size.height;
+	return CGRectGetHeight(self.view.frame);
 }
 @end

@@ -8,7 +8,11 @@ endif
 CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IQuickAccess/ -IReachApp/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
 CFLAGS += -fobjc-arc -flto=thin
 
-INSTALL_TARGET_PROCESSES = SpringBoard
+INSTALL_TARGET_PROCESSES = Preferences
+
+ifeq ($(RESPRING),1)
+INSTALL_TARGET_PROCESSES += SpringBoard
+endif
 
 include $(THEOS)/makefiles/common.mk
 
@@ -16,7 +20,7 @@ FRAMEWORK_NAME = MultiplexerCore
 MultiplexerCore_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.x) $(wildcard *.m) \
 	$(wildcard widgets/*.xm) $(wildcard widgets/*.mm) $(wildcard widgets/*.m) \
 	$(wildcard widgets/Core/*.xm) $(wildcard widgets/Core/*.mm) $(wildcard widgets/Core/*.m) \
-	$(wildcard widgets/Reachability/*.xm) $(wildcard widgets/Reachability/*.mm) $(wildcard widgets/Reachability/*.m) \
+	$(wildcard widgets/Reachability/*.xm) $(wildcard widgets/Reachability/*.mm) $(wildcard widgets/Reachability/*.x) $(wildcard widgets/Reachability/*.m) \
 	$(wildcard KeyboardSupport/*.mm) $(wildcard KeyboardSupport/*.x) $(wildcard KeyboardSupport/*.m) \
 	$(wildcard GestureSupport/*.xm) $(wildcard GestureSupport/*.mm) $(wildcard GestureSupport/*.x) \
 	$(wildcard IntroTutorial/*.x) \

@@ -5,7 +5,9 @@
 
 @implementation RADefaultWidgetSection
 + (instancetype)sharedDefaultWidgetSection {
-	SHARED_INSTANCE2(RADefaultWidgetSection, [[RAWidgetSectionManager sharedInstance] registerSection:sharedInstance]);
+	SHARED_INSTANCE2(RADefaultWidgetSection,
+		[[RAWidgetSectionManager sharedInstance] registerSection:sharedInstance];
+	);
 }
 
 - (NSString *)displayName {
@@ -17,7 +19,7 @@
 }
 @end
 
-static __attribute__((constructor)) void cant_believe_i_forgot_this_before() {
+%ctor {
 	static id _widget = [RADefaultWidgetSection sharedDefaultWidgetSection];
 	[[RAWidgetSectionManager sharedInstance] registerSection:_widget];
 }

@@ -1,9 +1,8 @@
 #import "RAAppSliderProvider.h"
 #import "RAHostedAppView.h"
 
-@interface RAAppSliderProvider () {
-	NSCache *cachedViews;
-}
+@interface RAAppSliderProvider ()
+@property (strong, nonatomic) NSCache *cachedViews;
 @end
 
 @implementation RAAppSliderProvider
@@ -12,7 +11,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		cachedViews = [[NSCache alloc] init];
+		self.cachedViews = [[NSCache alloc] init];
 	}
 
 	return self;
@@ -35,13 +34,13 @@
 	if (!ident) {
 		return nil;
 	}
-	if ([cachedViews objectForKey:ident]) {
-		return [cachedViews objectForKey:ident];
+	if ([self.cachedViews objectForKey:ident]) {
+		return [self.cachedViews objectForKey:ident];
 	}
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 	[view preloadApp];
-	[cachedViews setObject:view forKey:ident];
+	[self.cachedViews setObject:view forKey:ident];
 	return view;
 
 }
@@ -55,13 +54,13 @@
 	if (!ident) {
 		return nil;
 	}
-	if ([cachedViews objectForKey:ident]) {
-		return [cachedViews objectForKey:ident];
+	if ([self.cachedViews objectForKey:ident]) {
+		return [self.cachedViews objectForKey:ident];
 	}
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 	[view preloadApp];
-	[cachedViews setObject:view forKey:ident];
+	[self.cachedViews setObject:view forKey:ident];
 	return view;
 }
 
@@ -71,13 +70,13 @@
 	if (!ident) {
 		return nil;
 	}
-	if ([cachedViews objectForKey:ident]) {
-		return [cachedViews objectForKey:ident];
+	if ([self.cachedViews objectForKey:ident]) {
+		return [self.cachedViews objectForKey:ident];
 	}
 
 	RAHostedAppView *view = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
 	[view preloadApp];
-	[cachedViews setObject:view forKey:ident];
+	[self.cachedViews setObject:view forKey:ident];
 	return view;
 }
 

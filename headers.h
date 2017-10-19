@@ -39,7 +39,7 @@
 #import <IOKit/hid/IOHIDEvent.h>
 #import <version.h>
 
-static NSString * const MultiplexerBasePath = @"/Library/Multiplexer";
+static NSString *const MultiplexerBasePath = @"/Library/Multiplexer";
 
 #import "RALocalizer.h"
 #define LOCALIZE(key, local) [[objc_getClass("RALocalizer") sharedInstance] localizedStringForKey:key table:local]
@@ -51,7 +51,7 @@ static NSString * const MultiplexerBasePath = @"/Library/Multiplexer";
 #import "RASBWorkspaceFetcher.h"
 #define GET_SBWORKSPACE [RASBWorkspaceFetcher getCurrentSBWorkspaceImplementationInstanceForThisOS]
 
-#define GET_STATUSBAR_ORIENTATION ![[UIApplication sharedApplication] _accessibilityFrontMostApplication] ? [UIApplication sharedApplication].statusBarOrientation : [[UIApplication sharedApplication] _accessibilityFrontMostApplication].statusBarOrientation
+#define GET_STATUSBAR_ORIENTATION ![UIApplication sharedApplication]._accessibilityFrontMostApplication ? [UIApplication sharedApplication].statusBarOrientation : [UIApplication sharedApplication]._accessibilityFrontMostApplication.statusBarOrientation
 
 #if DEBUG
 #define LogDebug HBLogDebug
@@ -639,7 +639,7 @@ typedef enum {
 @end
 
 @interface SBSystemGestureManager ()
-- (void)setSystemGesturesDisabledForAccessibility:(BOOL)arg1;
+@property (assign ,getter=areSystemGesturesDisabledForAccessibility, nonatomic) BOOL systemGesturesDisabledForAccessibility;
 @end
 
 @interface SBDisplayItem ()
@@ -898,6 +898,16 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)openApplication:(NSString *)app options:(NSDictionary *)options withResult:(void (^)(void))result;
 @end
 
+@interface FBSSceneSnapshotContext : NSObject
+@property (nonatomic,copy) FBSSceneSettings *settings;
+@property (nonatomic,copy,readonly) NSString *sceneID;
+@property (nonatomic,copy) NSString *name;
+@property (assign,nonatomic) CGRect frame;
+@property (assign,nonatomic) CGFloat scale;
+@property (nonatomic,copy) NSSet *layersToExclude;
+@property (assign,nonatomic) CGFloat expirationInterval;
+@end
+
 @interface UIMutableApplicationSceneSettings : FBSMutableSceneSettings
 @end
 
@@ -907,21 +917,23 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBApplication ()
-- (void) _setDeactivationSettings:(SBDeactivationSettings*)arg1;
-- (void) clearDeactivationSettings;
-- (FBScene*) mainScene;
-- (id) mainScreenContextHostManager;
-- (id) mainSceneID;
+@property (nonatomic,copy) NSString * mainSceneID;
+@property (setter=_setDeactivationSettings:, nonatomic, copy) SBDeactivationSettings * _deactivationSettings;
+
+- (id)mainScreenContextHostManager;
 - (void)activate;
 
 - (void)processDidLaunch:(id)arg1;
 - (void)processWillLaunch:(id)arg1;
 - (void)resumeForContentAvailable;
 - (void)resumeToQuit;
-- (void)_sendDidLaunchNotification:(_Bool)arg1;
+- (void)_sendDidLaunchNotification:(BOOL)arg1;
 - (void)notifyResumeActiveForReason:(long long)arg1;
 
-@property(readwrite, nonatomic) int pid;
+- (BOOL)_isRecentlyUpdated;
+- (BOOL)_isNewlyInstalled;
+- (UIInterfaceOrientation)statusBarOrientation;
+
 @end
 
 @interface SBApplicationController : NSObject
@@ -1012,7 +1024,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface UIWindow ()
-+ (instancetype) keyWindow;
++ (UIWindow *)keyWindow;
 - (id) firstResponder;
 + (void)setAllWindowsKeepContextInBackground:(BOOL)arg1;
 - (void) _setRotatableViewOrientation:(UIInterfaceOrientation)orientation duration:(CGFloat)duration force:(BOOL)force;
@@ -1057,7 +1069,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBIconModel (iOS81)
-- (id)visibleIconIdentifiers;
+- (NSArray *)visibleIconIdentifiers;
 - (id)applicationIconForBundleIdentifier:(id)arg1;
 @end
 
@@ -1073,10 +1085,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (id)leafIdentifier;
 - (SBApplication*)application;
 - (NSString*)applicationBundleID;
-@end
-
-@interface SBIconController (iOS40)
-- (BOOL)canUninstallIcon:(SBIcon *)icon;
 @end
 
 @protocol SBIconViewDelegate, SBIconViewLocker;
@@ -1354,16 +1362,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface SBIconController (iOS90)
 @property (nonatomic,readonly) SBIconViewMap *homescreenIconViewMap;
-+ (id)sharedInstance;
-@end
-
-@interface SBApplication (iOS6)
-- (BOOL)isRunning;
-- (id)badgeNumberOrString;
-- (NSString*)bundleIdentifier;
-- (_Bool)_isRecentlyUpdated;
-- (_Bool)_isNewlyInstalled;
-- (UIInterfaceOrientation)statusBarOrientation;
+- (BOOL)canUninstallIcon:(SBIcon *)icon;
 @end
 
 @interface SBIconBlurryBackgroundView : UIView

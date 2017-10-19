@@ -33,7 +33,7 @@
 - (UIView *)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
 	CGSize size = [%c(SBIconView) defaultIconSize];
 	spacing = (frame.size.width - (iconsPerLine * size.width)) / iconsPerLine;
-	NSString *currentBundleIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
+	NSString *currentBundleIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
 	if (!currentBundleIdentifier) {
 		return nil;
 	}
@@ -61,10 +61,10 @@
 			SBApplicationIcon *icon = nil;
 			SBIconView *iconView = nil;
 			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-				icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
+				icon = [[%c(SBIconViewMap) homescreenMap].iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 			} else {
-				icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
+				icon = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 			}
 			if (!iconView) {
@@ -101,7 +101,7 @@
 	frame = favoritesView.frame;
 	frame.size.height = contentSize.height;
 	favoritesView.frame = frame;
-	[favoritesView setContentSize:contentSize];
+	favoritesView.contentSize = contentSize;
 	return favoritesView;
 }
 

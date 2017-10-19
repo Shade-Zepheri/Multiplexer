@@ -7,7 +7,7 @@
 @interface RAAppSliderProviderView : UIView<RAGestureCallbackProtocol> {
 	RAHostedAppView *currentView;
 }
-@property (nonatomic, retain) RAAppSliderProvider *swipeProvider;
+@property (strong, nonatomic) RAAppSliderProvider *swipeProvider;
 @property (nonatomic) BOOL isSwipeable;
 
 - (CGRect)clientFrame;

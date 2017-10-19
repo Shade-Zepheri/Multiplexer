@@ -39,7 +39,7 @@
 	viewFrame = frame;
 	CGSize size = [%c(SBIconView) defaultIconSize];
 	spacing = (frame.size.width - (iconsPerLine * size.width)) / (iconsPerLine + 0);
-	NSString *currentBundleIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
+	NSString *currentBundleIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
 	if (!currentBundleIdentifier) {
 		return nil;
 	}
@@ -70,10 +70,10 @@
 			SBApplicationIcon *icon = nil;
 			SBIconView *iconView = nil;
 			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-				icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
+				icon = [[%c(SBIconViewMap) homescreenMap].iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 			} else {
-				icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:app.bundleIdentifier];
+				icon = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 			}
 			if (!iconView) {
@@ -109,7 +109,7 @@
 	frame = recentsView.frame;
 	frame.size.height = contentSize.height;
 	recentsView.frame = frame;
-	[recentsView setContentSize:contentSize];
+	recentsView.contentSize = contentSize;
 	return recentsView;
 }
 
@@ -119,10 +119,10 @@
 
 		RAAppSliderProvider *provider = [[RAAppSliderProvider alloc] init];
 		provider.availableIdentifiers = [[RAAppSwitcherModelWrapper appSwitcherAppIdentiferList] mutableCopy];
-		[((NSMutableArray*)provider.availableIdentifiers) removeObject:[[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier];
+		[((NSMutableArray *)provider.availableIdentifiers) removeObject:[UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier];
 		provider.currentIndex = gesture.view.tag;
 
-		RAAppSliderProviderView *view = [[RAAppSliderProviderView alloc] initWithFrame:CGRectMake(0, 0, UIScreen.mainScreen._referenceBounds.size.width, UIScreen.mainScreen._referenceBounds.size.height / 2)];
+		RAAppSliderProviderView *view = [[RAAppSliderProviderView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth([UIScreen mainScreen]._referenceBounds), CGRectGetHeight([UIScreen mainScreen]._referenceBounds) / 2)];
 		view.swipeProvider = provider;
 		view.isSwipeable = YES;
 
