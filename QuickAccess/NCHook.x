@@ -26,14 +26,14 @@ RANCViewController *ncAppViewController;
 	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
 		SBModeViewController *modeVC = [self valueForKey:@"_modeController"];
 		if (!ncAppViewController) {
-			ncAppViewController = [self _newBulletinObserverViewControllerOfClass:[RANCViewController class]];
+			ncAppViewController = [self _newBulletinObserverViewControllerOfClass:%c(RANCViewController)];
 		}
 		[modeVC _addBulletinObserverViewController:ncAppViewController];
 	}
 }
 
 + (NSString *)_localizableTitleForBulletinViewControllerOfClass:(Class)aClass {
-	if (aClass == [RANCViewController class]) {
+	if (aClass == %c(RANCViewController)) {
 		BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [[RASettings sharedInstance] quickAccessUseGenericTabLabel];
 		if (useGenericLabel) {
 			return LOCALIZE(@"APP", @"Localizable");
@@ -56,7 +56,7 @@ RANCViewController *ncAppViewController;
 	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
 		SBModeViewController *modeVC = self.modeViewController;
 		if (!ncAppViewController) {
-			ncAppViewController = [[RANCViewController alloc] init];
+			ncAppViewController = [[%c(RANCViewController) alloc] init];
 		}
 		[modeVC _addBulletinObserverViewController:ncAppViewController];
 	}
@@ -98,7 +98,7 @@ static BOOL hasEnteredPages = NO;
 
 	if (!hasEnteredPages && [[RASettings sharedInstance] NCAppEnabled] && [self.superview isKindOfClass:%c(SBSearchEtceteraLayoutView)] && [[%c(SBNotificationCenterController) sharedInstance] isVisible]) {
 		if (!ncAppViewController) {
-			ncAppViewController = [[RANCViewController alloc] init];
+			ncAppViewController = [[%c(RANCViewController) alloc] init];
 		}
 
 		NSMutableArray *newArray = [[self pageViews] mutableCopy];

@@ -2,27 +2,28 @@
 #import "RAHostedAppView.h"
 #import "RASettings.h"
 
-@implementation SBNCColumnViewController // dummy impl. for compiler
-@end
-
-@interface RANCViewController () {
-	RAHostedAppView *appView;
-	UILabel *isLockedLabel;
-}
+@interface RANCViewController ()
+@property (strong, nonatomic) RAHostedAppView *appView;
+@property (strong, nonatomic)	UILabel *isLockedLabel;
 @end
 
 extern RANCViewController *ncAppViewController;
 extern BOOL shouldLoadView;
 
-@implementation RANCViewController
+%subclass RANCViewController : RANCViewControllerSuperClass
+%property (retain, nonatomic) RAHostedAppView *appView;
+%property (retain, nonatomic)	UILabel *isLockedLabel;
+
+%new
 + (instancetype)sharedViewController {
 	return ncAppViewController;
 }
 
+%new
 - (void)forceReloadAppLikelyBecauseTheSettingChanged {
-	[appView unloadApp];
-	[appView removeFromSuperview];
-	appView = nil;
+	[self.appView unloadApp];
+	[self.appView removeFromSuperview];
+	self.appView = nil;
 }
 
 
@@ -52,78 +53,74 @@ int rotationDegsForOrientation(int o) {
 	[self viewDidAppear:YES];
 }
 
-- (void)insertTableView {
-
-}
-
 - (void)viewWillLayoutSubviews {
 	[self viewDidAppear:YES];
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	[super viewDidAppear:animated];
+	%orig;
 
 	if (IS_IOS_OR_NEWER(iOS_10_0) && !shouldLoadView) {
 		return;
 	}
 
 	if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
-		if (!isLockedLabel) {
-			isLockedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 400)];
-			isLockedLabel.numberOfLines = 2;
-			isLockedLabel.textAlignment = NSTextAlignmentCenter;
-			isLockedLabel.textColor = [UIColor whiteColor];
-			isLockedLabel.font = [UIFont systemFontOfSize:IS_IPAD ? 36 : 30];
-			[self.view addSubview:isLockedLabel];
+		if (!self.isLockedLabel) {
+			self.isLockedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 400)];
+			self.isLockedLabel.numberOfLines = 2;
+			self.isLockedLabel.textAlignment = NSTextAlignmentCenter;
+			self.isLockedLabel.textColor = [UIColor whiteColor];
+			self.isLockedLabel.font = [UIFont systemFontOfSize:IS_IPAD ? 36 : 30];
+			[self.view addSubview:self.isLockedLabel];
 		}
 
-		isLockedLabel.frame = CGRectMake((self.view.frame.size.width - isLockedLabel.frame.size.width) / 2, (self.view.frame.size.height - isLockedLabel.frame.size.height) / 2, isLockedLabel.frame.size.width, isLockedLabel.frame.size.height);
+		self.isLockedLabel.frame = CGRectMake((self.view.frame.size.width - self.isLockedLabel.frame.size.width) / 2, (self.view.frame.size.height - self.isLockedLabel.frame.size.height) / 2, self.isLockedLabel.frame.size.width, self.isLockedLabel.frame.size.height);
 
-		isLockedLabel.text = LOCALIZE(@"UNLOCK_FOR_NCAPP", @"Localizable");
+		self.isLockedLabel.text = LOCALIZE(@"UNLOCK_FOR_NCAPP", @"Localizable");
 		return;
-	} else if (isLockedLabel) {
-		[isLockedLabel removeFromSuperview];
-		isLockedLabel = nil;
+	} else if (self.isLockedLabel) {
+		[self.isLockedLabel removeFromSuperview];
+		self.isLockedLabel = nil;
 	}
 
-	if (!appView) {
+	if (!self.appView) {
 		NSString *ident = [[RASettings sharedInstance] NCApp];
-		appView = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
-		appView.frame = [UIScreen mainScreen].bounds;
-		[self.view addSubview:appView];
+		self.appView = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
+		self.appView.frame = [UIScreen mainScreen].bounds;
+		[self.view addSubview:self.appView];
 
-		[appView preloadApp];
+		[self.appView preloadApp];
 	}
 
-	[appView loadApp];
-	appView.hideStatusBar = YES;
+	[self.appView loadApp];
+	self.appView.hideStatusBar = YES;
 
 	if (NO) {// (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation))
-		appView.autosizesApp = YES;
-		appView.allowHidingStatusBar = YES;
-		appView.transform = CGAffineTransformIdentity;
-		appView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
+		self.appView.autosizesApp = YES;
+		self.appView.allowHidingStatusBar = YES;
+		self.appView.transform = CGAffineTransformIdentity;
+		self.appView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
 	} else {
-		appView.autosizesApp = NO;
-		appView.allowHidingStatusBar = YES;
+		self.appView.autosizesApp = NO;
+		self.appView.allowHidingStatusBar = YES;
 
 		// Reset
-		appView.transform = CGAffineTransformIdentity;
-		appView.frame = [UIScreen mainScreen].bounds;
+		self.appView.transform = CGAffineTransformIdentity;
+		self.appView.frame = [UIScreen mainScreen].bounds;
 
-		appView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(rotationDegsForOrientation(UIApplication.sharedApplication.statusBarOrientation))); // Explicitly, SpringBoard's status bar since the NC is shown in SpringBoard
+		self.appView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(rotationDegsForOrientation([UIApplication sharedApplication].statusBarOrientation))); // Explicitly, SpringBoard's status bar since the NC is shown in SpringBoard
 		CGFloat scale = self.view.frame.size.height / [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height;
-		appView.transform = CGAffineTransformScale(appView.transform, scale, scale);
+		self.appView.transform = CGAffineTransformScale(self.appView.transform, scale, scale);
 
 		// Align vertically
-		CGRect f = appView.frame;
+		CGRect f = self.appView.frame;
 		f.origin.y = 0;
 		if (IS_IOS_OR_NEWER(iOS_10_0) && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) { //really hacky but u gotta do what ya gotta do
 			f.origin.x = (self.view.frame.size.width - f.size.height) / 2.0;
 		} else {
 			f.origin.x = (self.view.frame.size.width - f.size.width) / 2.0;
 		}
-		appView.frame = f;
+		self.appView.frame = f;
 	}
 	//[appView rotateToOrientation:UIApplication.sharedApplication.statusBarOrientation];
 
@@ -135,26 +132,28 @@ int rotationDegsForOrientation(int o) {
 	}
 }
 
+%new
 - (void)hostDidDismiss {
-	if (!appView.isCurrentlyHosting) {
+	if (!self.appView.isCurrentlyHosting) {
 		return;
 	}
 
-	appView.hideStatusBar = NO;
-	[appView unloadApp];
+	self.appView.hideStatusBar = NO;
+	[self.appView unloadApp];
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-	[super viewDidDisappear:animated];
+	%orig;
 
-	appView.hideStatusBar = NO;
-	if (appView.isCurrentlyHosting) {
-		[appView unloadApp];
+	self.appView.hideStatusBar = NO;
+	if (self.appView.isCurrentlyHosting) {
+		[self.appView unloadApp];
 	}
 }
 
+%new
 - (RAHostedAppView *)hostedApp {
-	return appView;
+	return self.appView;
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation {
@@ -163,10 +162,11 @@ int rotationDegsForOrientation(int o) {
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
-	NSMethodSignature *signature = [super methodSignatureForSelector:aSelector];
+	NSMethodSignature *signature = %orig;
 	if (!signature && class_respondsToSelector(%c(SBBulletinObserverViewController), aSelector)) {
 		signature = [%c(SBBulletinObserverViewController) instanceMethodSignatureForSelector:aSelector];
 	}
+
 	return signature;
 }
 
@@ -174,7 +174,13 @@ int rotationDegsForOrientation(int o) {
 	if (aClass == %c(SBBulletinObserverViewController) || aClass == %c(SBNCColumnViewController)) {
 		return YES;
 	} else {
-		return [super isKindOfClass:aClass];
+		return %orig;
 	}
 }
-@end
+
+%end
+
+%ctor {
+	Class ncContentViewControllerClass = %c(SBNCColumnViewController) ?: %c(UIViewController);
+	%init(RANCViewControllerSuperClass=ncContentViewControllerClass);
+}
