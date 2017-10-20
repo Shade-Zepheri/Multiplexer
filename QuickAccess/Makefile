@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = QuickAccess
-QuickAccess_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
+QuickAccess_FILES = $(wildcard *.x)
 QuickAccess_FRAMEWORKS = UIKit CoreGraphics
 QuickAccess_EXTRA_FRAMEWORKS = MultiplexerCore
 

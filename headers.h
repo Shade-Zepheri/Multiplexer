@@ -451,6 +451,10 @@ typedef struct {
 - (void)addViewController:(id)controller;
 @end
 
+@interface SBNCColumnViewController : UIViewController
+@property (nonatomic,readonly) SBNCTableViewController * ncTableViewController;
+@end
+
 @interface SBNotificationCenterLayoutViewController : UIViewController
 @property (nonatomic,retain,readonly) SBModeViewController * modeViewController;
 @end
