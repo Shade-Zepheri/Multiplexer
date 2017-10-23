@@ -66,6 +66,10 @@
 
   return %orig(queue, identifier, display, settings, clientSettings);
 }
+
+- (BOOL)invalidateSnapshotWithContext:(FBSSceneSnapshotContext *)context {
+  return [[RABackgrounder sharedInstance] globalBackgroundMode] == RABackgroundModeSuspendImmediately ? YES : %orig;
+}
 %end
 
 %hook FBUIApplicationWorkspaceScene

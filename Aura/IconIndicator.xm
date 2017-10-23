@@ -204,8 +204,8 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 	}
 #endif
 
-	BOOL homescreenMapCheck = [%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)] && [[[[%c(SBIconViewMap) homescreenMap] iconModel] visibleIconIdentifiers] containsObject:self.bundleIdentifier];
-	BOOL homescreenIconViewMapCheck = [%c(SBIconController) instancesRespondToSelector:@selector(homescreenIconViewMap)] && [[[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] visibleIconIdentifiers] containsObject:self.bundleIdentifier];
+	BOOL homescreenMapCheck = [%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)] && [[%c(SBIconViewMap) homescreenMap].iconModel.visibleIconIdentifiers containsObject:self.bundleIdentifier];
+	BOOL homescreenIconViewMapCheck = [%c(SBIconController) respondsToSelector:@selector(homescreenIconViewMap)] && [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel.visibleIconIdentifiers] containsObject:self.bundleIdentifier];
 
 	if (%c(LSStatusBarItem) && ![lsbitems objectForKey:self.bundleIdentifier] && [[RABackgrounder sharedInstance] shouldShowStatusBarIconForIdentifier:self.bundleIdentifier]) {
 		if (homescreenMapCheck || homescreenIconViewMapCheck) {

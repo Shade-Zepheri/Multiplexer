@@ -19,12 +19,12 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 	}
 }
 
-NSMutableDictionary *temporaryOverrides = [NSMutableDictionary dictionary];
-NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
-
 @implementation RABackgrounder
 + (instancetype)sharedInstance {
-	SHARED_INSTANCE(RABackgrounder);
+	SHARED_INSTANCE2(RABackgrounder,
+		sharedInstance.temporaryOverrides = [NSMutableDictionary dictionary];
+		sharedInstance.temporaryShouldPop = [NSMutableDictionary dictionary];
+	);
 }
 
 - (BOOL)shouldAutoLaunchApplication:(NSString *)identifier {
@@ -48,11 +48,11 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 }
 
 - (NSInteger)popTemporaryOverrideForApplication:(NSString *)identifier {
-	if (!identifier || ![temporaryOverrides objectForKey:identifier]) {
+	if (!identifier || ![self.temporaryOverrides objectForKey:identifier]) {
 		return -1;
 	}
 
-	RABackgroundMode override = (RABackgroundMode)[temporaryOverrides[identifier] intValue];
+	RABackgroundMode override = (RABackgroundMode)[self.temporaryOverrides[identifier] intValue];
 	return override;
 }
 
@@ -60,7 +60,7 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 	if (!identifier) {
 		return;
 	}
-	temporaryShouldPop[identifier] = @YES;
+	self.temporaryShouldPop[identifier] = @YES;
 }
 
 - (void)removeTemporaryOverrideForIdentifier:(NSString *)identifier {
@@ -68,9 +68,9 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 		return;
 	}
 
-	if ([temporaryShouldPop objectForKey:identifier] && [[temporaryShouldPop objectForKey:identifier] boolValue]) {
-		[temporaryShouldPop removeObjectForKey:identifier];
-		[temporaryOverrides removeObjectForKey:identifier];
+	if ([self.temporaryShouldPop objectForKey:identifier] && [[self.temporaryShouldPop objectForKey:identifier] boolValue]) {
+		[self.temporaryShouldPop removeObjectForKey:identifier];
+		[self.temporaryOverrides removeObjectForKey:identifier];
 	}
 }
 
@@ -143,8 +143,8 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 }
 
 - (void)temporarilyApplyBackgroundingMode:(RABackgroundMode)mode forApplication:(SBApplication *)app andCloseForegroundApp:(BOOL)close {
-	temporaryOverrides[app.bundleIdentifier] = @(mode);
-	[temporaryShouldPop removeObjectForKey:app.bundleIdentifier];
+	self.temporaryOverrides[app.bundleIdentifier] = @(mode);
+	[self.temporaryShouldPop removeObjectForKey:app.bundleIdentifier];
 
 	if (close) {
 		FBWorkspaceEvent *event = [%c(FBWorkspaceEvent) eventWithName:@"ActivateSpringBoard" handler:^{
@@ -190,31 +190,21 @@ NSMutableDictionary *temporaryShouldPop = [NSMutableDictionary dictionary];
 	return (RAIconIndicatorViewInfo)info;
 }
 
-#pragma GCC diagnostic push
-#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 - (void)updateIconIndicatorForIdentifier:(NSString *)identifier withInfo:(RAIconIndicatorViewInfo)info {
 	@autoreleasepool {
 		SBIconView *ret = nil;
 		if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-			if ([[[%c(SBIconViewMap) homescreenMap] iconModel] respondsToSelector:@selector(applicationIconForBundleIdentifier:)]) {
-				// iOS 8.0+
-				SBApplicationIcon *icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:identifier];
-				ret = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:icon];
-			} else {
-				// iOS 7.X could support once all features are seperate tweaks?
-				SBApplicationIcon *icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForDisplayIdentifier:identifier];
-				ret = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:icon];
-			}
+			// iOS 8.0+
+			SBApplicationIcon *icon = [[%c(SBIconViewMap) homescreenMap].iconModel applicationIconForBundleIdentifier:identifier];
+			ret = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:icon];
 		} else {
-			SBApplicationIcon *icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:identifier];
+			SBApplicationIcon *icon = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel applicationIconForBundleIdentifier:identifier];
 			ret = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] mappedIconViewForIcon:icon];
 		}
 
 		[ret RA_updateIndicatorView:info];
 	}
 }
-#pragma GCC diagnostic pop
-
 
 - (BOOL)shouldShowIndicatorForIdentifier:(NSString *)identifier {
 	NSDictionary *dct = [[RASettings sharedInstance] rawCompiledBackgrounderSettingsForIdentifier:identifier];

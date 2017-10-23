@@ -29,7 +29,12 @@ typedef NS_ENUM(NSInteger, RAIconIndicatorViewInfo) {
 NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode);
 
 @interface RABackgrounder : NSObject
+@property (strong, nonatomic) NSMutableDictionary *temporaryOverrides;
+@property (strong, nonatomic) NSMutableDictionary *temporaryShouldPop;
+
 + (instancetype)sharedInstance;
+
+- (RABackgroundMode)globalBackgroundMode;
 
 - (BOOL)shouldAutoLaunchApplication:(NSString *)identifier;
 - (BOOL)shouldAutoRelaunchApplication:(NSString *)identifier;

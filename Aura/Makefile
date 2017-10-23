@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Aura
-Aura_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
+Aura_FILES = $(wildcard *.xm) $(wildcard *.x)
 Aura_FRAMEWORKS = UIKit CoreGraphics
 Aura_EXTRA_FRAMEWORKS = MultiplexerCore
 Aura_LIBRARIES = applist
