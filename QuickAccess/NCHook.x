@@ -133,6 +133,14 @@ BOOL shouldLoadView = NO;
 %end
 %end
 
+%hook SpringBoard
+- (void)_performDeferredLaunchWork {
+	%orig;
+
+	[[Multiplexer sharedInstance] registerExtension:@"com.shade.quickaccess" forMultiplexerVersion:@"1.0.0"];
+}
+%end
+
 %ctor {
 	if (IS_IOS_OR_NEWER(iOS_10_0)) {
 		%init(iOS10);
@@ -142,5 +150,5 @@ BOOL shouldLoadView = NO;
 		%init(iOS8);
 	}
 
-	[[Multiplexer sharedInstance] registerExtension:@"com.shade.quickaccess" forMultiplexerVersion:@"1.0.0"];
+	%init;
 }

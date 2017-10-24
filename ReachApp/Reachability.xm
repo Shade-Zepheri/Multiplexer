@@ -714,7 +714,7 @@ CGFloat startingY = -1;
   if (!app.pid || !app.mainScene) {
     LogWarn(@"No pid or mainScene; trying again");
     overrideDisableForStatusBar = YES;
-    [[UIApplication sharedApplication] launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
+    [(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
     [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:bundleIdentifier];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -863,6 +863,12 @@ CGFloat startingY = -1;
 
   %orig;
 }
+
+- (void)_performDeferredLaunchWork {
+  %orig;
+
+	[[Multiplexer sharedInstance] registerExtension:@"com.shade.reachapp" forMultiplexerVersion:@"1.0.0"];
+}
 %end
 
 %end
@@ -872,7 +878,6 @@ CGFloat startingY = -1;
     return;
   }
 
-	[[Multiplexer sharedInstance] registerExtension:@"com.shade.reachapp" forMultiplexerVersion:@"1.0.0"];
   Class c = %c(SBMainWorkspace) ?: %c(SBWorkspace);
   %init(hooks, SB_WORKSPACE_CLASS=c);
 }

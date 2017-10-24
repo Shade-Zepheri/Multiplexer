@@ -140,11 +140,18 @@
 }
 %end
 
+%hook SpringBoard
+- (void)_performDeferredLaunchWork {
+  %orig;
+
+  [[Multiplexer sharedInstance] registerExtension:@"com.shade.aura" forMultiplexerVersion:@"1.0.0"];
+}
+%end
+
 %ctor {
   IF_NOT_SPRINGBOARD {
     return;
   }
 
-  [[Multiplexer sharedInstance] registerExtension:@"com.shade.aura" forMultiplexerVersion:@"1.0.0"];
   %init;
 }

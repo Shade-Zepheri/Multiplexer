@@ -7,6 +7,7 @@
 - (void)_performDeferredLaunchWork {
   %orig;
   [RADesktopManager sharedInstance]; // load desktop (and previous windows!)
+  [[Multiplexer sharedInstance] registerExtension:@"com.shade.empoleon" forMultiplexerVersion:@"1.0.0"];
 
   // No applications show in the mission control until they have been launched by the user.
   // This prevents always-running apps like Mail or Pebble from perpetually showing in Mission Control.
@@ -33,6 +34,5 @@
     return;
   }
 
-  [[Multiplexer sharedInstance] registerExtension:@"com.shade.empoleon" forMultiplexerVersion:@"1.0.0"];
   %init;
 }
