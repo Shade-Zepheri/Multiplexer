@@ -55,7 +55,7 @@ typedef struct {
   self = %orig;
   if (self) {
     for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
-      [recognizer setDelegate:(id<_UIScreenEdgePanRecognizerDelegate>)self];
+      recognizer.delegate = (id<_UIScreenEdgePanRecognizerDelegate>)self;
     }
   }
 
@@ -134,6 +134,7 @@ typedef struct {
     currentEdge = UIRectEdgeNone;
     isTracking = NO;
   });
+
   %orig;
 }
 %end

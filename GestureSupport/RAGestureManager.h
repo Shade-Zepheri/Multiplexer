@@ -1,26 +1,5 @@
 #import "headers.h"
-
-@class RAGestureCallback;
-
-typedef NS_ENUM(NSInteger, RAGestureCallbackResult) {
-	RAGestureCallbackResultSuccessAndContinue,
-	RAGestureCallbackResultFailure,
-	RAGestureCallbackResultSuccessAndStop,
-
-	RAGestureCallbackResultSuccess = RAGestureCallbackResultSuccessAndContinue,
-};
-
-@protocol RAGestureCallbackProtocol
-- (BOOL)RAGestureCallback_canHandle:(CGPoint)point velocity:(CGPoint)velocity;
-- (RAGestureCallbackResult)RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge;
-@end
-
-typedef BOOL(^RAGestureConditionBlock)(CGPoint location, CGPoint velocity);
-typedef RAGestureCallbackResult(^RAGestureCallbackBlock)(UIGestureRecognizerState state, CGPoint location, CGPoint velocity);
-
-const NSUInteger RAGesturePriorityLow = 0;
-const NSUInteger RAGesturePriorityHigh = 10;
-const NSUInteger RAGesturePriorityDefault = RAGesturePriorityLow;
+#import "RAGestureCallback.h"
 
 @interface RAGestureManager : NSObject {
 	NSMutableArray *gestures;
@@ -28,10 +7,10 @@ const NSUInteger RAGesturePriorityDefault = RAGesturePriorityLow;
 }
 + (instancetype)sharedInstance;
 
-- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(NSUInteger)priority;
+- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(RAGesturePriority)priority;
 - (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier;
 - (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier;
-- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(NSUInteger)priority;
+- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(RAGesturePriority)priority;
 - (void)addGesture:(RAGestureCallback *)callback;
 - (void)removeGestureWithIdentifier:(NSString *)identifier;
 

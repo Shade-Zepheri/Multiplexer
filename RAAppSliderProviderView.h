@@ -4,7 +4,7 @@
 
 @class RAAppSliderProvider;
 
-@interface RAAppSliderProviderView : UIView<RAGestureCallbackProtocol> {
+@interface RAAppSliderProviderView : UIView <RAGestureCallbackProtocol> {
 	RAHostedAppView *currentView;
 }
 @property (strong, nonatomic) RAAppSliderProvider *swipeProvider;

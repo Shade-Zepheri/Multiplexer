@@ -1,8 +1,5 @@
 #import "RAAppSliderProviderView.h"
-#import "RAHostedAppView.h"
-#import "RAGestureManager.h"
 #import "RAAppSliderProvider.h"
-#include <execinfo.h>
 
 @implementation RAAppSliderProviderView
 @synthesize swipeProvider;
@@ -95,6 +92,7 @@
 		}
 		return RAGestureCallbackResultSuccessAndStop;
 	}
+
 	return RAGestureCallbackResultFailure;
 }
 @end

@@ -1,6 +1,4 @@
-#import "headers.h"
 #import "RAGestureManager.h"
-#import "RAGestureCallback.h"
 
 @implementation RAGestureManager
 + (instancetype)sharedInstance {
@@ -40,7 +38,7 @@
 	}
 }
 
-- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(NSUInteger)priority {
+- (void)addGestureRecognizer:(RAGestureCallbackBlock)callbackBlock withCondition:(RAGestureConditionBlock)conditionBlock forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(RAGesturePriority)priority {
 	RAGestureCallback *callback = [[RAGestureCallback alloc] init];
 	callback.callbackBlock = [callbackBlock copy];
 	callback.conditionBlock = [conditionBlock copy];
@@ -55,7 +53,7 @@
 	[self addGestureRecognizerWithTarget:target forEdge:screenEdge identifier:identifier priority:RAGesturePriorityDefault];
 }
 
-- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(NSUInteger)priority {
+- (void)addGestureRecognizerWithTarget:(NSObject<RAGestureCallbackProtocol> *)target forEdge:(UIRectEdge)screenEdge identifier:(NSString *)identifier priority:(RAGesturePriority)priority {
 	RAGestureCallback *callback = [[RAGestureCallback alloc] init];
 	callback.target = target;
 	callback.screenEdge = screenEdge;
@@ -173,6 +171,7 @@
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}
+
 	CGRect r = CGRectMake(side == UIRectEdgeLeft ? 0 : [UIScreen mainScreen].bounds.size.width / 2.0 , 0, [UIScreen mainScreen].bounds.size.width / 2.0, axis);
 	[self ignoreSwipesBeginningInRect:r forIdentifier:identifier];
 }
@@ -181,6 +180,7 @@
 	if (side != UIRectEdgeLeft && side != UIRectEdgeRight) {
 		@throw [NSException exceptionWithName:@"InvalidRectEdgeException" reason:@"Expected UIRectEdgeLeft or UIRectEdgeRight" userInfo:nil];
 	}
+
 	CGRect r = CGRectMake(side == UIRectEdgeLeft ? 0 : [UIScreen mainScreen].bounds.size.width / 2.0 , axis, [UIScreen mainScreen].bounds.size.width / 2.0, [UIScreen mainScreen].bounds.size.height - axis);
 	[self ignoreSwipesBeginningInRect:r forIdentifier:identifier];
 }

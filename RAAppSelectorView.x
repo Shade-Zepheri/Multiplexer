@@ -14,7 +14,7 @@
 - (void)relayoutApps {
 	[self.subviews makeObjectsPerformSelector:@selector(removeFromSuperview)];
 
-	static CGSize fullSize = [%c(SBIconView) defaultIconSize];
+	CGSize fullSize = [%c(SBIconView) defaultIconSize];
 	fullSize.height = fullSize.width;
 	CGFloat padding = 20;
 
