@@ -68,7 +68,7 @@
 	} else {
 		desktopLabel = [[UILabel alloc] initWithFrame:CGRectMake(panePadding, y, self.frame.size.width - 20, 25)];
 		desktopLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
-		desktopLabel.textColor = UIColor.whiteColor;
+		desktopLabel.textColor = [UIColor whiteColor];
 		desktopLabel.text = LOCALIZE(@"DESKTOPS", @"Localizable");
 		[self addSubview:desktopLabel];
 
@@ -107,8 +107,8 @@
 			preview.layer.cornerRadius = 10;
 			preview.layer.borderColor = [UIColor whiteColor].CGColor;
 		} else if (desktop != [[%c(RADesktopManager) sharedInstance] currentDesktop] && [[RASettings sharedInstance] missionControlDesktopStyle] == 1) {
-			UIView *crapView = [[UIView alloc] initWithFrame:(CGRect){{ 0, 0 }, preview.frame.size }];
-			crapView.backgroundColor = [UIColor.blackColor colorWithAlphaComponent:0.5];
+			UIView *crapView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(preview.frame), CGRectGetHeight(preview.frame))];
+			crapView.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.5];
 			[preview addSubview:crapView];
 		}
 
@@ -129,9 +129,9 @@
 		preview.userInteractionEnabled = YES;
 	}
 
-	UIButton *newDesktopButton = [[UIButton alloc] init];
+	UIButton *newDesktopButton = [UIButton buttonWithType:UIButtonTypeCustom];
 	newDesktopButton.frame = CGRectMake(x, (desktopScrollView.frame.size.height - height) / 2.0, width, height);
-	newDesktopButton.backgroundColor = [UIColor.whiteColor colorWithAlphaComponent:0.2]; //[UIColor darkGrayColor];
+	newDesktopButton.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.2]; //[UIColor darkGrayColor];
 	[newDesktopButton setTitle:@"+" forState:UIControlStateNormal];
 	newDesktopButton.titleLabel.font = [UIFont systemFontOfSize:36];
 	[newDesktopButton addTarget:self action:@selector(createNewDesktop:) forControlEvents:UIControlEventTouchUpInside];
@@ -163,9 +163,9 @@
 	appsWithoutWindows = [runningApplications mutableCopy];
 	NSArray *visibleIcons = nil;
 	if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-		visibleIcons = [[[%c(SBIconViewMap) homescreenMap] iconModel] visibleIconIdentifiers];
+		visibleIcons = [%c(SBIconViewMap) homescreenMap].iconModel.visibleIconIdentifiers;
 	} else {
-		visibleIcons = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] visibleIconIdentifiers];
+		visibleIcons = [[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel.visibleIconIdentifiers;
 	}
 
 	for (SBApplication *app in runningApplications) {
@@ -183,7 +183,7 @@
 	} else {
 		windowedLabel = [[UILabel alloc] initWithFrame:CGRectMake(panePadding, y, self.frame.size.width - 20, 25)];
 		windowedLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
-		windowedLabel.textColor = UIColor.whiteColor;
+		windowedLabel.textColor = [UIColor whiteColor];
 		windowedLabel.text = LOCALIZE(@"ON_THIS_DESKTOP", @"Localizable");
 		[self addSubview:windowedLabel];
 
@@ -258,7 +258,7 @@
 	} else {
 		otherLabel = [[UILabel alloc] initWithFrame:CGRectMake(panePadding, y, self.frame.size.width - 20, 25)];
 		otherLabel.font = [UIFont fontWithName:(IS_IOS_OR_NEWER(iOS_9_0) ? @"SFUIText-Medium" : @"HelveticaNeue-Medium") size:14];
-		otherLabel.textColor = UIColor.whiteColor;
+		otherLabel.textColor = [UIColor whiteColor];
 		otherLabel.text = LOCALIZE(@"RUNNING_ELSEWHERE", @"Localizable");
 		[self addSubview:otherLabel];
 
@@ -341,7 +341,7 @@
 
 	for (UIView *view in subviews) {
 		if ([view isKindOfClass:[RAMissionControlPreviewView class]]) {
-			RAMissionControlPreviewView *real = (RAMissionControlPreviewView*)view;
+			RAMissionControlPreviewView *real = (RAMissionControlPreviewView *)view;
 			if ([real.application.bundleIdentifier isEqualToString:app.bundleIdentifier]) {
 				originX = view.frame.origin.x;
 				targetView = view;
@@ -395,7 +395,7 @@
 		[UIView animateWithDuration:0.4 animations:^{
 			shadowView.alpha = 1;
 			trashImageView.alpha = 1;
-			trashImageView.frame = CGRectMake((self.frame.size.width / 2) - (75/2), self.frame.size.height - (75+45), 75, 75);
+			trashImageView.frame = CGRectMake((self.frame.size.width / 2) - (75 / 2), self.frame.size.height - (75 + 45), 75, 75);
 		}];
 
 		if (!draggedView) {
@@ -433,8 +433,8 @@
 
 		BOOL didKill = NO;
 
-		if (CGRectContainsPoint(trashImageView.frame, center) || CGRectContainsPoint(CGRectOffset(shadowView.frame, 0, -(75/2)), center)) {
-			SBApplication *app = ((RAMissionControlPreviewView*)gesture.view).application;
+		if (CGRectContainsPoint(trashImageView.frame, center) || CGRectContainsPoint(CGRectOffset(shadowView.frame, 0, -(75 / 2)), center)) {
+			SBApplication *app = ((RAMissionControlPreviewView *)gesture.view).application;
 			[[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:app.bundleIdentifier animated:NO];
 			[[%c(RAWindowStatePreservationSystemManager) sharedInstance] removeWindowInformationForIdentifier:app.bundleIdentifier];
 			if ([[RASettings sharedInstance] missionControlKillApps]) {
@@ -572,7 +572,7 @@
 	[self.manager hideMissionControl:YES];
 	__block __strong NSString *identifier = [[[gesture view] performSelector:@selector(application)] bundleIdentifier];
 	dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-		[[UIApplication sharedApplication] launchApplicationWithIdentifier:identifier suspended:NO];
+		[(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:identifier suspended:NO];
 		identifier = nil;
 	});
 }
@@ -582,7 +582,7 @@
 		if (![view isKindOfClass:[RAMissionControlPreviewView class]]) {
 			continue;
 		}
-		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
+		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView *)view;
 		SBApplication *app = realView.application;
 		[RAAppKiller killAppWithSBApplication:app completion:^{
 			[runningApplications removeObject:app];
@@ -597,7 +597,7 @@
 		if (![view isKindOfClass:[RAMissionControlPreviewView class]]) {
 			continue;
 		}
-		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView*)view;
+		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView *)view;
 		SBApplication *app = realView.application;
 		[RAAppKiller killAppWithSBApplication:app completion:^{
 			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[RARunningAppsProvider sharedInstance].runningApps waitUntilDone:YES];

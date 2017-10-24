@@ -33,6 +33,7 @@ CGRect swappedForOrientation(CGRect input) {
 	UIInterfaceOrientation interfaceOrientation = GET_STATUSBAR_ORIENTATION;
 	CGFloat x = input.origin.x;
 	switch (interfaceOrientation) {
+		case UIInterfaceOrientationUnknown:
 		case UIInterfaceOrientationPortrait:
 			break;
 		case UIInterfaceOrientationPortraitUpsideDown:
@@ -242,7 +243,6 @@ CGRect swappedForOrientation(CGRect input) {
 
 - (RAGestureCallbackResult)RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge {
 	static CGPoint initialCenter;
-	static CGRect initialAppFrame;
 	UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
 
 	if (state == UIGestureRecognizerStateEnded) {
@@ -251,6 +251,7 @@ CGRect swappedForOrientation(CGRect input) {
 
 		BOOL dismiss = NO;
 		switch (orientation) {
+			case UIInterfaceOrientationUnknown:
 			case UIInterfaceOrientationPortrait:
 				dismiss = window.frame.origin.y + window.frame.size.height + velocity.y < [UIScreen mainScreen]._referenceBounds.size.height / 2;
 				break;
@@ -273,6 +274,7 @@ CGRect swappedForOrientation(CGRect input) {
 			[UIView animateWithDuration:duration animations:^{
 				CGRect frame = window.frame;
 				switch (orientation) {
+					case UIInterfaceOrientationUnknown:
 					case UIInterfaceOrientationPortrait:
 						window.center = CGPointMake(window.center.x, -initialCenter.y);
 						break;
@@ -312,12 +314,10 @@ CGRect swappedForOrientation(CGRect input) {
 		hasMoved = YES;
 		[RAControlCenterInhibitor setInhibited:YES];
 		initialCenter = window.center;
-		if (originalAppView) {
-			initialAppFrame = initialAppFrame;
-		}
 	} else {
 		CGRect frame = window.frame;
 		switch (orientation) {
+			case UIInterfaceOrientationUnknown:
 			case UIInterfaceOrientationPortrait:
 				window.center = CGPointMake(window.center.x, location.y - initialCenter.y);
 				break;

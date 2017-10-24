@@ -4,7 +4,7 @@
 	SBApplicationIcon *icon;
 	SBIconView *iconView;
 }
-@property (nonatomic, retain) SBApplication *application;
+@property (strong, nonatomic) SBApplication *application;
 
 - (void)generatePreview;
 - (void)generatePreviewAsync;

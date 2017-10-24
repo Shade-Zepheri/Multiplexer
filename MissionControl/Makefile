@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = MissionControl
-MissionControl_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.m)
+MissionControl_FILES = $(wildcard *.x)
 MissionControl_FRAMEWORKS = UIKit CoreGraphics
 MissionControl_EXTRA_FRAMEWORKS = MultiplexerCore
 

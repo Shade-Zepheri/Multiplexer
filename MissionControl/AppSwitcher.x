@@ -12,18 +12,25 @@ BOOL statusBarVisibility;
 BOOL willShowMissionControl = NO;
 BOOL toggleOrActivate = NO;
 
-%hook SBHomeHardwareButton
-- (void)singlePressUp:(id)button {
-	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
-		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
-	}
-
+%hook SpringBoard
+- (void)_performDeferredLaunchWork {
 	%orig;
+
+	[[Multiplexer sharedInstance] registerExtension:@"com.shade.missioncontrol" forMultiplexerVersion:@"1.0.0"];
 }
 %end
 
 %hook SBUIController
 - (BOOL)clickedMenuButton {
+	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
+		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
+		return YES;
+	}
+
+	return %orig;
+}
+
+- (BOOL)handleHomeButtonSinglePressUp {
 	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
 		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
 		return YES;
@@ -636,8 +643,3 @@ BOOL toggleOrActivate = NO;
 	return %orig;
 }
 %end
-
-%ctor {
-	[[Multiplexer sharedInstance] registerExtension:@"com.shade.missioncontrol" forMultiplexerVersion:@"1.0.0"];
-	%init;
-}

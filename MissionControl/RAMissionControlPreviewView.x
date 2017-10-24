@@ -19,9 +19,9 @@
   [targetQueue addOperationWithBlock:^{
     if (!icon) {
       if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-        icon = [[[%c(SBIconViewMap) homescreenMap] iconModel] applicationIconForBundleIdentifier:self.application.bundleIdentifier];
+        icon = [[%c(SBIconViewMap) homescreenMap].iconModel applicationIconForBundleIdentifier:self.application.bundleIdentifier];
       } else {
-        icon = [[[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconModel] applicationIconForBundleIdentifier:self.application.bundleIdentifier];
+        icon = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel applicationIconForBundleIdentifier:self.application.bundleIdentifier];
       }
     }
     if (icon && !iconView) {

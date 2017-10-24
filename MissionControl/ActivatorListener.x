@@ -21,7 +21,7 @@ static RAActivatorListener *sharedInstance;
 			[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
 		}];
 	}
-	[event setHandled:YES];
+	event.handled = YES;
 }
 @end
 
