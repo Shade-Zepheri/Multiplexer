@@ -1,4 +1,4 @@
-CFLAGS = -I../ -I../Theming
+CFLAGS = -fobjc-arc -I../ -I../Theming
 
 include $(THEOS)/makefiles/common.mk
 
