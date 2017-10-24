@@ -54,7 +54,9 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   if ([app mainScene]) {
     isPreloading = NO;
     if (((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive && [GET_SBWORKSPACE respondsToSelector:@selector(RA_updateViewSizes)]) {
-      [GET_SBWORKSPACE performSelector:@selector(RA_updateViewSizes) withObject:nil afterDelay:0.5]; // App is launched using ReachApp - animations commence. We have to wait for those animations to finish or this won't work.
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+        [GET_SBWORKSPACE RA_updateViewSizes]; // App is launched using ReachApp - animations commence. We have to wait for those animations to finish or this won't work.
+      });
     }
   } else if (![app mainScene]) {
     if (disablePreload) {
@@ -107,7 +109,9 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 
 - (void)_actualLoadApp {
   if (isPreloading) {
-    [self performSelector:@selector(_actualLoadApp) withObject:nil afterDelay:0.3];
+    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.3 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+      [self _actualLoadApp];
+    });
     return;
   }
 
@@ -155,7 +159,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     isForemostAppLabel.font = [UIFont systemFontOfSize:36];
     isForemostAppLabel.numberOfLines = 0;
     isForemostAppLabel.lineBreakMode = NSLineBreakByWordWrapping;
-    isForemostAppLabel.text = [NSString stringWithFormat:LOCALIZE(@"ACTIVE_APP_WARNING", @"Localizable"),self.app.displayName];
+    isForemostAppLabel.text = [NSString stringWithFormat:LOCALIZE(@"ACTIVE_APP_WARNING", @"Localizable"), self.app.displayName];
     [self addSubview:isForemostAppLabel];
     return;
   }
@@ -171,7 +175,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
           authenticationDidFailLabel.font = [UIFont systemFontOfSize:36];
           authenticationDidFailLabel.numberOfLines = 0;
           authenticationDidFailLabel.lineBreakMode = NSLineBreakByWordWrapping;
-          authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"BIOLOCKDOWN_AUTH_FAILED", @"Localizable"),self.app.displayName];
+          authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"BIOLOCKDOWN_AUTH_FAILED", @"Localizable"), self.app.displayName];
           [self addSubview:authenticationDidFailLabel];
 
           authenticationFailedRetryTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loadApp)];
@@ -194,7 +198,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
         authenticationDidFailLabel.font = [UIFont systemFontOfSize:36];
         authenticationDidFailLabel.numberOfLines = 0;
         authenticationDidFailLabel.lineBreakMode = NSLineBreakByWordWrapping;
-        authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"ASPHALEIA_AUTH_FAILED", @"Localizable"),self.app.displayName];
+        authenticationDidFailLabel.text = [NSString stringWithFormat:LOCALIZE(@"ASPHALEIA_AUTH_FAILED", @"Localizable"), self.app.displayName];
         [self addSubview:authenticationDidFailLabel];
 
         authenticationFailedRetryTapGesture = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(loadApp)];

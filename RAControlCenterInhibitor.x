@@ -9,7 +9,7 @@ BOOL overrideCC = NO;
 	overrideCC = value;
 
 	if (%c(SBSystemGestureManager)) {
-		[[%c(SBSystemGestureManager) mainDisplayManager] setSystemGesturesDisabledForAccessibility:value];
+		[%c(SBSystemGestureManager) mainDisplayManager].systemGesturesDisabledForAccessibility = value;
 	}
 }
 

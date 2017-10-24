@@ -107,7 +107,7 @@ BOOL overrideDisableForStatusBar = NO;
   if ([self respondsToSelector:@selector(_interfaceOrientedBounds)]) {
     return [self _interfaceOrientedBounds];
   }
-  return [self bounds];
+  return self.bounds;
 }
 %end
 

@@ -43,11 +43,11 @@ NSCache *_rsImgCache = [NSCache new];
 }
 
 + (UIImage *)convertToUIImageIfNeeded:(id)input sizeIfNeeded:(CGSize)size forceSizing:(BOOL)force {
-  if ([input isKindOfClass:UIImage.class]) {
+  if ([input isKindOfClass:[UIImage class]]) {
   	if (force) {
       return [self imageWithImage:input scaledToSize:size];
     } else {
-      return (UIImage*)input;
+      return (UIImage *)input;
     }
   }
 

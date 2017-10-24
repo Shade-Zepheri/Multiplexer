@@ -1,5 +1,7 @@
 #import <AssertionServices/BKSProcessAssertion.h>
 #import <BulletinBoard/BBBulletinRequest.h>
+#include <dlfcn.h>
+#include <execinfo.h>
 #import <FrontBoard/FBApplicationProcess.h>
 #import <FrontBoard/FBProcessManager.h>
 #import <FrontBoard/FBProcessState.h>
@@ -8,6 +10,10 @@
 #import <FrontBoardServices/FBSMutableSceneSettings.h>
 #import <FrontBoardServices/FBSSystemService.h>
 #import <GraphicsServices/GraphicsServices.h>
+#import <IOKit/hid/IOHIDEvent.h>
+#include <libkern/OSCacheControl.h>
+#include <mach/mach.h>
+#import <notify.h>
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
 #import <SpringBoard/SBApplicationIcon.h>
@@ -26,17 +32,12 @@
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>
+#include <stdbool.h>
+#import <substrate.h>
+#include <sys/sysctl.h>
 #import <UIKit/_UIBackdropViewSettings.h>
 #import <UIKit/_UIBackdropView.h>
 #import <UIKit/UIKit.h>
-#import <substrate.h>
-#include <mach/mach.h>
-#include <libkern/OSCacheControl.h>
-#include <stdbool.h>
-#include <dlfcn.h>
-#include <sys/sysctl.h>
-#import <notify.h>
-#import <IOKit/hid/IOHIDEvent.h>
 #import <version.h>
 
 static NSString *const MultiplexerBasePath = @"/Library/Multiplexer";
@@ -452,7 +453,7 @@ typedef struct {
 @end
 
 @interface SBNCColumnViewController : UIViewController
-@property (nonatomic,readonly) SBNCTableViewController * ncTableViewController;
+
 @end
 
 @interface SBNotificationCenterLayoutViewController : UIViewController

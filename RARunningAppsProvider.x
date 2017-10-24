@@ -79,6 +79,7 @@
 	if (state.running && ![[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
 		[[RARunningAppsProvider sharedInstance] addRunningApp:self];
 	} else if (!state.running && [[RARunningAppsProvider sharedInstance].runningApps containsObject:self]) {
+		LogWarn(@"%@ stopped running", self.bundleIdentifier);
 		[[RARunningAppsProvider sharedInstance] removeRunningApp:self];
 	}
 }

@@ -6,7 +6,7 @@
 #import "UIAlertController+Window.h"
 
 @implementation RACompatibilitySystem
-+ (NSString*)aggregateSystemInfo {
++ (NSString *)aggregateSystemInfo {
 	NSMutableString *ret = [[NSMutableString alloc] init];
 
 	struct utsname systemInfo;

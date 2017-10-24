@@ -22,7 +22,7 @@
 
 	if ([app respondsToSelector:@selector(mainScene)]) {
 		FBScene *scene = [app mainScene];
-		FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
+		FBSMutableSceneSettings *settings = [scene.mutableSettings mutableCopy];
 		if (!settings) {
 			return nil;
 		}

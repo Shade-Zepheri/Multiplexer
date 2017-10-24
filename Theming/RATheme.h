@@ -2,38 +2,38 @@
 
 @interface RATheme : NSObject
 
-@property (nonatomic, copy) NSString *themeIdentifier;
-@property (nonatomic, copy) NSString *themeName;
+@property (copy, nonatomic) NSString *themeIdentifier;
+@property (copy, nonatomic) NSString *themeName;
 
 // Backgrounder
-@property (nonatomic, retain) UIColor *backgroundingIndicatorBackgroundColor;
-@property (nonatomic, retain) UIColor *backgroundingIndicatorTextColor;
+@property (strong, nonatomic) UIColor *backgroundingIndicatorBackgroundColor;
+@property (strong, nonatomic) UIColor *backgroundingIndicatorTextColor;
 
 // Mission Control
 @property (nonatomic) NSInteger missionControlBlurStyle;
-@property (nonatomic, retain) UIColor *missionControlScrollViewBackgroundColor;
+@property (strong, nonatomic) UIColor *missionControlScrollViewBackgroundColor;
 @property (nonatomic) CGFloat missionControlScrollViewOpacity;
 @property (nonatomic) CGFloat missionControlIconPreviewShadowRadius;
 
 // Windowed Multitasking
-@property (nonatomic, retain) UIColor *windowedMultitaskingWindowBarBackgroundColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingCloseIconBackgroundColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingCloseIconTint;
-@property (nonatomic, retain) UIColor *windowedMultitaskingMaxIconBackgroundColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingMaxIconTint;
-@property (nonatomic, retain) UIColor *windowedMultitaskingMinIconBackgroundColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingMinIconTint;
-@property (nonatomic, retain) UIColor *windowedMultitaskingRotationIconBackgroundColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingRotationIconTint;
+@property (strong, nonatomic) UIColor *windowedMultitaskingWindowBarBackgroundColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingCloseIconBackgroundColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingCloseIconTint;
+@property (strong, nonatomic) UIColor *windowedMultitaskingMaxIconBackgroundColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingMaxIconTint;
+@property (strong, nonatomic) UIColor *windowedMultitaskingMinIconBackgroundColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingMinIconTint;
+@property (strong, nonatomic) UIColor *windowedMultitaskingRotationIconBackgroundColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingRotationIconTint;
 
 @property (nonatomic) NSUInteger windowedMultitaskingBarButtonCornerRadius;
 
-@property (nonatomic, retain) UIColor *windowedMultitaskingCloseIconOverlayColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingMaxIconOverlayColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingMinIconOverlayColor;
-@property (nonatomic, retain) UIColor *windowedMultitaskingRotationIconOverlayColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingCloseIconOverlayColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingMaxIconOverlayColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingMinIconOverlayColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingRotationIconOverlayColor;
 
-@property (nonatomic, retain) UIColor *windowedMultitaskingBarTitleColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingBarTitleColor;
 @property (nonatomic) NSTextAlignment windowedMultaskingBarTitleTextAlignment;
 @property (nonatomic) NSInteger windowedMultitaskingBarTitleTextInset;
 
@@ -47,12 +47,12 @@
 @property (nonatomic) NSInteger windowedMultitaskingRotationPriority;
 
 @property (nonatomic) NSInteger windowedMultitaskingBlurStyle;
-@property (nonatomic, retain) UIColor *windowedMultitaskingOverlayColor;
+@property (strong, nonatomic) UIColor *windowedMultitaskingOverlayColor;
 
 // Quick Access
 @property (nonatomic) BOOL quickAccessUseGenericTabLabel;
 
 // SwipeOver
-@property (nonatomic, retain) UIColor *swipeOverDetachBarColor;
-@property (nonatomic, retain) UIColor *swipeOverDetachImageColor;
+@property (strong, nonatomic) UIColor *swipeOverDetachBarColor;
+@property (strong, nonatomic) UIColor *swipeOverDetachImageColor;
 @end

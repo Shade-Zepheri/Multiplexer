@@ -24,7 +24,7 @@
 	allThemes = [NSMutableDictionary dictionary];
 
 	NSString *folderName = [NSString stringWithFormat:@"%@/Themes/", MultiplexerBasePath];
-	NSArray *themeFileNames = [NSFileManager.defaultManager subpathsAtPath:folderName];
+	NSArray *themeFileNames = [[NSFileManager defaultManager] subpathsAtPath:folderName];
 
 	for (NSString *themeName in themeFileNames) {
 		if (![themeName hasSuffix:@"plist"]) {

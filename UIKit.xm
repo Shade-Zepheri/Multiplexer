@@ -8,7 +8,7 @@ UIInterfaceOrientation prevousOrientation;
 BOOL setPreviousOrientation = NO;
 NSInteger wasStatusBarHidden = -1;
 
-NSMutableDictionary *oldFrames = [NSMutableDictionary new];
+NSMutableDictionary *oldFrames = [NSMutableDictionary dictionary];
 
 static Class $memorized$UITextEffectsWindow$class;
 
@@ -212,7 +212,7 @@ static Class $memorized$UITextEffectsWindow$class;
 %hook UIStatusBar
 - (void)statusBarServer:(UIStatusBarServer *)server didReceiveStatusBarData:(StatusBarData *)data withActions:(NSInteger)actions {
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
-    data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = [[UIApplication sharedApplication] isNetworkActivityIndicatorVisible];
+    data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = [UIApplication sharedApplication].networkActivityIndicatorVisible;
   }
 
   %orig;
