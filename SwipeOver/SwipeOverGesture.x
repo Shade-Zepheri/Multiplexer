@@ -25,6 +25,7 @@ CGRect adjustFrameForRotation() {
 
   UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
   switch (orientation) {
+    case UIInterfaceOrientationUnknown:
     case UIInterfaceOrientationPortrait: {
       LogDebug(@"[ReachApp] portrait");
       return CGRectMake(width - portraitWidth + 5, (height - portraitHeight) / 2, portraitWidth, portraitHeight);
@@ -51,6 +52,7 @@ CGPoint adjustCenterForOffscreenSlide(CGPoint center) {
 
   UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
   switch (orientation) {
+    case UIInterfaceOrientationUnknown:
     case UIInterfaceOrientationPortrait:
       return CGPointMake(center.x + portraitWidth, center.y);
     case UIInterfaceOrientationPortraitUpsideDown:
@@ -66,6 +68,7 @@ CGPoint adjustCenterForOffscreenSlide(CGPoint center) {
 CGAffineTransform adjustTransformRotation() {
   UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
   switch (orientation) {
+    case UIInterfaceOrientationUnknown:
     case UIInterfaceOrientationPortrait:
       return CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(0));
     case UIInterfaceOrientationPortraitUpsideDown:
@@ -122,8 +125,8 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
 
         grabberView.transform = adjustTransformRotation();
         //[UIWindow.keyWindow addSubview:grabberView]; // The desktop view most likely
-        if ([[UIApplication sharedApplication] _accessibilityFrontMostApplication]) {
-          UIView *appView = [[RAHostManager systemHostViewForApplication:[[UIApplication sharedApplication] _accessibilityFrontMostApplication]] superview];
+        if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
+          UIView *appView = [[RAHostManager systemHostViewForApplication:[UIApplication sharedApplication]._accessibilityFrontMostApplication] superview];
           [appView addSubview:grabberView];
         } else {
           UIView *contentView = [[%c(SBUIController) sharedInstance] contentView];
@@ -167,8 +170,10 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
       }
     }
 
-    CGPoint translation;
+    CGPoint translation = CGPointZero;
     switch (state) {
+      case UIGestureRecognizerStatePossible:
+        break;
       case UIGestureRecognizerStateBegan: {
         startingPoint = location;
         break;
@@ -177,7 +182,9 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
         translation = CGPointMake(location.x - startingPoint.x, location.y - startingPoint.y);
         break;
       }
-      case UIGestureRecognizerStateEnded: {
+      case UIGestureRecognizerStateEnded:
+      case UIGestureRecognizerStateCancelled:
+      case UIGestureRecognizerStateFailed: {
         startingPoint = CGPointZero;
         isPastGrabber = NO;
         break;

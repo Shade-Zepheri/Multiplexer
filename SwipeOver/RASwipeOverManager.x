@@ -41,7 +41,7 @@ extern int rotationDegsForOrientation(int o);
 - (void)startUsingSwipeOver {
 	start = 0;
 	_usingSwipeOver = YES;
-	currentAppIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
+	currentAppIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
 
 	[self createEdgeView];
 
@@ -62,7 +62,8 @@ extern int rotationDegsForOrientation(int o);
 
 	CGRect frame = self.overlayWindow.frame;
 	CGPoint newCenter = self.overlayWindow.center;
-	switch ([[UIApplication sharedApplication] statusBarOrientation]) {
+	switch ([UIApplication sharedApplication].statusBarOrientation) {
+		case UIInterfaceOrientationUnknown:
 	  case UIInterfaceOrientationPortrait:
 			newCenter = CGPointMake((frame.size.width * 3) / 2, newCenter.y);
 			break;
