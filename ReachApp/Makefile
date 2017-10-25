@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = ReachApp
-ReachApp_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.x)
+ReachApp_FILES = $(wildcard *.x) $(wildcard *.m)
 ReachApp_FRAMEWORKS = UIKit CoreGraphics
 ReachApp_EXTRA_FRAMEWORKS = MultiplexerCore
 

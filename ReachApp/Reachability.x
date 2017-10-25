@@ -18,7 +18,6 @@ UIView *draggerView = nil;
 
 BOOL overrideOrientation = NO;
 CGFloat grabberCenter_Y = -1;
-CGPoint firstLocation = CGPointZero;
 CGFloat grabberCenter_X = 0;
 BOOL showingNC = NO;
 extern BOOL overrideDisableForStatusBar;
@@ -449,7 +448,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
 
   UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   //CGSize iconSize = [%c(SBIconView) defaultIconImageSize];
-  static CGSize fullSize = [%c(SBIconView) defaultIconSize];
+  CGSize fullSize = [%c(SBIconView) defaultIconSize];
   fullSize.height = fullSize.width; // otherwise it often looks like {60,74}
   CGFloat padding = 20;
 
@@ -489,6 +488,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
 CGFloat startingY = -1;
 %new - (void)handlePan:(UIPanGestureRecognizer *)sender {
   UIView *view = draggerView; //sender.view;
+	CGPoint firstLocation = CGPointZero;
 
   if (sender.state == UIGestureRecognizerStateBegan) {
     startingY = grabberCenter_Y;
@@ -701,7 +701,7 @@ CGFloat startingY = -1;
 %new - (void)RA_launchTopAppWithIdentifier:(NSString *)bundleIdentifier {
   UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:lastBundleIdentifier];
-  FBScene *scene = app.mainScene;
+  FBScene *scene = [app mainScene];
   if (!app) {
     return;
   }
@@ -711,7 +711,7 @@ CGFloat startingY = -1;
   [[RAMessagingServer sharedInstance] rotateApp:app.bundleIdentifier toOrientation:[UIApplication sharedApplication].statusBarOrientation completion:nil];
   [[RAMessagingServer sharedInstance] forceStatusBarVisibility:YES forApp:app.bundleIdentifier completion:nil];
 
-  if (!app.pid || !app.mainScene) {
+  if (!app.pid || ![app mainScene]) {
     LogWarn(@"No pid or mainScene; trying again");
     overrideDisableForStatusBar = YES;
     [(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:bundleIdentifier suspended:YES];

@@ -29,4 +29,5 @@
 	[view load];
 	[GET_SBWORKSPACE RA_setView:view preferredHeight:view.frame.size.height];
 }
+
 @end
