@@ -9,10 +9,7 @@ BOOL allowOpenApp = NO;
 
 %hook SBIconController
 - (void)iconWasTapped:(SBApplicationIcon *)icon {
-	NSMutableArray *alwaysWindowedApps = [[RASettings sharedInstance] alwaysWindowedApps];
-	BOOL alwaysOpenWindowed = [alwaysWindowedApps containsObject:icon.application.bundleIdentifier];
-
-	if ((([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows]) || alwaysOpenWindowed) && icon.application) {
+	if ([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows] && icon.application) {
 		[[RADesktopManager sharedInstance].currentDesktop createAppWindowForSBApplication:icon.application animated:YES];
 		override = YES;
 	}
@@ -34,7 +31,7 @@ BOOL allowOpenApp = NO;
 	// Broken
 	//if (launchNextOpenIntoWindow)
 
-	if (([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows]) && !allowOpenApp) {
+	if ([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows] && !allowOpenApp) {
 		[[RADesktopManager sharedInstance].currentDesktop createAppWindowForSBApplication:application animated:YES];
 		//launchNextOpenIntoWindow = NO;
 		return;
@@ -47,10 +44,8 @@ BOOL allowOpenApp = NO;
 - (void)activateApplication:(SBApplication *)application {
 	// Broken
 	//if (launchNextOpenIntoWindow)
-	NSMutableArray *alwaysWindowedApps = [[RASettings sharedInstance] alwaysWindowedApps];
-	BOOL alwaysOpenWindowed = [alwaysWindowedApps containsObject:application.bundleIdentifier];
 
-	if ((([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows]) || alwaysOpenWindowed) && !allowOpenApp) {
+	if ([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows] && !allowOpenApp) {
 		[[RADesktopManager sharedInstance].currentDesktop createAppWindowForSBApplication:application animated:YES];
 		//launchNextOpenIntoWindow = NO;
 		return;
@@ -63,10 +58,7 @@ BOOL allowOpenApp = NO;
 
 %hook SpringBoard
 - (BOOL)launchApplicationWithIdentifier:(NSString *)identifier suspended:(BOOL)suspended {
-	NSMutableArray *alwaysWindowedApps = [[RASettings sharedInstance] alwaysWindowedApps];
-	BOOL alwaysOpenWindowed = [alwaysWindowedApps containsObject:identifier];
-
-	if ((([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows]) || alwaysOpenWindowed) && !allowOpenApp) {
+	if ([[RASettings sharedInstance] windowedMultitaskingEnabled] && [[RASettings sharedInstance] launchIntoWindows] && !allowOpenApp) {
 		[[RADesktopManager sharedInstance].currentDesktop createAppWindowWithIdentifier:identifier animated:YES];
 		return NO;
 	} else {

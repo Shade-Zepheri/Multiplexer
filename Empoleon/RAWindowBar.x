@@ -235,15 +235,11 @@ extern BOOL allowOpenApp;
 			return minimizeButton;
 		};
 
-
-		NSMutableArray *alwaysLockedApps = [[RASettings sharedInstance] alwaysLockedApps];
-		appRotationLocked = [alwaysLockedApps containsObject:view.bundleIdentifier];
-
 		UIButton *(^createRotationButton)() = ^{
 			sizingLockButton = [UIButton buttonWithType:UIButtonTypeCustom];
 			sizingLockButton.frame = CGRectMake(self.frame.size.width - (buttonSize + 5), spacing, buttonSize, buttonSize);
 			sizingLockButton.titleLabel.font = [UIFont systemFontOfSize:13];
-			[sizingLockButton setImage:[RAResourceImageProvider imageForFilename:appRotationLocked ? @"Lock" : @"Unlocked" size:CGSizeMake(16, 16) tintedTo:THEMED(windowedMultitaskingRotationIconTint)] forState:UIControlStateNormal];
+			[sizingLockButton setImage:[RAResourceImageProvider imageForFilename:@"Unlocked" size:CGSizeMake(16, 16) tintedTo:THEMED(windowedMultitaskingRotationIconTint)] forState:UIControlStateNormal];
 			sizingLockButton.clipsToBounds = YES;
 			[sizingLockButton addTarget:self action:@selector(sizingLockButtonTap:) forControlEvents:UIControlEventTouchUpInside];
 			sizingLockButton.backgroundColor = THEMED(windowedMultitaskingRotationIconBackgroundColor);
@@ -300,6 +296,7 @@ extern BOOL allowOpenApp;
 	}
 
 	sizingLocked = NO;
+	appRotationLocked = NO;
 
 	CAShapeLayer *maskLayer = [CAShapeLayer layer];
 	maskLayer.path = [UIBezierPath bezierPathWithRoundedRect:self.bounds byRoundingCorners:UIRectCornerTopLeft | UIRectCornerTopRight cornerRadii:(CGSize){6.0, 6.0}].CGPath;
@@ -356,12 +353,6 @@ extern BOOL allowOpenApp;
 }
 
 - (BOOL)isLocked {
-	NSMutableArray *alwaysLockedApps = [[RASettings sharedInstance] alwaysLockedApps];
-	BOOL overrideLock = [alwaysLockedApps containsObject:attachedView.bundleIdentifier];
-	if (overrideLock) {
-		return overrideLock;
-	}
-
 	if ([[RASettings sharedInstance] windowRotationLockMode] == 0) {
 		return sizingLocked;
 	} else {

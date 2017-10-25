@@ -79,8 +79,6 @@
 	//[self saveInfo];
 	[windowBar updateClientRotation];
 
-	//[RAAppSwitcherModelWrapper removeItemWithIdentifier:view.bundleIdentifier];
-
 	return windowBar;
 }
 

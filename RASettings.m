@@ -425,32 +425,6 @@
 	return favorites;
 }
 
-- (NSMutableArray *)alwaysWindowedApps {
-	NSMutableArray *favorites = [NSMutableArray array];
-	for (NSString *key in _settings.allKeys) {
-		if ([key hasPrefix:@"LaunchWin-"]) {
-			NSString *ident = [key substringFromIndex:10];
-			if ([_settings[key] boolValue]) {
-				[favorites addObject:ident];
-			}
-		}
-	}
-	return favorites;
-}
-
-- (NSMutableArray *)alwaysLockedApps {
-	NSMutableArray *favorites = [NSMutableArray array];
-	for (NSString *key in _settings.allKeys) {
-		if ([key hasPrefix:@"AlwaysLocked-"]) {
-			NSString *ident = [key substringFromIndex:13];
-			if ([_settings[key] boolValue]) {
-				[favorites addObject:ident];
-			}
-		}
-	}
-	return favorites;
-}
-
 - (NSString *)currentThemeIdentifier {
 	return _settings[@"currentThemeIdentifier"] ?: @"com.eljahandandrew.multiplexer.themes.default";
 }
