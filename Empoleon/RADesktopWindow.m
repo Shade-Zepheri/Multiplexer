@@ -5,6 +5,7 @@
 #import "RASnapshotProvider.h"
 #import "RAMessagingServer.h"
 #import "RAFakePhoneMode.h"
+#import "RAAppSwitcherModelWrapper.h"
 
 @implementation RADesktopWindow
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -24,8 +25,8 @@
 		}
 	}
 
-	if ([RAFakePhoneMode shouldFakeForAppWithIdentifier:view.app.bundleIdentifier]) {
-		CGSize fakeSize = [RAFakePhoneMode fakeSizeForAppWithIdentifier:view.app.bundleIdentifier];
+	if ([RAFakePhoneMode shouldFakeForAppWithIdentifier:view.bundleIdentifier]) {
+		CGSize fakeSize = [RAFakePhoneMode fakeSizeForAppWithIdentifier:view.bundleIdentifier];
 		view.frame = CGRectMake(0, 100, fakeSize.width, fakeSize.height);
 	} else {
 		view.frame = CGRectMake(0, 100, [UIScreen mainScreen]._referenceBounds.size.width, [UIScreen mainScreen]._referenceBounds.size.height);
@@ -52,7 +53,7 @@
 	}
 	view.hideStatusBar = YES;
 	windowBar.transform = CGAffineTransformMakeScale(0.5, 0.5);
-	if (![RAFakePhoneMode shouldFakeForAppWithIdentifier:view.app.bundleIdentifier]) {
+	if (![RAFakePhoneMode shouldFakeForAppWithIdentifier:view.bundleIdentifier]) {
 		windowBar.transform = CGAffineTransformRotate(windowBar.transform, DEGREES_TO_RADIANS([self baseRotationForOrientation]));
 	}
 	windowBar.hidden = NO;
@@ -61,8 +62,8 @@
 
 	//view.shouldUseExternalKeyboard = YES;
 
-	if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:view.app.bundleIdentifier]) {
-		RAPreservedWindowInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] windowInformationForAppIdentifier:view.app.bundleIdentifier];
+	if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:view.bundleIdentifier]) {
+		RAPreservedWindowInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] windowInformationForAppIdentifier:view.bundleIdentifier];
 
 		windowBar.center = info.center;
 		windowBar.transform = info.transform;
@@ -78,6 +79,8 @@
 	//[self saveInfo];
 	[windowBar updateClientRotation];
 
+	//[RAAppSwitcherModelWrapper removeItemWithIdentifier:view.bundleIdentifier];
+
 	return windowBar;
 }
 
@@ -86,7 +89,7 @@
 	[self addSubview:window];
 
 	[self addAppWithView:window.attachedView animated:NO];
-	((UIView*)self.subviews[self.subviews.count - 1]).transform = window.transform;
+	((UIView *)self.subviews[self.subviews.count - 1]).transform = window.transform;
 }
 
 - (RAWindowBar *)createAppWindowForSBApplication:(SBApplication *)app animated:(BOOL)animated {
@@ -222,15 +225,21 @@
 
 - (void)loadInfo {
 	NSInteger index = [[RADesktopManager sharedInstance].availableDesktops indexOfObject:self];
+	[self loadInfo:index];
+}
+
+
+- (void)loadInfo:(NSInteger)index {
 	if (![[RAWindowStatePreservationSystemManager sharedInstance] hasDesktopInformationAtIndex:index]) {
 		return;
 	}
 
-	RAPreservedDesktopInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] desktopInformationForIndex:index];
+	RAPreservedDesktopInformation *info = [[RAWindowStatePreservationSystemManager sharedInstance] desktopInformationForIndex:index];
 	for (NSString *bundleIdentifier in info.openApps) {
 		[self createAppWindowWithIdentifier:bundleIdentifier animated:YES];
 	}
 }
+
 
 - (UIInterfaceOrientation)currentOrientation {
 	if (lastKnownOrientation >= 0) {
@@ -311,16 +320,6 @@
 		return UIInterfaceOrientationPortraitUpsideDown;
 	} else {
 		return UIInterfaceOrientationLandscapeRight;
-	}
-}
-
-- (void)loadInfo:(NSInteger)index {
-	if (![[RAWindowStatePreservationSystemManager sharedInstance] hasDesktopInformationAtIndex:index]) {
-		return;
-	}
-	RAPreservedDesktopInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] desktopInformationForIndex:index];
-	for (NSString *bundleIdentifier in info.openApps) {
-		[self createAppWindowWithIdentifier:bundleIdentifier animated:YES];
 	}
 }
 

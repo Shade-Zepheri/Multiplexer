@@ -7,10 +7,15 @@ typedef struct {
 	CGAffineTransform transform;
 } RAPreservedWindowInformation;
 
-typedef struct {
-	NSUInteger index;
-	NSArray *openApps; //NSArray<NSString>
-} RAPreservedDesktopInformation;
+// Cuz struct causes compiling errors
+@interface RAPreservedDesktopInformation : NSObject
+@property (assign, nonatomic) NSUInteger index;
+@property (copy, nonatomic) NSArray *openApps;
+
+- (instancetype)initWithIndex:(NSUInteger)index;
+
+@end
+
 
 @interface RAWindowStatePreservationSystemManager : NSObject {
 	NSMutableDictionary *dict;
@@ -23,11 +28,11 @@ typedef struct {
 // Desktop
 - (void)saveDesktopInformation:(RADesktopWindow *)desktop;
 - (BOOL)hasDesktopInformationAtIndex:(NSInteger)index;
-- (RAPreservedDesktopInformation)desktopInformationForIndex:(NSInteger)index;
+- (RAPreservedDesktopInformation *)desktopInformationForIndex:(NSInteger)index;
 
 // Window
 - (void)saveWindowInformation:(RAWindowBar *)window;
 - (BOOL)hasWindowInformationForIdentifier:(NSString *)appIdentifier;
-- (RAPreservedWindowInformation) windowInformationForAppIdentifier:(NSString *)identifier;
+- (RAPreservedWindowInformation)windowInformationForAppIdentifier:(NSString *)identifier;
 - (void)removeWindowInformationForIdentifier:(NSString *)appIdentifier;
 @end

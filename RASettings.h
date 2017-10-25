@@ -59,6 +59,8 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 - (BOOL)snapWindows;
 - (BOOL)snapRotation;
 - (NSMutableArray *)disabledApps;
+- (NSMutableArray *)alwaysWindowedApps;
+- (NSMutableArray *)alwaysLockedApps;
 - (BOOL)launchIntoWindows;
 - (BOOL)windowedMultitaskingCompleteAnimations;
 - (BOOL)openLinksInWindows;

@@ -7,7 +7,7 @@
 }
 + (instancetype)sharedInstance;
 
-@property (nonatomic, weak, readwrite) RAWindowBar *lastUsedWindow;
+@property (weak, nonatomic) RAWindowBar *lastUsedWindow;
 
 - (void)addDesktop:(BOOL)switchTo;
 - (void)removeDesktopAtIndex:(NSUInteger)index;

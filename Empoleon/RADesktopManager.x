@@ -130,7 +130,7 @@ BOOL overrideUIWindow = NO;
 - (void)findNewForemostApp {
 	RADesktopWindow *desktop = [self currentDesktop];
 	for (RAHostedAppView *hostedApp in desktop.appViews) {
-		RAWindowBar *bar = [desktop windowForIdentifier:hostedApp.app.bundleIdentifier];
+		RAWindowBar *bar = [desktop windowForIdentifier:hostedApp.bundleIdentifier];
 		if (bar) {
 			self.lastUsedWindow = bar;
 			return;

@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = Empoleon
-Empoleon_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.x)
+Empoleon_FILES = $(wildcard *.x) $(wildcard *.m)
 Empoleon_FRAMEWORKS = UIKit CoreGraphics
 Empoleon_EXTRA_FRAMEWORKS = MultiplexerCore
 

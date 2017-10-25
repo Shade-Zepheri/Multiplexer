@@ -175,7 +175,7 @@
 			[objc_getClass("SBApplication") performSelector:@selector(RA_clearAllStatusBarIcons)];
 		}
 
-		[RAThemeManager.sharedInstance invalidateCurrentThemeAndReload:[self currentThemeIdentifier]];
+		[[RAThemeManager sharedInstance] invalidateCurrentThemeAndReload:[self currentThemeIdentifier]];
 		[self.backgrounderCache removeAllObjects];
 	}
 }
@@ -267,7 +267,7 @@
 }
 
 - (NSMutableArray *)favoriteApps {
-	NSMutableArray *favorites = [[NSMutableArray alloc] init];
+	NSMutableArray *favorites = [NSMutableArray array];
 	for (NSString *key in _settings.allKeys) {
 		if ([key hasPrefix:@"Favorites-"]) {
 			NSString *ident = [key substringFromIndex:10];
@@ -413,10 +413,36 @@
 }
 
 - (NSMutableArray *)disabledApps {
-	NSMutableArray *favorites = [[NSMutableArray alloc] init];
+	NSMutableArray *favorites = [NSMutableArray array];
 	for (NSString *key in _settings.allKeys) {
 		if ([key hasPrefix:@"Disabled-"]) {
 			NSString *ident = [key substringFromIndex:9];
+			if ([_settings[key] boolValue]) {
+				[favorites addObject:ident];
+			}
+		}
+	}
+	return favorites;
+}
+
+- (NSMutableArray *)alwaysWindowedApps {
+	NSMutableArray *favorites = [NSMutableArray array];
+	for (NSString *key in _settings.allKeys) {
+		if ([key hasPrefix:@"LaunchWin-"]) {
+			NSString *ident = [key substringFromIndex:10];
+			if ([_settings[key] boolValue]) {
+				[favorites addObject:ident];
+			}
+		}
+	}
+	return favorites;
+}
+
+- (NSMutableArray *)alwaysLockedApps {
+	NSMutableArray *favorites = [NSMutableArray array];
+	for (NSString *key in _settings.allKeys) {
+		if ([key hasPrefix:@"AlwaysLocked-"]) {
+			NSString *ident = [key substringFromIndex:13];
 			if ([_settings[key] boolValue]) {
 				[favorites addObject:ident];
 			}

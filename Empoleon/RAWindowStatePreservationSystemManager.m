@@ -2,7 +2,20 @@
 #import "RADesktopManager.h"
 #import "RAHostedAppView.h"
 
-static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickson.empoleon.windowstates.plist";
+static NSString * const RAPreservedWindowStatePath = @"/User/Library/Preferences/com.efrederickson.empoleon.windowstates.plist";
+
+@implementation RAPreservedDesktopInformation
+
+- (instancetype)initWithIndex:(NSUInteger)index {
+	self = [super init];
+	if (self) {
+		self.index = index;
+	}
+
+	return self;
+}
+
+@end
 
 @implementation RAWindowStatePreservationSystemManager
 + (instancetype)sharedInstance {
@@ -10,11 +23,11 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 }
 
 - (void)loadInfo {
-	dict = [NSMutableDictionary dictionaryWithContentsOfFile:FILE_PATH] ?: [NSMutableDictionary dictionary];
+	dict = [NSMutableDictionary dictionaryWithContentsOfFile:RAPreservedWindowStatePath] ?: [NSMutableDictionary dictionary];
 }
 
 - (void)saveInfo {
-	[dict writeToFile:FILE_PATH atomically:YES];
+	[dict writeToFile:RAPreservedWindowStatePath atomically:YES];
 }
 
 - (void)saveDesktopInformation:(RADesktopWindow *)desktop {
@@ -22,7 +35,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 	NSString *key = [NSString stringWithFormat:@"%tu", index];
 	NSMutableArray *openApps = [NSMutableArray array];
 	for (RAHostedAppView *app in desktop.appViews) {
-		[openApps addObject:app.app.bundleIdentifier];
+		[openApps addObject:app.bundleIdentifier];
 	}
 
 	dict[key] = openApps;
@@ -35,9 +48,8 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 	return [dict objectForKey:key] != nil;
 }
 
-- (RAPreservedDesktopInformation)desktopInformationForIndex:(NSInteger)index {
-	RAPreservedDesktopInformation info;
-	info.index = index;
+- (RAPreservedDesktopInformation *)desktopInformationForIndex:(NSInteger)index {
+	RAPreservedDesktopInformation *info = [[RAPreservedDesktopInformation alloc] initWithIndex:index];
 	NSString *key = [NSString stringWithFormat:@"%tu", index];
 
 	NSMutableArray *apps = [NSMutableArray array];
@@ -45,7 +57,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 		[apps addObject:ident];
 	}
 
-	info.openApps = apps;
+	info.openApps = [apps copy];
 
 	return info;
 }
@@ -54,7 +66,7 @@ static NSString * const FILE_PATH = @"/User/Library/Preferences/com.efrederickso
 - (void)saveWindowInformation:(RAWindowBar *)window {
 	CGPoint center = window.center;
 	CGAffineTransform transform = window.transform;
-	NSString *appIdent = window.attachedView.app.bundleIdentifier;
+	NSString *appIdent = window.attachedView.bundleIdentifier;
 
 	dict[appIdent] = @{
 		@"center": NSStringFromCGPoint(center),
