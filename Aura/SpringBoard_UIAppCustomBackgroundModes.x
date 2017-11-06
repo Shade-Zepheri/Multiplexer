@@ -18,25 +18,24 @@
 
 %hook BKSProcessAssertion
 - (instancetype)initWithPID:(NSInteger)pid flags:(NSUInteger)flags reason:(NSUInteger)reason name:(NSString *)name withHandler:(id)handler {
-	BKSProcessAssertion *original = %orig;
-
 	if (reason == BKSProcessAssertionReasonViewServices || [name isEqualToString:@"Called by iOS6_iCleaner, from unknown method"] || [name isEqualToString:@"Called by Filza_main, from -[AppDelegate applicationDidEnterBackground:]"] || [name isEqualToString:@"QRC"]) {
 		//Whitelist share menu, iCleaner, Filza and QRC
-		return original;
+		return %orig;
 	}
 
 	NSString *identifier = [NSBundle mainBundle].bundleIdentifier;
-
-	if (!identifier || [identifier isEqualToString:@"net.whatsapp.WhatsApp"]) {
-		return original;
+	if (!identifier || IN_SPRINGBOARD || IN_BUNDLE(@"net.whatsapp.WhatsApp")) {
+		return %orig;
 	}
 
 	//LogDebug(@"BKSProcessAssertion initWithPID:'%zd' flags:'%tu' reason:'%tu' name:'%@' withHandler:'%@' process identifier:'%@'", pid, flags, reason, name, handler, identifier);
 
-	if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:identifier] && reason >= BKSProcessAssertionReasonAudio && reason <= BKSProcessAssertionReasonVOiP) { // In most cases reason == 4 (finish task)
+	if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:identifier] && (reason >= BKSProcessAssertionReasonAudio && reason <= BKSProcessAssertionReasonVOiP)) { // In most cases reason == 4 (finish task)
 		return nil;
 	}
 
-	return original;
+	[identifier release];
+
+	return %orig(pid, flags, reason, name, handler);
 }
 %end

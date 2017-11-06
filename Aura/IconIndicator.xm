@@ -119,7 +119,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 			}
 
 			UIImage *bgImage = [%c(SBIconBadgeView) _checkoutBackgroundImage];
-			if (%c(ANEMSettingsManager) && [[[%c(ANEMSettingsManager) sharedManager] themeSettings] containsObject:@"ModernBadges"]) {
+			if (%c(ANEMSettingsManager) && [[%c(ANEMSettingsManager) sharedManager].themeSettings containsObject:@"ModernBadges"]) {
 				badge.backgroundColor = [UIColor colorWithPatternImage:bgImage];
 			}
 
@@ -130,7 +130,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 			badge.layer.cornerRadius = MAX(badge.frame.size.width, badge.frame.size.height) / 2.0;
 		}
 
-		if (%c(ANEMSettingsManager) && [[[%c(ANEMSettingsManager) sharedManager] themeSettings] containsObject:@"ModernBadges"]) {
+		if (%c(ANEMSettingsManager) && [[%c(ANEMSettingsManager) sharedManager].themeSettings containsObject:@"ModernBadges"]) {
 			UIImageView *textImageView = (UIImageView *)[badge viewWithTag:42];
 			if (!textImageView) {
 				CGFloat padding = [%c(SBIconBadgeView) _textPadding];
@@ -205,7 +205,7 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 #endif
 
 	BOOL homescreenMapCheck = [%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)] && [[%c(SBIconViewMap) homescreenMap].iconModel.visibleIconIdentifiers containsObject:self.bundleIdentifier];
-	BOOL homescreenIconViewMapCheck = [%c(SBIconController) respondsToSelector:@selector(homescreenIconViewMap)] && [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel.visibleIconIdentifiers] containsObject:self.bundleIdentifier];
+	BOOL homescreenIconViewMapCheck = [%c(SBIconController) respondsToSelector:@selector(homescreenIconViewMap)] && [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel.visibleIconIdentifiers containsObject:self.bundleIdentifier];
 
 	if (%c(LSStatusBarItem) && ![lsbitems objectForKey:self.bundleIdentifier] && [[RABackgrounder sharedInstance] shouldShowStatusBarIconForIdentifier:self.bundleIdentifier]) {
 		if (homescreenMapCheck || homescreenIconViewMapCheck) {

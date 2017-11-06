@@ -16,6 +16,6 @@ Aura_FILES = $(wildcard *.xm) $(wildcard *.x)
 Aura_FRAMEWORKS = UIKit CoreGraphics
 Aura_EXTRA_FRAMEWORKS = MultiplexerCore
 Aura_LIBRARIES = applist
-SpringBoard_UIAppCustomBackgroundModes.xm_CFLAGS = -fno-objc-arc
+SpringBoard_UIAppCustomBackgroundModes.x_CFLAGS = -fno-objc-arc
 
 include $(THEOS_MAKE_PATH)/tweak.mk
