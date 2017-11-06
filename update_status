@@ -19,7 +19,6 @@ Bugs:
   - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
   - Prevent Death doesnt protect from system killing
   - SI messes with Apple Watch
-  - SI stil doesnt properly work?
   - Fix AppSwitcher cards suspending
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Empoleon windows dont properly rotate in some (most) apps

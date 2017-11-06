@@ -113,7 +113,7 @@ BOOL overrideDisableForStatusBar = NO;
 
 static void respring_notification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
   if (IS_IOS_OR_NEWER(iOS_9_3)) {
-    SBSRelaunchAction *restartAction = [%c(SBSRelaunchAction) actionWithReason:@"RestartRenderServer" options:SBSRelaunchOptionsFadeToBlack targetURL:nil];
+    SBSRelaunchAction *restartAction = [%c(SBSRelaunchAction) actionWithReason:@"RestartRenderServer" options:SBSRelaunchActionOptionsFadeToBlack targetURL:nil];
     [[FBSSystemService sharedService] sendActions:[NSSet setWithObject:restartAction] withResult:nil];
   } else {
     [(SpringBoard *)[UIApplication sharedApplication] _relaunchSpringBoardNow];

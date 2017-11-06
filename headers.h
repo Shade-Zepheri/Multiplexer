@@ -3,6 +3,7 @@
 #include <dlfcn.h>
 #include <execinfo.h>
 #import <FrontBoard/FBApplicationProcess.h>
+#import <FrontBoard/FBProcess.h>
 #import <FrontBoard/FBProcessManager.h>
 #import <FrontBoard/FBProcessState.h>
 #import <FrontBoard/FBScene.h>
