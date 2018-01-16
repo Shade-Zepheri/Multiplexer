@@ -15,7 +15,7 @@
 @property (nonatomic) BOOL showSplashscreenInsteadOfSpinner;
 @property (nonatomic) BOOL renderWallpaper;
 
-@property (nonatomic, copy) NSString *bundleIdentifier;
+@property (copy, nonatomic) NSString *bundleIdentifier;
 @property (nonatomic) BOOL autosizesApp;
 
 @property (nonatomic) BOOL allowHidingStatusBar;

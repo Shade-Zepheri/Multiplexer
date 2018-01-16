@@ -6,6 +6,7 @@
 #import "RASpringBoardKeyboardActivation.h"
 #import "Asphaleia.h"
 #import "dispatch_after_cancel.h"
+#import "UIAlertController+Window.h"
 
 NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 
@@ -86,7 +87,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer" message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:defaultAction];
-    [self.inputViewController presentViewController:alert animated:YES completion:nil];
+    [alert show];
     return;
   }
 
@@ -97,8 +98,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   isPreloading = YES;
   FBScene *scene = [app mainScene];
   if (![app pid] || !scene) {
-    [(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:self.bundleIdentifier suspended:YES];
-    [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:self.bundleIdentifier]; // ummm...?
+    [[FBSSystemService sharedService] openApplication:self.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:nil];
   }
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
     [self _preloadOrAttemptToUpdateReachabilityCounterpart];
@@ -364,7 +364,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
       return;
     }
 
-    FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
+    FBSMutableSceneSettings *settings = scene.mutableSettings;
     settings.backgrounded = YES;
     [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
     //FBWindowContextHostManager *contextHostManager = [scene contextHostManager];
@@ -402,7 +402,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
       SBApplication *app_ = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:bundleIdentifier];
       FBWindowContextHostManager *manager = (FBWindowContextHostManager *)[RAHostManager hostManagerForApp:app_];
       if (manager) {
-        LogDebug(@"[ReachApp] rehosting for iPad: %@", bundleIdentifier);
+        LogInfo(@"[ReachApp] rehosting for iPad: %@", bundleIdentifier);
         [manager enableHostingForRequester:@"reachapp" priority:1];
       }
     }
@@ -427,4 +427,5 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 - (NSString *)displayName {
   return app.displayName;
 }
+
 @end

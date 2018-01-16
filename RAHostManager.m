@@ -22,19 +22,17 @@
 
 	if ([app respondsToSelector:@selector(mainScene)]) {
 		FBScene *scene = [app mainScene];
-		FBSMutableSceneSettings *settings = [scene.mutableSettings mutableCopy];
+		FBSMutableSceneSettings *settings = scene.mutableSettings;
 		if (!settings) {
 			return nil;
 		}
 
-		[[FBSSystemService sharedService] openApplication:app.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:^{
-			settings.backgrounded = NO;
-			[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
-		}];
+		settings.backgrounded = NO;
+		[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
 
 		FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
 		[contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
-		return [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
+		return [contextHostManager hostViewForRequester:@"reachapp" appearanceStyle:2];
 	}
 
 	[RACompatibilitySystem showWarning:@"Unable to find valid method for accessing context host views"];
