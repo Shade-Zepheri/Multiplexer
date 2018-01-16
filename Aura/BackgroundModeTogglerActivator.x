@@ -20,7 +20,7 @@ static RAActivatorBackgrounderToggleModeListener *sharedInstance$RAActivatorBack
 
   NSString *friendlyCurrentBackgroundMode = FriendlyNameForBackgroundMode((RABackgroundMode)[[RABackgrounder sharedInstance] backgroundModeForIdentifier:app.bundleIdentifier]);
 
-  UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:[NSString stringWithFormat:LOCALIZE(@"BACKGROUNDER_POPUP_SWITCHER_TEXT", @"Localizable"),app.displayName,friendlyCurrentBackgroundMode] preferredStyle:UIAlertControllerStyleAlert];
+  UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:[NSString stringWithFormat:LOCALIZE(@"BACKGROUNDER_POPUP_SWITCHER_TEXT", @"Localizable"), app.displayName, friendlyCurrentBackgroundMode] preferredStyle:UIAlertControllerStyleAlert];
   [alert addAction:[UIAlertAction actionWithTitle:LOCALIZE(@"FORCE_FOREGROUND", @"Aura") style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
     [[RABackgrounder sharedInstance] temporarilyApplyBackgroundingMode:RABackgroundModeForcedForeground forApplication:app andCloseForegroundApp:dismissApp];
   }]];

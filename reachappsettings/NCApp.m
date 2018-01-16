@@ -96,7 +96,7 @@
 
   if ([cell isKindOfClass:[ALCheckCell class]]) {
     NSString *dn = [self displayIdentifierForIndexPath:indexPath];
-    NSString *key = @"NCApp";// [NSString stringWithFormat:@"NCApp-%@",dn];
+    NSString *key = @"NCApp";// [NSString stringWithFormat:@"NCApp-%@", dn];
     //BOOL value = [prefs[key] boolValue];
     BOOL value = [dn isEqualToString:prefs[key] ? : @"com.apple.Preferences"];
     [(ALCheckCell *)cell loadValue:@(value)];

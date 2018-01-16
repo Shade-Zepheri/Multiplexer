@@ -191,7 +191,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 
 	if ([[specifier propertyForKey:@"key"] isEqualToString:@"UIApplicationExitsOnSuspend"]) {
 		LSApplicationProxy *appInfo = [%c(LSApplicationProxy) applicationProxyForIdentifier:self.identifier];
-		NSString *path = [NSString stringWithFormat:@"%@/Info.plist",appInfo.bundleURL.absoluteString];
+		NSString *path = [NSString stringWithFormat:@"%@/Info.plist", appInfo.bundleURL.absoluteString];
 		NSMutableDictionary *infoPlist = [NSMutableDictionary dictionaryWithContentsOfURL:[NSURL URLWithString:path]];
 		infoPlist[@"UIApplicationExitsOnSuspend"] = value;
 		BOOL success = [infoPlist writeToURL:[NSURL URLWithString:path] atomically:YES];
@@ -212,9 +212,9 @@ extern void RA_BGAppsControllerNeedsToReload();
 
 	CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
 
-	NSString *key = [NSString stringWithFormat:@"backgrounder-%@-%@",self.identifier,[specifier propertyForKey:@"key"]];
+	NSString *key = [NSString stringWithFormat:@"backgrounder-%@-%@", self.identifier, [specifier propertyForKey:@"key"]];
 	if ([specifier propertyForKey:@"prefix"]) {
-		key = [NSString stringWithFormat:@"backgrounder-%@-%@-%@",self.identifier,[specifier propertyForKey:@"prefix"],[specifier propertyForKey:@"key"]];
+		key = [NSString stringWithFormat:@"backgrounder-%@-%@-%@", self.identifier, [specifier propertyForKey:@"prefix"],[specifier propertyForKey:@"key"]];
 	}
 	CFPreferencesSetAppValue((__bridge CFStringRef)key, (const void*)value, appID);
 
@@ -229,7 +229,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 
 - (id)getActualPrefValue:(NSString *)basename {
 	CFStringRef appID = CFSTR("com.efrederickson.reachapp.settings");
-	NSString *key = [NSString stringWithFormat:@"backgrounder-%@-%@",self.identifier,basename];
+	NSString *key = [NSString stringWithFormat:@"backgrounder-%@-%@", self.identifier, basename];
 
 	CFPropertyListRef value = CFPreferencesCopyValue((__bridge CFStringRef)key, appID, kCFPreferencesCurrentUser, kCFPreferencesAnyHost);
 
@@ -248,7 +248,7 @@ extern void RA_BGAppsControllerNeedsToReload();
 		return [specifier propertyForKey:@"default"];
 	}
 
-	NSString *key = [specifier propertyForKey:@"prefix"] ?[NSString stringWithFormat:@"backgrounder-%@-%@-%@",self.identifier,[specifier propertyForKey:@"prefix"],[specifier propertyForKey:@"key"]] :[NSString stringWithFormat:@"backgrounder-%@-%@",self.identifier,[specifier propertyForKey:@"key"]];
-	return ![_settings objectForKey:key] ?[specifier propertyForKey:@"default"] : _settings[key];
+	NSString *key = [specifier propertyForKey:@"prefix"] ? [NSString stringWithFormat:@"backgrounder-%@-%@-%@", self.identifier, [specifier propertyForKey:@"prefix"], [specifier propertyForKey:@"key"]] : [NSString stringWithFormat:@"backgrounder-%@-%@", self.identifier, [specifier propertyForKey:@"key"]];
+	return ![_settings objectForKey:key] ? [specifier propertyForKey:@"default"] : _settings[key];
 }
 @end

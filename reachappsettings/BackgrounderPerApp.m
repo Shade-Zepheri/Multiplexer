@@ -27,7 +27,7 @@ void RA_BGAppsControllerNeedsToReload() {
 	  if (prefs) {
 	    NSArray *apps = [ALApplicationList sharedApplicationList].applications.allKeys;
 	  	for (NSString *identifier in apps) {
-	      if ([prefs[[NSString stringWithFormat:@"backgrounder-%@-enabled",identifier]] boolValue]) {
+	      if ([prefs[[NSString stringWithFormat:@"backgrounder-%@-enabled", identifier]] boolValue]) {
 	      	enabledList = [enabledList stringByAppendingString:[NSString stringWithFormat:@"'%@',", identifier]];
 	      }
 	  	}

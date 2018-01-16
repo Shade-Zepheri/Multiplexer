@@ -17,8 +17,8 @@ NSCache *_rsImgCache = [NSCache new];
 }
 
 + (id)loadAndCacheImageWithStrippedPath:(NSString *)stripped {
-  NSString *pdfPath = [NSString stringWithFormat:@"%@/Resources/%@.pdf",resourcePath,stripped];
-  NSString *pngPath = [NSString stringWithFormat:@"%@/Resources/%@.png",resourcePath,stripped];
+  NSString *pdfPath = [NSString stringWithFormat:@"%@/Resources/%@.pdf", resourcePath, stripped];
+  NSString *pngPath = [NSString stringWithFormat:@"%@/Resources/%@.png", resourcePath, stripped];
 
   if ([[NSFileManager defaultManager] fileExistsAtPath:pdfPath]) {
   	RAPDFImage *pdf = [RAPDFImage imageWithContentsOfFile:pdfPath];

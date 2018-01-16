@@ -449,7 +449,7 @@ SBWorkspace *SBWorkspace$sharedInstance;
   UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
   //CGSize iconSize = [%c(SBIconView) defaultIconImageSize];
   CGSize fullSize = [%c(SBIconView) defaultIconSize];
-  fullSize.height = fullSize.width; // otherwise it often looks like {60,74}
+  fullSize.height = fullSize.width; // otherwise it often looks like {60, 74}
   CGFloat padding = 20;
 
   NSInteger numIconsPerLine = 0;

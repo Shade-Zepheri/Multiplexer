@@ -350,27 +350,27 @@
 - (NSDictionary *)_createAndCacheBackgrounderSettingsForIdentifier:(NSString *)identifier {
 	NSMutableDictionary *ret = [NSMutableDictionary dictionary];
 
-	ret[@"enabled"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-enabled",identifier]] ?: @NO;
-	ret[@"backgroundMode"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundMode",identifier]] ?: @1;
-	ret[@"autoLaunch"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-autoLaunch",identifier]] ?: @NO;
-	ret[@"autoRelaunch"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-autoRelaunch",identifier]] ?: @NO;
-	ret[@"showIndicatorOnIcon"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-showIndicatorOnIcon",identifier]] ?: @YES;
-	ret[@"preventDeath"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-preventDeath",identifier]] ?: @NO;
-	ret[@"unlimitedBackgrounding"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-unlimitedBackgrounding",identifier]] ?: @NO;
-	ret[@"removeFromSwitcher"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-removeFromSwitcher",identifier]] ?: @NO;
-	ret[@"showStatusBarIcon"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-showStatusBarIcon",identifier]] ?: @YES;
+	ret[@"enabled"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-enabled", identifier]] ?: @NO;
+	ret[@"backgroundMode"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundMode", identifier]] ?: @1;
+	ret[@"autoLaunch"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-autoLaunch", identifier]] ?: @NO;
+	ret[@"autoRelaunch"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-autoRelaunch", identifier]] ?: @NO;
+	ret[@"showIndicatorOnIcon"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-showIndicatorOnIcon", identifier]] ?: @YES;
+	ret[@"preventDeath"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-preventDeath", identifier]] ?: @NO;
+	ret[@"unlimitedBackgrounding"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-unlimitedBackgrounding", identifier]] ?: @NO;
+	ret[@"removeFromSwitcher"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-removeFromSwitcher", identifier]] ?: @NO;
+	ret[@"showStatusBarIcon"] = _settings[[NSString stringWithFormat:@"backgrounder-%@-showStatusBarIcon", identifier]] ?: @YES;
 
 	ret[@"backgroundModes"] = [NSMutableDictionary dictionary];
-	ret[@"backgroundModes"][kBKSBackgroundModeUnboundedTaskCompletion] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeUnboundedTaskCompletion]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeContinuous] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeContinuous]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeFetch] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeFetch]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeRemoteNotification] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeRemoteNotification]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeExternalAccessory] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeExternalAccessory]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeVoIP] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeVoIP]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeLocation] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeLocation]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeAudio] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeAudio]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeBluetoothCentral] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeBluetoothCentral]] ?: @NO;
-	ret[@"backgroundModes"][kBKSBackgroundModeBluetoothPeripheral] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@",identifier,kBKSBackgroundModeBluetoothPeripheral]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeUnboundedTaskCompletion] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeUnboundedTaskCompletion]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeContinuous] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeContinuous]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeFetch] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeFetch]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeRemoteNotification] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeRemoteNotification]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeExternalAccessory] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeExternalAccessory]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeVoIP] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeVoIP]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeLocation] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeLocation]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeAudio] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeAudio]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeBluetoothCentral] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeBluetoothCentral]] ?: @NO;
+	ret[@"backgroundModes"][kBKSBackgroundModeBluetoothPeripheral] = _settings[[NSString stringWithFormat:@"backgrounder-%@-backgroundmodes-%@", identifier, kBKSBackgroundModeBluetoothPeripheral]] ?: @NO;
 
 	[self.backgrounderCache setObject:ret forKey:identifier];
 

@@ -306,7 +306,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		return;
 	}
 
-	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge CFStringRef)[NSString stringWithFormat:@"com.efrederickson.reachapp.clientupdate-%@",identifier], nil, nil, YES);
+	CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), (__bridge CFStringRef)[NSString stringWithFormat:@"com.efrederickson.reachapp.clientupdate-%@", identifier], nil, nil, YES);
 
 	if (tries <= 4) {
 		if ([asyncHandles objectForKey:identifier]) {

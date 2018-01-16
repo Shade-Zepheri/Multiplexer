@@ -212,11 +212,11 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 			RAIconIndicatorViewInfo info = [[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier];
 			BOOL native = (info & RAIconIndicatorViewInfoNative);
 			if ((info & RAIconIndicatorViewInfoNone) == 0 && (!native || [[RASettings sharedInstance] shouldShowStatusBarNativeIcons])) {
-				LSStatusBarItem *item = [[%c(LSStatusBarItem) alloc] initWithIdentifier:[NSString stringWithFormat:@"multiplexer-%@",self.bundleIdentifier] alignment:StatusBarAlignmentLeft];
+				LSStatusBarItem *item = [[%c(LSStatusBarItem) alloc] initWithIdentifier:[NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier] alignment:StatusBarAlignmentLeft];
 				if (![item customViewClass]) {
 					item.customViewClass = @"RAAppIconStatusBarIconView";
 				}
-				item.imageName = [NSString stringWithFormat:@"multiplexer-%@",self.bundleIdentifier];
+				item.imageName = [NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier];
 				lsbitems[self.bundleIdentifier] = item;
 			}
 		}

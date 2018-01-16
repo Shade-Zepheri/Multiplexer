@@ -1366,15 +1366,12 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (nonatomic, readonly) SBIconModel *iconModel;
 @end
 
-@interface SBIconController (iOS90) {
-    SBIconModel *_iconModel;
-}
+@interface SBIconController (iOS90)
 @property (nonatomic,readonly) SBIconViewMap *homescreenIconViewMap;
 - (BOOL)canUninstallIcon:(SBIcon *)icon;
 @end
 
-@interface SBIconBlurryBackgroundView : UIView
-{
+@interface SBIconBlurryBackgroundView : UIView {
     struct CGRect _wallpaperRelativeBounds;
     _Bool _isBlurring;
     id _wantsBlurEvaluator;

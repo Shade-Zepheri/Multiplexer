@@ -248,7 +248,7 @@
 
   if ([cell isKindOfClass:[ALCheckCell class]]) {
     NSString *dn = [self displayIdentifierForIndexPath:indexPath];
-    NSString *key = [NSString stringWithFormat:@"Favorites-%@",dn];
+    NSString *key = [NSString stringWithFormat:@"Favorites-%@", dn];
     BOOL value = [prefs[key] boolValue];
     [(ALCheckCell *)cell loadValue:@(value)];
   }
