@@ -7,19 +7,10 @@
 @property (strong, nonatomic)	UILabel *isLockedLabel;
 @end
 
-extern RANCViewController *ncAppViewController;
 extern BOOL shouldLoadView;
 
-%subclass RANCViewController : RANCViewControllerSuperClass
-%property (retain, nonatomic) RAHostedAppView *appView;
-%property (retain, nonatomic)	UILabel *isLockedLabel;
+@implementation RANCViewController
 
-%new
-+ (instancetype)sharedViewController {
-	return ncAppViewController;
-}
-
-%new
 - (void)forceReloadAppLikelyBecauseTheSettingChanged {
 	[self.appView unloadApp];
 	[self.appView removeFromSuperview];
@@ -58,7 +49,7 @@ int rotationDegsForOrientation(int o) {
 }
 
 - (void)viewDidAppear:(BOOL)animated {
-	%orig;
+	[super viewDidAppear:animated];
 
 	if (IS_IOS_OR_NEWER(iOS_10_0) && !shouldLoadView) {
 		return;
@@ -132,7 +123,6 @@ int rotationDegsForOrientation(int o) {
 	}
 }
 
-%new
 - (void)hostDidDismiss {
 	if (!self.appView.isCurrentlyHosting) {
 		return;
@@ -143,7 +133,7 @@ int rotationDegsForOrientation(int o) {
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
-	%orig;
+	[super viewDidDisappear:animated];
 
 	self.appView.hideStatusBar = NO;
 	if (self.appView.isCurrentlyHosting) {
@@ -151,7 +141,6 @@ int rotationDegsForOrientation(int o) {
 	}
 }
 
-%new
 - (RAHostedAppView *)hostedApp {
 	return self.appView;
 }
@@ -162,7 +151,7 @@ int rotationDegsForOrientation(int o) {
 }
 
 - (NSMethodSignature *)methodSignatureForSelector:(SEL)aSelector {
-	NSMethodSignature *signature = %orig;
+	NSMethodSignature *signature = [super methodSignatureForSelector:aSelector];
 	if (!signature && class_respondsToSelector(%c(SBBulletinObserverViewController), aSelector)) {
 		signature = [%c(SBBulletinObserverViewController) instanceMethodSignatureForSelector:aSelector];
 	}
@@ -174,13 +163,8 @@ int rotationDegsForOrientation(int o) {
 	if (aClass == %c(SBBulletinObserverViewController) || aClass == %c(SBNCColumnViewController)) {
 		return YES;
 	} else {
-		return %orig;
+		return [super isKindOfClass:aClass];
 	}
 }
 
-%end
-
-%ctor {
-	Class ncContentViewControllerClass = %c(SBNCColumnViewController) ?: %c(UIViewController);
-	%init(RANCViewControllerSuperClass=ncContentViewControllerClass);
-}
+@end

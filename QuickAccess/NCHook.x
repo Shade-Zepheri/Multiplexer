@@ -4,47 +4,13 @@
 #import "headers.h"
 #import "Multiplexer.h"
 
-@interface SBNotificationCenterViewController () <UITextFieldDelegate>
-- (id)_newBulletinObserverViewControllerOfClass:(Class)aClass;
-@end
-
 NSString *getAppName() {
 	NSString *ident = [[RASettings sharedInstance] NCApp] ?: @"com.apple.Preferences";
 	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:ident];
 	return app ? app.displayName : nil;
 }
 
-RANCViewController *ncAppViewController;
-
-%group iOS8
-%hook SBNotificationCenterViewController
-- (void)viewWillAppear:(BOOL)animated {
-	%orig;
-
-	BOOL hideBecauseLS = [[%c(SBLockScreenManager) sharedInstance] isUILocked] ? [[RASettings sharedInstance] ncAppHideOnLS] : NO;
-
-	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
-		SBModeViewController *modeVC = [self valueForKey:@"_modeController"];
-		if (!ncAppViewController) {
-			ncAppViewController = [self _newBulletinObserverViewControllerOfClass:%c(RANCViewController)];
-		}
-		[modeVC _addBulletinObserverViewController:ncAppViewController];
-	}
-}
-
-+ (NSString *)_localizableTitleForBulletinViewControllerOfClass:(Class)aClass {
-	if (aClass == %c(RANCViewController)) {
-		BOOL useGenericLabel = THEMED(quickAccessUseGenericTabLabel) || [[RASettings sharedInstance] quickAccessUseGenericTabLabel];
-		if (useGenericLabel) {
-			return LOCALIZE(@"APP", @"Localizable");
-		}
-		return ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP", @"Localizable");
-	} else {
-		return %orig;
-	}
-}
-%end
-%end
+static RANCViewController *ncAppViewController;
 
 %group iOS9
 %hook SBNotificationCenterLayoutViewController
@@ -144,10 +110,8 @@ BOOL shouldLoadView = NO;
 %ctor {
 	if (IS_IOS_OR_NEWER(iOS_10_0)) {
 		%init(iOS10);
-	} else if (IS_IOS_BETWEEN(iOS_9_0, iOS_9_3)) {
-		%init(iOS9);
 	} else {
-		%init(iOS8);
+		%init(iOS9);
 	}
 
 	%init;

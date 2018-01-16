@@ -19,9 +19,9 @@
   [targetQueue addOperationWithBlock:^{
     SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
     if (!icon) {
-      SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
+      icon = [iconModel applicationIconForBundleIdentifier:self.application.bundleIdentifier];
     }
-    
+
     if (icon && !iconView) {
       if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
   			iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];

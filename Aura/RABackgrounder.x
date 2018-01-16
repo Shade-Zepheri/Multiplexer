@@ -193,7 +193,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 - (void)updateIconIndicatorForIdentifier:(NSString *)identifier withInfo:(RAIconIndicatorViewInfo)info {
 	@autoreleasepool {
 		SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
-		SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
+		SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:identifier];
 		SBIconView *iconView = nil;
 
 		if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {

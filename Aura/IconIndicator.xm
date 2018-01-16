@@ -209,7 +209,7 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 	}
 
 	SBIconModel *model = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
-	if (!model.visibleIconIdentifiers containsObject:self.bundleIdentifier]) {
+	if (![model.visibleIconIdentifiers containsObject:self.bundleIdentifier]) {
 		return;
 	}
 

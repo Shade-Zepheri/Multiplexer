@@ -63,7 +63,7 @@ typedef struct {
 @implementation RAHandMotionExtractor
 
 + (instancetype)mainHandMotionExtractor {
-  return SHARED_INSTANCE(RAHandMotionExtractor);
+  SHARED_INSTANCE(RAHandMotionExtractor);
 }
 
 - (instancetype)init {
@@ -143,7 +143,7 @@ static void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOH
 
   CGPoint rotatedLocation = CGPointMake(rotatedX, rotatedY);
 
-  LogInfo(@"[ReachApp] (%f, %d) %@ -> %@", density, isTracking, NSStringFromCGPoint(location), NSStringFromCGPoint(rotatedLocation));
+  LogDebug(@"[ReachApp] (%f, %d) %@ -> %@", density, isTracking, NSStringFromCGPoint(location), NSStringFromCGPoint(rotatedLocation));
 
   if (!isTracking) {
     for (_UIScreenEdgePanRecognizer *recognizer in gestureRecognizers) {
@@ -165,7 +165,7 @@ static void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOH
     currentEdge9 = UIRectEdgeNone;
     isTracking = NO;
 
-    LogInfo(@"[ReachApp] touch ended.");
+    LogDebug(@"[ReachApp] touch ended.");
   } else {
     _UIScreenEdgePanRecognizer *targetRecognizer = nil;
 

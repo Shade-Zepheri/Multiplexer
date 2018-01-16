@@ -2,9 +2,9 @@
 
 @class RAHostedAppView;
 
-@interface RANCViewController : SBNCColumnViewController
-+ (instancetype)sharedViewController;
+@interface RANCViewController : UIViewController
 
 - (RAHostedAppView *)hostedApp;
 - (void)forceReloadAppLikelyBecauseTheSettingChanged;
+
 @end

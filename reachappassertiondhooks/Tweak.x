@@ -7,7 +7,6 @@
 
   return %orig;
 }
-%end
 
 // Not sure if this one is still needed though
 %hookf(int, "_BSXPCConnectionHasEntitlement", id connection, NSString *entitlement) {
@@ -17,4 +16,3 @@
 
   return %orig;
 }
-%end
