@@ -204,22 +204,24 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 	}
 #endif
 
-	BOOL homescreenMapCheck = [%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)] && [[%c(SBIconViewMap) homescreenMap].iconModel.visibleIconIdentifiers containsObject:self.bundleIdentifier];
-	BOOL homescreenIconViewMapCheck = [%c(SBIconController) respondsToSelector:@selector(homescreenIconViewMap)] && [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel.visibleIconIdentifiers containsObject:self.bundleIdentifier];
+	if (!%c(LSStatusBarItem) || [lsbitems objectForKey:self.bundleIdentifier] || ![[RABackgrounder sharedInstance] shouldShowStatusBarIconForIdentifier:self.bundleIdentifier]) {
+		return;
+	}
 
-	if (%c(LSStatusBarItem) && ![lsbitems objectForKey:self.bundleIdentifier] && [[RABackgrounder sharedInstance] shouldShowStatusBarIconForIdentifier:self.bundleIdentifier]) {
-		if (homescreenMapCheck || homescreenIconViewMapCheck) {
-			RAIconIndicatorViewInfo info = [[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier];
-			BOOL native = (info & RAIconIndicatorViewInfoNative);
-			if ((info & RAIconIndicatorViewInfoNone) == 0 && (!native || [[RASettings sharedInstance] shouldShowStatusBarNativeIcons])) {
-				LSStatusBarItem *item = [[%c(LSStatusBarItem) alloc] initWithIdentifier:[NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier] alignment:StatusBarAlignmentLeft];
-				if (![item customViewClass]) {
-					item.customViewClass = @"RAAppIconStatusBarIconView";
-				}
-				item.imageName = [NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier];
-				lsbitems[self.bundleIdentifier] = item;
-			}
+	SBIconModel *model = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
+	if (!model.visibleIconIdentifiers containsObject:self.bundleIdentifier]) {
+		return;
+	}
+
+	RAIconIndicatorViewInfo info = [[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier];
+	BOOL native = (info & RAIconIndicatorViewInfoNative);
+	if ((info & RAIconIndicatorViewInfoNone) == 0 && (!native || [[RASettings sharedInstance] shouldShowStatusBarNativeIcons])) {
+		LSStatusBarItem *item = [[%c(LSStatusBarItem) alloc] initWithIdentifier:[NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier] alignment:StatusBarAlignmentLeft];
+		if (![item customViewClass]) {
+			item.customViewClass = @"RAAppIconStatusBarIconView";
 		}
+		item.imageName = [NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier];
+		lsbitems[self.bundleIdentifier] = item;
 	}
 }
 

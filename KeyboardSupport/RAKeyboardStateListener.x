@@ -100,11 +100,7 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
     LogDebug(@"[ReachApp] c id %tu", contextID);
   };
 
-  if (IS_IOS_OR_NEWER(iOS_9_0)) {
-    dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), block);
-  } else {
-    block();
-  }
+  dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), block);
 }
 %end
 

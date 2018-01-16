@@ -17,13 +17,11 @@
 
   NSOperationQueue *targetQueue = [NSOperationQueue mainQueue];
   [targetQueue addOperationWithBlock:^{
+    SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
     if (!icon) {
-      if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-        icon = [[%c(SBIconViewMap) homescreenMap].iconModel applicationIconForBundleIdentifier:self.application.bundleIdentifier];
-      } else {
-        icon = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel applicationIconForBundleIdentifier:self.application.bundleIdentifier];
-      }
+      SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
     }
+    
     if (icon && !iconView) {
       if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
   			iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];

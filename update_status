@@ -16,7 +16,9 @@ fake phone mode: working (hacky tho)
 Updates:
 - Begin to phase out iOS 8 support
 - Figure out SBAppView(Controller) and use those
+  - Remove RAHostedAppView and Manager
 - FBSceneMonitor replace RARunningAppsProvider?
+- Fix IntroTutorial
 
 Bugs:
 - 'Fix' Aura

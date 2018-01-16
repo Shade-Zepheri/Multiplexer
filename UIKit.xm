@@ -195,7 +195,7 @@ static Class $memorized$UITextEffectsWindow$class;
   if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
     self.RA_networkActivity = visible;
     StatusBarData *data = [UIStatusBarServer getStatusBarData];
-    data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = visible; // 26 = activity indicator TODO: check if ios 8
+    data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = visible; // 26 = activity indicator
     [[UIApplication sharedApplication].statusBar forceUpdateToData:data animated:YES];
   }
 }

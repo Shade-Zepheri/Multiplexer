@@ -3,6 +3,7 @@
 
 // IMPORTANT: DO NOT IMPORT HEADERS.H
 // REASON: HEADERS.H IMPORTS THIS FILE
+// Could get rid of this class but iOS 11 may need it
 
 @interface SBWorkspace : NSObject
 + (instancetype)sharedInstance;
@@ -28,5 +29,5 @@ Class CurrentSBWorkspaceClass = nil;
 %ctor {
 	// SBMainWorkspace: iOS 9
 	// SBWorkspace: iOS 8
-	CurrentSBWorkspaceClass = %c(SBMainWorkspace) ?: %c(SBWorkspace);
+	CurrentSBWorkspaceClass = %c(SBMainWorkspace);
 }

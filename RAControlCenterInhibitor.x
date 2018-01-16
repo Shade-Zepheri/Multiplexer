@@ -2,36 +2,15 @@
 #import "headers.h"
 #import <UIKit/UIKit.h>
 
-BOOL overrideCC = NO;
+static BOOL _gesturesInhibited = NO;
 
 @implementation RAControlCenterInhibitor : NSObject
-+ (void)setInhibited:(BOOL)value {
-	overrideCC = value;
-
-	if (%c(SBSystemGestureManager)) {
-		[%c(SBSystemGestureManager) mainDisplayManager].systemGesturesDisabledForAccessibility = value;
-	}
++ (void)setGesturesInhibited:(BOOL)value {
+	_gesturesInhibited = value;
+	[%c(SBSystemGestureManager) mainDisplayManager].systemGesturesDisabledForAccessibility = value;
 }
 
-+ (BOOL)isInhibited {
-	return overrideCC;
++ (BOOL)gesturesInhibited {
+	return _gesturesInhibited;
 }
 @end
-
-%hook SBUIController
-- (void)_showControlCenterGestureBeganWithLocation:(CGPoint)point {
-	if (overrideCC) {
-		return;
-	}
-
-	%orig;
-}
-
-- (void)handleShowControlCenterSystemGesture:(id)gesture {
-	if (overrideCC) {
-		return;
-	}
-
-	%orig;
-}
-%end

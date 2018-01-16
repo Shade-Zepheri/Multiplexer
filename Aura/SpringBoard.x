@@ -18,21 +18,6 @@
 %end
 
 // STAY IN "FOREGROUND"
-%hook FBUIApplicationResignActiveManager
-- (void)_sendResignActiveForReason:(NSInteger)reason toProcess:(FBApplicationProcess *)process {
-  if ([[RABackgrounder sharedInstance] shouldKeepInForeground:process.bundleIdentifier]) {
-    return;
-  }
-
-  %orig;
-
-  if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:process.bundleIdentifier]) {
-    BKSProcess *bkProcess = [process valueForKey:@"_bksProcess"];
-    [process processWillExpire:bkProcess];
-  }
-}
-%end
-
 %hook FBUIApplicationSceneDeactivationManager // iOS 9
 - (BOOL)_isEligibleProcess:(FBApplicationProcess *)process {
   if ([[RABackgrounder sharedInstance] shouldKeepInForeground:process.bundleIdentifier]) {

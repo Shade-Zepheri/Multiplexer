@@ -15,7 +15,7 @@
 }
 
 - (BOOL)isOnSupportedOS {
-	return IS_IOS_BETWEEN(iOS_8_0, iOS_10_2);
+	return IS_IOS_BETWEEN(iOS_9_0, iOS_10_2);
 }
 
 - (void)registerExtension:(NSString *)name forMultiplexerVersion:(NSString *)version {
@@ -30,36 +30,29 @@
 }
 
 + (SBAppToAppWorkspaceTransaction *)createSBAppToAppWorkspaceTransactionForExitingApp:(SBApplication *)app {
-	if ([%c(SBAppToAppWorkspaceTransaction) respondsToSelector:@selector(initWithAlertManager:exitedApp:)]) {
-		return [[%c(SBAppToAppWorkspaceTransaction) alloc] initWithAlertManager:nil exitedApp:app];
-	} else {
 	// ** below code from Mirmir (https://github.com/EthanArbuckle/Mirmir/blob/lamo_no_ms/Lamo/CDTLamo.mm#L114-L138)
-		SBWorkspaceApplicationTransitionContext *transitionContext = [[%c(SBWorkspaceApplicationTransitionContext) alloc] init];
+	SBWorkspaceApplicationTransitionContext *transitionContext = [[%c(SBWorkspaceApplicationTransitionContext) alloc] init];
 
-		//set layout role to 'side' (deactivating)
-		SBWorkspaceDeactivatingEntity *deactivatingEntity = [%c(SBWorkspaceDeactivatingEntity) entity];
-		deactivatingEntity.layoutRole = 3;
-		[transitionContext setEntity:deactivatingEntity forLayoutRole:3];
+	//set layout role to 'side' (deactivating)
+	SBWorkspaceDeactivatingEntity *deactivatingEntity = [%c(SBWorkspaceDeactivatingEntity) entity];
+	deactivatingEntity.layoutRole = 3;
+	[transitionContext setEntity:deactivatingEntity forLayoutRole:3];
 
-		//set layout role for 'primary' (activating)
-		SBWorkspaceHomeScreenEntity *homescreenEntity = [[%c(SBWorkspaceHomeScreenEntity) alloc] init];
-		[transitionContext setEntity:homescreenEntity forLayoutRole:2];
+	//set layout role for 'primary' (activating)
+	SBWorkspaceHomeScreenEntity *homescreenEntity = [[%c(SBWorkspaceHomeScreenEntity) alloc] init];
+	[transitionContext setEntity:homescreenEntity forLayoutRole:2];
 
-		transitionContext.animationDisabled = YES;
+	transitionContext.animationDisabled = YES;
 
-		//create transititon request
-		SBMainWorkspaceTransitionRequest *transitionRequest = [[%c(SBMainWorkspaceTransitionRequest) alloc] initWithDisplay:[%c(FBDisplayManager) mainDisplay]];
-		transitionRequest.applicationContext = transitionContext;
+	//create transititon request
+	SBMainWorkspaceTransitionRequest *transitionRequest = [[%c(SBMainWorkspaceTransitionRequest) alloc] initWithDisplay:[%c(FBDisplayManager) mainDisplay]];
+	transitionRequest.applicationContext = transitionContext;
 
-		return [[%c(SBAppToAppWorkspaceTransaction) alloc] initWithTransitionRequest:transitionRequest];
-	}
+	return [[%c(SBAppToAppWorkspaceTransaction) alloc] initWithTransitionRequest:transitionRequest];
 }
 
 + (BOOL)shouldShowControlCenterGrabberOnFirstSwipe {
-	if ([%c(SBUIController) respondsToSelector:@selector(shouldShowControlCenterTabControlOnFirstSwipe)]) {
-		return [[%c(SBUIController) sharedInstance] shouldShowControlCenterTabControlOnFirstSwipe];
-	}
-
+	// Only keeping this method in case iOS 11 changes stuff
 	return [[%c(SBControlCenterController) sharedInstance] _shouldShowGrabberOnFirstSwipe];
 }
 @end

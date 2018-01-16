@@ -30,28 +30,17 @@
 		__block SBAppSwitcherSnapshotView *view = nil;
 
 		ON_MAIN_THREAD(^{
-			if ([%c(SBUIController) respondsToSelector:@selector(switcherController)]) {
-				view = [[[%c(SBUIController) sharedInstance] switcherController] performSelector:@selector(_snapshotViewForDisplayItem:) withObject:item];
-				[view setOrientation:orientation orientationBehavior:0];
-			} else {
-				view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:NO withQueue:nil];
-			}
+			view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:NO withQueue:nil];
 		});
 
 		if (view) {
-			if ([view respondsToSelector:@selector(_loadSnapshotSync)]) {
-				dispatch_sync(dispatch_get_main_queue(), ^{
-					[view _loadSnapshotSync];
-				});
-				image = [(UIImageView *)[view valueForKey:@"_snapshotImageView"] image];
-			} else {
-				// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
-				_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:nil preferringDownscaled:NO defaultImageOnly:NO];
-				image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
-			}
+			// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
+			_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:nil preferringDownscaled:NO defaultImageOnly:NO];
+			image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
 		}
 
 		if (!image) {
+			/* Find adequate replacement for iOS 9+
 			LogWarn(@"Couldn't Get Switcher Image; Using SplashScreen");
 			SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
 
@@ -79,6 +68,7 @@
 			if (!image) { // we can only hope it does not reach this point of desperation
 				image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Default.png", app.path]];
 			}
+			*/
 		}
 
 		if (image) {

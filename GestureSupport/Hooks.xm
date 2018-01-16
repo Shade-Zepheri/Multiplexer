@@ -54,11 +54,18 @@ typedef struct {
 }
 %end
 
-@interface Hooks9$SBHandMotionExtractorReplacementByMultiplexer : NSObject <_UIScreenEdgePanRecognizerDelegate>
+@interface RAHandMotionExtractor : NSObject <_UIScreenEdgePanRecognizerDelegate>
+
++ (instancetype)mainHandMotionExtractor;
 
 @end
 
-@implementation Hooks9$SBHandMotionExtractorReplacementByMultiplexer
+@implementation RAHandMotionExtractor
+
++ (instancetype)mainHandMotionExtractor {
+  return SHARED_INSTANCE(RAHandMotionExtractor);
+}
+
 - (instancetype)init {
   self = [super init];
   if (self) {
@@ -182,10 +189,8 @@ static void initializeGestures(CFNotificationCenterRef center, void *observer, C
   IOHIDEventSystemClientRegisterEventCallback(ioHIDEventSystem, (IOHIDEventSystemClientEventCallback)touch_event, NULL, NULL);
 }
 
-__strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
-
 %ctor {
-  if (!IS_IOS_OR_NEWER(iOS_9_0) || !IS_SPRINGBOARD) {
+  if (!IS_SPRINGBOARD) {
     return;
   }
 
@@ -204,6 +209,6 @@ __strong id __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer;
 
     %init;
 
-    __static$Hooks9$SBHandMotionExtractorReplacementByMultiplexer = [[Hooks9$SBHandMotionExtractorReplacementByMultiplexer alloc] init];
+    [RAHandMotionExtractor mainHandMotionExtractor];
   }
 }

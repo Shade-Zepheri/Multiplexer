@@ -14,13 +14,11 @@ static RAActivatorListener *sharedInstance;
 	}
 
 	[[RAMissionControlManager sharedInstance] toggleMissionControl:YES];
-	if ([%c(SBUIController) respondsToSelector:@selector(_appSwitcherController)]) {
-		[[[%c(SBUIController) sharedInstance] _appSwitcherController] forceDismissAnimated:NO];
-	} else {
-		[UIView performWithoutAnimation:^{
-			[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
-		}];
-	}
+
+	[UIView performWithoutAnimation:^{
+		[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
+	}];
+
 	event.handled = YES;
 }
 @end

@@ -45,14 +45,15 @@
 	for (NSString *str in allApps) {
 		@autoreleasepool {
 			SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
-			SBApplicationIcon *icon = icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
+			SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 			SBIconView *iconView = nil;
-			
+
 			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
 				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 			} else {
 				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 			}
+
 			if (!iconView || ![icon isKindOfClass:%c(SBApplicationIcon)]) {
 				continue;
 			}

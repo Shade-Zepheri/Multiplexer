@@ -192,17 +192,17 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 
 - (void)updateIconIndicatorForIdentifier:(NSString *)identifier withInfo:(RAIconIndicatorViewInfo)info {
 	@autoreleasepool {
-		SBIconView *ret = nil;
+		SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
+		SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
+		SBIconView *iconView = nil;
+
 		if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-			// iOS 8.0+
-			SBApplicationIcon *icon = [[%c(SBIconViewMap) homescreenMap].iconModel applicationIconForBundleIdentifier:identifier];
-			ret = [[%c(SBIconViewMap) homescreenMap] mappedIconViewForIcon:icon];
+			iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 		} else {
-			SBApplicationIcon *icon = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel applicationIconForBundleIdentifier:identifier];
-			ret = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] mappedIconViewForIcon:icon];
+			iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 		}
 
-		[ret RA_updateIndicatorView:info];
+		[iconView RA_updateIndicatorView:info];
 	}
 }
 

@@ -37,9 +37,6 @@
     self.userInteractionEnabled = YES;
     self.layerHost = [[CALayerHost alloc] init];
     self.layerHost.anchorPoint = CGPointMake(0, 0);
-    if (!IS_IOS_OR_NEWER(iOS_9_0)) {
-      self.layerHost.transform = CATransform3DMakeScale(1/[UIScreen mainScreen].scale, 1/[UIScreen mainScreen].scale, 1);
-    }
     self.layerHost.bounds = self.bounds;
     [self.layer addSublayer:self.layerHost];
     update = NO;

@@ -48,7 +48,7 @@ BOOL locationIsInValidArea(CGFloat x) {
     [[%c(SBControlCenterController) sharedInstance] dismissAnimated:YES];
 
     if (state == UIGestureRecognizerStateBegan) {
-      [RAControlCenterInhibitor setInhibited:YES];
+      RAControlCenterInhibitor.gesturesInhibited = YES;
 
       // Show HS/Wallpaper
       [[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"BeautifulAnimation"];
@@ -92,7 +92,7 @@ BOOL locationIsInValidArea(CGFloat x) {
         appView.transform = CGAffineTransformMakeScale(scale, scale);
       }
     } else if (state == UIGestureRecognizerStateEnded) {
-      [RAControlCenterInhibitor setInhibited:NO];
+      RAControlCenterInhibitor.gesturesInhibited = NO;
 
       if (lastY <= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4) * 3 && lastY != 0) { // 75% down, 0 == gesture ended in most situations
         [UIView animateWithDuration:.3 animations:^{
