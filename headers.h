@@ -76,11 +76,10 @@ extern BOOL $__IS_SPRINGBOARD;
 
 #define ON_MAIN_THREAD(block) \
     { \
-      dispatch_block_t _blk = block; \
       if ([NSThread isMainThread]) { \
-        _blk(); \
+        block(); \
       } else { \
-        dispatch_sync(dispatch_get_main_queue(), _blk); \
+        dispatch_sync(dispatch_get_main_queue(), block); \
       } \
     }
 
@@ -884,9 +883,10 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface FBWindowContextHostManager : NSObject
-- (id)hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
+- (UIView *)hostViewForRequester:(NSString *)arg1 appearanceStyle:(NSUInteger)style;
+- (UIView *)hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
 - (void)resumeContextHosting;
-- (id)_hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
+- (UIView *)_hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
 - (id)snapshotViewWithFrame:(CGRect)arg1 excludingContexts:(id)arg2 opaque:(BOOL)arg3;
 - (id)snapshotUIImageForFrame:(struct CGRect)arg1 excludingContexts:(id)arg2 opaque:(BOOL)arg3 outTransform:(struct CGAffineTransform *)arg4;
 - (id)visibleContexts;
@@ -1366,7 +1366,9 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (nonatomic, readonly) SBIconModel *iconModel;
 @end
 
-@interface SBIconController (iOS90)
+@interface SBIconController (iOS90) {
+    SBIconModel *_iconModel;
+}
 @property (nonatomic,readonly) SBIconViewMap *homescreenIconViewMap;
 - (BOOL)canUninstallIcon:(SBIcon *)icon;
 @end

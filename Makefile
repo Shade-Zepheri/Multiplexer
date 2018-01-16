@@ -10,7 +10,7 @@ CFLAGS += -fobjc-arc -flto=thin
 
 INSTALL_TARGET_PROCESSES = Preferences
 
-ifeq ($(RESPRING),1)
+ifneq ($(RESPRING),0)
 INSTALL_TARGET_PROCESSES += SpringBoard
 endif
 

@@ -13,6 +13,11 @@ assertiond hooks: working
 backboardd hooks: working
 fake phone mode: working (hacky tho)
 
+Updates:
+- Begin to phase out iOS 8 support
+- Figure out SBAppView(Controller) and use those
+- FBSceneMonitor replace RARunningAppsProvider?
+
 Bugs:
 - 'Fix' Aura
   - Aura breaks calls? (kill on exit / Needs testing)
