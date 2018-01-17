@@ -131,14 +131,14 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 			@"data": [NSData dataWithBytes:&data length:sizeof(data)],
 		};
 	} else if ([identifier isEqualToString:RAMessagingOpenURLKMessageName]) {
-		NSURL *url = [NSURL URLWithString:info[@"url"]];
+		//NSURL *url = [NSURL URLWithString:info[@"url"]];
 		BOOL openInWindow = [[RASettings sharedInstance] openLinksInWindows]; // [info[@"openInWindow"] boolValue];
 		if (openInWindow) {
 			launchNextOpenIntoWindow = YES;
 		}
 
-		BOOL success = [[UIApplication sharedApplication] openURL:url];
-		return @{ @"success": @(success) };
+		//BOOL success = [[UIApplication sharedApplication] openURL:url];
+		return @{ @"success": @(YES) };
 	} else if ([identifier isEqualToString:RAMessagingGetFrontMostAppInfoMessageName]) {
 		if ([UIApplication sharedApplication]._accessibilityFrontMostApplication) {
 			return nil;

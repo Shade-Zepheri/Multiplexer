@@ -17,8 +17,10 @@ Updates:
 - Begin to phase out iOS 8 support
 - Figure out SBAppView(Controller) and use those
   - Remove RAHostedAppView and Manager
-- FBSceneMonitor replace RARunningAppsProvider?
+- Remove / update unneeded classes
+  - RARunningAppsProvider
 - Fix IntroTutorial
+- Improve stability
 
 Bugs:
 - 'Fix' Aura

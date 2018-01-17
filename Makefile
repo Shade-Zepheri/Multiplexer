@@ -1,4 +1,4 @@
-export TARGET = iphone:9.3
+export TARGET = iphone:10.1
 
 ifeq ($(IPAD),1)
 export THEOS_DEVICE_IP=192.168.254.7
