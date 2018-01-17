@@ -945,9 +945,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @interface SBApplicationController : NSObject
 + (id) sharedInstance;
 - (SBApplication*) applicationWithBundleIdentifier:(NSString*)identifier;
-- (SBApplication*) applicationWithDisplayIdentifier:(NSString*)identifier;
 - (SBApplication*)applicationWithPid:(int)arg1;
-- (SBApplication*) RA_applicationWithBundleIdentifier:(NSString*)bundleIdentifier;
 @end
 
 @interface FBWindowContextHostWrapperView : UIView

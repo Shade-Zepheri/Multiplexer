@@ -32,19 +32,6 @@ BOOL overrideDisableForStatusBar = NO;
 }
 %end
 
-%hook SBApplicationController
-%new - (SBApplication *)RA_applicationWithBundleIdentifier:(NSString *)bundleIdentifier {
-  if ([self respondsToSelector:@selector(applicationWithBundleIdentifier:)]) {
-    return [self applicationWithBundleIdentifier:bundleIdentifier];
-  } else if ([self respondsToSelector:@selector(applicationWithDisplayIdentifier:)]) {
-    return [self applicationWithDisplayIdentifier:bundleIdentifier];
-  }
-
-  [RACompatibilitySystem showWarning:@"Unable to find valid -[SBApplicationController applicationWithBundleIdentifier:] replacement"];
-  return nil;
-}
-%end
-
 %hook SBToAppsWorkspaceTransaction
 // On iOS 8.3 and above, on the iPad, if a FBWindowContextWhatever creates a hosting context / enabled hosting, all the other hosted windows stop.
 // This fixes that.

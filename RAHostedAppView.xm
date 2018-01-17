@@ -71,7 +71,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 - (void)setBundleIdentifier:(NSString *)value {
   _orientation = UIInterfaceOrientationPortrait;
   _bundleIdentifier = value;
-  app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:value];
+  app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:value];
 }
 
 - (void)setShouldUseExternalKeyboard:(BOOL)value {
@@ -399,7 +399,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   for (NSString *bundleIdentifier in appsBeingHosted.allKeys) {
     NSNumber *num = appsBeingHosted[bundleIdentifier];
     if (num.intValue > 0) {
-      SBApplication *app_ = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:bundleIdentifier];
+      SBApplication *app_ = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
       FBWindowContextHostManager *manager = (FBWindowContextHostManager *)[RAHostManager hostManagerForApp:app_];
       if (manager) {
         LogInfo(@"[ReachApp] rehosting for iPad: %@", bundleIdentifier);

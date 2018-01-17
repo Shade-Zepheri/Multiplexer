@@ -277,13 +277,13 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	RAMessageCompletionCallback callback = (RAMessageCompletionCallback)waitingCompletions[identifier];
 	[waitingCompletions removeObjectForKey:identifier];
 
-	SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
+	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
 	[self alertUser:[NSString stringWithFormat:@"Unable to communicate with app %@ (%@)", app.displayName, identifier]];
 	callback(NO);
 }
 
 - (void)sendDataWithCurrentTries:(NSInteger)tries toAppWithBundleIdentifier:(NSString *)identifier completion:(RAMessageCompletionCallback)callback {
-	SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
+	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
 	if (!app.isRunning || ![app mainScene]) {
 		if (tries > 4) {
 			[self alertUser:[NSString stringWithFormat:@"Unable to communicate with app that isn't running: %@ (%@)", app.displayName, identifier]];

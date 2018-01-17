@@ -8,7 +8,7 @@
 }
 
 + (void)addIdentifierToFront:(NSString *)ident {
-	[RAAppSwitcherModelWrapper addToFront:[[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:ident]];
+	[RAAppSwitcherModelWrapper addToFront:[[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:ident]];
 }
 
 + (NSArray *)appSwitcherAppIdentiferList {
