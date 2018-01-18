@@ -11,7 +11,7 @@ RAKeyboardWindow *keyboardWindow;
 @implementation RASpringBoardKeyboardActivation
 + (instancetype)sharedInstance {
   SHARED_INSTANCE2(RASpringBoardKeyboardActivation,
-    [[RARunningAppsProvider sharedInstance] addTarget:self]
+    [[RARunningAppsStateProvider defaultStateProvider] addObserver:self]
   );
 }
 

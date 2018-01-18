@@ -1,5 +1,5 @@
 #import "RAAppKiller.h"
-#import "RARunningAppsProvider.h"
+#import "RARunningAppsStateProvider.h"
 
 @interface RAAppKiller () {
 	NSMutableDictionary *completionDictionary;
@@ -72,7 +72,7 @@
 
 - (void)initialize {
 	completionDictionary = [NSMutableDictionary dictionary];
-	[[RARunningAppsProvider sharedInstance] addTarget:self];
+	[[RARunningAppsStateProvider defaultStateProvider] addObserver:self];
 }
 
 - (void)appDidDie:(SBApplication *)app {

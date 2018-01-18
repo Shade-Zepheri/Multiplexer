@@ -137,7 +137,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
     [RAHostedAppView iPad_iOS83_fixHosting];
   }
 
-  [[RARunningAppsProvider sharedInstance] addTarget:self];
+  [[RARunningAppsStateProvider defaultStateProvider] addObserver:self];
 
   loadedTimer = [NSTimer timerWithTimeInterval:1 target:self selector:@selector(verifyHostingAndRehostIfNecessary) userInfo:nil repeats:YES];
   [[NSRunLoop currentRunLoop] addTimer:loadedTimer forMode:NSRunLoopCommonModes];
@@ -311,7 +311,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   [loadedTimer invalidate];
   loadedTimer = nil;
 
-  [[RARunningAppsProvider sharedInstance] removeTarget:self];
+  [[RARunningAppsStateProvider defaultStateProvider] removeObserver:self];
 
   disablePreload = YES;
 

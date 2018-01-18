@@ -21,6 +21,7 @@ Updates:
   - RARunningAppsProvider
 - Fix IntroTutorial
 - Improve stability
+- Maybe separate hooks from main framework
 
 Bugs:
 - 'Fix' Aura

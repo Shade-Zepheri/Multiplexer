@@ -1,7 +1,7 @@
 #import "headers.h"
-#import "RARunningAppsProvider.h"
+#import "RARunningAppsStateProvider.h"
 
-@interface RASpringBoardKeyboardActivation : NSObject <RARunningAppsProviderDelegate>
+@interface RASpringBoardKeyboardActivation : NSObject <RARunningAppsStateObserver>
 + (instancetype)sharedInstance;
 
 @property (nonatomic, readonly, copy) NSString *currentIdentifier;

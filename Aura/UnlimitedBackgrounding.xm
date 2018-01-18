@@ -1,6 +1,6 @@
 #import "headers.h"
 #import "RABackgrounder.h"
-#import "RARunningAppsProvider.h"
+#import "RARunningAppsStateProvider.h"
 
 NSMutableDictionary *processAssertions = [NSMutableDictionary dictionary];
 BKSProcessAssertion *keepAlive$temp;
@@ -21,7 +21,7 @@ BKSProcessAssertion *keepAlive$temp;
 }
 %end
 
-@interface RAUnlimitedBackgroundingAppWatcher : NSObject <RARunningAppsProviderDelegate>
+@interface RAUnlimitedBackgroundingAppWatcher : NSObject <RARunningAppsStateObserver>
 + (void)load;
 @end
 
@@ -34,7 +34,7 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   }
 
   sharedInstance$RAUnlimitedBackgroundingAppWatcher = [[RAUnlimitedBackgroundingAppWatcher alloc] init];
-  [[RARunningAppsProvider sharedInstance] addTarget:sharedInstance$RAUnlimitedBackgroundingAppWatcher];
+  [[RARunningAppsStateProvider defaultStateProvider] addObserver:sharedInstance$RAUnlimitedBackgroundingAppWatcher];
 }
 
 - (void)appDidDie:(SBApplication *)app {

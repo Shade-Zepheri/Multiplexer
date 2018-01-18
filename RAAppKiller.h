@@ -1,7 +1,7 @@
 #import "headers.h"
-#import "RARunningAppsProvider.h"
+#import "RARunningAppsStateProvider.h"
 
-@interface RAAppKiller : NSObject <RARunningAppsProviderDelegate>
+@interface RAAppKiller : NSObject <RARunningAppsStateObserver>
 + (void)killAppWithIdentifier:(NSString *)identifier;
 + (void)killAppWithIdentifier:(NSString *)identifier completion:(void(^)())handler;
 + (void)killAppWithSBApplication:(SBApplication *)app;

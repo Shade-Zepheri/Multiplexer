@@ -190,7 +190,7 @@ static void initializeGestures(CFNotificationCenterRef center, void *observer, C
 }
 
 %ctor {
-  if (!IS_SPRINGBOARD) {
+  IF_NOT_SPRINGBOARD {
     return;
   }
 
