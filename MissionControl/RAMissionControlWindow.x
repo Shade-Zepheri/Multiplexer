@@ -9,7 +9,7 @@
 #import "RAMissionControlManager.h"
 #import "RASettings.h"
 #import "RAResourceImageProvider.h"
-#import "RARunningAppsProvider.h"
+#import "RARunningAppsStateProvider.h"
 #import "RAAppSwitcherModelWrapper.h"
 
 @interface RAMissionControlWindow ()  {
@@ -21,7 +21,6 @@
 	UIView *shadowView;
 	UIImage *trashIcon;
 
-	NSMutableArray *runningApplications;
 	NSMutableArray *appsWithoutWindows;
 
 	CGFloat width, height;
@@ -149,26 +148,23 @@
 }
 
 - (void)reloadWindowedAppsSection {
+	NSArray *runningApplications = [RARunningAppsStateProvider defaultStateProvider].runningApps;
 	[self reloadWindowedAppsSection:runningApplications];
 }
 
-- (void)reloadWindowedAppsSection:(NSArray *)runningApplicationsArg {
-	runningApplications = [runningApplicationsArg mutableCopy];
+- (void)reloadWindowedAppsSection:(NSArray *)runningApplications {
+	NSMutableArray *sortedRunningApps = [runningApplications mutableCopy];
 
 	NSArray *switcherOrder = [[RAAppSwitcherModelWrapper appSwitcherAppIdentiferList] copy];
-	[runningApplications sortUsingComparator:^NSComparisonResult(SBApplication *obj1, SBApplication *obj2) {
+	[sortedRunningApps sortUsingComparator:^NSComparisonResult(SBApplication *obj1, SBApplication *obj2) {
 		return [@([switcherOrder indexOfObject:obj1.bundleIdentifier]) compare:@([switcherOrder indexOfObject:obj2.bundleIdentifier])];
 	}];
 
-	appsWithoutWindows = [runningApplications mutableCopy];
-	NSArray *visibleIcons = nil;
-	if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-		visibleIcons = [%c(SBIconViewMap) homescreenMap].iconModel.visibleIconIdentifiers;
-	} else {
-		visibleIcons = [[%c(SBIconController) sharedInstance] homescreenIconViewMap].iconModel.visibleIconIdentifiers;
-	}
+	appsWithoutWindows = [sortedRunningApps mutableCopy];
+	SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
+	NSArray *visibleIcons = iconModel.visibleIconIdentifiers;
 
-	for (SBApplication *app in runningApplications) {
+	for (SBApplication *app in sortedRunningApps) {
 		if ([visibleIcons containsObject:app.bundleIdentifier]) {
 			continue;
 		}// || [RAMissionControlManager.sharedInstance.inhibitedApplications containsObject:app.bundleIdentifier])
@@ -196,7 +192,7 @@
 
 	BOOL empty = YES;
 	for (RAHostedAppView *app in [[%c(RADesktopManager) sharedInstance] currentDesktop].appViews) {
-		SBApplication *sbapp = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:app.bundleIdentifier];
+		SBApplication *sbapp = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:app.bundleIdentifier];
 		[appsWithoutWindows removeObject:sbapp];
 
 		RAMissionControlPreviewView *preview = [[RAMissionControlPreviewView alloc] initWithFrame:CGRectMake(x, (windowedAppScrollView.frame.size.height - height) / 2, width, height)];
@@ -439,7 +435,6 @@
 			[[%c(RAWindowStatePreservationSystemManager) sharedInstance] removeWindowInformationForIdentifier:app.bundleIdentifier];
 			if ([[RASettings sharedInstance] missionControlKillApps]) {
 				[RAAppKiller killAppWithSBApplication:app completion:^{
-					[runningApplications removeObject:app];
 
 					dispatch_async(dispatch_get_main_queue(), ^{
 						[self reloadDesktopSection];
@@ -585,8 +580,7 @@
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView *)view;
 		SBApplication *app = realView.application;
 		[RAAppKiller killAppWithSBApplication:app completion:^{
-			[runningApplications removeObject:app];
-			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[RARunningAppsProvider sharedInstance].runningApps waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection) withObject:nil waitUntilDone:YES];
 			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
 		}];
 	}
@@ -600,14 +594,14 @@
 		RAMissionControlPreviewView *realView = (RAMissionControlPreviewView *)view;
 		SBApplication *app = realView.application;
 		[RAAppKiller killAppWithSBApplication:app completion:^{
-			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection:) withObject:[RARunningAppsProvider sharedInstance].runningApps waitUntilDone:YES];
+			[self performSelectorOnMainThread:@selector(reloadWindowedAppsSection) withObject:nil waitUntilDone:YES];
 			[self performSelectorOnMainThread:@selector(reloadOtherAppsSection) withObject:nil waitUntilDone:YES];
 		}];
 	}
 }
 
 - (void)appDidStart:(SBApplication *)app {
-	[self reloadWindowedAppsSection:[RARunningAppsProvider sharedInstance].runningApps];
+	[self reloadWindowedAppsSection];
 	[self reloadOtherAppsSection];
 }
 

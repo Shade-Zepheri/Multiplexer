@@ -135,13 +135,8 @@ BOOL toggleOrActivate = NO;
 }
 
 %new - (RAGestureCallbackResult)RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge {
-	if ([%c(SBUIController) respondsToSelector:@selector(_showNotificationsGestureFailed)]) {
-		[[%c(SBUIController) sharedInstance] performSelector:@selector(_showNotificationsGestureFailed)];
-		[[%c(SBUIController) sharedInstance] performSelector:@selector(_showNotificationsGestureCancelled)];
-	} else {
-		[[%c(SBNotificationCenterController) sharedInstance] performSelector:@selector(_showNotificationCenterGestureFailed)];
-		[[%c(SBNotificationCenterController) sharedInstance] performSelector:@selector(_showNotificationCenterGestureCancelled)];
-	}
+	[[%c(SBNotificationCenterController) sharedInstance] performSelector:@selector(_showNotificationCenterGestureFailed)];
+	[[%c(SBNotificationCenterController) sharedInstance] performSelector:@selector(_showNotificationCenterGestureCancelled)];
 
 	static CGFloat origY = -1;
 	static UIView *fakeView;
@@ -247,13 +242,9 @@ BOOL toggleOrActivate = NO;
 				fakeView.frame = [UIScreen mainScreen].RA_interfaceOrientedBounds;
 			} completion:^(BOOL _) {
 				//((UIWindow*)[[%c(SBUIController) sharedInstance] switcherWindow]).alpha = 0;
-				if ([%c(SBUIController) respondsToSelector:@selector(dismissSwitcherAnimated:)]) {
-					[[%c(SBUIController) sharedInstance] dismissSwitcherAnimated:NO];
-				} else {
-					[UIView performWithoutAnimation:^{
-						[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
-					}];
-				}
+				[UIView performWithoutAnimation:^{
+					[[%c(SBMainSwitcherViewController) sharedInstance] dismissSwitcherNoninteractively];
+				}];
 				[[RAMissionControlManager sharedInstance] showMissionControl:NO];
 				[fakeView removeFromSuperview];
 				fakeView = nil;

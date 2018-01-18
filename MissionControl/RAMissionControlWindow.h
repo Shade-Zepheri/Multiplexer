@@ -1,9 +1,9 @@
 #import "headers.h"
-#import "RARunningAppsProvider.h"
+#import "RARunningAppsStateProvider.h"
 
 @class RAMissionControlManager;
 
-@interface RAMissionControlWindow : UIAutoRotatingWindow  <RARunningAppsProviderDelegate>
+@interface RAMissionControlWindow : UIAutoRotatingWindow  <RARunningAppsStateObserver>
 @property (nonatomic, weak) RAMissionControlManager *manager;
 
 - (void)reloadDesktopSection;
