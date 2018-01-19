@@ -58,15 +58,7 @@ BOOL overrideDisableForStatusBar = NO;
 
   %orig;
 }
-%end
 
-%hook UIScreen
-%new - (CGRect)RA_interfaceOrientedBounds {
-  if ([self respondsToSelector:@selector(_interfaceOrientedBounds)]) {
-    return [self _interfaceOrientedBounds];
-  }
-  return self.bounds;
-}
 %end
 
 static void respring_notification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {

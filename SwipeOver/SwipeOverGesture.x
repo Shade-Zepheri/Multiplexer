@@ -20,8 +20,8 @@ CGRect adjustFrameForRotation() {
   CGFloat portraitWidth = 30;
   CGFloat portraitHeight = 50;
 
-  CGFloat width = CGRectGetWidth([UIScreen mainScreen].RA_interfaceOrientedBounds);
-  CGFloat height = CGRectGetHeight([UIScreen mainScreen].RA_interfaceOrientedBounds);
+  CGFloat width = CGRectGetWidth([UIScreen mainScreen].bounds);
+  CGFloat height = CGRectGetHeight([UIScreen mainScreen].bounds);
 
   UIInterfaceOrientation orientation = GET_STATUSBAR_ORIENTATION;
   switch (orientation) {
@@ -90,11 +90,11 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
     case RAGrabAreaSideAnywhere:
       return YES;
     case RAGrabAreaSideTopThird:
-      return y <= [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 3.0;
+      return y <= CGRectGetHeight([UIScreen mainScreen].bounds) / 3.0;
     case RAGrabAreaSideMiddleThird:
-      return y >= [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 3.0 && y <= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 3.0) * 2;
+      return y >= CGRectGetHeight([UIScreen mainScreen].bounds) / 3.0 && y <= (CGRectGetHeight([UIScreen mainScreen].bounds) / 3.0) * 2;
     case RAGrabAreaSideBottomThird:
-      return y >= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 3.0) * 2;
+      return y >= (CGRectGetHeight([UIScreen mainScreen].bounds) / 3.0) * 2;
     default:
       return NO;
   }
@@ -112,13 +112,13 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
         grabberView = [[UIView alloc] initWithFrame:adjustFrameForRotation()];
 
         _UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:1 graphicsQuality:10];
-        _UIBackdropView *bgView = [[%c(_UIBackdropView) alloc] initWithFrame:CGRectMake(0, 0, grabberView.frame.size.width, grabberView.frame.size.height) autosizesToFitSuperview:YES settings:blurSettings];
+        _UIBackdropView *bgView = [[%c(_UIBackdropView) alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(grabberView.frame), CGRectGetHeight(grabberView.frame)) autosizesToFitSuperview:YES settings:blurSettings];
         [grabberView addSubview:bgView];
 
         //grabberView.backgroundColor = UIColor.redColor;
 
-        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, grabberView.frame.size.width - 20, grabberView.frame.size.height - 20)];
-        imgView.image = [RAResourceImageProvider imageForFilename:@"Grabber" constrainedToSize:CGSizeMake(grabberView.frame.size.width - 20, grabberView.frame.size.height - 20)];
+        UIImageView *imgView = [[UIImageView alloc] initWithFrame:CGRectMake(10, 10, CGRectGetWidth(grabberView.frame) - 20, CGRectGetHeight(grabberView.frame) - 20)];
+        imgView.image = [RAResourceImageProvider imageForFilename:@"Grabber" constrainedToSize:CGSizeMake(CGRectGetWidth(grabberView.frame) - 20, CGRectGetHeight(grabberView.frame) - 20)];
         [grabberView addSubview:imgView];
         grabberView.layer.cornerRadius = 5;
         grabberView.clipsToBounds = YES;
@@ -201,10 +201,10 @@ BOOL swipeOverLocationIsInValidArea(CGFloat y) {
     return RAGestureCallbackResultSuccess;
   } withCondition:^BOOL(CGPoint location, CGPoint velocity) {
     if ([RAKeyboardStateListener sharedInstance].visible && ![RASwipeOverManager sharedInstance].usingSwipeOver) {
-      CGRect realKBFrame = CGRectMake(0, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height, [RAKeyboardStateListener sharedInstance].size.width, [RAKeyboardStateListener sharedInstance].size.height);
-      realKBFrame = CGRectOffset(realKBFrame, 0, -realKBFrame.size.height);
+      CGRect realKBFrame = CGRectMake(0, CGRectGetHeight([UIScreen mainScreen].bounds), [RAKeyboardStateListener sharedInstance].size.width, [RAKeyboardStateListener sharedInstance].size.height);
+      realKBFrame = CGRectOffset(realKBFrame, 0, -CGRectGetHeight(realKBFrame));
 
-      if (CGRectContainsPoint(realKBFrame, location) || realKBFrame.size.height > 50) {
+      if (CGRectContainsPoint(realKBFrame, location) || CGRectGetHeight(realKBFrame) > 50) {
         return NO;
       }
     }

@@ -60,10 +60,8 @@ BOOL toggleOrActivate = NO;
 %end
 
 %hook SBAppSwitcherController
-- (void)switcherScroller:(id)scroller itemTapped:(SBDisplayLayout *)layout {
-	SBDisplayItem *item = [layout displayItems][0];
+- (void)switcherScroller:(id)scroller itemTapped:(SBDisplayItem *)item {
 	NSString *identifier = item.displayIdentifier;
-
 	[[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:identifier animated:NO forceImmediateUnload:YES];
 
 	%orig;
@@ -152,8 +150,8 @@ BOOL toggleOrActivate = NO;
 		} else {
 			fakeView = [[UIView alloc] initWithFrame:view.frame];
 
-			CGFloat width = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 4.5714;
-			CGFloat height = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4.36;
+			CGFloat width = [UIScreen mainScreen].bounds.size.width / 4.5714;
+			CGFloat height = [UIScreen mainScreen].bounds.size.height / 4.36;
 
 			_UIBackdropViewSettings *blurSettings = [_UIBackdropViewSettings settingsForStyle:1 graphicsQuality:10];
 			_UIBackdropView *blurView = [[%c(_UIBackdropView) alloc] initWithFrame:fakeView.frame autosizesToFitSuperview:YES settings:blurSettings];;
@@ -231,15 +229,15 @@ BOOL toggleOrActivate = NO;
 	if (state == UIGestureRecognizerStateEnded) {
 		//NSLog(@"[ReachApp] %@ + %@ = %@ > %@", NSStringFromCGPoint(fakeView.frame.origin), NSStringFromCGPoint(velocity), @(fakeView.frame.origin.y + velocity.y), @(-([UIScreen mainScreen].bounds.size.height / 2)));
 
-		if (fakeView.frame.origin.y + velocity.y > -([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 2)) {
+		if (fakeView.frame.origin.y + velocity.y > -([UIScreen mainScreen].bounds.size.height / 2)) {
 			willShowMissionControl = YES;
-			CGFloat distance = [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
+			CGFloat distance = [UIScreen mainScreen].bounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
 			CGFloat duration = MIN(distance / velocity.y, 0.3);
 
 			//NSLog(@"[ReachApp] dist %f, dur %f", distance, duration);
 
 			[UIView animateWithDuration:duration animations:^{
-				fakeView.frame = [UIScreen mainScreen].RA_interfaceOrientedBounds;
+				fakeView.frame = [UIScreen mainScreen].bounds;
 			} completion:^(BOOL _) {
 				//((UIWindow*)[[%c(SBUIController) sharedInstance] switcherWindow]).alpha = 0;
 				[UIView performWithoutAnimation:^{

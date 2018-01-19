@@ -38,6 +38,7 @@ Minor Things/Bugs to note:
 - Optimize FakePhoneMode (use Classic Modes)
 - Keyboard Dismisses reachability (apparently a feature?)
 - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
+- Really need to clean headers
 
 Things to do/Features to add:
 - 3D Touch actions?

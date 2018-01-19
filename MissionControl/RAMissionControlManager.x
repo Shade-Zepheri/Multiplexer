@@ -335,7 +335,7 @@ CGRect swappedForOrientation(CGRect input) {
 		}
 
 		if (originalAppView) {
-			originalAppView.frame = CGRectMake(originalAppView.frame.origin.x, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height - location.y), originalAppFrame.size.width, originalAppFrame.size.height);
+			originalAppView.frame = CGRectMake(originalAppView.frame.origin.x, [UIScreen mainScreen].bounds.size.height - ([UIScreen mainScreen].bounds.size.height - location.y), originalAppFrame.size.width, originalAppFrame.size.height);
 		}
 	}
 	return RAGestureCallbackResultSuccess;
