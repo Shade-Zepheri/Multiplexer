@@ -31,7 +31,7 @@
 
 + (SBAppToAppWorkspaceTransaction *)createSBAppToAppWorkspaceTransactionForExitingApp:(SBApplication *)app {
 	// ** below code from Mirmir (https://github.com/EthanArbuckle/Mirmir/blob/lamo_no_ms/Lamo/CDTLamo.mm#L114-L138)
-	SBWorkspaceApplicationTransitionContext *transitionContext = [[%c(SBWorkspaceApplicationTransitionContext) alloc] init];
+	SBWorkspaceApplicationTransitionContext *transitionContext = [%c(SBWorkspaceApplicationTransitionContext) context];
 
 	//set layout role to 'side' (deactivating)
 	SBWorkspaceDeactivatingEntity *deactivatingEntity = [%c(SBWorkspaceDeactivatingEntity) entity];
@@ -39,7 +39,7 @@
 	[transitionContext setEntity:deactivatingEntity forLayoutRole:3];
 
 	//set layout role for 'primary' (activating)
-	SBWorkspaceHomeScreenEntity *homescreenEntity = [[%c(SBWorkspaceHomeScreenEntity) alloc] init];
+	SBWorkspaceHomeScreenEntity *homescreenEntity = [%c(SBWorkspaceHomeScreenEntity) entity];
 	[transitionContext setEntity:homescreenEntity forLayoutRole:2];
 
 	transitionContext.animationDisabled = YES;

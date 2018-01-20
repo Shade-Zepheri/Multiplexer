@@ -5,7 +5,7 @@
 // REASON: HEADERS.H IMPORTS THIS FILE
 // Could get rid of this class but iOS 11 may need it
 
-@interface SBWorkspace : NSObject
+@interface SBMainWorkspace : NSObject
 + (instancetype)sharedInstance;
 @end
 
@@ -16,7 +16,7 @@ Class CurrentSBWorkspaceClass = nil;
 	return CurrentSBWorkspaceClass;
 }
 
-+ (SBWorkspace *)getCurrentSBWorkspaceImplementationInstanceForThisOS {
++ (SBMainWorkspace *)getCurrentSBWorkspaceImplementationInstanceForThisOS {
 	if (![CurrentSBWorkspaceClass respondsToSelector:@selector(sharedInstance)]) {
 		HBLogError(@"\"SBWorkspace\" class '%s' does not have '+sharedInstance' method", class_getName(CurrentSBWorkspaceClass));
 		return nil;
