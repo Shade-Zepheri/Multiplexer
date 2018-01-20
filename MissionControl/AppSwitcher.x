@@ -1,5 +1,6 @@
 #import "headers.h"
 #import "RAGestureManager.h"
+#import "RASystemGesturesInhibitor.h"
 #import "RAMissionControlManager.h"
 #import "RAMissionControlWindow.h"
 #import "RASettings.h"
@@ -21,6 +22,7 @@ BOOL toggleOrActivate = NO;
 %end
 
 %hook SBUIController
+
 - (BOOL)clickedMenuButton {
 	if ([RAMissionControlManager sharedInstance].showingMissionControl) {
 		[[RAMissionControlManager sharedInstance] hideMissionControl:YES];
@@ -42,9 +44,11 @@ BOOL toggleOrActivate = NO;
 - (BOOL)isAppSwitcherShowing {
 	return %orig || [RAMissionControlManager sharedInstance].showingMissionControl;
 }
+
 %end
 
 %hook SBNotificationCenterController
+
 - (void)beginPresentationWithTouchLocation:(CGPoint)location presentationBegunHandler:(id)handler {
 	if ([[RASettings sharedInstance] missionControlEnabled] && [[%c(SBUIController) sharedInstance] isAppSwitcherShowing] && CGRectContainsPoint([[[[%c(SBMainSwitcherViewController) sharedInstance] valueForKey:@"_contentView"] contentView] viewWithTag:999].frame, location)) {
 		return;
@@ -57,18 +61,22 @@ BOOL toggleOrActivate = NO;
 	[RAMissionControlManager sharedInstance].inhibitDismissalGesture = YES;
 	%orig;
 }
+
 %end
 
 %hook SBAppSwitcherController
+
 - (void)switcherScroller:(id)scroller itemTapped:(SBDisplayItem *)item {
 	NSString *identifier = item.displayIdentifier;
 	[[%c(RADesktopManager) sharedInstance] removeAppWithIdentifier:identifier animated:NO forceImmediateUnload:YES];
 
 	%orig;
 }
+
 %end
 
 %hook SBSwitcherContainerView
+
 - (void)layoutSubviews {
 	%orig;
 
@@ -133,8 +141,7 @@ BOOL toggleOrActivate = NO;
 }
 
 %new - (RAGestureCallbackResult)RAGestureCallback_handle:(UIGestureRecognizerState)state withPoint:(CGPoint)location velocity:(CGPoint)velocity forEdge:(UIRectEdge)edge {
-	[[%c(SBNotificationCenterController) sharedInstance] performSelector:@selector(_showNotificationCenterGestureFailed)];
-	[[%c(SBNotificationCenterController) sharedInstance] performSelector:@selector(_showNotificationCenterGestureCancelled)];
+	RASystemGesturesInhibitor.gesturesInhibited = YES;
 
 	static CGFloat origY = -1;
 	static UIView *fakeView;
@@ -228,7 +235,7 @@ BOOL toggleOrActivate = NO;
 
 	if (state == UIGestureRecognizerStateEnded) {
 		//NSLog(@"[ReachApp] %@ + %@ = %@ > %@", NSStringFromCGPoint(fakeView.frame.origin), NSStringFromCGPoint(velocity), @(fakeView.frame.origin.y + velocity.y), @(-([UIScreen mainScreen].bounds.size.height / 2)));
-
+		RASystemGesturesInhibitor.gesturesInhibited = NO;
 		if (fakeView.frame.origin.y + velocity.y > -([UIScreen mainScreen].bounds.size.height / 2)) {
 			willShowMissionControl = YES;
 			CGFloat distance = [UIScreen mainScreen].bounds.size.height - (fakeView.frame.origin.y + fakeView.frame.size.height);
@@ -269,9 +276,11 @@ BOOL toggleOrActivate = NO;
 
 	return RAGestureCallbackResultSuccess;
 }
+
 %end
 
 %hook SBMainSwitcherViewController
+
 - (void)viewDidAppear:(BOOL)animated {
 	statusBarVisibility = [UIApplication sharedApplication].statusBarHidden;
 	willShowMissionControl = NO;
@@ -323,4 +332,5 @@ BOOL toggleOrActivate = NO;
 
 	return %orig;
 }
+
 %end

@@ -6,7 +6,7 @@
 #import "RABackgrounder.h"
 #import "RASwipeOverManager.h"
 #import "RAWindowStatePreservationSystemManager.h"
-#import "RAControlCenterInhibitor.h"
+#import "RASystemGesturesInhibitor.h"
 #import "Multiplexer.h"
 
 BOOL locationIsInValidArea(CGFloat x) {
@@ -21,12 +21,12 @@ BOOL locationIsInValidArea(CGFloat x) {
 
   switch ([[RASettings sharedInstance] windowedMultitaskingGrabArea]) {
     case RAGrabAreaBottomLeftThird:
-      LogDebug(@"[ReachApp] StartMultitaskingGesture: %f %f", x, [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width);
-      return x <= [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0;
+      LogDebug(@"[ReachApp] StartMultitaskingGesture: %f %f", x, CGRectGetWidth([UIScreen mainScreen].bounds));
+      return x <= CGRectGetWidth([UIScreen mainScreen].bounds) / 3.0;
     case RAGrabAreaBottomMiddleThird:
-      return x >= [UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0 && x <= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0) * 2;
+      return x >= CGRectGetWidth([UIScreen mainScreen].bounds) / 3.0 && x <= (CGRectGetWidth([UIScreen mainScreen].bounds) / 3.0) * 2;
     case RAGrabAreaBottomRightThird:
-      return x >= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.width / 3.0) * 2;
+      return x >= (CGRectGetWidth([UIScreen mainScreen].bounds) / 3.0) * 2;
     default:
       return NO;
   }
@@ -48,7 +48,7 @@ BOOL locationIsInValidArea(CGFloat x) {
     [[%c(SBControlCenterController) sharedInstance] dismissAnimated:YES];
 
     if (state == UIGestureRecognizerStateBegan) {
-      RAControlCenterInhibitor.gesturesInhibited = YES;
+      RASystemGesturesInhibitor.gesturesInhibited = YES;
 
       // Show HS/Wallpaper
       [[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"BeautifulAnimation"];
@@ -62,7 +62,7 @@ BOOL locationIsInValidArea(CGFloat x) {
       originalCenter = appView.center;
     } else if (state == UIGestureRecognizerStateChanged) {
       lastY = location.y;
-      CGFloat scale = location.y / [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height;
+      CGFloat scale = location.y / CGRectGetHeight([UIScreen mainScreen].bounds);
 
       if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:topApp.bundleIdentifier]) {
         scale = MIN(MAX(scale, 0.01), 1);
@@ -92,9 +92,9 @@ BOOL locationIsInValidArea(CGFloat x) {
         appView.transform = CGAffineTransformMakeScale(scale, scale);
       }
     } else if (state == UIGestureRecognizerStateEnded) {
-      RAControlCenterInhibitor.gesturesInhibited = NO;
+      RASystemGesturesInhibitor.gesturesInhibited = NO;
 
-      if (lastY <= ([UIScreen mainScreen].RA_interfaceOrientedBounds.size.height / 4) * 3 && lastY != 0) { // 75% down, 0 == gesture ended in most situations
+      if (lastY <= (CGRectGetHeight([UIScreen mainScreen].bounds) / 4) * 3 && lastY != 0) { // 75% down, 0 == gesture ended in most situations
         [UIView animateWithDuration:.3 animations:^{
           if ([[RAWindowStatePreservationSystemManager sharedInstance] hasWindowInformationForIdentifier:topApp.bundleIdentifier]) {
             RAPreservedWindowInformation info = [[RAWindowStatePreservationSystemManager sharedInstance] windowInformationForAppIdentifier:topApp.bundleIdentifier];

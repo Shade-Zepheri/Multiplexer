@@ -3,23 +3,31 @@
 #include <dlfcn.h>
 #include <execinfo.h>
 #import <FrontBoard/FBApplicationProcess.h>
+#import <FrontBoard/FBDisplayManager.h>
 #import <FrontBoard/FBProcess.h>
 #import <FrontBoard/FBProcessManager.h>
 #import <FrontBoard/FBProcessState.h>
 #import <FrontBoard/FBScene.h>
 #import <FrontBoard/FBSceneManager.h>
+#import <FrontBoard/FBWorkspaceEvent.h>
+#import <FrontBoardServices/FBSDisplay.h>
 #import <FrontBoardServices/FBSMutableSceneSettings.h>
 #import <FrontBoardServices/FBSSystemService.h>
 #import <GraphicsServices/GraphicsServices.h>
 #import <IOKit/hid/IOHIDEvent.h>
 #include <libkern/OSCacheControl.h>
 #include <mach/mach.h>
+#import <MobileCoreServices/LSApplicationProxy.h>
 #import <notify.h>
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBApplication.h>
+#import <SpringBoard/SBApplicationController.h>
 #import <SpringBoard/SBApplicationIcon.h>
 #import <SpringBoard/SBAppSwitcherController.h>
+#import <SpringBoard/SBAppSwitcherModel.h>
+#import <SpringBoard/SBAppToAppWorkspaceTransaction.h>
 #import <SpringBoard/SBBulletinBannerController.h>
+#import <SpringBoard/SBControlCenterController.h>
 #import <SpringBoard/SBDisplayItem.h>
 #import <SpringBoard/SBIcon.h>
 #import <SpringBoard/SBIconController.h>
@@ -29,8 +37,16 @@
 #import <SpringBoard/SBLockScreenManager.h>
 #import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
 #import <SpringBoard/SBMainDisplaySystemGestureManager.h>
+#import <SpringBoard/SBMainSwitcherGestureCoordinator.h>
+#import <SpringBoard/SBMainWorkspace.h>
+#import <SpringBoard/SBMainWorkspaceTransitionRequest.h>
 #import <SpringBoard/SBUIController.h>
 #import <SpringBoard/SpringBoard.h>
+#import <SpringBoard/SBWallpaperController.h>
+#import <SpringBoard/SBWallpaperPreviewSnapshotCache.h>
+#import <SpringBoard/SBWorkspaceApplicationTransitionContext.h>
+#import <SpringBoard/SBWorkspaceDeactivatingEntity.h>
+#import <SpringBoard/SBWorkspaceHomeScreenEntity.h>
 #import <SpringBoardServices/SBSRestartRenderServerAction.h>
 #import <QuartzCore/QuartzCore.h>
 #include <stdbool.h>
@@ -121,34 +137,28 @@ return sharedInstance;
 + (instancetype)remoteKeyboardWindowForScreen:(id)arg1 create:(BOOL)arg2;
 @end
 
-@interface SBMainSwitcherGestureCoordinator : NSObject
-+ (instancetype)sharedInstance;
-- (void)_releaseOrientationLock;
-- (void)_lockOrientation;
-@end
-
 @interface SBIconImageView : UIView {
     UIImageView *_overlayView;
     //SBIconProgressView *_progressView;
-    _Bool _isPaused;
+    BOOL _isPaused;
     UIImage *_cachedSquareContentsImage;
-    _Bool _showsSquareCorners;
+    BOOL _showsSquareCorners;
     SBIcon *_icon;
-    double _brightness;
-    double _overlayAlpha;
+    CGFloat _brightness;
+    CGFloat _overlayAlpha;
 }
 
 + (id)dequeueRecycledIconImageViewOfClass:(Class)arg1;
 + (void)recycleIconImageView:(id)arg1;
-+ (double)cornerRadius;
-@property(nonatomic) _Bool showsSquareCorners; // @synthesize showsSquareCorners=_showsSquareCorners;
-@property(nonatomic) double overlayAlpha; // @synthesize overlayAlpha=_overlayAlpha;
-@property(nonatomic) double brightness; // @synthesize brightness=_brightness;
++ (CGFloat)cornerRadius;
+@property(nonatomic) BOOL showsSquareCorners; // @synthesize showsSquareCorners=_showsSquareCorners;
+@property(nonatomic) CGFloat overlayAlpha; // @synthesize overlayAlpha=_overlayAlpha;
+@property(nonatomic) CGFloat brightness; // @synthesize brightness=_brightness;
 @property(retain, nonatomic) SBIcon *icon; // @synthesize icon=_icon;
-- (_Bool)_shouldAnimatePropertyWithKey:(id)arg1;
+- (BOOL)_shouldAnimatePropertyWithKey:(id)arg1;
 - (void)iconImageDidUpdate:(id)arg1;
-- (struct CGRect)visibleBounds;
-- (struct CGSize)sizeThatFits:(struct CGSize)arg1;
+- (CGRect)visibleBounds;
+- (CGSize)sizeThatFits:(CGSize)arg1;
 - (id)squareDarkeningOverlayImage;
 - (id)darkeningOverlayImage;
 - (id)squareContentsImage;
@@ -158,88 +168,19 @@ return sharedInstance;
 - (void)_updateProgressMask;
 - (void)_updateOverlayImage;
 - (id)_currentOverlayImage;
-- (void)updateImageAnimated:(_Bool)arg1;
+- (void)updateImageAnimated:(BOOL)arg1;
 - (id)snapshot;
 - (void)prepareForReuse;
 - (void)layoutSubviews;
-- (void)setPaused:(_Bool)arg1;
-- (void)setProgressAlpha:(double)arg1;
+- (void)setPaused:(BOOL)arg1;
+- (void)setProgressAlpha:(CGFloat)arg1;
 - (void)_clearProgressView;
 - (void)progressViewCanBeRemoved:(id)arg1;
-- (void)setProgressState:(long long)arg1 paused:(_Bool)arg2 percent:(double)arg3 animated:(_Bool)arg4;
+- (void)setProgressState:(NSInteger)arg1 paused:(BOOL)arg2 percent:(CGFloat)arg3 animated:(BOOL)arg4;
 - (void)_updateOverlayAlpha;
-- (void)setIcon:(id)arg1 animated:(_Bool)arg2;
+- (void)setIcon:(id)arg1 animated:(BOOL)arg2;
 - (void)dealloc;
-- (instancetype)initWithFrame:(struct CGRect)arg1;
-@end
-
-@interface SBOrientationLockManager : NSObject {
-    NSMutableSet *_lockOverrideReasons;
-    long long _userLockedOrientation;
-}
-
-+ (id)sharedInstance;
-- (_Bool)_effectivelyLocked;
-- (void)_updateLockStateWithOrientation:(long long)arg1 forceUpdateHID:(_Bool)arg2 changes:(id/*block*/)arg3;
-- (void)_updateLockStateWithChanges:(id/*block*/)arg1;
-- (void)updateLockOverrideForCurrentDeviceOrientation;
-- (_Bool)lockOverrideEnabled;
-- (void)enableLockOverrideForReason:(id)arg1 forceOrientation:(long long)arg2;
-- (void)enableLockOverrideForReason:(id)arg1 suggestOrientation:(long long)arg2;
-- (void)setLockOverrideEnabled:(_Bool)arg1 forReason:(id)arg2;
-- (long long)userLockOrientation;
-- (_Bool)isLocked;
-- (void)unlock;
-- (void)lock:(long long)arg1;
-- (void)lock;
-- (void)dealloc;
-- (instancetype)init;
-- (void)restoreStateFromPrefs;
-
-@end
-
-@interface SBMedusaSettings : NSObject
-{
-    _Bool _enableSideApps;
-    _Bool _enableBreadcrumbs;
-    _Bool _enablePinningSideApps;
-    _Bool _debugSceneColors;
-    _Bool _debugRotationCenter;
-    _Bool _debugColorRotationRegions;
-    _Bool _clipRotationRegions;
-    _Bool _fencesRotation;
-    NSString *_desiredBundleIdentifier;
-    double _zoomOutRotationFactor;
-    double _rotationSlowdownFactor;
-    double _spaceAroundSideGrabberToAllowPullIn;
-    unsigned long long _millisecondsBetweenResizeSteps;
-    double _slideOffResizeThreshold;
-    double _gapSwipeBuffer;
-}
-
-+ (id)settingsControllerModule;
-@property(nonatomic) double gapSwipeBuffer; // @synthesize gapSwipeBuffer=_gapSwipeBuffer;
-@property(nonatomic) double slideOffResizeThreshold; // @synthesize slideOffResizeThreshold=_slideOffResizeThreshold;
-@property(nonatomic) unsigned long long millisecondsBetweenResizeSteps; // @synthesize millisecondsBetweenResizeSteps=_millisecondsBetweenResizeSteps;
-@property(nonatomic) _Bool fencesRotation; // @synthesize fencesRotation=_fencesRotation;
-@property(nonatomic) double spaceAroundSideGrabberToAllowPullIn; // @synthesize spaceAroundSideGrabberToAllowPullIn=_spaceAroundSideGrabberToAllowPullIn;
-@property(nonatomic) double rotationSlowdownFactor; // @synthesize rotationSlowdownFactor=_rotationSlowdownFactor;
-@property(nonatomic) double zoomOutRotationFactor; // @synthesize zoomOutRotationFactor=_zoomOutRotationFactor;
-@property(nonatomic) _Bool clipRotationRegions; // @synthesize clipRotationRegions=_clipRotationRegions;
-@property(nonatomic) _Bool debugColorRotationRegions; // @synthesize debugColorRotationRegions=_debugColorRotationRegions;
-@property(nonatomic) _Bool debugRotationCenter; // @synthesize debugRotationCenter=_debugRotationCenter;
-@property(nonatomic) _Bool debugSceneColors; // @synthesize debugSceneColors=_debugSceneColors;
-@property(copy, nonatomic) NSString *desiredBundleIdentifier; // @synthesize desiredBundleIdentifier=_desiredBundleIdentifier;
-@property(nonatomic) _Bool enablePinningSideApps; // @synthesize enablePinningSideApps=_enablePinningSideApps;
-@property(nonatomic) _Bool enableBreadcrumbs; // @synthesize enableBreadcrumbs=_enableBreadcrumbs;
-@property(nonatomic) _Bool enableSideApps; // @synthesize enableSideApps=_enableSideApps;
-- (_Bool)anyRotationDebuggingEnabled;
-- (void)setDefaultValues;
-
-@end
-
-@interface SBToAppsWorkspaceTransaction : NSObject
-- (NSArray*)toApplications;
+- (instancetype)initWithFrame:(CGRect)arg1;
 @end
 
 @interface SBFWallpaperView : UIView
@@ -255,110 +196,18 @@ return sharedInstance;
 - (void)_setDisplayedImage:(UIImage*)arg1;
 @end
 
-@interface SBControlCenterController : UIViewController
-+ (id)sharedInstance;
-@property(nonatomic, getter=isPresented) _Bool presented; // @synthesize presented=_presented;
-@property(nonatomic, getter=isUILocked) _Bool UILocked; // @synthesize UILocked=_uiLocked;
-- (void)dismissAnimated:(_Bool)arg1;
-- (void)presentAnimated:(_Bool)arg1;
-- (void)presentAnimated:(_Bool)arg1 completion:(id)arg2;
-- (void)hideGrabberAnimated:(_Bool)arg1 completion:(id)arg2;
-- (void)hideGrabberAnimated:(_Bool)arg1;
-- (void)showGrabberAnimated:(_Bool)arg1;
-- (void)preventDismissalOnLock:(_Bool)arg1 forReason:(id)arg2;
-- (void)_dismissOnLock;
-- (void)_uiRelockedNotification:(id)arg1;
-- (void)_lockStateChangedNotification:(id)arg1;
-- (_Bool)isGrabberVisible;
-- (_Bool)isPresentingControllerTransitioning;
-- (_Bool)isVisible;
-- (void)loadView;
-- (_Bool)handleMenuButtonTap;
-- (void)removeObserver:(id)arg1;
-- (void)addObserver:(id)arg1;
-- (_Bool)isAvailableWhileLocked;
-
-// iOS 9
-- (_Bool)_shouldShowGrabberOnFirstSwipe;
-@end
-
-@interface BKSProcess : NSObject { //BSBaseXPCClient  {
-    int _pid;
-    NSString *_bundlePath;
-    bool _workspaceLocked;
-    bool _connectedToExternalAccessories;
-    bool _nowPlayingWithAudio;
-    bool _recordingAudio;
-    bool _supportsTaskSuspension;
-    int _visibility;
-    int _taskState;
-    NSObject *_delegate;
-    long long _terminationReason;
-    long long _exitStatus;
-}
-
-@property (nonatomic, weak) NSObject * delegate;
-@property int visibility;
-@property long long terminationReason;
-@property long long exitStatus;
-@property bool workspaceLocked;
-@property bool connectedToExternalAccessories;
-@property bool nowPlayingWithAudio;
-@property bool recordingAudio;
-@property bool supportsTaskSuspension;
-@property int taskState;
-@property(readonly) double backgroundTimeRemaining;
-
-+ (id)busyExtensionInstances:(id)arg1;
-+ (void)setTheSystemApp:(int)arg1 identifier:(id)arg2;
-+ (double)backgroundTimeRemaining;
-
-- (void)setVisibility:(int)arg1;
-- (int)visibility;
-- (void)_sendMessageType:(int)arg1 withMessage:(id)arg2 withReplyHandler:(id)arg3 waitForReply:(bool)arg4;
-- (long long)exitStatus;
-- (instancetype)initWithPID:(int)arg1 bundlePath:(id)arg2 visibility:(int)arg3 workspaceLocked:(bool)arg4 queue:(id)arg5;
-- (bool)supportsTaskSuspension;
-- (void)setTerminationReason:(long long)arg1;
-- (void)setConnectedToExternalAccessories:(bool)arg1;
-- (void)setNowPlayingWithAudio:(bool)arg1;
-- (void)setRecordingAudio:(bool)arg1;
-- (void)setWorkspaceLocked:(bool)arg1;
-- (void)setTaskState:(int)arg1;
-- (void)queue_connectionWasCreated;
-- (void)queue_connectionWasInterrupted;
-- (void)queue_handleMessage:(id)arg1;
-- (bool)recordingAudio;
-- (bool)nowPlayingWithAudio;
-- (bool)connectedToExternalAccessories;
-- (bool)workspaceLocked;
-- (void)setExitStatus:(long long)arg1;
-- (void)_handleDebuggingStateChanged:(id)arg1;
-- (void)_handleExpirationWarning:(id)arg1;
-- (void)_handleSuspendedStateChanged:(id)arg1;
-- (void)_sendMessageType:(int)arg1 withMessage:(id)arg2;
-- (int)taskState;
-- (double)backgroundTimeRemaining;
-- (void)setSupportsTaskSuspension:(bool)arg1;
-- (id)delegate;
-- (instancetype)init;
-- (void)setDelegate:(NSObject*)arg1;
-- (void)dealloc;
-- (long long)terminationReason;
-@end
-
 @class _SBAppSwitcherSnapshotContext;
 
 @interface SBAppSwitcherSnapshotView : UIView
 @property (nonatomic,copy,readonly) SBDisplayItem *displayItem;
 @property (assign,nonatomic) BOOL shouldTransitionToDefaultPng;
-+ (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(long long)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
-- (void)setOrientation:(long long)arg1 orientationBehavior:(int)arg2;
++ (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(NSInteger)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
+- (void)setOrientation:(NSInteger)arg1 orientationBehavior:(int)arg2;
 - (void)_loadSnapshotAsync;
 - (void)_loadZoomUpSnapshotSync;
 - (void)_loadSnapshotSync;
 - (UIImage*)_syncImageFromSnapshot:(id)arg1 ;
-- (instancetype)initWithDisplayItem:(id)arg1 application:(id)arg2 orientation:(long long)arg3 preferringDownscaledSnapshot:(_Bool)arg4 async:(_Bool)arg5 withQueue:(id)arg6;
+- (instancetype)initWithDisplayItem:(id)arg1 application:(id)arg2 orientation:(NSInteger)arg3 preferringDownscaledSnapshot:(BOOL)arg4 async:(BOOL)arg5 withQueue:(id)arg6;
 - (_SBAppSwitcherSnapshotContext*)_contextForAvailableSnapshotWithLayoutState:(id)arg1 preferringDownscaled:(BOOL)arg2 defaultImageOnly:(BOOL)arg3 ;
 @end
 
@@ -384,8 +233,8 @@ return sharedInstance;
 //@property(readonly, nonatomic) _UILegibilitySettings *legibilitySettings; // @synthesize legibilitySettings=_legibilitySettings;
 @property(readonly, nonatomic) UIColor *referenceColor; // @synthesize referenceColor=_referenceColor;
 @property(readonly, nonatomic) int style; // @synthesize style=_style;
-- (id)highlightLimitingViewWithFrame:(struct CGRect)arg1;
-- (id)tintViewWithFrame:(struct CGRect)arg1;
+- (id)highlightLimitingViewWithFrame:(CGRect)arg1;
+- (id)tintViewWithFrame:(CGRect)arg1;
 - (id)_computeSourceColorDodgeColorForDestinationColor:(id)arg1 producingLuminanceChange:(float)arg2;
 - (int)_style;
 - (unsigned int)hash;
@@ -480,22 +329,11 @@ typedef struct {
 @interface SBSearchEtceteraLayoutContentView : UIView
 @end
 
-@interface SBSearchEtceteraLayoutView : UIView
-@property (getter=_visibleView,nonatomic,retain,readonly) SBSearchEtceteraLayoutContentView * visibleView;
-- (id)_visibleView;
-@end
-
 @interface SBNotificationCenterController ()
 - (BOOL) isVisible;
-- (double)percentComplete;
+- (CGFloat)percentComplete;
 - (BOOL)isTransitioning;
 - (BOOL)isPresentingControllerTransitioning;
-@end
-
-@interface SBSearchEtceteraIsolatedViewController : UIViewController
-@property (nonatomic,retain,readonly) SBSearchEtceteraLayoutView * contentView;
-- (SBSearchEtceteraLayoutView *)contentView;
-+ (id)sharedInstance;
 @end
 
 @interface UIStatusBarItem : NSObject
@@ -507,9 +345,6 @@ typedef struct {
 - (CGRect) _referenceBounds;
 - (CGPoint)convertPoint:(CGPoint)arg1 toCoordinateSpace:(id)arg2;
 + (CGPoint)convertPoint:(CGPoint)arg1 toView:(id)arg2;
-
-- (CGRect) _interfaceOrientedBounds; // ios 8
-- (CGRect) RA_interfaceOrientedBounds; // ios 8 + 9 (wrapper)
 @end
 
 @interface UIAutoRotatingWindow : UIWindow
@@ -517,11 +352,7 @@ typedef struct {
 - (void)updateForOrientation:(UIInterfaceOrientation)arg1;
 @end
 
-@interface LSApplicationProxy
-+ (id)applicationProxyForIdentifier:(id)arg1;
-- (NSArray*) UIBackgroundModes;
-@property (nonatomic, readonly) NSURL *appStoreReceiptURL;
-@property (nonatomic, readonly) NSURL *bundleContainerURL;
+@interface LSApplicationProxy ()
 @property (nonatomic, readonly) NSURL *bundleURL;
 @end
 
@@ -529,23 +360,6 @@ typedef struct {
 - (void)setInterfaceOrientation:(UIInterfaceOrientation)arg1;
 - (void)_setInterfaceOrientationOnModalRecursively:(int)arg1;
 - (void)_updateInterfaceOrientationAnimated:(BOOL)arg1;
-@end
-
-@interface SBWallpaperPreviewSnapshotCache : NSObject
-- (UIImage*)homeScreenSnapshot;
-- (UIImage*)lockScreenSnapshot;
-@end
-
-@interface SBWallpaperController : NSObject {
-    SBFWallpaperView *_homescreenWallpaperView;
-    SBFWallpaperView *_sharedWallpaperView;
-    SBWallpaperPreviewSnapshotCache* _previewCache;
-}
-@property (nonatomic,retain) SBFStaticWallpaperView *homescreenWallpaperView;
-@property (nonatomic,retain) SBFStaticWallpaperView *sharedWallpaperView;
-+ (instancetype)sharedInstance;
-- (void)beginRequiringWithReason:(NSString*)reason;
-- (void)endRequiringWithReason:(NSString*)reason;
 @end
 
 @interface BBAction
@@ -599,15 +413,15 @@ typedef enum {
 @end
 
 @interface SBAppSwitcherController ()
-- (void)forceDismissAnimated:(_Bool)arg1;
+- (void)forceDismissAnimated:(BOOL)arg1;
 - (void)animateDismissalToDisplayLayout:(id)arg1 withCompletion:(id/*block*/)arg2;
 - (void)animatePresentationFromDisplayLayout:(id)arg1 withViews:(id)arg2 withCompletion:(id/*block*/)arg3;
 @property(nonatomic, copy) NSObject *startingDisplayLayout; // @synthesize startingDisplayLayout=_startingDisplayLayout;
-- (void)switcherWasPresented:(_Bool)arg1;
+- (void)switcherWasPresented:(BOOL)arg1;
 @end
 
 @interface SBUIController ()
-+ (id)_zoomViewWithSplashboardLaunchImageForApplication:(id)arg1 sceneID:(id)arg2 screen:(id)arg3 interfaceOrientation:(long long)arg4 includeStatusBar:(_Bool)arg5 snapshotFrame:(struct CGRect *)arg6;
++ (id)_zoomViewWithSplashboardLaunchImageForApplication:(id)arg1 sceneID:(id)arg2 screen:(id)arg3 interfaceOrientation:(NSInteger)arg4 includeStatusBar:(BOOL)arg5 snapshotFrame:(CGRect *)arg6;
 - (id) switcherController;
 - (id)_appSwitcherController;
 - (void) activateApplicationAnimated:(SBApplication*)app;
@@ -619,9 +433,9 @@ typedef enum {
 - (void)_showControlCenterGestureEndedWithLocation:(CGPoint)arg1 velocity:(CGPoint)arg2;
 - (void)_showControlCenterGestureChangedWithLocation:(CGPoint)arg1 velocity:(CGPoint)arg2 duration:(CGFloat)arg3;
 - (void)_showControlCenterGestureBeganWithLocation:(CGPoint)arg1;
-- (void)restoreContentUpdatingStatusBar:(_Bool)arg1;
+- (void)restoreContentUpdatingStatusBar:(BOOL)arg1;
 - (void) restoreContentAndUnscatterIconsAnimated:(BOOL)arg1;
-- (_Bool)shouldShowControlCenterTabControlOnFirstSwipe;- (_Bool)isAppSwitcherShowing;
+- (BOOL)shouldShowControlCenterTabControlOnFirstSwipe;- (BOOL)isAppSwitcherShowing;
 - (BOOL) _activateAppSwitcher;
 - (void)_releaseTransitionOrientationLock;
 - (void)_releaseSystemGestureOrientationLock;
@@ -629,8 +443,8 @@ typedef enum {
 - (void)_lockOrientationForSwitcher;
 - (void)_lockOrientationForSystemGesture;
 - (void)_lockOrientationForTransition;
-- (void)_dismissSwitcherAnimated:(_Bool)arg1;
-- (void)dismissSwitcherAnimated:(_Bool)arg1;
+- (void)_dismissSwitcherAnimated:(BOOL)arg1;
+- (void)dismissSwitcherAnimated:(BOOL)arg1;
 - (void)_dismissAppSwitcherImmediately;
 - (void)dismissSwitcherForAlert:(id)arg1;
 
@@ -645,10 +459,6 @@ typedef enum {
 
 @interface SBSystemGestureManager ()
 @property (assign ,getter=areSystemGesturesDisabledForAccessibility, nonatomic) BOOL systemGesturesDisabledForAccessibility;
-@end
-
-@interface SBDisplayItem ()
-+ (instancetype)displayItemWithType:(NSString *)arg1 displayIdentifier:(id)arg2;
 @end
 
 @interface SBHomeScreenViewController : UIViewController
@@ -667,22 +477,6 @@ typedef enum {
 - (void)noteInterfaceOrientationChanged:(UIInterfaceOrientation)orientation;
 @end
 
-typedef struct {
-    int type;
-    int modifier;
-    NSUInteger pathIndex;
-    NSUInteger pathIdentity;
-    CGPoint location;
-    CGPoint previousLocation;
-    CGPoint unrotatedLocation;
-    CGPoint previousUnrotatedLocation;
-    double totalDistanceTraveled;
-    UIInterfaceOrientation interfaceOrientation;
-    UIInterfaceOrientation previousInterfaceOrientation;
-    double timestamp;
-    BOOL isValid;
-} SBActiveTouch;
-
 typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
     UIScreenEdgePanRecognizerTypeMultitasking,
     UIScreenEdgePanRecognizerTypeNavigation,
@@ -693,8 +487,8 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface _UIScreenEdgePanRecognizer : NSObject
 - (instancetype)initWithType:(UIScreenEdgePanRecognizerType)type;
-- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(double)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation;
-- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(double)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation forceState:(int)arg5;
+- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(CGFloat)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation;
+- (void)incorporateTouchSampleAtLocation:(CGPoint)location timestamp:(CGFloat)timestamp modifier:(NSInteger)modifier interfaceOrientation:(UIInterfaceOrientation)orientation forceState:(int)arg5;
 - (void)reset;
 @property (nonatomic, assign) id <_UIScreenEdgePanRecognizerDelegate> delegate;
 @property (nonatomic, readonly) NSInteger state;
@@ -713,23 +507,14 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface _UIBackdropView ()
-@property (assign,nonatomic) double _blurRadius;
-- (void)_setCornerRadius:(double)radius;
+@property (assign,nonatomic) CGFloat _blurRadius;
+- (void)_setCornerRadius:(CGFloat)radius;
 - (void)_applyCornerRadiusToSubviews;
-@end
-
-@interface SBOffscreenSwipeGestureRecognizer : NSObject // SBPanGestureRecognizer <_UIScreenEdgePanRecognizerDelegate>
-- (id) initForOffscreenEdge:(int)edge;
-- (void) setTypes:(NSInteger)types;
-- (void) setMinTouches:(NSInteger)amount;
-- (void) setHandler:(id)arg;
-- (void) setCanBeginCondition:(id)arg;
-- (void) setShouldUseUIKitHeuristics:(BOOL)val;
 @end
 
 @interface UIKeyboardImpl
 + (id)activeInstance;
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 - (void)handleKeyEvent:(id)arg1;
 - (void)handleKeyWithString:(id)arg1 forKeyEvent:(id)arg2 executionContext:(id)arg3;
 - (void)deleteBackward;
@@ -757,48 +542,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (int)type;
 @end
 
-@interface FBWorkspaceEvent : NSObject
-+ (instancetype)eventWithName:(NSString *)label handler:(id)handler;
-@end
-
-@interface FBSDisplay : NSObject
-@property (nonatomic,readonly) double scale;                                 //@synthesize scale=_scale - In the implementation block
-@property (nonatomic,readonly) double orientation;                           //@synthesize orientation=_orientation - In the implementation block
-@property (nonatomic,readonly) unsigned long long type;                      //@synthesize type=_type - In the implementation block
-@property (nonatomic,readonly) int pid;                                      //@synthesize pid=_pid - In the implementation block
-@property (nonatomic,readonly) CGRect referenceBounds;
-@end
-
-@interface FBDisplayManager : NSObject
-+ (instancetype)sharedInstance;
-+ (FBSDisplay *)mainDisplay;
-@end
-
-@interface SBWorkspaceApplicationTransitionContext : NSObject
-@property(nonatomic) _Bool animationDisabled; // @synthesize animationDisabled=_animationDisabled;
-- (void)setEntity:(id)arg1 forLayoutRole:(int)arg2;
-@end
-
-@interface SBWorkspaceDeactivatingEntity : NSObject
-@property(nonatomic) long long layoutRole; // @synthesize layoutRole=_layoutRole;
-+ (id)entity;
-@end
-
-@interface SBWorkspaceHomeScreenEntity : NSObject
-@end
-
-@interface SBMainWorkspaceTransitionRequest : NSObject
-- (instancetype)initWithDisplay:(id)arg1;
-- (void)setApplicationContext:(SBWorkspaceApplicationTransitionContext *)arg1 ;
-@end
-
-@interface SBAppToAppWorkspaceTransaction
-- (void)begin;
-- (instancetype)initWithAlertManager:(id)alertManager exitedApp:(id)app;
-- (instancetype)initWithAlertManager:(id)arg1 from:(id)arg2 to:(id)arg3 withResult:(id)arg4;
-- (instancetype)initWithTransitionRequest:(id)arg1;
-@end
-
 @interface FBWorkspaceEventQueue : NSObject
 + (instancetype)sharedInstance;
 - (void)executeOrAppendEvent:(FBWorkspaceEvent *)event;
@@ -809,72 +552,20 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)setFlag:(int)flag forDeactivationSetting:(unsigned)deactivationSetting;
 @end
 
-@interface SBWorkspace : NSObject
-+ (id) sharedInstance;
-- (BOOL) isUsingReachApp;
+@interface SBMainWorkspace ()
+- (BOOL)isUsingReachApp;
 - (void)_exitReachabilityModeWithCompletion:(id)arg1;
-- (void)_disableReachabilityImmediately:(_Bool)arg1;
+- (void)_disableReachabilityImmediately:(BOOL)arg1;
 - (void)handleReachabilityModeDeactivated;
-- (void) RA_animateWidgetSelectorOut:(id)completion;
-- (void) RA_setView:(UIView*)view preferredHeight:(CGFloat)preferredHeight;
-- (void) RA_launchTopAppWithIdentifier:(NSString*) bundleIdentifier;
-- (void) RA_showWidgetSelector;
-- (void) updateViewSizes:(CGPoint)center animate:(BOOL)animate;
-- (void) RA_closeCurrentView;
-- (void) RA_handleLongPress:(UILongPressGestureRecognizer*)gesture;
-- (void) RA_updateViewSizes;
-- (void) appViewItemTap:(id)sender;
-@end
-
-@interface SBMainWorkspace : SBWorkspace // replaces SBWorkspace on iOS 9
-+ (instancetype)_instanceIfExists;
-+ (instancetype)_sharedInstanceWithNilCheckPolicy:(long long)arg1 ;
-+ (instancetype)sharedInstance;
-@end
-
-@interface SBDisplayLayout : NSObject {
-  int _layoutSize;
-  NSMutableArray* _displayItems;
-  NSString* _uniqueStringRepresentation;
-}
-@property(readonly, assign, nonatomic) NSArray* displayItems;
-@property(readonly, assign, nonatomic) int layoutSize;
-+ (id)fullScreenDisplayLayoutForApplication:(id)application;
-+ (id)homeScreenDisplayLayout;
-+ (id)displayLayoutWithPlistRepresentation:(id)plistRepresentation;
-+ (id)displayLayoutWithLayoutSize:(int)layoutSize displayItems:(id)items;
-- (id)displayLayoutBySettingSize:(int)size;
-- (id)displayLayoutByReplacingDisplayItemOnSide:(int)side withDisplayItem:(id)displayItem;
-- (id)displayLayoutByRemovingDisplayItems:(id)items;
-- (id)displayLayoutByRemovingDisplayItem:(id)item;
-- (id)displayLayoutByAddingDisplayItem:(id)item side:(int)side withLayout:(int)layout;
-- (BOOL)isEqual:(id)equal;
-- (unsigned)hash;
-- (id)uniqueStringRepresentation;
-- (id)_calculateUniqueStringRepresentation;
-- (id)description;
-- (id)copyWithZone:(NSZone*)zone;
-- (void)dealloc;
-- (id)plistRepresentation;
-- (instancetype)initWithLayoutSize:(int)layoutSize displayItems:(id)items;
-@end
-
-@interface FBProcessManager ()
-- (void)_updateWorkspaceLockedState;
-- (void)applicationProcessWillLaunch:(id)arg1;
-- (void)noteProcess:(id)arg1 didUpdateState:(id)arg2;
-- (void)noteProcessDidExit:(id)arg1;
-- (id)_serviceClientAddedWithPID:(int)arg1 isUIApp:(BOOL)arg2 isExtension:(BOOL)arg3 bundleID:(id)arg4;
-- (id)_serviceClientAddedWithConnection:(id)arg1;
-- (id)_systemServiceClientAdded:(id)arg1;
-- (BOOL)_isWorkspaceLocked;
-- (id)createApplicationProcessForBundleID:(id)arg1 withExecutionContext:(id)arg2;
-- (id)createApplicationProcessForBundleID:(id)arg1;
-- (id)applicationProcessForPID:(int)arg1;
-- (id)applicationProcessesForBundleIdentifier:(id)arg1;
-- (id)processesForBundleIdentifier:(id)arg1;
-- (id)allApplicationProcesses;
-- (id)allProcesses;
+- (void)RA_animateWidgetSelectorOut:(id)completion;
+- (void)RA_setView:(UIView*)view preferredHeight:(CGFloat)preferredHeight;
+- (void)RA_launchTopAppWithIdentifier:(NSString*) bundleIdentifier;
+- (void)RA_showWidgetSelector;
+- (void)updateViewSizes:(CGPoint)center animate:(BOOL)animate;
+- (void)RA_closeCurrentView;
+- (void)RA_handleLongPress:(UILongPressGestureRecognizer*)gesture;
+- (void)RA_updateViewSizes;
+- (void)appViewItemTap:(id)sender;
 @end
 
 @interface UIGestureRecognizerTarget : NSObject {
@@ -888,7 +579,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)resumeContextHosting;
 - (UIView *)_hostViewForRequester:(id)arg1 enableAndOrderFront:(BOOL)arg2;
 - (id)snapshotViewWithFrame:(CGRect)arg1 excludingContexts:(id)arg2 opaque:(BOOL)arg3;
-- (id)snapshotUIImageForFrame:(struct CGRect)arg1 excludingContexts:(id)arg2 opaque:(BOOL)arg3 outTransform:(struct CGAffineTransform *)arg4;
+- (id)snapshotUIImageForFrame:(CGRect)arg1 excludingContexts:(id)arg2 opaque:(BOOL)arg3 outTransform:(struct CGAffineTransform *)arg4;
 - (id)visibleContexts;
 - (void)orderRequesterFront:(id)arg1;
 - (void)enableHostingForRequester:(id)arg1 orderFront:(BOOL)arg2;
@@ -898,10 +589,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)invalidate;
 
 @property(copy, nonatomic) NSString *identifier; // @synthesize identifier=_identifier;
-@end
-
-@interface FBSSystemService ()
-- (void)openApplication:(NSString *)app options:(NSDictionary *)options withResult:(void (^)(void))result;
 @end
 
 @interface FBSSceneSnapshotContext : NSObject
@@ -917,11 +604,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @interface UIMutableApplicationSceneSettings : FBSMutableSceneSettings
 @end
 
-@interface FBScene ()
-- (FBWindowContextHostManager*)contextHostManager;
-- (void)updateSettings:(id)arg1 withTransitionContext:(id)arg2;
-@end
-
 @interface SBApplication ()
 @property (nonatomic,copy) NSString * mainSceneID;
 @property (setter=_setDeactivationSettings:, nonatomic, copy) SBDeactivationSettings * _deactivationSettings;
@@ -934,7 +616,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)resumeForContentAvailable;
 - (void)resumeToQuit;
 - (void)_sendDidLaunchNotification:(BOOL)arg1;
-- (void)notifyResumeActiveForReason:(long long)arg1;
+- (void)notifyResumeActiveForReason:(NSInteger)arg1;
 
 - (BOOL)_isRecentlyUpdated;
 - (BOOL)_isNewlyInstalled;
@@ -942,10 +624,10 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @end
 
-@interface SBApplicationController : NSObject
-+ (id) sharedInstance;
-- (SBApplication*) applicationWithBundleIdentifier:(NSString*)identifier;
-- (SBApplication*)applicationWithPid:(int)arg1;
+@interface SBApplicationController ()
+
+- (NSArray *)runningApplications;
+
 @end
 
 @interface FBWindowContextHostWrapperView : UIView
@@ -954,7 +636,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)_setAppearanceStyle:(unsigned int)arg1 force:(BOOL)arg2;
 - (id)_stringForAppearanceStyle;
 - (id)window;
-@property(readonly, nonatomic) struct CGRect referenceFrame; // @dynamic referenceFrame;
+@property(readonly, nonatomic) CGRect referenceFrame; // @dynamic referenceFrame;
 @property(readonly, nonatomic, getter=isContextHosted) BOOL contextHosted; // @dynamic contextHosted;
 - (void)clearManager;
 - (void)_hostingStatusChanged;
@@ -977,43 +659,11 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)minimize;
 @end
 
-@interface BKSProcessAssertion ()
-- (void)invalidate;
-@property(readonly, nonatomic) BOOL valid;
-@end
-
 @interface SBReachabilityManager
-+ (id)sharedInstance;
-@property(readonly, nonatomic) _Bool reachabilityModeActive; // @synthesize reachabilityModeActive=_reachabilityModeActive;
++ (instancetype)sharedInstance;
+@property(readonly, nonatomic) BOOL reachabilityModeActive; // @synthesize reachabilityModeActive=_reachabilityModeActive;
 - (void)_handleReachabilityDeactivated;
 - (void)_handleReachabilityActivated;
-@end
-
-@interface SBAppSwitcherModel : NSObject
-+ (id)sharedInstance;
-- (id)snapshotOfFlattenedArrayOfAppIdentifiersWhichIsOnlyTemporary;
-- (id)snapshot;
-- (void)remove:(id)arg1;
-- (void)removeDisplayItem:(id)arg1;
-- (void)addToFront:(id)arg1;
-- (void)_verifyAppList;
-- (id)_recentsFromPrefs;
-- (id)_recentsFromLegacyPrefs;
-
-// iOS 9
-- (id)commandTabDisplayItems;
-- (id)displayItemsForAppsOfRoles:(id)arg1;
-- (NSArray*)mainSwitcherDisplayItems;
-- (void)addToFront:(id)arg1 role:(long long)arg2;
-- (void)_warmUpIconForDisplayItem:(id)arg1;
-- (void)_warmUpRecentIcons;
-- (void)_pruneRoles;
-- (id)_displayItemRolesFromPrefsForLoadedDisplayItems:(id)arg1;
-- (void)_saveRecents;
-- (void)_saveRecentsDelayed;
-- (void)_invalidateSaveTimer;
-- (void)_appActivationStateDidChange:(id)arg1;
-
 @end
 
 @interface UIImage ()
@@ -1032,8 +682,8 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (id) firstResponder;
 + (void)setAllWindowsKeepContextInBackground:(BOOL)arg1;
 - (void) _setRotatableViewOrientation:(UIInterfaceOrientation)orientation duration:(CGFloat)duration force:(BOOL)force;
-- (void)_setRotatableViewOrientation:(UIInterfaceOrientation)arg1 updateStatusBar:(BOOL)arg2 duration:(double)arg3 force:(BOOL)arg4;
-- (void)_rotateWindowToOrientation:(UIInterfaceOrientation)arg1 updateStatusBar:(BOOL)arg2 duration:(double)arg3 skipCallbacks:(BOOL)arg4;
+- (void)_setRotatableViewOrientation:(UIInterfaceOrientation)arg1 updateStatusBar:(BOOL)arg2 duration:(CGFloat)arg3 force:(BOOL)arg4;
+- (void)_rotateWindowToOrientation:(UIInterfaceOrientation)arg1 updateStatusBar:(BOOL)arg2 duration:(CGFloat)arg3 skipCallbacks:(BOOL)arg4;
 - (unsigned int)_contextId;
 - (UIInterfaceOrientation) _windowInterfaceOrientation;
 @end
@@ -1069,7 +719,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface SBIcon (iOS81)
 - (BOOL) isBeta;
-- (_Bool)isApplicationIcon;
+- (BOOL)isApplicationIcon;
 @end
 
 @interface SBIconModel (iOS81)
@@ -1085,7 +735,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)prepareDropGlow;
 - (UIImageView *)dropGlow;
 - (void)showDropGlow:(BOOL)showDropGlow;
-- (long long)badgeValue;
+- (NSInteger)badgeValue;
 - (id)leafIdentifier;
 - (SBApplication*)application;
 - (NSString*)applicationBundleID;
@@ -1099,7 +749,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBDarkeningImageView : UIImageView
-- (void)setImage:(id)arg1 brightness:(double)arg2;
+- (void)setImage:(id)arg1 brightness:(CGFloat)arg2;
 - (void)setImage:(id)arg1;
 @end
 
@@ -1112,35 +762,35 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @interface SBIconBadgeView : UIView
 {
     NSString *_text;
-    _Bool _animating;
+    BOOL _animating;
     id/*block*/ _queuedAnimation;
-    _Bool _displayingAccessory;
+    BOOL _displayingAccessory;
     SBIconAccessoryImage *_backgroundImage;
     SBDarkeningImageView *_backgroundView;
     SBDarkeningImageView *_textView;
 }
 
-+ (id)_createImageForText:(id)arg1 highlighted:(_Bool)arg2;
-+ (id)_checkoutImageForText:(id)arg1 highlighted:(_Bool)arg2;
++ (id)_createImageForText:(id)arg1 highlighted:(BOOL)arg2;
++ (id)_checkoutImageForText:(id)arg1 highlighted:(BOOL)arg2;
 + (id)_checkoutBackgroundImage;
 + (id)checkoutAccessoryImagesForIcon:(id)arg1 location:(int)arg2;
 + (struct CGPoint)_overhang;
-+ (double)_textPadding;
++ (CGFloat)_textPadding;
 + (struct CGPoint)_textOffset;
-+ (double)_maxTextWidth;
++ (CGFloat)_maxTextWidth;
 + (id)_textFont;
 - (void)_resizeForTextImage:(id)arg1;
 - (void)_clearText;
 - (void)_zoomOutWithPreparation:(id/*block*/)arg1 animation:(id/*block*/)arg2 completion:(id/*block*/)arg3;
 - (void)_zoomInWithTextImage:(id)arg1 preparation:(id/*block*/)arg2 animation:(id/*block*/)arg3 completion:(id/*block*/)arg4;
 - (void)_crossfadeToTextImage:(id)arg1 withPreparation:(id/*block*/)arg2 animation:(id/*block*/)arg3 completion:(id/*block*/)arg4;
-- (void)_configureAnimatedForText:(id)arg1 highlighted:(_Bool)arg2 withPreparation:(id/*block*/)arg3 animation:(id/*block*/)arg4 completion:(id/*block*/)arg5;
-- (void)setAccessoryBrightness:(double)arg1;
-- (struct CGPoint)accessoryOriginForIconBounds:(struct CGRect)arg1;
+- (void)_configureAnimatedForText:(id)arg1 highlighted:(BOOL)arg2 withPreparation:(id/*block*/)arg3 animation:(id/*block*/)arg4 completion:(id/*block*/)arg5;
+- (void)setAccessoryBrightness:(CGFloat)arg1;
+- (struct CGPoint)accessoryOriginForIconBounds:(CGRect)arg1;
 - (void)prepareForReuse;
-- (_Bool)displayingAccessory;
-- (void)configureForIcon:(id)arg1 location:(int)arg2 highlighted:(_Bool)arg3;
-- (void)configureAnimatedForIcon:(id)arg1 location:(int)arg2 highlighted:(_Bool)arg3 withPreparation:(id/*block*/)arg4 animation:(id/*block*/)arg5 completion:(id/*block*/)arg6;
+- (BOOL)displayingAccessory;
+- (void)configureForIcon:(id)arg1 location:(int)arg2 highlighted:(BOOL)arg3;
+- (void)configureAnimatedForIcon:(id)arg1 location:(int)arg2 highlighted:(BOOL)arg3 withPreparation:(id/*block*/)arg4 animation:(id/*block*/)arg5 completion:(id/*block*/)arg6;
 - (void)layoutSubviews;
 - (void)dealloc;
 - (instancetype)init;
@@ -1207,8 +857,8 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 + (BOOL)allowsRecycling;
 + (id)_jitterPositionAnimation;
 + (id)_jitterTransformAnimation;
-+ (struct CGSize)defaultIconImageSize;
-+ (struct CGSize)defaultIconSize;
++ (CGSize)defaultIconImageSize;
++ (CGSize)defaultIconSize;
 
 - (instancetype)initWithDefaultSize;
 - (void)dealloc;
@@ -1270,7 +920,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)setIconPosition:(CGPoint)position;
 - (void)setRefusesRecipientStatus:(BOOL)status;
 - (BOOL)canReceiveGrabbedIcon:(id)icon;
-- (double)grabDurationForEvent:(id)event;
+- (CGFloat)grabDurationForEvent:(id)event;
 - (void)setIsGrabbed:(BOOL)grabbed;
 - (BOOL)isGrabbed;
 - (void)setIsOverlapping:(BOOL)overlapping;
@@ -1370,23 +1020,23 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBIconBlurryBackgroundView : UIView {
-    struct CGRect _wallpaperRelativeBounds;
-    _Bool _isBlurring;
+    CGRect _wallpaperRelativeBounds;
+    BOOL _isBlurring;
     id _wantsBlurEvaluator;
     struct CGPoint _wallpaperRelativeCenter;
 }
 
 @property(copy, nonatomic) id wantsBlurEvaluator; // @synthesize wantsBlurEvaluator=_wantsBlurEvaluator;
-@property(readonly, nonatomic) _Bool isBlurring; // @synthesize isBlurring=_isBlurring;
+@property(readonly, nonatomic) BOOL isBlurring; // @synthesize isBlurring=_isBlurring;
 @property(nonatomic) struct CGPoint wallpaperRelativeCenter; // @synthesize wallpaperRelativeCenter=_wallpaperRelativeCenter;
-- (_Bool)_shouldAnimatePropertyWithKey:(id)arg1;
-- (void)setBlurring:(_Bool)arg1;
-- (void)setWallpaperColor:(struct CGColor *)arg1 phase:(struct CGSize)arg2;
-- (_Bool)wantsBlur:(id)arg1;
-- (struct CGRect)wallpaperRelativeBounds;
+- (BOOL)_shouldAnimatePropertyWithKey:(id)arg1;
+- (void)setBlurring:(BOOL)arg1;
+- (void)setWallpaperColor:(struct CGColor *)arg1 phase:(CGSize)arg2;
+- (BOOL)wantsBlur:(id)arg1;
+- (CGRect)wallpaperRelativeBounds;
 - (void)didAddSubview:(id)arg1;
 - (void)dealloc;
-- (instancetype)initWithFrame:(struct CGRect)arg1;
+- (instancetype)initWithFrame:(CGRect)arg1;
 @end
 
 @interface SBFolderIconBackgroundView : SBIconBlurryBackgroundView
@@ -1394,16 +1044,16 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface BBServer
-- (void)publishBulletin:(id)arg1 destinations:(unsigned long long)arg2 alwaysToLockScreen:(_Bool)arg3;
+- (void)publishBulletin:(id)arg1 destinations:(NSUInteger)arg2 alwaysToLockScreen:(BOOL)arg3;
 - (id)_allBulletinsForSectionID:(id)arg1;
 
 - (id)allBulletinIDsForSectionID:(id)arg1;
 - (id)noticesBulletinIDsForSectionID:(id)arg1;
-- (id)bulletinIDsForSectionID:(id)arg1 inFeed:(unsigned long long)arg2;
+- (id)bulletinIDsForSectionID:(id)arg1 inFeed:(NSUInteger)arg2;
 @end
 
 @interface SBSwitcherSnapshotImageView : UIView
-@property (nonatomic,readonly) UIImage * image;
+@property (nonatomic,readonly) UIImage *image;
 - (UIImage *)image;
 @end
 
@@ -1411,11 +1061,11 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface _SBAppSwitcherSnapshotContext : NSObject
-@property (nonatomic,retain) XBApplicationSnapshot * snapshot;
+@property (nonatomic,retain) XBApplicationSnapshot *snapshot;
 @end
 
 @interface SBMainSwitcherViewController : UIViewController
-+ (id)sharedInstance;
++ (instancetype)sharedInstance;
 - (BOOL)dismissSwitcherNoninteractively;
 - (BOOL)isVisible;
 - (BOOL)activateSwitcherNoninteractively;
@@ -1428,18 +1078,22 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBUIChevronView : UIView
-@property (assign,nonatomic) long long state;
+@property (assign,nonatomic) NSInteger state;
 @property (nonatomic,retain) UIColor * color;
 - (instancetype)initWithFrame:(CGRect)arg1;
 - (instancetype)initWithColor:(id)arg1 ;
 - (void)setColor:(UIColor *)arg1 ;
-- (void)setState:(long long)arg1 animated:(BOOL)arg2;
+- (void)setState:(NSInteger)arg1 animated:(BOOL)arg2;
 - (void)setBackgroundView:(id)arg1;
 @end
 
+@interface FBApplicationProcess ()
+- (BOOL)isApplicationProcess;
+@end
+
 @interface SBPagedScrollView : UIScrollView
-- (NSArray *)pageViews;
-- (void)setPageViews:(NSArray *)arg1;
+@property (assign, nonatomic) NSUInteger currentPageIndex;
+@property (copy, nonatomic) NSArray *pageViews;
 @end
 
 @interface SBApplicationShortcutMenuContentView : UIView
@@ -1453,14 +1107,91 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface SBSApplicationShortcutItem : NSObject
-@property (nonatomic,copy) NSString *type;                                  //@synthesize type=_type - In the implementation block
-@property (nonatomic,copy) NSString *localizedTitle;                        //@synthesize localizedTitle=_localizedTitle - In the implementation block
-@property (nonatomic,copy) NSString *localizedSubtitle;                     //@synthesize localizedSubtitle=_localizedSubtitle - In the implementation block
-@property (nonatomic,copy) SBSApplicationShortcutIcon *icon;
-@property (nonatomic,copy) NSString *bundleIdentifierToLaunch;
-+ (instancetype)staticShortcutItemWithDictionary:(NSDictionary*)dictionary localizationHandler:(/*^block*/id)handler;
+@property (nonatomic, copy) NSString *type;
+@property (nonatomic, copy) NSString *localizedTitle;
+@property (nonatomic, copy) NSString *localizedSubtitle;
+@property (nonatomic, copy) SBSApplicationShortcutIcon *icon;
+@property (nonatomic, copy) NSString *bundleIdentifierToLaunch;
++ (instancetype)staticShortcutItemWithDictionary:(NSDictionary *)dictionary localizationHandler:(/*^block*/id)handler;
+@end
+
+@class SBAppView, SBAppViewController;
+
+@protocol SBApplicationHosting <NSObject>
+@required
+
+- (SBApplication *)hostedApp;
+- (BOOL)isHostingAnApp;
+- (BOOL)canHostAnApp;
+- (void)hostedAppWillRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation;
+
+@end
+
+@protocol SBAppViewControllerDelegate <NSObject>
+@optional
+
+-(BOOL)appViewController:(SBAppViewController *)controller shouldTransitionToMode:(NSInteger)mode;
+-(void)appViewController:(SBAppViewController *)controller didTransitionFromMode:(NSInteger)fromMode toMode:(NSInteger)toMode;
+-(void)appViewControllerWillActivateApplication:(id)application;
+-(void)appViewControllerDidDeactivateApplication:(id)application;
+
 @end
 
 @interface SBUIAppIconForceTouchController : NSObject
 + (NSArray *)filteredApplicationShortcutItemsWithStaticApplicationShortcutItems:(NSArray *)staticItems dynamicApplicationShortcutItems:(NSArray *)dynamicItems;
+@end
+
+@interface SBWorkspaceApplication : NSObject
++ (instancetype)entityForApplication:(SBApplication *)application;
+@end
+
+@interface SBAppView : UIView
+
+- (void)setForcesStatusBarHidden:(BOOL)hidden;
+- (CGSize)sizeThatFits:(CGSize)size;
+
+@end
+
+@interface SBAppViewController : UIViewController <SBApplicationHosting>
+@property (nonatomic,copy,readonly) NSString *bundleIdentifier;
+@property (assign,nonatomic) BOOL automatesLifecycle;
+@property (assign,nonatomic) NSInteger requestedMode;
+@property (nonatomic,readonly) NSInteger currentMode;
+@property (nonatomic,readonly) SBAppView *appView;
+@property (assign,nonatomic) NSUInteger options;
+@property (assign,nonatomic) BOOL ignoresOcclusions;
+
+- (instancetype)initWithIdentifier:(NSString *)identifier andApplication:(SBWorkspaceApplication *)application;
+
+- (SBApplication *)hostedApp;
+- (BOOL)isHostingAnApp;
+- (BOOL)canHostAnApp;
+- (void)hostedAppWillRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation;
+
+- (void)invalidate;
+
+@end
+
+@interface UIViewController (BaseBoardUI)
+
+- (BOOL)bs_addChildViewController:(UIViewController *)childController;
+- (BOOL)bs_addChildViewController:(UIViewController *)childController animated:(BOOL)animated transitionBlock:(void(^)())block;
+
+- (BOOL)bs_removeChildViewController:(UIViewController *)childController;
+- (BOOL)bs_removeChildViewController:(UIViewController *)childController animated:(BOOL)animated transitionBlock:(void(^)())block;
+
+@end
+
+@interface SBSearchEtceteraLayoutView : UIView
+@property (getter=_visibleView,nonatomic,retain,readonly) SBSearchEtceteraLayoutContentView *visibleView;
+@property (getter=_scrollView,nonatomic,retain,readonly) SBPagedScrollView *scrollView;
+
+- (id)_visibleView;
+@end
+
+@interface SBSearchEtceteraIsolatedViewController : UIViewController
+@property (nonatomic,retain,readonly) SBSearchEtceteraLayoutView *contentView;
+@property (assign, nonatomic) NSUInteger currentMode;
+
++ (instancetype)sharedInstance;
 @end

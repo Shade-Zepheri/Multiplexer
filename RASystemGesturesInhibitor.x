@@ -1,10 +1,10 @@
-#import "RAControlCenterInhibitor.h"
+#import "RASystemGesturesInhibitor.h"
 #import "headers.h"
-#import <UIKit/UIKit.h>
 
 static BOOL _gesturesInhibited = NO;
 
-@implementation RAControlCenterInhibitor : NSObject
+@implementation RASystemGesturesInhibitor : NSObject
+
 + (void)setGesturesInhibited:(BOOL)value {
 	_gesturesInhibited = value;
 	[%c(SBSystemGestureManager) mainDisplayManager].systemGesturesDisabledForAccessibility = value;
@@ -13,4 +13,5 @@ static BOOL _gesturesInhibited = NO;
 + (BOOL)gesturesInhibited {
 	return _gesturesInhibited;
 }
+
 @end
