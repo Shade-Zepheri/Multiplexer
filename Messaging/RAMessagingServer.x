@@ -227,6 +227,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	if (![[RASettings sharedInstance] debug_showIPCMessages]) {
 		return;
 	}
+
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
 	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
 	[alert show];
@@ -260,6 +261,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 	if (!identifier) {
 		return;
 	}
+
 	dataForApps[identifier] = [NSValue valueWithBytes:&data objCType:@encode(RAMessageAppData)];
 }
 

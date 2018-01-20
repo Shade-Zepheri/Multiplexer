@@ -1,17 +1,14 @@
 #import "RAMessagingClient.h"
 #import "UIAlertController+Window.h"
 
-extern const char *__progname;
 BOOL allowClosingReachabilityNatively = NO;;
 
-#define IS_PROCESS(x) (strcmp(__progname, x) == 0)
-
 @interface RAMessagingClient ()
-@property (nonatomic) BOOL allowedProcess;
+@property (readonly, nonatomic) BOOL allowedProcess;
+- (void)checkProcessElegibility;
 @end
 
 @implementation RAMessagingClient
-@synthesize allowedProcess;
 
 + (instancetype)sharedInstance {
 	IF_SPRINGBOARD {
@@ -19,22 +16,20 @@ BOOL allowClosingReachabilityNatively = NO;;
 	}
 
 	SHARED_INSTANCE2(RAMessagingClient,
+		[sharedInstance checkProcessElegibility];
 		[sharedInstance loadMessagingCenter];
 		sharedInstance.hasRecievedData = NO;
-
-		if ([[NSBundle mainBundle].executablePath hasPrefix:@"/Applications"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/stash/appsstash"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/containers/Bundle/Application"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/private/var/db/stash"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/mobile/Applications"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/private/var/mobile/Applications"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/var/mobile/Containers/Bundle/Application"] ||
-			[[NSBundle mainBundle].executablePath hasPrefix:@"/private/var/mobile/Containers/Bundle/Application"])
-		{
-			LogDebug(@"[ReachApp] valid process for RAMessagingClient");
-			sharedInstance->allowedProcess = YES;
-		}
 	);
+}
+
+- (void)checkProcessElegibility {
+	//Much cleaner check
+	NSString *bundleIdentifier = [NSBundle mainBundle].bundleIdentifier;
+	LSApplicationProxy *applicationProxy = [%c(LSApplicationProxy) applicationProxyForIdentifier:bundleIdentifier];
+	if ([applicationProxy isInstalled]) { //no dot syntax because property name changes on iOS 11
+		LogDebug(@"valid process for RAMessagingClient");
+		_allowedProcess = YES;
+	}
 }
 
 - (void)loadMessagingCenter {
@@ -83,7 +78,7 @@ BOOL allowClosingReachabilityNatively = NO;;
 		IS_PROCESS("backboardd") // Backboardd uses its own messaging center for what it does.
 		)*/
 
-	if (!allowedProcess) {
+	if (!self.allowedProcess) {
 		// Anything that's not a UIApp (system app or user app) doesn't need this messaging client
 		// Attempting to reach out will either:
 		// 1. hang the process
