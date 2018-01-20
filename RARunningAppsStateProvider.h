@@ -2,8 +2,8 @@
 
 @protocol RARunningAppsStateObserver
 @optional
-- (void)appDidStart:(SBApplication *)app;
-- (void)appDidDie:(SBApplication *)app;
+- (void)applicationDidLaunch:( NSString *)bundleIdentifier;
+- (void)applicationDidExit:(NSString *)bundleIdentifier;
 @end
 
 typedef void (^RARunningAppsStateObserverHandler)(NSObject<RARunningAppsStateObserver> *observer);

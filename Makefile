@@ -6,7 +6,7 @@ export THEOS_DEVICE_PORT=22
 endif
 
 CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IQuickAccess/ -IReachApp/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
-CFLAGS += -fobjc-arc -flto=thin
+CFLAGS += -fobjc-arc
 
 INSTALL_TARGET_PROCESSES = Preferences
 

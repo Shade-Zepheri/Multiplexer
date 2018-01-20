@@ -38,10 +38,11 @@ RAKeyboardWindow *keyboardWindow;
   _currentIdentifier = nil;
 }
 
-- (void)appDidDie:(SBApplication *)app {
-  if (![_currentIdentifier isEqualToString:app.bundleIdentifier]) {
+- (void)applicationDidExit:(NSString *)bundleIdentifier {
+  if (![_currentIdentifier isEqualToString:bundleIdentifier]) {
     return;
   }
+
   [self hideKeyboard];
 }
 

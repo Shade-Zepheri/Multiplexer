@@ -37,12 +37,12 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   [[RARunningAppsStateProvider defaultStateProvider] addObserver:sharedInstance$RAUnlimitedBackgroundingAppWatcher];
 }
 
-- (void)appDidDie:(SBApplication *)app {
-  if (![processAssertions objectForKey:app.bundleIdentifier]) {
+- (void)applicationDidExit:(NSString *)bundleIdentifier {
+  if (![processAssertions objectForKey:bundleIdentifier]) {
     return;
   }
 
-  [processAssertions[app.bundleIdentifier] invalidate];
-  [processAssertions removeObjectForKey:app.bundleIdentifier];
+  [processAssertions[bundleIdentifier] invalidate];
+  [processAssertions removeObjectForKey:bundleIdentifier];
 }
 @end

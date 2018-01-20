@@ -22,6 +22,7 @@ Updates:
 - Fix IntroTutorial
 - Improve stability
 - Maybe separate hooks from main framework
+- Update Public API (that nobody uses)
 
 Bugs:
 - 'Fix' Aura
@@ -33,6 +34,7 @@ Bugs:
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Empoleon windows dont properly rotate in some (most) apps
 - RA broken on 9.0.2?
+- Fix UIWindow crash
 
 Minor Things/Bugs to note:
 - Optimize FakePhoneMode (use Classic Modes)

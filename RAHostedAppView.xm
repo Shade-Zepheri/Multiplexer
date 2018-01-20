@@ -248,10 +248,11 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
   }
 }
 
-- (void)appDidDie:(SBApplication *)app_ {
-  if (app_ != self.app) {
+- (void)applicationDidExit:(NSString *)bundleIdentifier {
+  if (![self.bundleIdentifier isEqualToString:bundleIdentifier]) {
     return;
   }
+
   [self verifyHostingAndRehostIfNecessary];
 }
 

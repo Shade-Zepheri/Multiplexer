@@ -75,13 +75,13 @@
 	[[RARunningAppsStateProvider defaultStateProvider] addObserver:self];
 }
 
-- (void)appDidDie:(SBApplication *)app {
-	if (!completionDictionary || ![completionDictionary objectForKey:app.bundleIdentifier]) {
+- (void)applicationDidExit:(NSString *)bundleIdentifier {
+	if (!completionDictionary || ![completionDictionary objectForKey:bundleIdentifier]) {
 		return;
 	}
 
-	dispatch_block_t block = completionDictionary[app.bundleIdentifier];
+	dispatch_block_t block = completionDictionary[bundleIdentifier];
 	block();
-	[completionDictionary removeObjectForKey:app.bundleIdentifier];
+	[completionDictionary removeObjectForKey:bundleIdentifier];
 }
 @end

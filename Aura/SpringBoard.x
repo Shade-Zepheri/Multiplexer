@@ -66,7 +66,7 @@
 
         if ([proc isKindOfClass:%c(FBApplicationProcess)]) {
           FBApplicationProcess *proc2 = (FBApplicationProcess *)proc;
-          [proc2 killForReason:1 andReport:NO withDescription:@"ReachApp.Backgrounder.killOnExit" completion:nil];
+          [proc2 killForReason:1 andReport:NO withDescription:@"ReachApp.Backgrounder.killOnExit"];
           [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:RAIconIndicatorViewInfoForceDeath];
           if ([[RABackgrounder sharedInstance] shouldRemoveFromSwitcherWhenKilledOnExit:scene.identifier]) {
             [RAAppSwitcherModelWrapper removeItemWithIdentifier:scene.identifier];

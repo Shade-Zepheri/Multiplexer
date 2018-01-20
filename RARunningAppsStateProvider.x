@@ -71,13 +71,13 @@
 
 	RARunningAppsStateObserverHandler appKilledBlock = ^(NSObject<RARunningAppsStateObserver> *observer) {
 		NSString *bundleIdentifier = process.bundleIdentifier;
-		SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
-
-		if ([observer respondsToSelector:@selector(appDidDie:)]) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[observer appDidDie:app];
-			});
+		if (![observer respondsToSelector:@selector(applicationDidExit:)]) {
+			return;
 		}
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[observer applicationDidExit:bundleIdentifier];
+		});
 	};
 
 	[[RARunningAppsStateProvider defaultStateProvider] notifyObserversUsingBlock:appKilledBlock];
@@ -88,13 +88,13 @@
 
 	RARunningAppsStateObserverHandler appStartedBlock = ^(NSObject<RARunningAppsStateObserver> *observer) {
 		NSString *bundleIdentifier = process.bundleIdentifier;
-		SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
-
-		if ([observer respondsToSelector:@selector(appDidStart:)]) {
-			dispatch_async(dispatch_get_main_queue(), ^{
-				[observer appDidStart:app];
-			});
+		if (![observer respondsToSelector:@selector(applicationDidLaunch:)]) {
+			return;
 		}
+
+		dispatch_async(dispatch_get_main_queue(), ^{
+			[observer applicationDidLaunch:bundleIdentifier];
+		});
 	};
 
 	[[RARunningAppsStateProvider defaultStateProvider] notifyObserversUsingBlock:appStartedBlock];

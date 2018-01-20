@@ -4,7 +4,7 @@ export THEOS_DEVICE_PORT=22
 endif
 
 CFLAGS = -I../ -I../Theming/
-CFLAGS += -fobjc-arc
+CFLAGS += -fobjc-arc -Wno-deprecated-declarations
 TARGET = iphone:10.1
 
 INSTALL_TARGET_PROCESSES = SpringBoard

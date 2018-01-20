@@ -600,12 +600,13 @@
 	}
 }
 
-- (void)appDidStart:(SBApplication *)app {
+- (void)applicationDidLaunch:(NSString *)bundleIdentifier {
 	[self reloadWindowedAppsSection];
 	[self reloadOtherAppsSection];
 }
 
-- (void)appDidDie:(SBApplication *)app {
+- (void)applicationDidExit:(NSString *)bundleIdentifier {
+	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
 	[self removeCardForApplication:app];
 }
 
