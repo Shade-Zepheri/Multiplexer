@@ -26,6 +26,7 @@ Updates:
 
 Bugs:
 - 'Fix' Aura
+  - Crashes due to ARC
   - Aura breaks calls? (kill on exit / Needs testing)
   - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
   - Prevent Death doesnt protect from system killing

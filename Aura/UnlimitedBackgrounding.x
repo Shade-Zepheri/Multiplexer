@@ -2,7 +2,7 @@
 #import "RABackgrounder.h"
 #import "RARunningAppsStateProvider.h"
 
-NSMutableDictionary *processAssertions = [NSMutableDictionary dictionary];
+NSMutableDictionary *processAssertions;
 BKSProcessAssertion *keepAlive$temp;
 
 %hook FBUIApplicationWorkspaceScene
@@ -32,6 +32,8 @@ static RAUnlimitedBackgroundingAppWatcher *sharedInstance$RAUnlimitedBackgroundi
   IF_NOT_SPRINGBOARD {
     return;
   }
+
+  processAssertions = [NSMutableDictionary dictionary];
 
   sharedInstance$RAUnlimitedBackgroundingAppWatcher = [[RAUnlimitedBackgroundingAppWatcher alloc] init];
   [[RARunningAppsStateProvider defaultStateProvider] addObserver:sharedInstance$RAUnlimitedBackgroundingAppWatcher];

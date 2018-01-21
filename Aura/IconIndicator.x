@@ -7,7 +7,7 @@
 #import <libstatusbar/UIStatusBarCustomItem.h>
 #import <UIKit/_UILegibilityImageSet.h>
 
-NSMutableDictionary *indicatorStateDict = [NSMutableDictionary dictionary];
+NSMutableDictionary *indicatorStateDict;
 #define SET_INFO_(x, y)    indicatorStateDict[x] = @(y)
 #define GET_INFO_(x)       [indicatorStateDict[x] intValue]
 #define SET_INFO(y)        if (self.icon && self.icon.application) SET_INFO_(self.icon.application.bundleIdentifier, y);
@@ -193,7 +193,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 }
 %end
 
-NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
+NSMutableDictionary *lsbitems;
 
 %hook SBApplication
 %new - (void)RA_addStatusBarIconForSelfIfOneDoesNotExist {
@@ -300,9 +300,13 @@ NSMutableDictionary *lsbitems = [NSMutableDictionary dictionary];
 
 %ctor {
 	dlopen("/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib", RTLD_LAZY);
+
+	lsbitems = [NSMutableDictionary dictionary];
+	indicatorStateDict = [NSMutableDictionary dictionary];
+
+	%init;
+
 	if (%c(UIStatusBarCustomItem)) {
 		%init(libstatusbar);
 	}
-
-	%init;
 }
