@@ -18,9 +18,7 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 
 + (instancetype)sharedInstance;
 
-+ (BOOL)isParagonInstalled;
 + (BOOL)isActivatorInstalled;
-+ (BOOL)isLibStatusBarInstalled;
 
 + (BOOL)isAuraInstalled;
 + (BOOL)isEmpoleonInstalled;

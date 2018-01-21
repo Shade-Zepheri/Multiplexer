@@ -7,14 +7,6 @@
 #define BOOL(key, default) ([_settings objectForKey:key] ? [_settings[key] boolValue] : default)
 
 @implementation RASettings
-+ (BOOL)isParagonInstalled {
-	static BOOL installed = NO;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-	    installed = [[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/ParagonPlus.dylib"];
-	});
-	return installed;
-}
 
 + (BOOL)isActivatorInstalled {
 	static BOOL installed = NO;
@@ -23,18 +15,6 @@
 		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/libactivator.dylib"]) {
 			installed = YES;
 	    dlopen("/Library/MobileSubstrate/DynamicLibraries/libactivator.dylib", RTLD_LAZY);
-		}
-	});
-	return installed;
-}
-
-+ (BOOL)isLibStatusBarInstalled {
-	static BOOL installed = NO;
-	static dispatch_once_t onceToken;
-	dispatch_once(&onceToken, ^{
-		if ([[NSFileManager defaultManager] fileExistsAtPath:@"/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib"]) {
-			installed = YES;
-	    dlopen("/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib", RTLD_LAZY);
 		}
 	});
 	return installed;
