@@ -48,107 +48,105 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 %hook SBIconView
 %property (nonatomic, assign) BOOL RA_isIconIndicatorInhibited;
 %new - (void)RA_updateIndicatorView:(RAIconIndicatorViewInfo)info {
-	@autoreleasepool {
-		if (info == RAIconIndicatorViewInfoTemporarilyInhibit || info == RAIconIndicatorViewInfoInhibit) {
-			[[self viewWithTag:9962] removeFromSuperview];
-			[self RA_setIsIconIndicatorInhibited:YES];
-			if (info == RAIconIndicatorViewInfoTemporarilyInhibit) {
-				dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
-					[self RA_setIsIconIndicatorInhibited:NO showAgainImmediately:NO];
-				});
-			}
-			return;
-		} else if (info == RAIconIndicatorViewInfoUninhibit) {
-			[self RA_setIsIconIndicatorInhibited:NO showAgainImmediately:NO];
+	if (info == RAIconIndicatorViewInfoTemporarilyInhibit || info == RAIconIndicatorViewInfoInhibit) {
+		[[self viewWithTag:9962] removeFromSuperview];
+		[self RA_setIsIconIndicatorInhibited:YES];
+		if (info == RAIconIndicatorViewInfoTemporarilyInhibit) {
+			dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
+				[self RA_setIsIconIndicatorInhibited:NO showAgainImmediately:NO];
+			});
 		}
+		return;
+	} else if (info == RAIconIndicatorViewInfoUninhibit) {
+		[self RA_setIsIconIndicatorInhibited:NO showAgainImmediately:NO];
+	}
 
-		NSString *text = stringFromIndicatorInfo(info);
+	NSString *text = stringFromIndicatorInfo(info);
 
-		if (self.RA_isIconIndicatorInhibited ||
-			(!text || text.length == 0) || // OR info == RAIconIndicatorViewInfoNone
-			(!self.icon || !self.icon.application || !self.icon.application.isRunning || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) ||
-			![[RASettings sharedInstance] backgrounderEnabled])
-		{
-			[[self viewWithTag:9962] removeFromSuperview];
-			return;
-		}
+	if (self.RA_isIconIndicatorInhibited ||
+		(!text || text.length == 0) || // OR info == RAIconIndicatorViewInfoNone
+		(!self.icon || !self.icon.application || !self.icon.application.isRunning || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) ||
+		![[RASettings sharedInstance] backgrounderEnabled])
+	{
+		[[self viewWithTag:9962] removeFromSuperview];
+		return;
+	}
 
-		UILabel *badge = (UILabel *)[self viewWithTag:9962];
-		if (!badge) {
-			badge = [[UILabel alloc] init];
-			badge.tag = 9962;
+	UILabel *badge = (UILabel *)[self viewWithTag:9962];
+	if (!badge) {
+		badge = [[UILabel alloc] init];
+		badge.tag = 9962;
 
-			badge.textAlignment = NSTextAlignmentCenter;
-			badge.clipsToBounds = YES;
-			badge.font = [%c(SBIconBadgeView) _textFont];
+		badge.textAlignment = NSTextAlignmentCenter;
+		badge.clipsToBounds = YES;
+		badge.font = [%c(SBIconBadgeView) _textFont];
 
-			// Note that my macros for this deal with the situation where ColorBadges is not installed
-			badge.backgroundColor = GET_COLORBADGES_COLOR(self.icon, THEMED(backgroundingIndicatorBackgroundColor));
+		// Note that my macros for this deal with the situation where ColorBadges is not installed
+		badge.backgroundColor = GET_COLORBADGES_COLOR(self.icon, THEMED(backgroundingIndicatorBackgroundColor));
 
-			//badge.textColor = GET_ACCEPTABLE_TEXT_COLOR(badge.backgroundColor, THEMED(backgroundingIndicatorTextColor));
-			if (HAS_COLORBADGES && [%c(ColorBadges) isEnabled]) {
-				int bgColor = RGBFromUIColor(badge.backgroundColor);
-				int txtColor = RGBFromUIColor(THEMED(backgroundingIndicatorTextColor));
+		//badge.textColor = GET_ACCEPTABLE_TEXT_COLOR(badge.backgroundColor, THEMED(backgroundingIndicatorTextColor));
+		if (HAS_COLORBADGES && [%c(ColorBadges) isEnabled]) {
+			int bgColor = RGBFromUIColor(badge.backgroundColor);
+			int txtColor = RGBFromUIColor(THEMED(backgroundingIndicatorTextColor));
 
-				if ([%c(ColorBadges) isDarkColor:bgColor]) {
-					// dark color
-					if ([%c(ColorBadges) isDarkColor:txtColor]) {
-						// dark + dark
-						badge.textColor = [UIColor whiteColor];
-					} else {
-						// dark + light
-						badge.textColor = THEMED(backgroundingIndicatorTextColor);
-					}
+			if ([%c(ColorBadges) isDarkColor:bgColor]) {
+				// dark color
+				if ([%c(ColorBadges) isDarkColor:txtColor]) {
+					// dark + dark
+					badge.textColor = [UIColor whiteColor];
 				} else {
-					// light color
-					if ([%c(ColorBadges) isDarkColor:txtColor]) {
-						// light + dark
-						badge.textColor = THEMED(backgroundingIndicatorTextColor);
-					} else {
-						//light + light
-						badge.textColor = [UIColor blackColor];
-					}
-				}
-
-				if ([%c(ColorBadges) areBordersEnabled]) {
-					badge.layer.borderColor = badge.textColor.CGColor;
-					badge.layer.borderWidth = 1.0;
+					// dark + light
+					badge.textColor = THEMED(backgroundingIndicatorTextColor);
 				}
 			} else {
-				badge.textColor = THEMED(backgroundingIndicatorTextColor);
+				// light color
+				if ([%c(ColorBadges) isDarkColor:txtColor]) {
+					// light + dark
+					badge.textColor = THEMED(backgroundingIndicatorTextColor);
+				} else {
+					//light + light
+					badge.textColor = [UIColor blackColor];
+				}
 			}
 
-			UIImage *bgImage = [%c(SBIconBadgeView) _checkoutBackgroundImage];
-			if (%c(ANEMSettingsManager) && [[%c(ANEMSettingsManager) sharedManager].themeSettings containsObject:@"ModernBadges"]) {
-				badge.backgroundColor = [UIColor colorWithPatternImage:bgImage];
+			if ([%c(ColorBadges) areBordersEnabled]) {
+				badge.layer.borderColor = badge.textColor.CGColor;
+				badge.layer.borderWidth = 1.0;
 			}
-
-			[self addSubview:badge];
-
-			CGPoint overhang = [%c(SBIconBadgeView) _overhang];
-			badge.frame = CGRectMake(-overhang.x, -overhang.y, bgImage.size.width, bgImage.size.height);
-			badge.layer.cornerRadius = MAX(badge.frame.size.width, badge.frame.size.height) / 2.0;
-		}
-
-		if (%c(ANEMSettingsManager) && [[%c(ANEMSettingsManager) sharedManager].themeSettings containsObject:@"ModernBadges"]) {
-			UIImageView *textImageView = (UIImageView *)[badge viewWithTag:42];
-			if (!textImageView) {
-				CGFloat padding = [%c(SBIconBadgeView) _textPadding];
-
-				textImageView = [[UIImageView alloc] initWithFrame:CGRectMake(padding, padding, badge.frame.size.width - (padding * 2.0), badge.frame.size.height - (padding * 2.0))];
-				textImageView.center = CGPointMake((badge.frame.size.width / 2.0) + [%c(SBIconBadgeView) _textOffset].x, (badge.frame.size.height / 2.0) + [%c(SBIconBadgeView) _textOffset].y);
-				textImageView.tag = 42;
-				[badge addSubview:textImageView];
-			}
-
-			UIImage *textImage = [%c(SBIconBadgeView) _checkoutImageForText:text highlighted:NO];
-			textImageView.image = textImage;
 		} else {
-			[badge performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:YES];
+			badge.textColor = THEMED(backgroundingIndicatorTextColor);
 		}
 
-		SET_INFO(info);
+		UIImage *bgImage = [%c(SBIconBadgeView) _checkoutBackgroundImage];
+		if (%c(ANEMSettingsManager) && [[%c(ANEMSettingsManager) sharedManager].themeSettings containsObject:@"ModernBadges"]) {
+			badge.backgroundColor = [UIColor colorWithPatternImage:bgImage];
+		}
+
+		[self addSubview:badge];
+
+		CGPoint overhang = [%c(SBIconBadgeView) _overhang];
+		badge.frame = CGRectMake(-overhang.x, -overhang.y, bgImage.size.width, bgImage.size.height);
+		badge.layer.cornerRadius = MAX(badge.frame.size.width, badge.frame.size.height) / 2.0;
 	}
+
+	if (%c(ANEMSettingsManager) && [[%c(ANEMSettingsManager) sharedManager].themeSettings containsObject:@"ModernBadges"]) {
+		UIImageView *textImageView = (UIImageView *)[badge viewWithTag:42];
+		if (!textImageView) {
+			CGFloat padding = [%c(SBIconBadgeView) _textPadding];
+
+			textImageView = [[UIImageView alloc] initWithFrame:CGRectMake(padding, padding, badge.frame.size.width - (padding * 2.0), badge.frame.size.height - (padding * 2.0))];
+			textImageView.center = CGPointMake((badge.frame.size.width / 2.0) + [%c(SBIconBadgeView) _textOffset].x, (badge.frame.size.height / 2.0) + [%c(SBIconBadgeView) _textOffset].y);
+			textImageView.tag = 42;
+			[badge addSubview:textImageView];
+		}
+
+		UIImage *textImage = [%c(SBIconBadgeView) _checkoutImageForText:text highlighted:NO];
+		textImageView.image = textImage;
+	} else {
+		[badge performSelectorOnMainThread:@selector(setText:) withObject:text waitUntilDone:YES];
+	}
+
+	SET_INFO(info);
 }
 
 %new - (void)RA_updateIndicatorViewWithExistingInfo {

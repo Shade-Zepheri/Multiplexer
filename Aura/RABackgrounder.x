@@ -191,19 +191,18 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 }
 
 - (void)updateIconIndicatorForIdentifier:(NSString *)identifier withInfo:(RAIconIndicatorViewInfo)info {
-	@autoreleasepool {
-		SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
-		SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:identifier];
-		SBIconView *iconView = nil;
+	SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
+	SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:identifier];
+	SBIconView *iconView = nil;
 
-		if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-			iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
-		} else {
-			iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
-		}
-
-		[iconView RA_updateIndicatorView:info];
+	if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
+		iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
+	} else {
+		iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 	}
+
+	LogDebug(@"lets check this class %@", NSStringFromClass(iconView.class));
+	[iconView RA_updateIndicatorView:info];
 }
 
 - (BOOL)shouldShowIndicatorForIdentifier:(NSString *)identifier {
