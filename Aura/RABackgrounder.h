@@ -1,29 +1,25 @@
 #import "headers.h"
 
 typedef NS_ENUM(NSInteger, RABackgroundMode) {
-  RABackgroundModeNative = 1,
-  RABackgroundModeForceNativeForOldApps = 2,
-  RABackgroundModeForcedForeground = 3,
-  RABackgroundModeForceNone = 4,
-  RABackgroundModeSuspendImmediately = 5,
-  RABackgroundModeUnlimitedBackgroundingTime = 6,
+  RABackgroundModeNative,
+  //RABackgroundModeForceNativeForOldApps,
+  RABackgroundModeForcedForeground,
+  RABackgroundModeForceNone,
+  RABackgroundModeSuspendImmediately,
+  RABackgroundModeUnlimitedBackgroundingTime,
 };
 
-typedef NS_ENUM(NSInteger, RAIconIndicatorViewInfo) {
-  RAIconIndicatorViewInfoNone = 0,
-  RAIconIndicatorViewInfoNative = 1,
-  RAIconIndicatorViewInfoForced = 2,
-  RAIconIndicatorViewInfoSuspendImmediately = 4,
-
-  RAIconIndicatorViewInfoUnkillable = 8,
-  RAIconIndicatorViewInfoForceDeath = 16,
-
-  RAIconIndicatorViewInfoUnlimitedBackgroundTime = 32,
-
-
-  RAIconIndicatorViewInfoTemporarilyInhibit = 1024,
-  RAIconIndicatorViewInfoInhibit = 2048,
-  RAIconIndicatorViewInfoUninhibit = 4096,
+typedef NS_OPTIONS(NSInteger, RAIconIndicatorViewInfo) {
+  RAIconIndicatorViewInfoNone                    = 0,
+  RAIconIndicatorViewInfoNative                  = 1 << 0,
+  RAIconIndicatorViewInfoForced                  = 1 << 1,
+  RAIconIndicatorViewInfoSuspendImmediately      = 1 << 2,
+  RAIconIndicatorViewInfoUnkillable              = 1 << 3,
+  RAIconIndicatorViewInfoForceDeath              = 1 << 4,
+  RAIconIndicatorViewInfoUnlimitedBackgroundTime = 1 << 5,
+  RAIconIndicatorViewInfoTemporarilyInhibit      = 1 << 6,
+  RAIconIndicatorViewInfoInhibit                 = 1 << 7,
+  RAIconIndicatorViewInfoUninhibit               = 1 << 8,
 };
 
 NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode);
@@ -45,7 +41,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode);
 - (BOOL)killProcessOnExit:(NSString *)identifier;
 - (BOOL)shouldRemoveFromSwitcherWhenKilledOnExit:(NSString *)identifier;
 - (BOOL)preventKillingOfIdentifier:(NSString *)identifier;
-- (NSInteger)backgroundModeForIdentifier:(NSString *)identifier;
+- (RABackgroundMode)backgroundModeForIdentifier:(NSString *)identifier;
 - (BOOL)hasUnlimitedBackgroundTime:(NSString *)identifier;
 
 - (void)temporarilyApplyBackgroundingMode:(RABackgroundMode)mode forApplication:(SBApplication *)app andCloseForegroundApp:(BOOL)close;

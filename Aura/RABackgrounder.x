@@ -74,10 +74,12 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 	}
 }
 
+/*
 - (NSInteger)popTemporaryOverrideForApplication:(NSString *)identifier is:(RABackgroundMode)mode {
 	NSInteger popped = [self popTemporaryOverrideForApplication:identifier];
 	return popped == -1 ? -1 : (popped == mode ? 1 : 0);
 }
+*/
 
 - (RABackgroundMode)globalBackgroundMode {
 	return (RABackgroundMode)[[RASettings sharedInstance] globalBackgroundMode];
@@ -111,7 +113,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 	return [[RASettings sharedInstance] backgrounderEnabled] && enabled && (![dict objectForKey:@"removeFromSwitcher"] ? NO : [dict[@"removeFromSwitcher"] boolValue]);
 }
 
-- (NSInteger)backgroundModeForIdentifier:(NSString *)identifier {
+- (RABackgroundMode)backgroundModeForIdentifier:(NSString *)identifier {
 	@autoreleasepool {
 		if (!identifier || ![[RASettings sharedInstance] backgrounderEnabled]) {
 			return RABackgroundModeNative;
@@ -130,7 +132,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 		if (!enabled) {
 			return [self globalBackgroundMode];
 		}
-		return [dict[@"backgroundMode"] intValue];
+		return (RABackgroundMode)[dict[@"backgroundMode"] intValue];
 	}
 }
 
@@ -163,7 +165,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 }
 
 - (RAIconIndicatorViewInfo)allAggregatedIndicatorInfoForIdentifier:(NSString *)identifier {
-	NSInteger info = RAIconIndicatorViewInfoNone;
+	RAIconIndicatorViewInfo info = RAIconIndicatorViewInfoNone;
 
 	switch ([self backgroundModeForIdentifier:identifier]) {
 		case RABackgroundModeNative:
@@ -187,7 +189,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 		info |= RAIconIndicatorViewInfoUnkillable;
 	}
 
-	return (RAIconIndicatorViewInfo)info;
+	return info;
 }
 
 - (void)updateIconIndicatorForIdentifier:(NSString *)identifier withInfo:(RAIconIndicatorViewInfo)info {
