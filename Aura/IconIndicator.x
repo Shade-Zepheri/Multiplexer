@@ -1,11 +1,10 @@
 #import "ColorBadges.h"
 #import "RABackgrounder.h"
 #import "RASettings.h"
+#import "RAAppIconStatusBarIconView.h"
 #import <Anemone/ANEMSettingsManager.h>
-#import <AppList/ALApplicationList.h>
 #import <libstatusbar/LSStatusBarItem.h>
 #import <libstatusbar/UIStatusBarCustomItem.h>
-#import <UIKit/_UILegibilityImageSet.h>
 
 NSMutableDictionary *indicatorStateDict;
 #define SET_INFO_(x, y)    indicatorStateDict[x] = @(y)
@@ -220,9 +219,6 @@ NSMutableDictionary *lsbitems;
 	}
 
 	LSStatusBarItem *item = [[%c(LSStatusBarItem) alloc] initWithIdentifier:[NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier] alignment:StatusBarAlignmentLeft];
-	if (![item customViewClass]) {
-		item.customViewClass = @"RAAppIconStatusBarIconView";
-	}
 	item.imageName = [NSString stringWithFormat:@"multiplexer-%@", self.bundleIdentifier];
 	lsbitems[self.bundleIdentifier] = item;
 }
@@ -270,24 +266,8 @@ NSMutableDictionary *lsbitems;
 %end
 
 %group libstatusbar
-@interface RAAppIconStatusBarIconView : UIView
-@property (strong, nonatomic) UIStatusBarItem *item;
-@end
-
-%subclass RAAppIconStatusBarIconView : UIStatusBarCustomItemView
-- (_UILegibilityImageSet *)contentsImage {
-	NSString *identifier = [self.item.indicatorName substringFromIndex:(@"multiplexer-").length];
-	UIImage *image = [[ALApplicationList sharedApplicationList] iconOfSize:15 forDisplayIdentifier:identifier];
-
-	return [_UILegibilityImageSet imageFromImage:image withShadowImage:image];
-}
-
-- (CGFloat)standardPadding {
-	return 4;
-}
-%end
-
 %hook UIStatusBarCustomItem
+
 - (NSUInteger)leftOrder {
 	if ([self.indicatorName hasPrefix:@"multiplexer-"]) {
 		return 7; // Shows just after vpn, before the loading/sync indicator
@@ -295,6 +275,15 @@ NSMutableDictionary *lsbitems;
 
 	return %orig;
 }
+
+- (Class)viewClass {
+	if ([self.indicatorName hasPrefix:@"multiplexer-"]) {
+		return %c(RAAppIconStatusBarIconView);
+	}
+
+	return %orig;
+}
+
 %end
 %end
 
