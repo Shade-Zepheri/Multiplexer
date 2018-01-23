@@ -34,8 +34,6 @@
 		return nil;
 	}
 
-	[identifier release];
-
 	return %orig(pid, flags, reason, name, handler);
 }
 %end

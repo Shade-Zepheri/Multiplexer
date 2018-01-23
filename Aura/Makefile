@@ -4,6 +4,7 @@ export THEOS_DEVICE_PORT=22
 endif
 
 CFLAGS = -I../ -I../Theming/
+# Cuz ARC breaks all the things
 CFLAGS += -fobjc-arc -Wno-deprecated-declarations
 TARGET = iphone:10.1
 

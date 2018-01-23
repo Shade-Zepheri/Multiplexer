@@ -2,8 +2,8 @@
 #import "RABackgrounder.h"
 #import "RARunningAppsStateProvider.h"
 
-NSMutableDictionary *processAssertions;
-BKSProcessAssertion *keepAlive$temp;
+static NSMutableDictionary *processAssertions;
+static BKSProcessAssertion *keepAlive$temp;
 
 %hook FBUIApplicationWorkspaceScene
 - (void)host:(FBScene *)scene didUpdateSettings:(FBSSceneSettings *)settings withDiff:(id)diff transitionContext:(id)context completion:(void (^)(BOOL))completion {
