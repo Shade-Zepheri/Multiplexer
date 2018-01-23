@@ -8,7 +8,7 @@ UIInterfaceOrientation prevousOrientation;
 BOOL setPreviousOrientation = NO;
 NSInteger wasStatusBarHidden = -1;
 
-NSMutableDictionary *oldFrames = [NSMutableDictionary dictionary];
+NSMutableDictionary *oldFrames;
 
 static Class $memorized$UITextEffectsWindow$class;
 
@@ -45,7 +45,7 @@ static Class $memorized$UITextEffectsWindow$class;
 
   %orig;
 }
-
+/* TODO: Figure out why this is causing problems
 - (BOOL)_shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation checkForDismissal:(BOOL)check isRotationDisabled:(BOOL)disabled {
   if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return NO;
@@ -53,7 +53,7 @@ static Class $memorized$UITextEffectsWindow$class;
 
   return %orig;
 }
-
+*/
 - (void)_setWindowInterfaceOrientation:(UIInterfaceOrientation)orientation {
   if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return;
@@ -228,6 +228,8 @@ static inline void reloadSettings(CFNotificationCenterRef center, void *observer
     %init;
     $memorized$UITextEffectsWindow$class = %c(UITextEffectsWindow);
   }
+
+  oldFrames = [NSMutableDictionary dictionary];
 
   CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &reloadSettings, CFSTR("com.efrederickson.reachapp.settings/reloadSettings"), NULL, 0);
   [RASettings sharedInstance];
