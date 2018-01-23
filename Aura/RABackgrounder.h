@@ -2,7 +2,6 @@
 
 typedef NS_ENUM(NSInteger, RABackgroundMode) {
   RABackgroundModeNative,
-  //RABackgroundModeForceNativeForOldApps,
   RABackgroundModeForcedForeground,
   RABackgroundModeForceNone,
   RABackgroundModeSuspendImmediately,

@@ -6,6 +6,7 @@
 extern void RA_BGAppsControllerNeedsToReload();
 
 @implementation RABGPerAppDetailsController
+
 - (instancetype)initWithAppName:(NSString *)appName identifier:(NSString *)identifier {
 	_appName = appName;
 	_identifier = identifier;
@@ -251,4 +252,5 @@ extern void RA_BGAppsControllerNeedsToReload();
 	NSString *key = [specifier propertyForKey:@"prefix"] ? [NSString stringWithFormat:@"backgrounder-%@-%@-%@", self.identifier, [specifier propertyForKey:@"prefix"], [specifier propertyForKey:@"key"]] : [NSString stringWithFormat:@"backgrounder-%@-%@", self.identifier, [specifier propertyForKey:@"key"]];
 	return ![_settings objectForKey:key] ? [specifier propertyForKey:@"default"] : _settings[key];
 }
+
 @end

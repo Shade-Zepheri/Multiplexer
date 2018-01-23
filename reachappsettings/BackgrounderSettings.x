@@ -1,6 +1,7 @@
 #import "BackgrounderSettings.h"
 
 @implementation ReachAppBackgrounderSettingsListController
+
 - (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 50)];
   header.colors = @[
@@ -112,9 +113,11 @@
     [self.rootController pushController:vc animate:YES];
   }
 }
+
 @end
 
 @implementation RABackgrounderIconIndicatorOptionsListController
+
 - (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
@@ -143,9 +146,11 @@
     },
   ];
 }
+
 @end
 
 @implementation RABackgrounderStatusbarOptionsListController
+
 - (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
@@ -174,4 +179,5 @@
     },
   ];
 }
+
 @end

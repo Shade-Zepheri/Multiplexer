@@ -27,6 +27,7 @@ Updates:
 Bugs:
 - 'Fix' Aura
   - Crashes due to ARC
+  - Rework IconIndicator
   - Aura breaks calls? (kill on exit / Needs testing)
   - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
   - Prevent Death doesnt protect from system killing
@@ -42,6 +43,9 @@ Minor Things/Bugs to note:
 - Keyboard Dismisses reachability (apparently a feature?)
 - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
 - Really need to clean headers
+- Clean up code
+  - Use generics?
+  - Fix tabs??
 
 Things to do/Features to add:
 - 3D Touch actions?

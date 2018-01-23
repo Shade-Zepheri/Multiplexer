@@ -218,11 +218,12 @@
 
 
 @implementation RASwitchCell
-- (instancetype)initWithStyle:(int)arg1 reuseIdentifier:(id)arg2 specifier:(id)arg3 { //init method
-  self = [super initWithStyle:arg1 reuseIdentifier:arg2 specifier:arg3]; //call the super init method
+- (instancetype)initWithStyle:(UITableViewCellStyle)style reuseIdentifier:(NSString *)reuseIdentifier specifier:(PSSpecifier *)specifier { //init method
+  self = [super initWithStyle:style reuseIdentifier:reuseIdentifier specifier:specifier]; //call the super init method
   if (self) {
     [((UISwitch *)[self control]) setOnTintColor:[UIColor redColor]]; //change the switch color
   }
+
   return self;
 }
 @end
