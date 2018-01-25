@@ -8,7 +8,7 @@
 #import "dispatch_after_cancel.h"
 #import "UIAlertController+Window.h"
 
-NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
+NSMutableDictionary *appsBeingHosted;
 
 @interface RAHostedAppView () {
     //NSTimer *verifyTimer;
@@ -430,3 +430,7 @@ NSMutableDictionary *appsBeingHosted = [NSMutableDictionary dictionary];
 }
 
 @end
+
+%ctor {
+  appsBeingHosted = [NSMutableDictionary dictionary];
+}

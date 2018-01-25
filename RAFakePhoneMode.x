@@ -12,9 +12,10 @@ I split them apart when i was trying to find some issue with app resizing/touche
 #define RA_6S_SIZE CGSizeMake(375, 667)
 #define RA_6P_SIZE CGSizeMake(414, 736)
 
-CGSize forcePhoneModeSize = RA_6S_SIZE;
+CGSize forcePhoneModeSize;
 
 @implementation RAFakePhoneMode
+
 + (void)load {
   // Prevent iPhone issue
   if (!IS_IPAD) {
@@ -34,6 +35,7 @@ CGSize forcePhoneModeSize = RA_6S_SIZE;
   if (UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) {
     return CGSizeMake(forcePhoneModeSize.height, forcePhoneModeSize.width);
   }
+
   return forcePhoneModeSize;
 }
 
@@ -63,12 +65,18 @@ CGSize forcePhoneModeSize = RA_6S_SIZE;
     if (![RAMessagingClient sharedInstance].hasRecievedData) {
       [[RAMessagingClient sharedInstance] requestUpdateFromServer];
     }
+
     fakeFlag = [RAMessagingClient sharedInstance].currentData.forcePhoneMode;
   });
 
   return fakeFlag;
 }
+
 @end
+
+%ctor {
+  forcePhoneModeSize = RA_6S_SIZE;
+}
 
 /*
 %hook UIApplication
