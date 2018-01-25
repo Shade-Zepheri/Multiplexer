@@ -46,6 +46,7 @@
       UIMutableApplicationSceneSettings *fakeSettings = [[%c(UIMutableApplicationSceneSettings) alloc] init];
       settings = fakeSettings;
     }
+
     settings.backgrounded = NO;
   }
 

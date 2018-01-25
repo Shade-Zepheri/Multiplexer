@@ -13,6 +13,18 @@ assertiond hooks: working
 backboardd hooks: working
 fake phone mode: working (hacky tho)
 
+Aura: (Own mini section cuz needs a ton of work)
+- Rework IconIndicator
+  - Re-add ColorBadges stuffs
+  - Rework badge info system
+  - Crashes due to ARC (seems to be fixed now)
+- SpringBoard.x (just relook over the whole thing);
+- Aura breaks calls? (kill on exit / Needs testing)
+- Individual app force foregrounding is broken when used in conjunction with auto (re)launch
+- Prevent Death doesnt protect from system killing
+- SI messes with Apple Watch
+- Fix AppSwitcher cards suspending
+
 Updates:
 - Begin to phase out iOS 8 support
 - Figure out SBAppView(Controller) and use those
@@ -25,18 +37,11 @@ Updates:
 - Update Public API (that nobody uses)
 
 Bugs:
-- 'Fix' Aura
-  - Crashes due to ARC
-  - Rework IconIndicator
-  - Aura breaks calls? (kill on exit / Needs testing)
-  - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
-  - Prevent Death doesnt protect from system killing
-  - SI messes with Apple Watch
-  - Fix AppSwitcher cards suspending
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
 - Empoleon windows dont properly rotate in some (most) apps
 - RA broken on 9.0.2?
 - Fix UIWindow crash
+  - See method
 
 Minor Things/Bugs to note:
 - Optimize FakePhoneMode (use Classic Modes)
@@ -50,7 +55,7 @@ Minor Things/Bugs to note:
 Things to do/Features to add:
 - 3D Touch actions?
 - Unify StatusBar in SO side by side
-- Make Modules more independent (have them use current extensions system?)
+- Make Modules more independent
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?
