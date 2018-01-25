@@ -85,9 +85,9 @@ typedef struct {
   CGPoint location = screenEdgePanRecognizer._lastTouchLocation;
 
   if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft && (location.x != 0 && location.y != 0)) {
-    location.x = [UIScreen mainScreen].bounds.size.width - location.x;
+    location.x = CGRectGetWidth([UIScreen mainScreen].bounds) - location.x;
   } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationPortraitUpsideDown && (location.x != 0 && location.y != 0)) {
-      location.x = [UIScreen mainScreen].bounds.size.width - location.x;
+    location.x = CGRectGetWidth([UIScreen mainScreen].bounds) - location.x;
   } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
     CGFloat t = location.y;
     location.y = location.x;
@@ -128,16 +128,16 @@ static void touch_event(void *target, void *refcon, IOHIDServiceRef service, IOH
       rotatedY = y;
       break;
     case UIInterfaceOrientationPortraitUpsideDown:
-      rotatedX = [UIScreen mainScreen].bounds.size.width - x;
-      rotatedY = [UIScreen mainScreen].bounds.size.height - y;
+      rotatedX = CGRectGetWidth([UIScreen mainScreen].bounds) - x;
+      rotatedY = CGRectGetHeight([UIScreen mainScreen].bounds) - y;
       break;
     case UIInterfaceOrientationLandscapeLeft:
-      rotatedX = [UIScreen mainScreen]._referenceBounds.size.height - y;
+      rotatedX = CGRectGetHeight([UIScreen mainScreen]._referenceBounds) - y;
       rotatedY = x;
       break;
     case UIInterfaceOrientationLandscapeRight:
       rotatedX = y;
-      rotatedY = [UIScreen mainScreen]._referenceBounds.size.width - x;
+      rotatedY = CGRectGetWidth([UIScreen mainScreen]._referenceBounds) - x;
       break;
   }
 

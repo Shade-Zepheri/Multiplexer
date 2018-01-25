@@ -5,7 +5,7 @@
 		return;
 	}
 #if DEBUG
-	LogInfo(@"[ReachApp][DRM] Not checking statistics on debug build");
+	LogInfo(@"[DRM] Not checking statistics on debug build");
 #else
 	LogInfo(@"[DRM] Would Normally Check DRM but public beta so ¯\_(ツ)_/¯");
 /* Doesnt work cuz elijah's server is down but what ever
