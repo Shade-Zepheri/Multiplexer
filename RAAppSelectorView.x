@@ -49,9 +49,9 @@
 			SBIconView *iconView = nil;
 
 			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
+				iconView = [[%c(SBIconViewMap) homescreenMap] iconViewForIcon:icon];
 			} else {
-				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
+				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconViewForIcon:icon];
 			}
 
 			if (!iconView || ![icon isKindOfClass:%c(SBApplicationIcon)]) {
