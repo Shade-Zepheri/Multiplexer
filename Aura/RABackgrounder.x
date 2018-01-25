@@ -20,6 +20,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 }
 
 @implementation RABackgrounder
+
 + (instancetype)sharedInstance {
 	SHARED_INSTANCE2(RABackgrounder,
 		sharedInstance.temporaryOverrides = [NSMutableDictionary dictionary];
@@ -132,6 +133,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 		if (!enabled) {
 			return [self globalBackgroundMode];
 		}
+
 		return (RABackgroundMode)[dict[@"backgroundMode"] intValue];
 	}
 }
@@ -203,8 +205,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 		iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconViewForIcon:icon];
 	}
 
-	LogDebug(@"lets check this class %@", NSStringFromClass(iconView.class));
-	[iconView RA_updateIndicatorView:info];
+	[iconView _ra_updateCustomBadgeView:info];
 }
 
 - (BOOL)shouldShowIndicatorForIdentifier:(NSString *)identifier {
@@ -218,4 +219,5 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 	BOOL globalSetting = [[RASettings sharedInstance] shouldShowStatusBarIcons];
 	return globalSetting ? (![dct objectForKey:@"showStatusBarIcon"] ? YES : [dct[@"showStatusBarIcon"] boolValue]) : NO;
 }
+
 @end

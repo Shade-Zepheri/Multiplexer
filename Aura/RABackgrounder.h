@@ -16,9 +16,6 @@ typedef NS_OPTIONS(NSInteger, RAIconIndicatorViewInfo) {
   RAIconIndicatorViewInfoUnkillable              = 1 << 3,
   RAIconIndicatorViewInfoForceDeath              = 1 << 4,
   RAIconIndicatorViewInfoUnlimitedBackgroundTime = 1 << 5,
-  RAIconIndicatorViewInfoTemporarilyInhibit      = 1 << 6,
-  RAIconIndicatorViewInfoInhibit                 = 1 << 7,
-  RAIconIndicatorViewInfoUninhibit               = 1 << 8,
 };
 
 NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode);

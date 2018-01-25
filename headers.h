@@ -33,6 +33,7 @@
 #import <SpringBoard/SBIconController.h>
 #import <SpringBoard/SBIconLabel.h>
 #import <SpringBoard/SBIconModel.h>
+#import <SpringBoard/SBIconViewMap.h>
 #import <SpringBoard/SBNotificationCenterController.h>
 #import <SpringBoard/SBLockScreenManager.h>
 #import <SpringBoard/SBScreenEdgePanGestureRecognizer.h>
@@ -336,10 +337,6 @@ typedef struct {
 - (BOOL)isPresentingControllerTransitioning;
 @end
 
-@interface UIStatusBarItem : NSObject
-- (NSString*)indicatorName;
-@end
-
 @interface UIScreen (ohBoy)
 - (CGRect)_gkBounds;
 - (CGRect) _referenceBounds;
@@ -354,6 +351,7 @@ typedef struct {
 
 @interface LSApplicationProxy ()
 @property (nonatomic, readonly) NSURL *bundleURL;
+@property (nonatomic, readonly) NSArray *UIBackgroundModes;
 @end
 
 @interface UIViewController ()
@@ -753,12 +751,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)setImage:(id)arg1;
 @end
 
-@interface _UILegibilityImageSet : NSObject
-+ (_UILegibilityImageSet*) imageFromImage: (UIImage*) image withShadowImage: (UIImage*) imag_sh;
-@property(retain) UIImage * image;
-@property(retain) UIImage * shadowImage;
-@end
-
 @interface SBIconBadgeView : UIView
 {
     NSString *_text;
@@ -784,7 +776,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)_zoomOutWithPreparation:(id/*block*/)arg1 animation:(id/*block*/)arg2 completion:(id/*block*/)arg3;
 - (void)_zoomInWithTextImage:(id)arg1 preparation:(id/*block*/)arg2 animation:(id/*block*/)arg3 completion:(id/*block*/)arg4;
 - (void)_crossfadeToTextImage:(id)arg1 withPreparation:(id/*block*/)arg2 animation:(id/*block*/)arg3 completion:(id/*block*/)arg4;
-- (void)_configureAnimatedForText:(id)arg1 highlighted:(BOOL)arg2 withPreparation:(id/*block*/)arg3 animation:(id/*block*/)arg4 completion:(id/*block*/)arg5;
 - (void)setAccessoryBrightness:(CGFloat)arg1;
 - (struct CGPoint)accessoryOriginForIconBounds:(CGRect)arg1;
 - (void)prepareForReuse;
@@ -846,11 +837,14 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
   BOOL _ghostlyPending;
   }
 
+@property (assign, nonatomic) BOOL RA_isIconIndicatorInhibited;
 
-- (void) RA_updateIndicatorView:(NSInteger)info;
-- (void) RA_updateIndicatorViewWithExistingInfo;
-- (void) RA_setIsIconIndicatorInhibited:(BOOL)value;
-- (void) RA_setIsIconIndicatorInhibited:(BOOL)value showAgainImmediately:(BOOL)value2;
+/*
+- (void)RA_updateIndicatorView:(NSInteger)info;
+- (void)RA_updateIndicatorViewWithExistingInfo;
+- (void)RA_setIsIconIndicatorInhibited:(BOOL)value;
+- (void)RA_setIsIconIndicatorInhibited:(BOOL)value showAgainImmediately:(BOOL)value2;
+*/
 
 + (CGSize)defaultIconSize;
 + (CGSize)defaultIconImageSize;
@@ -974,48 +968,9 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @end
 
-@interface SBIconView ()
-@property (nonatomic, assign) BOOL RA_isIconIndicatorInhibited;
-@end
-
 @class NSMapTable;
 
-@interface SBIconViewMap : NSObject {
-  NSMapTable* _iconViewsForIcons;
-  id<SBIconViewDelegate> _iconViewdelegate;
-  NSMapTable* _recycledIconViewsByType;
-  NSMapTable* _labels;
-  NSMapTable* _badges;
-}
-+ (SBIconViewMap *)switcherMap;
-+ (SBIconViewMap *)homescreenMap;
-+ (Class)iconViewClassForIcon:(SBIcon *)icon location:(int)location;
-- (instancetype)init;
-- (void)dealloc;
-- (SBIconView *)mappedIconViewForIcon:(SBApplicationIcon *)icon;
-- (SBIconView *)_iconViewForIcon:(SBApplicationIcon *)icon;
-- (SBIconView *)iconViewForIcon:(SBApplicationIcon *)icon;
-- (void)_addIconView:(SBIconView *)iconView forIcon:(SBIcon *)icon;
-- (void)purgeIconFromMap:(SBIcon *)icon;
-- (void)_recycleIconView:(SBIconView *)iconView;
-- (void)recycleViewForIcon:(SBIcon *)icon;
-- (void)recycleAndPurgeAll;
-- (id)releaseIconLabelForIcon:(SBIcon *)icon;
-- (void)captureIconLabel:(id)label forIcon:(SBIcon *)icon;
-- (void)purgeRecycledIconViewsForClass:(Class)aClass;
-- (void)_modelListAddedIcon:(SBIcon *)icon;
-- (void)_modelRemovedIcon:(SBIcon *)icon;
-- (void)_modelReloadedIcons;
-- (void)_modelReloadedState;
-- (void)iconAccessoriesDidUpdate:(SBIcon *)icon;
-@end
-
-@interface SBIconViewMap (iOS6)
-@property (nonatomic, readonly) SBIconModel *iconModel;
-@end
-
 @interface SBIconController (iOS90)
-@property (nonatomic,readonly) SBIconViewMap *homescreenIconViewMap;
 - (BOOL)canUninstallIcon:(SBIcon *)icon;
 @end
 
@@ -1194,4 +1149,27 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (assign, nonatomic) NSUInteger currentMode;
 
 + (instancetype)sharedInstance;
+@end
+
+//temp until I update the headers
+@interface SBIconBadgeView ()
+
+- (void)_configureAnimatedForText:(NSString *)text highlighted:(BOOL)highlighted withPreparation:(void(^)())preparation animation:(void(^)())animation completion:(void(^)())completion;
+
+- (CGPoint)accessoryOriginForIconBounds:(CGRect)bounds;
+
+@end
+
+@interface SBIconView ()
+@property (strong, nonatomic) SBIconBadgeView *_ra_badgeView;
+
+- (CGRect)_frameForAccessoryView;
+// Cuz above method needs an accessoryView to work
+- (CGRect)_ra_frameForAccessoryView:(SBIconBadgeView *)accessoryView;
+
+// Added methods
+- (void)_ra_createCustomBadgeView;
+- (void)_ra_updateCustomBadgeView:(NSInteger)info;
+- (void)_ra_updateCustomBadgeWithExitingInfo;
+
 @end
