@@ -100,6 +100,14 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 	[self _ra_updateCustomBadgeView:GET_INFO];
 }
 
+- (void)_updateBrightness {
+	%orig;
+
+	SBIconImageView *imageView = [self valueForKey:@"_iconImageView"];
+	CGFloat brightness = imageView.brightness;
+	[self._ra_badgeView setAccessoryBrightness:brightness];
+}
+
 - (void)setIsEditing:(BOOL)editing animated:(BOOL)animated {
 	%orig;
 
