@@ -1157,6 +1157,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)_configureAnimatedForText:(NSString *)text highlighted:(BOOL)highlighted withPreparation:(void(^)())preparation animation:(void(^)())animation completion:(void(^)())completion;
 
 - (CGPoint)accessoryOriginForIconBounds:(CGRect)bounds;
+- (void)setAccessoryBrightness:(CGFloat)brightness;
 
 @end
 
@@ -1168,7 +1169,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (CGRect)_ra_frameForAccessoryView:(SBIconBadgeView *)accessoryView;
 
 // Added methods
-- (void)_ra_createCustomBadgeView;
+- (void)_ra_createCustomBadgeViewIfNecessary;
 - (void)_ra_updateCustomBadgeView:(NSInteger)info;
 - (void)_ra_updateCustomBadgeWithExitingInfo;
 

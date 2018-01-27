@@ -63,7 +63,12 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 	return CGRectMake(actualOrigin.x, actualOrigin.y, CGRectGetWidth(accessoryView.frame), CGRectGetHeight(accessoryView.frame));
 }
 
-%new - (void)_ra_createCustomBadgeView {
+%new - (void)_ra_createCustomBadgeViewIfNecessary {
+	if (self._ra_badgeView) {
+		//Find way to recycle view?
+		return;
+	}
+
 	SBIconBadgeView *badgeView = [[%c(SBIconBadgeView) alloc] init];
 	self._ra_badgeView = badgeView;
 	//TODO re-add ColorBadges support
@@ -76,15 +81,22 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 }
 
 %new - (void)_ra_updateCustomBadgeView:(RAIconIndicatorViewInfo)info {
-	if (![[RASettings sharedInstance] backgrounderEnabled] || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier] || info == RAIconIndicatorViewInfoNone) {
+	if (![[RASettings sharedInstance] backgrounderEnabled] || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) {
 		return;
 	}
 
-	if (!self._ra_badgeView) {
-		[self _ra_createCustomBadgeView];
+	if (info == RAIconIndicatorViewInfoNone) {
+    if (self._ra_badgeView) {
+      [self._ra_badgeView removeFromSuperview];
+      self._ra_badgeView = nil;
+    }
+
+    return;
 	}
 
-	NSString *text = stringFromIndicatorInfo(info);
+	[self _ra_createCustomBadgeViewIfNecessary];
+
+  NSString *text = stringFromIndicatorInfo(info);
 	[self._ra_badgeView _configureAnimatedForText:text highlighted:NO withPreparation:nil animation:^{
 		CGRect frame = [self _ra_frameForAccessoryView:self._ra_badgeView];
 		CGFloat width = CGRectGetWidth(self.frame);
@@ -120,7 +132,7 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 NSMutableDictionary *lsbitems;
 
 %hook SBApplication
-%new - (void)RA_addStatusBarIconForSelfIfOneDoesNotExist {
+%new - (void)_ra_addStatusBarIconIfNecessary {
 #if DEBUG
 	if (![lsbitems respondsToSelector:@selector(objectForKey:)]) {
 		LogError(@"ERROR: lsbitems is not NSDictionary it is %@", NSStringFromClass([lsbitems class]));
@@ -148,6 +160,7 @@ NSMutableDictionary *lsbitems;
 	lsbitems[self.bundleIdentifier] = item;
 }
 
+// Gone in iOS 11
 - (void)setApplicationState:(NSUInteger)state {
 	%orig;
 
@@ -156,8 +169,8 @@ NSMutableDictionary *lsbitems;
 		//SET_INFO_(self.bundleIdentifier, RAIconIndicatorViewInfoNone);
 		[lsbitems removeObjectForKey:self.bundleIdentifier];
 	} else {
-		if ([self respondsToSelector:@selector(RA_addStatusBarIconForSelfIfOneDoesNotExist)]) {
-			[self performSelector:@selector(RA_addStatusBarIconForSelfIfOneDoesNotExist)];
+		if ([self respondsToSelector:@selector(_ra_addStatusBarIconIfNecessary)]) {
+			[self performSelector:@selector(_ra_addStatusBarIconIfNecessary)];
 		}
 
 		[[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:self.bundleIdentifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier]];
