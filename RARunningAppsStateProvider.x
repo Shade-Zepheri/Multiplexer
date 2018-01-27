@@ -28,15 +28,15 @@
 	return [[%c(SBApplicationController) sharedInstance] runningApplications];
 }
 
-- (void)addObserver:(__weak NSObject<RARunningAppsStateObserver> *)observer {
+- (void)addObserver:(id<RARunningAppsStateObserver>)observer {
 	dispatch_sync(_queue, ^{
 		if (![_observers containsObject:observer]) {
-			[_observers addObject:observer];
+		  [_observers addObject:observer];
 		}
 	});
 }
 
-- (void)removeObserver:(__weak NSObject<RARunningAppsStateObserver> *)observer {
+- (void)removeObserver:(id<RARunningAppsStateObserver>)observer {
 	dispatch_sync(_queue, ^{
 		if ([_observers containsObject:observer]) {
 			[_observers removeObject:observer];
@@ -53,7 +53,7 @@
 			observers = [_observers.allObjects copy];
 		});
 
-		for (NSObject<RARunningAppsStateObserver> *observer in observers) {
+		for (id<RARunningAppsStateObserver> observer in observers) {
 			dispatch_async(_queue, ^{
 				handler(observer);
 			});
@@ -69,7 +69,7 @@
 - (void)applicationProcessDidExit:(FBApplicationProcess *)process withContext:(id)context  {
 	%orig;
 
-	RARunningAppsStateObserverHandler appKilledBlock = ^(NSObject<RARunningAppsStateObserver> *observer) {
+	RARunningAppsStateObserverHandler appKilledBlock = ^(id<RARunningAppsStateObserver> observer) {
 		NSString *bundleIdentifier = process.bundleIdentifier;
 		if (![observer respondsToSelector:@selector(applicationDidExit:)]) {
 			return;
@@ -86,7 +86,7 @@
 - (void)applicationProcessDidLaunch:(FBApplicationProcess *)process {
 	%orig;
 
-	RARunningAppsStateObserverHandler appStartedBlock = ^(NSObject<RARunningAppsStateObserver> *observer) {
+	RARunningAppsStateObserverHandler appStartedBlock = ^(id<RARunningAppsStateObserver> observer) {
 		NSString *bundleIdentifier = process.bundleIdentifier;
 		if (![observer respondsToSelector:@selector(applicationDidLaunch:)]) {
 			return;

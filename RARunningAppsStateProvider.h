@@ -1,12 +1,14 @@
 #import "headers.h"
 
-@protocol RARunningAppsStateObserver
+@protocol RARunningAppsStateObserver <NSObject>
 @optional
+
 - (void)applicationDidLaunch:( NSString *)bundleIdentifier;
 - (void)applicationDidExit:(NSString *)bundleIdentifier;
+
 @end
 
-typedef void (^RARunningAppsStateObserverHandler)(NSObject<RARunningAppsStateObserver> *observer);
+typedef void (^RARunningAppsStateObserverHandler)(id<RARunningAppsStateObserver> observer);
 
 @interface RARunningAppsStateProvider : NSObject {
     NSHashTable *_observers;
@@ -18,7 +20,7 @@ typedef void (^RARunningAppsStateObserverHandler)(NSObject<RARunningAppsStateObs
 
 + (instancetype)defaultStateProvider;
 
-- (void)addObserver:(__weak NSObject<RARunningAppsStateObserver> *)observer;
-- (void)removeObserver:(__weak NSObject<RARunningAppsStateObserver> *)observer;
+- (void)addObserver:(id<RARunningAppsStateObserver>)observer;
+- (void)removeObserver:(id<RARunningAppsStateObserver>)observer;
 
 @end
