@@ -7,14 +7,18 @@
 @property (strong, nonatomic)	UILabel *isLockedLabel;
 @end
 
-extern BOOL shouldLoadView;
-
 @implementation RANCViewController
 
++ (instancetype)defaultViewController {
+	SHARED_INSTANCE(RANCViewController);
+}
+
 - (void)forceReloadAppLikelyBecauseTheSettingChanged {
+/*
 	[self.appView unloadApp];
 	[self.appView removeFromSuperview];
 	self.appView = nil;
+*/
 }
 
 
@@ -44,17 +48,70 @@ int rotationDegsForOrientation(int o) {
 	[self viewDidAppear:YES];
 }
 
+- (SBApplication *)hostedApp {
+	return [_appViewController hostedApp];
+}
+
+- (BOOL)isHostingAnApp {
+	return [_appViewController isHostingAnApp];
+}
+
+- (BOOL)canHostAnApp {
+	return [_appViewController canHostAnApp];
+}
+
+- (void)hostedAppWillRotateToInterfaceOrientation:(UIInterfaceOrientation)orientation {
+	[_appViewController hostedAppWillRotateToInterfaceOrientation:orientation];
+}
+
+- (void)loadView {
+	[super loadView];
+
+  //Major changes in iOS 11 so gotta account for that
+	NSString *identifier = [[RASettings sharedInstance] NCApp];
+	SBApplication *application = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
+	SBWorkspaceApplication *workspaceApplication = [%c(SBWorkspaceApplication) entityForApplication:application];
+	_appViewController = [[%c(SBAppViewController) alloc] initWithIdentifier:identifier andApplication:workspaceApplication];
+	_appViewController.automatesLifecycle = NO;
+	_appViewController.ignoresOcclusions = YES;
+	_appViewController.options = 65537;
+
+	[self bs_addChildViewController:_appViewController animated:NO transitionBlock:^{
+		[self.view addSubview:_appViewController.view];
+	}];
+}
+
 - (void)viewWillLayoutSubviews {
-	[self viewDidAppear:YES];
+	[super viewWillLayoutSubviews];
+
+  //Hacky fix for frame size
+  self.view.frame = self.view.superview.bounds;
+}
+
+- (void)viewWillAppear:(BOOL)animated {
+	[super viewWillAppear:animated];
+
+	if (_appViewController.requestedMode != 2) {
+		_appViewController.requestedMode = 1;
+	}
 }
 
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
-	if (IS_IOS_OR_NEWER(iOS_10_0) && !shouldLoadView) {
-		return;
-	}
+	_appViewController.requestedMode = 2;
+	[_appViewController.appView setForcesStatusBarHidden:YES];
 
+	UIView *contentView = _appViewController.view;
+
+  //Get scale before resize
+	CGFloat scale = CGRectGetHeight(contentView.frame) / CGRectGetHeight([UIScreen mainScreen].bounds);
+
+  contentView.frame = [UIScreen mainScreen].bounds;
+  contentView.center = self.view.center;
+	contentView.transform = CGAffineTransformMakeScale(scale, scale);
+
+/*
 	if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
 		if (!self.isLockedLabel) {
 			self.isLockedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 400)];
@@ -100,7 +157,7 @@ int rotationDegsForOrientation(int o) {
 		self.appView.frame = [UIScreen mainScreen].bounds;
 
 		self.appView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(rotationDegsForOrientation([UIApplication sharedApplication].statusBarOrientation))); // Explicitly, SpringBoard's status bar since the NC is shown in SpringBoard
-		CGFloat scale = self.view.frame.size.height / [UIScreen mainScreen].RA_interfaceOrientedBounds.size.height;
+		CGFloat scale = self.view.frame.size.height / [UIScreen mainScreen].bounds.size.height;
 		self.appView.transform = CGAffineTransformScale(self.appView.transform, scale, scale);
 
 		// Align vertically
@@ -121,8 +178,9 @@ int rotationDegsForOrientation(int o) {
 		frame.origin.x = [UIScreen mainScreen].bounds.size.width * 2.0;
 		self.view.frame = frame;
 	}
+*/
 }
-
+/*
 - (void)hostDidDismiss {
 	if (!self.appView.isCurrentlyHosting) {
 		return;
@@ -131,18 +189,17 @@ int rotationDegsForOrientation(int o) {
 	self.appView.hideStatusBar = NO;
 	[self.appView unloadApp];
 }
-
+*/
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 
+	_appViewController.requestedMode = 0;
+/*
 	self.appView.hideStatusBar = NO;
 	if (self.appView.isCurrentlyHosting) {
 		[self.appView unloadApp];
 	}
-}
-
-- (RAHostedAppView *)hostedApp {
-	return self.appView;
+*/
 }
 
 - (void)forwardInvocation:(NSInvocation *)anInvocation {
@@ -165,6 +222,10 @@ int rotationDegsForOrientation(int o) {
 	} else {
 		return [super isKindOfClass:aClass];
 	}
+}
+
+- (void)dealloc {
+	[_appViewController invalidate];
 }
 
 @end

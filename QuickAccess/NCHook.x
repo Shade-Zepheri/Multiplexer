@@ -14,6 +14,7 @@ static RANCViewController *ncAppViewController;
 
 %group iOS9
 %hook SBNotificationCenterLayoutViewController
+
 - (void)viewWillAppear:(BOOL)animated {
 	%orig;
 
@@ -22,16 +23,18 @@ static RANCViewController *ncAppViewController;
 	if ([[RASettings sharedInstance] NCAppEnabled] && !hideBecauseLS) {
 		SBModeViewController *modeVC = self.modeViewController;
 		if (!ncAppViewController) {
-			ncAppViewController = [[%c(RANCViewController) alloc] init];
+			ncAppViewController = [RANCViewController defaultViewController];
 		}
 		[modeVC _addBulletinObserverViewController:ncAppViewController];
 	}
 }
+
 %end
 
 // This is more of a hack than anything else. Note that `_localizableTitleForColumnViewController` on iOS 9 does not seem to work (I may be doing something else wrong)
 // if more than one custom nc tab is added, this will not work correctly.
 %hook SBModeViewController
+
 - (void)_layoutHeaderViewIfNecessary {
 	%orig;
 
@@ -52,59 +55,78 @@ static RANCViewController *ncAppViewController;
 		}
 	}
 }
+
 %end
 %end
 
-%group iOS10
-%hook SBPagedScrollView
-static BOOL hasEnteredPages = NO;
+%group iOS10 //Major changes in iOS 11
+static UIView *ncAppContentView;
 
-- (void)layoutSubviews {
+//This whole process could be simplified to 1 hook, but this is how SB adds its VCs
+%hook SBSearchEtceteraLayoutView
+
+- (instancetype)initWithFrame:(CGRect)frame {
+	SBSearchEtceteraLayoutView *orig = %orig;
+	if (orig) {
+		SBPagedScrollView *scrollView = orig.scrollView;
+		NSMutableArray *mutablePageViews = [scrollView.pageViews mutableCopy];
+
+		ncAppContentView = [[UIView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), CGRectGetHeight(frame))];
+		[mutablePageViews addObject:ncAppContentView];
+		scrollView.pageViews = [mutablePageViews copy];
+	}
+
+	return orig;
+}
+
+%end
+
+%hook SBSearchEtceteraIsolatedViewController
+
+- (void)_createMultiplexedChildViewControllers {
 	%orig;
 
-	if (!hasEnteredPages && [[RASettings sharedInstance] NCAppEnabled] && [self.superview isKindOfClass:%c(SBSearchEtceteraLayoutView)] && [[%c(SBNotificationCenterController) sharedInstance] isVisible]) {
-		if (!ncAppViewController) {
-			ncAppViewController = [[%c(RANCViewController) alloc] init];
-		}
-
-		NSMutableArray *newArray = [[self pageViews] mutableCopy];
-		[newArray addObject:ncAppViewController.view];
-		[self setPageViews:newArray];
-		hasEnteredPages = YES;
+	if (!ncAppViewController) {
+		ncAppViewController = [RANCViewController defaultViewController];
 	}
+
+	[self addChildViewController:ncAppViewController];
+	[ncAppContentView addSubview:ncAppViewController.view];
+	[ncAppViewController didMoveToParentViewController:self];
 }
+
+// Hacky way get SVSEIVC to get the VC
+- (UIViewController *)viewControllerForMode:(NSUInteger)mode {
+	if (mode != 0) {
+		return %orig;
+	}
+
+	return ncAppViewController;
+}
+
 %end
 
 %hook SBNotificationCenterViewController
-BOOL shouldLoadView = NO;
 
-- (void)viewWillAppear:(BOOL)animated {
-	shouldLoadView = YES;
-	%orig;
-}
-
-- (void)viewDidDisappear:(BOOL)animated {
-	shouldLoadView = NO;
-	[ncAppViewController viewDidDisappear:animated];
-
-	%orig;
-}
-
-- (void)viewDidLoad {
+- (void)_loadPageControl {
 	%orig;
 
+  // minor hook to have it show 3 dots
 	UIPageControl *pageControl = self.pageControl;
 	pageControl.numberOfPages += 1;
 }
+
 %end
 %end
 
 %hook SpringBoard
+
 - (void)_performDeferredLaunchWork {
 	%orig;
 
 	[[Multiplexer sharedInstance] registerExtension:@"com.shade.quickaccess" forMultiplexerVersion:@"1.0.0"];
 }
+
 %end
 
 %ctor {

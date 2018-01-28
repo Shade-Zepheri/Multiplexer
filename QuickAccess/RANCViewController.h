@@ -2,9 +2,13 @@
 
 @class RAHostedAppView;
 
-@interface RANCViewController : UIViewController
+@interface RANCViewController : UIViewController <SBApplicationHosting> {
+    SBAppViewController *_appViewController;
+}
 
-- (RAHostedAppView *)hostedApp;
++ (instancetype)defaultViewController;
+
+- (CGSize)contentSizeForContainerSize:(CGSize)containerSize;
 - (void)forceReloadAppLikelyBecauseTheSettingChanged;
 
 @end
