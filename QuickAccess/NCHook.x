@@ -4,12 +4,6 @@
 #import "headers.h"
 #import "Multiplexer.h"
 
-NSString *getAppName() {
-	NSString *ident = [[RASettings sharedInstance] NCApp] ?: @"com.apple.Preferences";
-	SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:ident];
-	return app ? app.displayName : nil;
-}
-
 static RANCViewController *ncAppViewController;
 
 %group iOS9
@@ -43,16 +37,18 @@ static RANCViewController *ncAppViewController;
 	if (useGenericLabel) {
 		text = LOCALIZE(@"APP", @"Localizable");
 	} else {
-		text = ncAppViewController.hostedApp.displayName ?: getAppName() ?: LOCALIZE(@"APP", @"Localizable");
+		text = [ncAppViewController hostedApp].displayName ?: LOCALIZE(@"APP", @"Localizable");
 	}
 
 	for (UIView *view in [[self valueForKey:@"_headerView"] subviews]) {
 		if ([view isKindOfClass:[UISegmentedControl class]]) {
-			UISegmentedControl *segment = (UISegmentedControl *)view;
-			if (segment.numberOfSegments > 2) {
-				[segment setTitle:text forSegmentAtIndex:2];
-			}
+      continue;
 		}
+
+    UISegmentedControl *segment = (UISegmentedControl *)view;
+    if (segment.numberOfSegments > 2) {
+      [segment setTitle:text forSegmentAtIndex:2];
+    }
 	}
 }
 
@@ -124,6 +120,7 @@ static UIView *ncAppContentView;
 - (void)_performDeferredLaunchWork {
 	%orig;
 
+  //Register the extension
 	[[Multiplexer sharedInstance] registerExtension:@"com.shade.quickaccess" forMultiplexerVersion:@"1.0.0"];
 }
 

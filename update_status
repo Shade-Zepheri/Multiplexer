@@ -23,14 +23,13 @@ Aura: (Own mini section cuz needs a ton of work)
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
 - Prevent Death doesnt protect from system killing
 - SI messes with Apple Watch
-- Fix AppSwitcher cards suspending
 
 Updates:
 - Begin to phase out iOS 8 support
 - Figure out SBAppView(Controller) and use those
   - Remove RAHostedAppView and Manager
 - Remove / update unneeded classes
-  - RARunningAppsProvider
+  - RASBWorkspaceFetcher
 - Fix IntroTutorial
 - Improve stability
 - Maybe separate hooks from main framework
