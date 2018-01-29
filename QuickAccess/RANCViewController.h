@@ -8,7 +8,6 @@
 
 + (instancetype)defaultViewController;
 
-- (CGSize)contentSizeForContainerSize:(CGSize)containerSize;
 - (void)forceReloadAppLikelyBecauseTheSettingChanged;
 
 @end

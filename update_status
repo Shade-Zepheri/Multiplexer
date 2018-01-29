@@ -17,7 +17,6 @@ Aura: (Own mini section cuz needs a ton of work)
 - Rework IconIndicator
   - Re-add ColorBadges stuffs
   - Rework badge info system
-  - Crashes due to ARC (seems to be fixed now)
 - SpringBoard.x (just relook over the whole thing);
 - Aura breaks calls? (kill on exit / Needs testing)
 - Individual app force foregrounding is broken when used in conjunction with auto (re)launch
@@ -25,12 +24,13 @@ Aura: (Own mini section cuz needs a ton of work)
 - SI messes with Apple Watch
 
 Updates:
-- Begin to phase out iOS 8 support
-- Figure out SBAppView(Controller) and use those
-  - Remove RAHostedAppView and Manager
-- Remove / update unneeded classes
-  - RASBWorkspaceFetcher
-- Fix IntroTutorial
+- Begin the iOS 11 updates
+  - Begin to phase out iOS 8 support
+  - Figure out SBAppView(Controller) and use those
+    - Remove RAHostedAppView and Manager
+    - Remove / update unneeded classes
+    - RASBWorkspaceFetcher
+- Fix / rework IntroTutorial
 - Improve stability
 - Maybe separate hooks from main framework
 - Update Public API (that nobody uses)
@@ -44,7 +44,6 @@ Bugs:
 
 Minor Things/Bugs to note:
 - Optimize FakePhoneMode (use Classic Modes)
-- Keyboard Dismisses reachability (apparently a feature?)
 - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
 - Really need to clean headers
 - Clean up code
