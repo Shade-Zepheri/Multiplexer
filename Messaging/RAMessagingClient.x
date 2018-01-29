@@ -4,8 +4,9 @@
 BOOL allowClosingReachabilityNatively = NO;;
 
 @interface RAMessagingClient ()
-@property (readonly, nonatomic) BOOL allowedProcess;
-- (void)checkProcessElegibility;
+
++ (BOOL)isProcessIsEligible;
+
 @end
 
 @implementation RAMessagingClient
@@ -15,21 +16,23 @@ BOOL allowClosingReachabilityNatively = NO;;
 		@throw [NSException exceptionWithName:@"IsSpringBoardException" reason:@"Cannot use RAMessagingClient in SpringBoard" userInfo:nil];
 	}
 
+  if (![RAMessagingClient isProcessIsEligible]) {
+    return nil;
+  }
+
+  LogDebug(@"valid process for RAMessagingClient");
+
 	SHARED_INSTANCE2(RAMessagingClient,
-		[sharedInstance checkProcessElegibility];
 		[sharedInstance loadMessagingCenter];
 		sharedInstance.hasRecievedData = NO;
 	);
 }
 
-- (void)checkProcessElegibility {
-	//Much cleaner check
++ (BOOL)isProcessIsEligible {
+	//Much cleaner check (i hope)
 	NSString *bundleIdentifier = [NSBundle mainBundle].bundleIdentifier;
 	LSApplicationProxy *applicationProxy = [%c(LSApplicationProxy) applicationProxyForIdentifier:bundleIdentifier];
-	if ([applicationProxy isInstalled]) { //no dot syntax because property name changes on iOS 11
-		LogDebug(@"valid process for RAMessagingClient");
-		_allowedProcess = YES;
-	}
+	return [applicationProxy isInstalled]; //no dot syntax because property name changes on iOS 11
 }
 
 - (void)loadMessagingCenter {
@@ -70,24 +73,6 @@ BOOL allowClosingReachabilityNatively = NO;;
 }
 
 - (void)_requestUpdateFromServerWithTries:(NSInteger)tries {
-	/*if (![NSBundle mainBundle].bundleIdentifier ||
-		IS_PROCESS("assertiond") ||  // Don't need to load into this anyway
-		IS_PROCESS("searchd") ||  // safe-mode crash fix
-		IS_PROCESS("gputoolsd") || // iMohkles found this crashes (no uikit)
-		IS_PROCESS("filecoordinationd") || // ???
-		IS_PROCESS("backboardd") // Backboardd uses its own messaging center for what it does.
-		)*/
-
-	if (!self.allowedProcess) {
-		// Anything that's not a UIApp (system app or user app) doesn't need this messaging client
-		// Attempting to reach out will either:
-		// 1. hang the process
-		// 2. crash after timeout due to no UIKit (?)
-		// 3. something else bad
-		// so therefore all those are simply blacklisted. simple.
-		return;
-	}
-
 	NSDictionary *dict = @{ @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
 	NSDictionary *data = [serverCenter sendMessageAndReceiveReplyName:RAMessagingUpdateAppInfoMessageName userInfo:dict];
 	if (data && [data objectForKey:@"data"]) {
