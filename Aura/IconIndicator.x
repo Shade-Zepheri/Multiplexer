@@ -108,22 +108,29 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 }
 
 %new - (void)_ra_updateCustomBadgeWithExitingInfo {
-	//if ([self viewWithTag:9962])
 	[self _ra_updateCustomBadgeView:GET_INFO];
 }
 
 - (void)_updateBrightness {
 	%orig;
 
+  // Dim badge when tapped
 	SBIconImageView *imageView = [self valueForKey:@"_iconImageView"];
 	CGFloat brightness = imageView.brightness;
 	[self._ra_badgeView setAccessoryBrightness:brightness];
 }
 
+- (void)_applyIconAccessoryAlpha:(CGFloat)alpha {
+  %orig;
+
+  //So it disappears when app launched
+  self._ra_badgeView.alpha = alpha;
+}
+
 - (void)setIsEditing:(BOOL)editing animated:(BOOL)animated {
 	%orig;
 
-	// inhibit icon indicator
+	// Hide icon when editing
 	self._ra_badgeView.hidden = editing;
 }
 
