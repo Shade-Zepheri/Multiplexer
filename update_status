@@ -13,6 +13,20 @@ assertiond hooks: working
 backboardd hooks: working
 fake phone mode: working (hacky tho)
 
+iOS 11: (Oh boy)
+- Fix / rework IntroTutorial
+- Figure out SBAppView(Controller) and use those
+  - Remove RAHostedAppView and Manager cuz methods dont exist
+    - Update client / server accordingly
+- Remove / update unneeded classes
+  - RASBWorkspaceFetcher
+  - RAOrientationLocker
+  - RAAppSwitcherModelWrapper
+  - RASnapshotProvider
+- iX and Gestures (just figure that out)
+- Extensions
+  - Verify everything works
+
 Aura: (Own mini section cuz needs a ton of work)
 - Rework IconIndicator
   - Re-add ColorBadges stuffs
@@ -24,13 +38,6 @@ Aura: (Own mini section cuz needs a ton of work)
 - SI messes with Apple Watch
 
 Updates:
-- Begin the iOS 11 updates
-  - Begin to phase out iOS 8 support
-  - Figure out SBAppView(Controller) and use those
-    - Remove RAHostedAppView and Manager
-    - Remove / update unneeded classes
-    - RASBWorkspaceFetcher
-- Fix / rework IntroTutorial
 - Improve stability
 - Maybe separate hooks from main framework
 - Update Public API (that nobody uses)
@@ -54,6 +61,7 @@ Things to do/Features to add:
 - 3D Touch actions?
 - Unify StatusBar in SO side by side
 - Make Modules more independent
+- (New one) add protection from Rogue apps?
 
 notes:
 use _referenceBounds instead of bounds on UIScreen to get physical bounds. Makes landscape support easier?

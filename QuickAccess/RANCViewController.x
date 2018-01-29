@@ -14,11 +14,7 @@
 }
 
 - (void)forceReloadAppLikelyBecauseTheSettingChanged {
-/*
-	[self.appView unloadApp];
-	[self.appView removeFromSuperview];
-	self.appView = nil;
-*/
+
 }
 
 
@@ -38,11 +34,6 @@ int rotationDegsForOrientation(int o) {
 	}
 	return 0;
 }
-
-//-(void)hostWillPresent;
-//-(void)hostDidPresent;
-//-(void)hostWillDismiss;
-//-(void)hostDidDismiss;
 
 - (void)insertAppropriateViewWithContent {
 	[self viewDidAppear:YES];
@@ -104,12 +95,13 @@ int rotationDegsForOrientation(int o) {
 
 	UIView *contentView = _appViewController.view;
 
-  //Get scale before resize
-	CGFloat scale = CGRectGetHeight(contentView.frame) / CGRectGetHeight([UIScreen mainScreen].bounds);
-
+  //TODO: find a way so I dont have to reset the transfrom everytime
+  contentView.transform = CGAffineTransformIdentity;
   contentView.frame = [UIScreen mainScreen].bounds;
-  contentView.center = self.view.center;
+
+	CGFloat scale = CGRectGetHeight(self.view.frame) / CGRectGetHeight([UIScreen mainScreen].bounds);
 	contentView.transform = CGAffineTransformMakeScale(scale, scale);
+  contentView.center = self.view.center;
 
 /*
 	if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
@@ -130,78 +122,16 @@ int rotationDegsForOrientation(int o) {
 		[self.isLockedLabel removeFromSuperview];
 		self.isLockedLabel = nil;
 	}
-
-	if (!self.appView) {
-		NSString *ident = [[RASettings sharedInstance] NCApp];
-		self.appView = [[RAHostedAppView alloc] initWithBundleIdentifier:ident];
-		self.appView.frame = [UIScreen mainScreen].bounds;
-		[self.view addSubview:self.appView];
-
-		[self.appView preloadApp];
-	}
-
-	[self.appView loadApp];
-	self.appView.hideStatusBar = YES;
-
-	if (NO) {// (UIInterfaceOrientationIsLandscape(UIApplication.sharedApplication.statusBarOrientation))
-		self.appView.autosizesApp = YES;
-		self.appView.allowHidingStatusBar = YES;
-		self.appView.transform = CGAffineTransformIdentity;
-		self.appView.frame = CGRectMake(0, 0, self.view.frame.size.width, self.view.frame.size.height);
-	} else {
-		self.appView.autosizesApp = NO;
-		self.appView.allowHidingStatusBar = YES;
-
-		// Reset
-		self.appView.transform = CGAffineTransformIdentity;
-		self.appView.frame = [UIScreen mainScreen].bounds;
-
-		self.appView.transform = CGAffineTransformMakeRotation(DEGREES_TO_RADIANS(rotationDegsForOrientation([UIApplication sharedApplication].statusBarOrientation))); // Explicitly, SpringBoard's status bar since the NC is shown in SpringBoard
-		CGFloat scale = self.view.frame.size.height / [UIScreen mainScreen].bounds.size.height;
-		self.appView.transform = CGAffineTransformScale(self.appView.transform, scale, scale);
-
-		// Align vertically
-		CGRect f = self.appView.frame;
-		f.origin.y = 0;
-		if (IS_IOS_OR_NEWER(iOS_10_0) && UIInterfaceOrientationIsLandscape([UIApplication sharedApplication].statusBarOrientation)) { //really hacky but u gotta do what ya gotta do
-			f.origin.x = (self.view.frame.size.width - f.size.height) / 2.0;
-		} else {
-			f.origin.x = (self.view.frame.size.width - f.size.width) / 2.0;
-		}
-		self.appView.frame = f;
-	}
-	//[appView rotateToOrientation:UIApplication.sharedApplication.statusBarOrientation];
-
-
-	if (IS_IOS_BETWEEN(iOS_9_0, iOS_9_3)) { // Must manually place view controller :(
-		CGRect frame = self.view.frame;
-		frame.origin.x = [UIScreen mainScreen].bounds.size.width * 2.0;
-		self.view.frame = frame;
-	}
 */
 }
-/*
-- (void)hostDidDismiss {
-	if (!self.appView.isCurrentlyHosting) {
-		return;
-	}
 
-	self.appView.hideStatusBar = NO;
-	[self.appView unloadApp];
-}
-*/
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 
 	_appViewController.requestedMode = 0;
-/*
-	self.appView.hideStatusBar = NO;
-	if (self.appView.isCurrentlyHosting) {
-		[self.appView unloadApp];
-	}
-*/
 }
 
+//TODO: See if iOS 9 needs these methods
 - (void)forwardInvocation:(NSInvocation *)anInvocation {
 	// Override
 	LogDebug(@"RANCViewController: ignoring invocation: %@", anInvocation);
