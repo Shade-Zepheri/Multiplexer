@@ -12,7 +12,7 @@ INSTALL_TARGET_PROCESSES = SpringBoard
 include $(THEOS)/makefiles/common.mk
 
 TWEAK_NAME = SwipeOver
-SwipeOver_FILES = $(wildcard *.xm) $(wildcard *.x)
+SwipeOver_FILES = $(wildcard *.x) $(wildcard *.m)
 SwipeOver_FRAMEWORKS = UIKit CoreGraphics
 SwipeOver_EXTRA_FRAMEWORKS = MultiplexerCore
 
