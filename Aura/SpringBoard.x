@@ -73,19 +73,13 @@
             [RAAppSwitcherModelWrapper removeItemWithIdentifier:scene.identifier];
           }
         }
-        [[RABackgrounder sharedInstance] queueRemoveTemporaryOverrideForIdentifier:scene.identifier];
       }
 
+      [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:scene.identifier]];
+      [[RABackgrounder sharedInstance] queueRemoveTemporaryOverrideForIdentifier:scene.identifier];
+
       if ([[RABackgrounder sharedInstance] shouldKeepInForeground:scene.identifier]) {
-        [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:scene.identifier]];
-        [[RABackgrounder sharedInstance] queueRemoveTemporaryOverrideForIdentifier:scene.identifier];
         return;
-      } else if ([[RABackgrounder sharedInstance] backgroundModeForIdentifier:scene.identifier] == RABackgroundModeNative) {
-        [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:scene.identifier]];
-        [[RABackgrounder sharedInstance] queueRemoveTemporaryOverrideForIdentifier:scene.identifier];
-      } else if ([[RABackgrounder sharedInstance] shouldSuspendImmediately:scene.identifier]) {
-        [[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:scene.identifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:scene.identifier]];
-        [[RABackgrounder sharedInstance] queueRemoveTemporaryOverrideForIdentifier:scene.identifier];
       }
     }
   }
