@@ -18,6 +18,7 @@ UIView *draggerView = nil;
 
 BOOL overrideOrientation = NO;
 CGFloat grabberCenter_Y = -1;
+CGPoint firstLocation;
 CGFloat grabberCenter_X = 0;
 BOOL showingNC = NO;
 extern BOOL overrideDisableForStatusBar;
@@ -186,16 +187,8 @@ BOOL wasEnabled = NO;
 
 %end
 
-SBWorkspace *SBWorkspace$sharedInstance;
-%hook SB_WORKSPACE_CLASS
-%new + (instancetype)sharedInstance {
-  return SBWorkspace$sharedInstance;
-}
 
-- (instancetype)init {
-  SBWorkspace$sharedInstance = %orig;
-  return SBWorkspace$sharedInstance;
-}
+%hook SBMainWorkspace
 
 %new - (BOOL)isUsingReachApp {
   return (view || showingNC);
@@ -488,7 +481,6 @@ SBWorkspace *SBWorkspace$sharedInstance;
 CGFloat startingY = -1;
 %new - (void)handlePan:(UIPanGestureRecognizer *)sender {
   UIView *view = draggerView; //sender.view;
-	CGPoint firstLocation = CGPointZero;
 
   if (sender.state == UIGestureRecognizerStateBegan) {
     startingY = grabberCenter_Y;
@@ -540,7 +532,7 @@ CGFloat startingY = -1;
   }
 
   [self handleReachabilityModeDeactivated];
-  SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:ident];
+  SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:ident];
   RAIconIndicatorViewInfo indicatorInfo = [[%c(RABackgrounder) sharedInstance] allAggregatedIndicatorInfoForIdentifier:ident];
 
   // Close app
@@ -878,6 +870,5 @@ CGFloat startingY = -1;
     return;
   }
 
-  Class c = %c(SBMainWorkspace) ?: %c(SBWorkspace);
-  %init(hooks, SB_WORKSPACE_CLASS=c);
+  %init;
 }
