@@ -17,10 +17,9 @@ BOOL allowClosingReachabilityNatively = NO;;
 	}
 
   if (![RAMessagingClient isProcessIsEligible]) {
+    LogError(@"Not a valid process for RAMessagingClient");
     return nil;
   }
-
-  LogDebug(@"valid process for RAMessagingClient");
 
 	SHARED_INSTANCE2(RAMessagingClient,
 		[sharedInstance loadMessagingCenter];

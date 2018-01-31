@@ -102,6 +102,7 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 @end
 
 %hook BKEventFocusManager
+
 - (BKEventDestination *)destinationForFocusedEventWithDisplay:(id)display {
 	NSDictionary *response = [center sendMessageAndReceiveReplyName:RAMessagingGetFrontMostAppInfoMessageName userInfo:nil];
 
@@ -113,8 +114,10 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 			return [[[%c(BKEventDestination) alloc] initWithPid:pid clientID:clientId] autorelease];
 		}
 	}
+
 	return %orig;
 }
+
 %end
 
 /*
@@ -152,12 +155,6 @@ static void handle_event(void *target, void *refcon, IOHIDServiceRef service, IO
 */
 
 %ctor {
-	center = [%c(CPDistributedMessagingCenter) centerNamed:@"com.efrederickson.reachapp.messaging.server"];
-
-	void *handle = dlopen("/usr/lib/librocketbootstrap.dylib", RTLD_LAZY);
-	if (handle) {
-		void (*rocketbootstrap_distributedmessagingcenter_apply)(CPDistributedMessagingCenter *) = (void(*)(CPDistributedMessagingCenter *))dlsym(handle, "rocketbootstrap_distributedmessagingcenter_apply");
-		rocketbootstrap_distributedmessagingcenter_apply(center);
-		dlclose(handle);
-	}
+	center = [CPDistributedMessagingCenter centerNamed:@"com.efrederickson.reachapp.messaging.server"];
+  rocketbootstrap_distributedmessagingcenter_apply(center);
 }
