@@ -119,7 +119,7 @@
 			[self saveInfo];
 
 			if (!dontClearForcedPhoneState && [RAFakePhoneMode shouldFakeForAppWithIdentifier:identifier]) {
-				[[RAMessagingServer sharedInstance] forcePhoneMode:NO forIdentifier:identifier andRelaunchApp:YES];
+				[[RAMessagingServer mainMessagingServer] forcePhoneMode:NO forIdentifier:identifier andRelaunchApp:YES];
 			}
 		};
 

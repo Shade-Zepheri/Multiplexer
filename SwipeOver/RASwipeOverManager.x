@@ -51,8 +51,8 @@ extern int rotationDegsForOrientation(int o);
 - (void)stopUsingSwipeOver {
 	[self.overlayWindow removeOverlayFromUnderlyingAppImmediately];
 	if (currentAppIdentifier) {
-		[[RAMessagingServer sharedInstance] endResizingApp:currentAppIdentifier completion:nil];
-		[[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
+		[[RAMessagingServer mainMessagingServer] endResizingApp:currentAppIdentifier completion:nil];
+		[[RAMessagingServer mainMessagingServer] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
 	}
 
 	[RAOrientationLocker unlockOrientation];
@@ -194,7 +194,7 @@ extern int rotationDegsForOrientation(int o);
 		return;
 	}
 
-	[[RAMessagingServer sharedInstance] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
+	[[RAMessagingServer mainMessagingServer] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
 
 	if ([[self.overlayWindow currentView] isKindOfClass:[RAHostedAppView class]]) {
 		((RAHostedAppView *)[self.overlayWindow currentView]).autosizesApp = YES;
@@ -218,7 +218,7 @@ extern int rotationDegsForOrientation(int o);
 - (void)updateClientSizes:(BOOL)reloadAppSelectorSizeNow {
 	if (currentAppIdentifier && !self.overlayWindow.hidingUnderlyingApp) {
 		CGFloat underWidth = self.overlayWindow.hidingUnderlyingApp ? -1 : CGRectGetMinX(self.overlayWindow.frame);
-		[[RAMessagingServer sharedInstance] resizeApp:currentAppIdentifier toSize:CGSizeMake(underWidth, -1) completion:nil];
+		[[RAMessagingServer mainMessagingServer] resizeApp:currentAppIdentifier toSize:CGSizeMake(underWidth, -1) completion:nil];
 	}
 
 	if (self.overlayWindow.isShowingAppSelector && reloadAppSelectorSizeNow) {

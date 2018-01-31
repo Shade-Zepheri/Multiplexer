@@ -41,9 +41,11 @@ Updates:
 - Improve stability
 - Maybe separate hooks from main framework
 - Update Public API (that nobody uses)
+- Separate widgets from core to ReachApp
 
 Bugs:
 - Showing NC with reachapp doesnt properly resize (not even sure if possible)
+- Fix weird animations when going HS
 - Empoleon windows dont properly rotate in some (most) apps
 - RA broken on 9.0.2?
 - Fix UIWindow crash

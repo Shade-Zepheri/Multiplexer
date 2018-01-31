@@ -546,7 +546,7 @@ extern BOOL allowOpenApp;
 	if (!IS_IPAD) {
 		return;
 	}
-	[[RAMessagingServer sharedInstance] forcePhoneMode:![RAFakePhoneMode shouldFakeForAppWithIdentifier:attachedView.app.bundleIdentifier] forIdentifier:attachedView.app.bundleIdentifier andRelaunchApp:YES];
+	[[RAMessagingServer mainMessagingServer] forcePhoneMode:![RAFakePhoneMode shouldFakeForAppWithIdentifier:attachedView.app.bundleIdentifier] forIdentifier:attachedView.app.bundleIdentifier andRelaunchApp:YES];
 }
 
 - (void)handlePan:(UIPanGestureRecognizer *)sender {

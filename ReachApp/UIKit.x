@@ -10,7 +10,7 @@ extern BOOL allowClosingReachabilityNatively;
     return;
   }
 
-  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
+  if ([[RAMessagingClient defaultAppClient] isBeingHosted]) {
     LogDebug(@"[ReachApp] stopping reachability from closing because hosted");
     return;
   }

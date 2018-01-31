@@ -20,7 +20,7 @@
   }
   _identifier = identifier;
 
-  NSUInteger value = [[RAMessagingServer sharedInstance] getStoredKeyboardContextIdForApp:identifier];
+  NSUInteger value = [[RAMessagingServer mainMessagingServer] getStoredKeyboardContextIdForApp:identifier];
   self.layerHost.contextId = value;
 
   LogDebug(@"[ReachApp] loaded keyboard view with %tu", value);

@@ -4,9 +4,10 @@
 #import "RAMessaging.h"
 
 @interface RAMessagingClient : NSObject {
-	CPDistributedMessagingCenter *serverCenter;
+	CPDistributedMessagingCenter *_serverCenter;
 }
-+ (instancetype)sharedInstance;
+
++ (instancetype)defaultAppClient;
 
 @property (nonatomic, readonly) RAMessageAppData currentData;
 @property (nonatomic) BOOL hasRecievedData;

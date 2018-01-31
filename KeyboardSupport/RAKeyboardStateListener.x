@@ -22,10 +22,10 @@ BOOL isShowing = NO;
 
   IF_NOT_SPRINGBOARD {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDistributedCenter(), CFSTR("com.efrederickson.reachapp.keyboard.didShow"), NULL, NULL, true);
-    [[RAMessagingClient sharedInstance] notifyServerOfKeyboardSizeUpdate:_size];
+    [[RAMessagingClient defaultAppClient] notifyServerOfKeyboardSizeUpdate:_size];
 
-    if ([[RAMessagingClient sharedInstance] shouldUseExternalKeyboard]) {
-      [[RAMessagingClient sharedInstance] notifyServerToShowKeyboard];
+    if ([[RAMessagingClient defaultAppClient] shouldUseExternalKeyboard]) {
+      [[RAMessagingClient defaultAppClient] notifyServerToShowKeyboard];
       isShowing = YES;
     }
   }
@@ -37,9 +37,9 @@ BOOL isShowing = NO;
 
   IF_NOT_SPRINGBOARD {
     CFNotificationCenterPostNotification(CFNotificationCenterGetDarwinNotifyCenter(), CFSTR("com.efrederickson.reachapp.keyboard.didHide"), NULL, NULL, true);
-    if ([[RAMessagingClient sharedInstance] shouldUseExternalKeyboard] || isShowing) {
+    if ([[RAMessagingClient defaultAppClient] shouldUseExternalKeyboard] || isShowing) {
       isShowing = NO;
-      [[RAMessagingClient sharedInstance] notifyServerToHideKeyboard];
+      [[RAMessagingClient defaultAppClient] notifyServerToHideKeyboard];
     }
   }
 }
@@ -89,7 +89,7 @@ static inline void externalKeyboardDidHide(CFNotificationCenterRef center, void 
     } else {
       contextID = [UITextEffectsWindow sharedTextEffectsWindow]._contextId;
     }
-    [[RAMessagingClient sharedInstance] notifyServerWithKeyboardContextId:contextID];
+    [[RAMessagingClient defaultAppClient] notifyServerWithKeyboardContextId:contextID];
 
 #if DEBUG && NO
     NSCAssert([[[UIKeyboard activeKeyboard] window] _contextId]);

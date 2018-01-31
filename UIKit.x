@@ -14,15 +14,15 @@ static Class $memorized$UITextEffectsWindow$class;
 
 %hook UIWindow
 - (void)setFrame:(CGRect)frame {
-  if (![self.class isEqual:$memorized$UITextEffectsWindow$class] && [[RAMessagingClient sharedInstance] shouldResize]) {
+  if (![self.class isEqual:$memorized$UITextEffectsWindow$class] && [[RAMessagingClient defaultAppClient] shouldResize]) {
     if (![oldFrames objectForKey:@(self.hash)]) {
       [oldFrames setObject:[NSValue valueWithCGRect:frame] forKey:@(self.hash)];
     }
 
-    frame.origin.x = [RAMessagingClient sharedInstance].currentData.wantedClientOriginX == -1 ? 0 : [RAMessagingClient sharedInstance].currentData.wantedClientOriginX;
-    frame.origin.y = [RAMessagingClient sharedInstance].currentData.wantedClientOriginY == -1 ? 0 : [RAMessagingClient sharedInstance].currentData.wantedClientOriginY;
-    CGFloat overrideWidth = [[RAMessagingClient sharedInstance] resizeSize].width;
-    CGFloat overrideHeight = [[RAMessagingClient sharedInstance] resizeSize].height;
+    frame.origin.x = [RAMessagingClient defaultAppClient].currentData.wantedClientOriginX == -1 ? 0 : [RAMessagingClient defaultAppClient].currentData.wantedClientOriginX;
+    frame.origin.y = [RAMessagingClient defaultAppClient].currentData.wantedClientOriginY == -1 ? 0 : [RAMessagingClient defaultAppClient].currentData.wantedClientOriginY;
+    CGFloat overrideWidth = [[RAMessagingClient defaultAppClient] resizeSize].width;
+    CGFloat overrideHeight = [[RAMessagingClient defaultAppClient] resizeSize].height;
     if (overrideWidth != -1 && overrideWidth != 0) {
       frame.size.width = overrideWidth;
     }
@@ -39,7 +39,7 @@ static Class $memorized$UITextEffectsWindow$class;
 }
 
 - (void)_rotateWindowToOrientation:(UIInterfaceOrientation)orientation updateStatusBar:(BOOL)update duration:(CGFloat)duration skipCallbacks:(BOOL)skip {
-  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
+  if ([[RAMessagingClient defaultAppClient] shouldForceOrientation] && orientation != [[RAMessagingClient defaultAppClient] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return;
   }
 
@@ -47,7 +47,7 @@ static Class $memorized$UITextEffectsWindow$class;
 }
 /* TODO: Figure out why this is causing problems
 - (BOOL)_shouldAutorotateToInterfaceOrientation:(UIInterfaceOrientation)orientation checkForDismissal:(BOOL)check isRotationDisabled:(BOOL)disabled {
-  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
+  if ([[RAMessagingClient defaultAppClient] shouldForceOrientation] && orientation != [[RAMessagingClient defaultAppClient] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return NO;
   }
 
@@ -55,18 +55,18 @@ static Class $memorized$UITextEffectsWindow$class;
 }
 */
 - (void)_setWindowInterfaceOrientation:(UIInterfaceOrientation)orientation {
-  if ([[RAMessagingClient sharedInstance] shouldForceOrientation] && orientation != [[RAMessagingClient sharedInstance] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
+  if ([[RAMessagingClient defaultAppClient] shouldForceOrientation] && orientation != [[RAMessagingClient defaultAppClient] forcedOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:orientation]) {
     return;
   }
 
-  %orig([[RAMessagingClient sharedInstance] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient sharedInstance] forcedOrientation]] ? [[RAMessagingClient sharedInstance] forcedOrientation] : orientation);
+  %orig([[RAMessagingClient defaultAppClient] shouldForceOrientation] && [[UIApplication sharedApplication] _isSupportedOrientation:[[RAMessagingClient defaultAppClient] forcedOrientation]] ? [[RAMessagingClient defaultAppClient] forcedOrientation] : orientation);
 }
 
 - (void)_sendTouchesForEvent:(UIEvent *)event {
   %orig;
 
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
-    [[RAMessagingClient sharedInstance] notifySpringBoardOfFrontAppChangeToSelf];
+    [[RAMessagingClient defaultAppClient] notifySpringBoardOfFrontAppChangeToSelf];
   });
 }
 %end
@@ -75,7 +75,7 @@ static Class $memorized$UITextEffectsWindow$class;
 %property (nonatomic, assign) BOOL RA_networkActivity;
 - (void)applicationDidResume {
   %orig;
-  [[RAMessagingClient sharedInstance] requestUpdateFromServer];
+  [[RAMessagingClient defaultAppClient] requestUpdateFromServer];
   //[RAFakePhoneMode updateAppSizing];
 }
 /*
@@ -88,10 +88,10 @@ static Class $memorized$UITextEffectsWindow$class;
 */
 - (void)_setStatusBarHidden:(BOOL)hidden animationParameters:(id)parameters changeApplicationFlag:(BOOL)change {
   //if ([RASettings.sharedInstance unifyStatusBar])
-  if ([[RAMessagingClient sharedInstance] shouldHideStatusBar]) {
+  if ([[RAMessagingClient defaultAppClient] shouldHideStatusBar]) {
     hidden = YES;
     change = YES;
-  } else if ([[RAMessagingClient sharedInstance] shouldShowStatusBar]) {
+  } else if ([[RAMessagingClient defaultAppClient] shouldShowStatusBar]) {
     hidden = NO;
     change = YES;
   }
@@ -183,7 +183,7 @@ static Class $memorized$UITextEffectsWindow$class;
 }
 
 - (BOOL)isNetworkActivityIndicatorVisible {
-  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
+  if ([[RAMessagingClient defaultAppClient] isBeingHosted]) {
     return self.RA_networkActivity;
   } else {
     return %orig;
@@ -192,7 +192,7 @@ static Class $memorized$UITextEffectsWindow$class;
 
 - (void)setNetworkActivityIndicatorVisible:(BOOL)visible {
   %orig(visible);
-  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
+  if ([[RAMessagingClient defaultAppClient] isBeingHosted]) {
     self.RA_networkActivity = visible;
     StatusBarData *data = [UIStatusBarServer getStatusBarData];
     data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = visible; // 26 = activity indicator
@@ -201,8 +201,8 @@ static Class $memorized$UITextEffectsWindow$class;
 }
 
 - (BOOL)openURL:(NSURL *)url {
-  if ([[RAMessagingClient sharedInstance] isBeingHosted]) { // || [RASettings.sharedInstance openLinksInWindows])
-    return [[RAMessagingClient sharedInstance] notifyServerToOpenURL:url openInWindow:[[RASettings sharedInstance] openLinksInWindows]];
+  if ([[RAMessagingClient defaultAppClient] isBeingHosted]) { // || [RASettings.sharedInstance openLinksInWindows])
+    return [[RAMessagingClient defaultAppClient] notifyServerToOpenURL:url openInWindow:[[RASettings sharedInstance] openLinksInWindows]];
   }
 
   return %orig;
@@ -211,7 +211,7 @@ static Class $memorized$UITextEffectsWindow$class;
 
 %hook UIStatusBar
 - (void)statusBarServer:(UIStatusBarServer *)server didReceiveStatusBarData:(StatusBarData *)data withActions:(NSInteger)actions {
-  if ([[RAMessagingClient sharedInstance] isBeingHosted]) {
+  if ([[RAMessagingClient defaultAppClient] isBeingHosted]) {
     data->itemIsEnabled[IS_IOS_OR_NEWER(iOS_10_0) ? 26 : 24] = [UIApplication sharedApplication].networkActivityIndicatorVisible;
   }
 

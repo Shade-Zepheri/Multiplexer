@@ -54,7 +54,8 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 @end
 
 @implementation RAMessagingServer
-+ (instancetype)sharedInstance {
+
++ (instancetype)mainMessagingServer {
 	SHARED_INSTANCE2(RAMessagingServer,
 		[sharedInstance loadServer];
 		sharedInstance->dataForApps = [NSMutableDictionary dictionary];
@@ -65,37 +66,31 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 }
 
 - (void)loadServer {
-	messagingCenter = [%c(CPDistributedMessagingCenter) centerNamed:@"com.efrederickson.reachapp.messaging.server"];
+	_messagingCenter = [CPDistributedMessagingCenter centerNamed:@"com.efrederickson.reachapp.messaging.server"];
+  rocketbootstrap_distributedmessagingcenter_apply(_messagingCenter);
 
-	void *handle = dlopen("/usr/lib/librocketbootstrap.dylib", RTLD_LAZY);
-	if (handle) {
-		void (*rocketbootstrap_distributedmessagingcenter_apply)(CPDistributedMessagingCenter *) = (void(*)(CPDistributedMessagingCenter *))dlsym(handle, "rocketbootstrap_distributedmessagingcenter_apply");
-		rocketbootstrap_distributedmessagingcenter_apply(messagingCenter);
-		dlclose(handle);
-	}
+	[_messagingCenter runServerOnCurrentThread];
 
-	[messagingCenter runServerOnCurrentThread];
+	[_messagingCenter registerForMessageName:RAMessagingShowKeyboardMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingHideKeyboardMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingUpdateKeyboardContextIdMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingRetrieveKeyboardContextIdMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingUpdateAppInfoMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
 
-	[messagingCenter registerForMessageName:RAMessagingShowKeyboardMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingHideKeyboardMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingUpdateKeyboardContextIdMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingRetrieveKeyboardContextIdMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingUpdateAppInfoMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingUpdateKeyboardSizeMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingOpenURLKMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
 
-	[messagingCenter registerForMessageName:RAMessagingUpdateKeyboardSizeMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingOpenURLKMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingGetFrontMostAppInfoMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingChangeFrontMostAppMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
 
-	[messagingCenter registerForMessageName:RAMessagingGetFrontMostAppInfoMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingChangeFrontMostAppMessageName target:self selector:@selector(handleMessageNamed:userInfo:)];
-
-	[messagingCenter registerForMessageName:RAMessagingSnapFrontMostWindowLeftMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingSnapFrontMostWindowRightMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingGoToDesktopOnTheLeftMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingGoToDesktopOnTheRightMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingMaximizeAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingAddNewDesktopMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingCloseAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
-	[messagingCenter registerForMessageName:RAMessagingDetachCurrentAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingSnapFrontMostWindowLeftMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingSnapFrontMostWindowRightMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingGoToDesktopOnTheLeftMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingGoToDesktopOnTheRightMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingMaximizeAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingAddNewDesktopMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingCloseAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
+	[_messagingCenter registerForMessageName:RAMessagingDetachCurrentAppMessageName target:self selector:@selector(handleKeyboardEvent:userInfo:)];
 }
 
 - (NSDictionary *)handleMessageNamed:(NSString *)identifier userInfo:(NSDictionary *)info {
@@ -490,6 +485,7 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 - (NSUInteger)getStoredKeyboardContextIdForApp:(NSString *)identifier {
 	return ![contextIds objectForKey:identifier] ? 0 : [contextIds[identifier] unsignedIntValue];
 }
+
 @end
 
 %ctor {
@@ -497,5 +493,5 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		return;
 	}
 
-	[RAMessagingServer sharedInstance];
+	[RAMessagingServer mainMessagingServer];
 }

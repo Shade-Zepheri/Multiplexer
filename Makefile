@@ -30,8 +30,9 @@ MultiplexerCore_FILES = $(wildcard *.xm) $(wildcard *.mm) $(wildcard *.x) $(wild
 	$(wildcard Debugging/*.x)
 
 MultiplexerCore_FRAMEWORKS = UIKit QuartzCore CoreGraphics
-MultiplexerCore_PRIVATE_FRAMEWORKS = FrontBoardServices BackBoardServices IOKit
+MultiplexerCore_PRIVATE_FRAMEWORKS = AppSupport BackBoardServices FrontBoardServices IOKit
 MultiplexerCore_EXTRA_FRAMEWORKS = CydiaSubstrate
+MultiplexerCore_LIBRARIES = rocketbootstrap
 
 SUBPROJECTS = reachappfakephonemode reachappassertiondhooks reachappbackboarddhooks reachappsettings reachappflipswitch reachappfsdaemon
 

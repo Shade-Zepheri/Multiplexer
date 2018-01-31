@@ -4,12 +4,13 @@
 #import "RAMessaging.h"
 
 @interface RAMessagingServer : NSObject {
-	CPDistributedMessagingCenter *messagingCenter;
+	CPDistributedMessagingCenter *_messagingCenter;
 	NSMutableDictionary *dataForApps;
 	NSMutableDictionary *contextIds;
 	NSMutableDictionary *waitingCompletions;
 }
-+ (instancetype)sharedInstance;
+
++ (instancetype)mainMessagingServer;
 
 - (void)loadServer;
 

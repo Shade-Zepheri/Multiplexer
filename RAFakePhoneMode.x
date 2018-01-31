@@ -55,18 +55,18 @@ CGSize forcePhoneModeSize;
     return NO;
   }
 
-  return [[RAMessagingServer sharedInstance] getDataForIdentifier:identifier].forcePhoneMode;
+  return [[RAMessagingServer mainMessagingServer] getDataForIdentifier:identifier].forcePhoneMode;
 }
 
 + (BOOL)shouldFakeForThisProcess {
   static BOOL fakeFlag = NO;
   static dispatch_once_t onceToken;
   dispatch_once(&onceToken, ^{
-    if (![RAMessagingClient sharedInstance].hasRecievedData) {
-      [[RAMessagingClient sharedInstance] requestUpdateFromServer];
+    if (![RAMessagingClient defaultAppClient].hasRecievedData) {
+      [[RAMessagingClient defaultAppClient] requestUpdateFromServer];
     }
 
-    fakeFlag = [RAMessagingClient sharedInstance].currentData.forcePhoneMode;
+    fakeFlag = [RAMessagingClient defaultAppClient].currentData.forcePhoneMode;
   });
 
   return fakeFlag;

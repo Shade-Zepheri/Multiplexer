@@ -11,7 +11,7 @@ BOOL allowClosingReachabilityNatively = NO;;
 
 @implementation RAMessagingClient
 
-+ (instancetype)sharedInstance {
++ (instancetype)defaultAppClient {
 	IF_SPRINGBOARD {
 		@throw [NSException exceptionWithName:@"IsSpringBoardException" reason:@"Cannot use RAMessagingClient in SpringBoard" userInfo:nil];
 	}
@@ -54,14 +54,8 @@ BOOL allowClosingReachabilityNatively = NO;;
 
 	_currentData = data; // Initialize data
 
-	serverCenter = [%c(CPDistributedMessagingCenter) centerNamed:@"com.efrederickson.reachapp.messaging.server"];
-
-	void *handle = dlopen("/usr/lib/librocketbootstrap.dylib", RTLD_LAZY);
-	if (handle) {
-		void (*rocketbootstrap_distributedmessagingcenter_apply)(CPDistributedMessagingCenter *) = (void(*)(CPDistributedMessagingCenter *))dlsym(handle, "rocketbootstrap_distributedmessagingcenter_apply");
-		rocketbootstrap_distributedmessagingcenter_apply(serverCenter);
-		dlclose(handle);
-	}
+	_serverCenter = [CPDistributedMessagingCenter centerNamed:@"com.efrederickson.reachapp.messaging.server"];
+  rocketbootstrap_distributedmessagingcenter_apply(_serverCenter);
 }
 
 - (void)alertUser:(NSString *)description {
@@ -74,7 +68,7 @@ BOOL allowClosingReachabilityNatively = NO;;
 
 - (void)_requestUpdateFromServerWithTries:(NSInteger)tries {
 	NSDictionary *dict = @{ @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
-	NSDictionary *data = [serverCenter sendMessageAndReceiveReplyName:RAMessagingUpdateAppInfoMessageName userInfo:dict];
+	NSDictionary *data = [_serverCenter sendMessageAndReceiveReplyName:RAMessagingUpdateAppInfoMessageName userInfo:dict];
 	if (data && [data objectForKey:@"data"]) {
 		RAMessageAppData actualData;
 		[data[@"data"] getBytes:&actualData length:sizeof(actualData)];
@@ -124,21 +118,21 @@ BOOL allowClosingReachabilityNatively = NO;;
 
 - (void)notifyServerWithKeyboardContextId:(NSUInteger)cid {
 	NSDictionary *dict = @{ @"contextId": @(cid), @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
-	[serverCenter sendMessageName:RAMessagingUpdateKeyboardContextIdMessageName userInfo:dict];
+	[_serverCenter sendMessageName:RAMessagingUpdateKeyboardContextIdMessageName userInfo:dict];
 }
 
 - (void)notifyServerToShowKeyboard {
 	NSDictionary *dict = @{ @"bundleIdentifier": [NSBundle mainBundle].bundleIdentifier };
-	[serverCenter sendMessageName:RAMessagingShowKeyboardMessageName userInfo:dict];
+	[_serverCenter sendMessageName:RAMessagingShowKeyboardMessageName userInfo:dict];
 }
 
 - (void)notifyServerToHideKeyboard {
-	[serverCenter sendMessageName:RAMessagingHideKeyboardMessageName userInfo:nil];
+	[_serverCenter sendMessageName:RAMessagingHideKeyboardMessageName userInfo:nil];
 }
 
 - (void)notifyServerOfKeyboardSizeUpdate:(CGSize)size {
 	NSDictionary *dict = @{ @"size": NSStringFromCGSize(size) };
-	[serverCenter sendMessageName:RAMessagingUpdateKeyboardSizeMessageName userInfo:dict];
+	[_serverCenter sendMessageName:RAMessagingUpdateKeyboardSizeMessageName userInfo:dict];
 }
 
 - (BOOL)notifyServerToOpenURL:(NSURL *)url openInWindow:(BOOL)openWindow {
@@ -146,7 +140,7 @@ BOOL allowClosingReachabilityNatively = NO;;
 		@"url": url.absoluteString,
 		@"openInWindow": @(openWindow)
 	};
-	return [[serverCenter sendMessageAndReceiveReplyName:RAMessagingOpenURLKMessageName userInfo:dict][@"success"] boolValue];
+	return [[_serverCenter sendMessageAndReceiveReplyName:RAMessagingOpenURLKMessageName userInfo:dict][@"success"] boolValue];
 }
 
 - (void)notifySpringBoardOfFrontAppChangeToSelf {
@@ -156,42 +150,50 @@ BOOL allowClosingReachabilityNatively = NO;;
 	}
 
 	if ([self isBeingHosted] && (!self.knownFrontmostApp || ![self.knownFrontmostApp isEqualToString:ident])) {
-		[serverCenter sendMessageName:RAMessagingChangeFrontMostAppMessageName userInfo:@{ @"bundleIdentifier": ident }];
+		[_serverCenter sendMessageName:RAMessagingChangeFrontMostAppMessageName userInfo:@{ @"bundleIdentifier": ident }];
 	}
 }
 
 - (BOOL)shouldUseExternalKeyboard {
 	return _currentData.shouldUseExternalKeyboard;
 }
+
 - (BOOL)shouldResize {
 	return _currentData.shouldForceSize;
 }
+
 - (CGSize)resizeSize {
 	return CGSizeMake(_currentData.wantedClientWidth, _currentData.wantedClientHeight);
 }
+
 - (BOOL)shouldHideStatusBar {
 	return _currentData.shouldForceStatusBar && !_currentData.statusBarVisibility;
 }
+
 - (BOOL)shouldShowStatusBar {
 	return _currentData.shouldForceStatusBar && _currentData.statusBarVisibility;
 }
+
 - (UIInterfaceOrientation)forcedOrientation {
 	return _currentData.forcedOrientation;
 }
+
 - (BOOL)shouldForceOrientation {
 	return _currentData.shouldForceOrientation;
 }
+
 - (BOOL)isBeingHosted {
 	return _currentData.isBeingHosted;
 }
+
 @end
 
 static inline void reloadClientData(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-	[[RAMessagingClient sharedInstance] requestUpdateFromServer];
+	[[RAMessagingClient defaultAppClient] requestUpdateFromServer];
 }
 
 static inline void updateFrontmostApp(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-	[RAMessagingClient sharedInstance].knownFrontmostApp = ((__bridge NSDictionary *)userInfo)[@"bundleIdentifier"];
+	[RAMessagingClient defaultAppClient].knownFrontmostApp = ((__bridge NSDictionary *)userInfo)[@"bundleIdentifier"];
 }
 
 %ctor {
@@ -199,7 +201,7 @@ static inline void updateFrontmostApp(CFNotificationCenterRef center, void *obse
 		return;
 	}
 
-	[RAMessagingClient sharedInstance];
+	[RAMessagingClient defaultAppClient];
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDarwinNotifyCenter(), NULL, &reloadClientData, (__bridge CFStringRef)[NSString stringWithFormat:@"com.efrederickson.reachapp.clientupdate-%@",[NSBundle mainBundle].bundleIdentifier], NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 	CFNotificationCenterAddObserver(CFNotificationCenterGetDistributedCenter(), NULL, &updateFrontmostApp, CFSTR("com.efrederickson.reachapp.frontmostAppDidUpdate"), NULL, CFNotificationSuspensionBehaviorDeliverImmediately);
 }
