@@ -55,6 +55,7 @@
 #include <sys/sysctl.h>
 #import <UIKit/_UIBackdropViewSettings.h>
 #import <UIKit/_UIBackdropView.h>
+#import <UIKit/UIStatusBar.h>
 #import <UIKit/UIKit.h>
 #import <version.h>
 
@@ -134,54 +135,11 @@ return sharedInstance;
 
 ////////////////////////////////////////////////////////////////////////////////////////////////
 
-@interface UIRemoteKeyboardWindow : UIWindow //UITextEffectsWindow
-+ (instancetype)remoteKeyboardWindowForScreen:(id)arg1 create:(BOOL)arg2;
-@end
+@interface SBIconImageView : UIView
+@property (assign, nonatomic) CGFloat brightness;
 
-@interface SBIconImageView : UIView {
-    UIImageView *_overlayView;
-    //SBIconProgressView *_progressView;
-    BOOL _isPaused;
-    UIImage *_cachedSquareContentsImage;
-    BOOL _showsSquareCorners;
-    SBIcon *_icon;
-    CGFloat _brightness;
-    CGFloat _overlayAlpha;
-}
-
-+ (id)dequeueRecycledIconImageViewOfClass:(Class)arg1;
-+ (void)recycleIconImageView:(id)arg1;
-+ (CGFloat)cornerRadius;
-@property(nonatomic) BOOL showsSquareCorners; // @synthesize showsSquareCorners=_showsSquareCorners;
-@property(nonatomic) CGFloat overlayAlpha; // @synthesize overlayAlpha=_overlayAlpha;
-@property(nonatomic) CGFloat brightness; // @synthesize brightness=_brightness;
-@property(retain, nonatomic) SBIcon *icon; // @synthesize icon=_icon;
-- (BOOL)_shouldAnimatePropertyWithKey:(id)arg1;
-- (void)iconImageDidUpdate:(id)arg1;
 - (CGRect)visibleBounds;
-- (CGSize)sizeThatFits:(CGSize)arg1;
-- (id)squareDarkeningOverlayImage;
-- (id)darkeningOverlayImage;
-- (id)squareContentsImage;
-- (UIImage*)contentsImage;
-- (void)_clearCachedImages;
-- (id)_generateSquareContentsImage;
-- (void)_updateProgressMask;
-- (void)_updateOverlayImage;
-- (id)_currentOverlayImage;
-- (void)updateImageAnimated:(BOOL)arg1;
-- (id)snapshot;
-- (void)prepareForReuse;
-- (void)layoutSubviews;
-- (void)setPaused:(BOOL)arg1;
-- (void)setProgressAlpha:(CGFloat)arg1;
-- (void)_clearProgressView;
-- (void)progressViewCanBeRemoved:(id)arg1;
-- (void)setProgressState:(NSInteger)arg1 paused:(BOOL)arg2 percent:(CGFloat)arg3 animated:(BOOL)arg4;
-- (void)_updateOverlayAlpha;
-- (void)setIcon:(id)arg1 animated:(BOOL)arg2;
-- (void)dealloc;
-- (instancetype)initWithFrame:(CGRect)arg1;
+
 @end
 
 @interface SBFWallpaperView : UIView
@@ -197,52 +155,18 @@ return sharedInstance;
 - (void)_setDisplayedImage:(UIImage*)arg1;
 @end
 
-@class _SBAppSwitcherSnapshotContext;
+@class SBDisplayItem, _SBAppSwitcherSnapshotContext, XBApplicationSnapshot;
 
 @interface SBAppSwitcherSnapshotView : UIView
 @property (nonatomic,copy,readonly) SBDisplayItem *displayItem;
 @property (assign,nonatomic) BOOL shouldTransitionToDefaultPng;
-+ (instancetype)appSwitcherSnapshotViewForDisplayItem:(id)arg1 orientation:(NSInteger)arg2 preferringDownscaledSnapshot:(BOOL)arg3 loadAsync:(BOOL)arg4 withQueue:(id)arg5 ;
++ (instancetype)appSwitcherSnapshotViewForDisplayItem:(SBDisplayItem *)item orientation:(UIInterfaceOrientation)orientation preferringDownscaledSnapshot:(BOOL)downscaled loadAsync:(BOOL)async withQueue:(id)queue;
 - (void)setOrientation:(NSInteger)arg1 orientationBehavior:(int)arg2;
 - (void)_loadSnapshotAsync;
 - (void)_loadZoomUpSnapshotSync;
 - (void)_loadSnapshotSync;
-- (UIImage*)_syncImageFromSnapshot:(id)arg1 ;
-- (instancetype)initWithDisplayItem:(id)arg1 application:(id)arg2 orientation:(NSInteger)arg3 preferringDownscaledSnapshot:(BOOL)arg4 async:(BOOL)arg5 withQueue:(id)arg6;
-- (_SBAppSwitcherSnapshotContext*)_contextForAvailableSnapshotWithLayoutState:(id)arg1 preferringDownscaled:(BOOL)arg2 defaultImageOnly:(BOOL)arg3 ;
-@end
-
-@interface _SBFVibrantSettings : NSObject {
-    int _style;
-    UIColor *_referenceColor;
-    id _legibilitySettings; // _UILegibilitySettings *_legibilitySettings;
-    float _referenceContrast;
-    UIColor *_tintColor;
-    UIColor *_shimmerColor;
-    UIColor *_chevronShimmerColor;
-    UIColor *_highlightColor;
-    UIColor *_highlightLimitingColor;
-}
-
-+ (id)vibrantSettingsWithReferenceColor:(id)arg1 referenceContrast:(float)arg2 legibilitySettings:(id)arg3;
-@property(retain, nonatomic) UIColor *highlightLimitingColor; // @synthesize highlightLimitingColor=_highlightLimitingColor;
-@property(retain, nonatomic) UIColor *highlightColor; // @synthesize highlightColor=_highlightColor;
-@property(retain, nonatomic) UIColor *chevronShimmerColor; // @synthesize chevronShimmerColor=_chevronShimmerColor;
-@property(retain, nonatomic) UIColor *shimmerColor; // @synthesize shimmerColor=_shimmerColor;
-@property(retain, nonatomic) UIColor *tintColor; // @synthesize tintColor=_tintColor;
-@property(readonly, nonatomic) float referenceContrast; // @synthesize referenceContrast=_referenceContrast;
-//@property(readonly, nonatomic) _UILegibilitySettings *legibilitySettings; // @synthesize legibilitySettings=_legibilitySettings;
-@property(readonly, nonatomic) UIColor *referenceColor; // @synthesize referenceColor=_referenceColor;
-@property(readonly, nonatomic) int style; // @synthesize style=_style;
-- (id)highlightLimitingViewWithFrame:(CGRect)arg1;
-- (id)tintViewWithFrame:(CGRect)arg1;
-- (id)_computeSourceColorDodgeColorForDestinationColor:(id)arg1 producingLuminanceChange:(float)arg2;
-- (int)_style;
-- (unsigned int)hash;
-- (BOOL)isEqual:(id)arg1;
-- (void)dealloc;
-- (instancetype)initWithReferenceColor:(id)arg1 referenceContrast:(float)arg2 legibilitySettings:(id)arg3;
-
+- (UIImage *)_syncImageFromSnapshot:(XBApplicationSnapshot *)snapshit;
+- (_SBAppSwitcherSnapshotContext *)_contextForAvailableSnapshotWithLayoutState:(id)layoutState preferringDownscaled:(BOOL)downscaled defaultImageOnly:(BOOL)defaultOnly;
 @end
 
 typedef struct {
@@ -284,19 +208,20 @@ typedef struct {
     unsigned wifiLinkWarning : 1;
 } StatusBarData;
 
-@interface UIStatusBar : UIView
-+ (CGFloat)heightForStyle:(int)arg1 orientation:(int)arg2;
-- (void)setOrientation:(int)arg1;
-- (void)requestStyle:(int)arg1;
-- (void)forceUpdateToData:(StatusBarData *)arg1 animated:(BOOL)arg2;
+@interface UIStatusBar ()
+
+- (void)setOrientation:(UIInterfaceOrientation)orientation;
+- (void)requestStyle:(UIStatusBarStyle)style;
+- (void)forceUpdateToData:(StatusBarData *)data animated:(BOOL)animated;
+
 @end
 
-@interface UIStatusBarServer
+@interface UIStatusBarServer : NSObject
 + (StatusBarData *)getStatusBarData;
 @end
 
 @interface SBModeViewController : UIViewController {
-    UIView* _headerView;
+    UIView *_headerView;
 }
 - (void)_addBulletinObserverViewController:(id)controller;
 - (void)addViewController:(id)controller;
@@ -399,7 +324,6 @@ typedef enum {
 @end
 
 @interface SBChevronView : UIView
-@property(retain, nonatomic) _SBFVibrantSettings *vibrantSettings;
 - (void) setState:(int)state animated:(BOOL)animated;
 - (void)setBackgroundView:(id)arg1;
 @property(retain, nonatomic) UIColor *color;
@@ -751,222 +675,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)setImage:(id)arg1;
 @end
 
-@interface SBIconBadgeView : UIView
-{
-    NSString *_text;
-    BOOL _animating;
-    id/*block*/ _queuedAnimation;
-    BOOL _displayingAccessory;
-    SBIconAccessoryImage *_backgroundImage;
-    SBDarkeningImageView *_backgroundView;
-    SBDarkeningImageView *_textView;
-}
-
-+ (id)_createImageForText:(id)arg1 highlighted:(BOOL)arg2;
-+ (id)_checkoutImageForText:(id)arg1 highlighted:(BOOL)arg2;
-+ (id)_checkoutBackgroundImage;
-+ (id)checkoutAccessoryImagesForIcon:(id)arg1 location:(int)arg2;
-+ (struct CGPoint)_overhang;
-+ (CGFloat)_textPadding;
-+ (struct CGPoint)_textOffset;
-+ (CGFloat)_maxTextWidth;
-+ (id)_textFont;
-- (void)_resizeForTextImage:(id)arg1;
-- (void)_clearText;
-- (void)_zoomOutWithPreparation:(id/*block*/)arg1 animation:(id/*block*/)arg2 completion:(id/*block*/)arg3;
-- (void)_zoomInWithTextImage:(id)arg1 preparation:(id/*block*/)arg2 animation:(id/*block*/)arg3 completion:(id/*block*/)arg4;
-- (void)_crossfadeToTextImage:(id)arg1 withPreparation:(id/*block*/)arg2 animation:(id/*block*/)arg3 completion:(id/*block*/)arg4;
-- (void)setAccessoryBrightness:(CGFloat)arg1;
-- (struct CGPoint)accessoryOriginForIconBounds:(CGRect)arg1;
-- (void)prepareForReuse;
-- (BOOL)displayingAccessory;
-- (void)configureForIcon:(id)arg1 location:(int)arg2 highlighted:(BOOL)arg3;
-- (void)configureAnimatedForIcon:(id)arg1 location:(int)arg2 highlighted:(BOOL)arg3 withPreparation:(id/*block*/)arg4 animation:(id/*block*/)arg5 completion:(id/*block*/)arg6;
-- (void)layoutSubviews;
-- (void)dealloc;
-- (instancetype)init;
-@end
-
-@interface SBIconParallaxBadgeView : SBIconBadgeView
-- (void)_applyParallaxSettings;
-- (void)settings:(id)arg1 changedValueForKey:(id)arg2;
-@end
-
-@interface SBIconView : UIView {
-  SBIcon *_icon;
-  id<SBIconViewDelegate> _delegate;
-  id<SBIconViewLocker> _locker;
-  SBIconImageContainerView *_iconImageContainer;
-  SBIconImageView *_iconImageView;
-  UIImageView *_iconDarkeningOverlay;
-  UIImageView *_ghostlyImageView;
-  UIImageView *_reflection;
-  UIImageView *_shadow;
-  SBIconBadgeImage *_badgeImage;
-  UIImageView *_badgeView;
-  SBIconLabel *_label;
-  BOOL _labelHidden;
-  BOOL _labelOnWallpaper;
-  UIView *_closeBox;
-  int _closeBoxType;
-  UIImageView *_dropGlow;
-  unsigned _drawsLabel : 1;
-  unsigned _isHidden : 1;
-  unsigned _isGrabbed : 1;
-  unsigned _isOverlapping : 1;
-  unsigned _refusesRecipientStatus : 1;
-  unsigned _highlighted : 1;
-  unsigned _launchDisabled : 1;
-  unsigned _isJittering : 1;
-  unsigned _allowJitter : 1;
-  unsigned _touchDownInIcon : 1;
-  unsigned _hideShadow : 1;
-  NSTimer *_delayedUnhighlightTimer;
-  unsigned _onWallpaper : 1;
-  unsigned _ghostlyRequesters;
-  int _iconLocation;
-  float _iconImageAlpha;
-  float _iconImageBrightness;
-  float _iconLabelAlpha;
-  float _accessoryAlpha;
-  CGPoint _unjitterPoint;
-  CGPoint _grabPoint;
-  NSTimer *_longPressTimer;
-  unsigned _ghostlyTag;
-  UIImage *_ghostlyImage;
-  BOOL _ghostlyPending;
-  }
-
-@property (assign, nonatomic) BOOL RA_isIconIndicatorInhibited;
-
-/*
-- (void)RA_updateIndicatorView:(NSInteger)info;
-- (void)RA_updateIndicatorViewWithExistingInfo;
-- (void)RA_setIsIconIndicatorInhibited:(BOOL)value;
-- (void)RA_setIsIconIndicatorInhibited:(BOOL)value showAgainImmediately:(BOOL)value2;
-*/
-
-+ (CGSize)defaultIconSize;
-+ (CGSize)defaultIconImageSize;
-+ (BOOL)allowsRecycling;
-+ (id)_jitterPositionAnimation;
-+ (id)_jitterTransformAnimation;
-+ (CGSize)defaultIconImageSize;
-+ (CGSize)defaultIconSize;
-
-- (instancetype)initWithDefaultSize;
-- (void)dealloc;
-
-@property(assign) id<SBIconViewDelegate> delegate;
-@property (nonatomic) BOOL RA_networkActivity;
-@property(assign) id<SBIconViewLocker> locker;
-@property(readonly, retain) SBIcon *icon;
-- (void)setIcon:(SBIcon *)icon;
-
-- (int)location;
-- (void)setLocation:(int)location;
-- (void)showIconAnimationDidStop:(id)showIconAnimation didFinish:(id)finish icon:(id)icon;
-- (void)setIsHidden:(BOOL)hidden animate:(BOOL)animate;
-- (BOOL)isHidden;
-- (BOOL)isRevealable;
-- (void)positionIconImageView;
-- (void)applyIconImageTransform:(CATransform3D)transform duration:(float)duration delay:(float)delay;
-- (void)setDisplayedIconImage:(id)image;
-- (id)snapshotSettings;
-- (id)iconImageSnapshot:(id)snapshot;
-- (id)reflectedIconWithBrightness:(CGFloat)brightness;
-- (void)setIconImageAlpha:(CGFloat)alpha;
-- (void)setIconLabelAlpha:(CGFloat)alpha;
-- (SBIconImageView *)iconImageView;
-- (void)setLabelHidden:(BOOL)hidden;
-- (void)positionLabel;
-- (CGSize)_labelSize;
-- (Class)_labelClass;
-- (void)updateLabel;
-- (void)_updateBadgePosition;
-- (id)_overriddenBadgeTextForText:(id)text;
-- (void)updateBadge;
-- (id)_automationID;
-- (BOOL)pointMostlyInside:(CGPoint)inside withEvent:(UIEvent *)event;
-- (CGRect)frameForIconOverlay;
-- (void)placeIconOverlayView;
-- (void)updateIconOverlayView;
-- (void)_updateIconBrightness;
-- (BOOL)allowsTapWhileEditing;
-- (BOOL)delaysUnhighlightWhenTapped;
-- (BOOL)isHighlighted;
-- (void)setHighlighted:(BOOL)highlighted;
-- (void)setHighlighted:(BOOL)highlighted delayUnhighlight:(BOOL)unhighlight;
-- (void)_delayedUnhighlight;
-- (BOOL)isInDock;
-- (id)_shadowImage;
-- (void)_updateShadow;
-- (void)updateReflection;
-- (void)setDisplaysOnWallpaper:(BOOL)wallpaper;
-- (void)setLabelDisplaysOnWallpaper:(BOOL)wallpaper;
-- (BOOL)showsReflection;
-- (float)_reflectionImageOffset;
-- (void)setFrame:(CGRect)frame;
-- (void)setIsJittering:(BOOL)isJittering;
-- (void)setAllowJitter:(BOOL)allowJitter;
-- (BOOL)allowJitter;
-- (void)removeAllIconAnimations;
-- (void)setIconPosition:(CGPoint)position;
-- (void)setRefusesRecipientStatus:(BOOL)status;
-- (BOOL)canReceiveGrabbedIcon:(id)icon;
-- (CGFloat)grabDurationForEvent:(id)event;
-- (void)setIsGrabbed:(BOOL)grabbed;
-- (BOOL)isGrabbed;
-- (void)setIsOverlapping:(BOOL)overlapping;
-- (CGAffineTransform)transformToMakeDropGlowShrinkToIconSize;
-- (void)prepareDropGlow;
-- (void)showDropGlow:(BOOL)glow;
-- (void)removeDropGlow;
-- (id)dropGlow;
-- (BOOL)isShowingDropGlow;
-- (void)placeGhostlyImageView;
-- (id)_genGhostlyImage:(id)image;
-- (void)prepareGhostlyImageIfNeeded;
-- (void)prepareGhostlyImage;
-- (void)prepareGhostlyImageView;
-- (void)setGhostly:(BOOL)ghostly requester:(int)requester;
-- (void)setPartialGhostly:(float)ghostly requester:(int)requester;
-- (void)removeGhostlyImageView;
-- (BOOL)isGhostly;
-- (int)ghostlyRequesters;
-- (void)longPressTimerFired;
-- (void)cancelLongPressTimer;
-- (void)touchesCancelled:(id)cancelled withEvent:(id)event;
-- (void)touchesBegan:(id)began withEvent:(id)event;
-- (void)touchesMoved:(id)moved withEvent:(id)event;
-- (void)touchesEnded:(id)ended withEvent:(id)event;
-- (BOOL)isTouchDownInIcon;
-- (void)setTouchDownInIcon:(BOOL)icon;
-- (void)hideCloseBoxAnimationDidStop:(id)hideCloseBoxAnimation didFinish:(id)finish closeBox:(id)box;
-- (void)positionCloseBoxOfType:(int)type;
-- (id)_newCloseBoxOfType:(int)type;
-- (void)setShowsCloseBox:(BOOL)box;
-- (void)setShowsCloseBox:(BOOL)box animated:(BOOL)animated;
-- (BOOL)isShowingCloseBox;
-- (void)closeBoxTapped;
-- (BOOL)pointInside:(CGPoint)inside withEvent:(id)event;
-- (UIEdgeInsets)snapshotEdgeInsets;
-- (void)setShadowsHidden:(BOOL)hidden;
-- (void)_updateShadowFrameForShadow:(id)shadow;
-- (void)_updateShadowFrame;
-- (BOOL)_delegatePositionIsEditable;
-- (void)_delegateTouchEnded:(BOOL)ended;
-- (BOOL)_delegateTapAllowed;
-- (int)_delegateCloseBoxType;
-- (id)createShadowImageView;
-- (void)prepareForRecycling;
-- (CGRect)defaultFrameForProgressBar;
-- (void)iconImageDidUpdate:(id)iconImage;
-- (void)iconAccessoriesDidUpdate:(id)iconAccessories;
-- (void)iconLaunchEnabledDidChange:(id)iconLaunchEnabled;
-- (SBIconImageView*)_iconImageView;
-
-@end
 
 @class NSMapTable;
 
@@ -1013,6 +721,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @end
 
 @interface XBApplicationSnapshot : NSObject
+
 @end
 
 @interface _SBAppSwitcherSnapshotContext : NSObject
@@ -1151,26 +860,55 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 + (instancetype)sharedInstance;
 @end
 
+@protocol SBIconAccessoryInfoProvider <NSObject> // Only iOS 11
+@property (nonatomic, readonly) NSInteger location;
+@property (getter=isHighlighted, nonatomic, readonly) BOOL highlighted;
+@property (nonatomic, readonly) NSInteger continuityBadgeType;
+
+@required
+
+- (NSInteger)continuityBadgeType;
+- (BOOL)isHighlighted;
+- (NSInteger)location;
+
+@end
+
 //temp until I update the headers
-@interface SBIconBadgeView ()
+@interface SBIconBadgeView : UIView
 
 - (void)_configureAnimatedForText:(NSString *)text highlighted:(BOOL)highlighted withPreparation:(void(^)())preparation animation:(void(^)())animation completion:(void(^)())completion;
+
+- (void)configureForIcon:(SBIcon *)icon location:(NSInteger)location highlighted:(BOOL)highlighted;
+- (void)configureForIcon:(SBIcon *)arg1 infoProvider:(id<SBIconAccessoryInfoProvider>)infoProvider;
 
 - (CGPoint)accessoryOriginForIconBounds:(CGRect)bounds;
 - (void)setAccessoryBrightness:(CGFloat)brightness;
 
 @end
 
-@interface SBIconView ()
-@property (strong, nonatomic) SBIconBadgeView *_ra_badgeView;
+@interface SBIconView : UIView <SBIconAccessoryInfoProvider>
+@property (assign, nonatomic) NSInteger location;
+@property (nonatomic, retain) SBIcon *icon;
 
 - (CGRect)_frameForAccessoryView;
-// Cuz above method needs an accessoryView to work
+
+@end
+
+@interface SBIconView (Aura)
+@property (strong, nonatomic) SBIconBadgeView *_ra_badgeView;
+
+// Cuz _frameForAccessoryView needs an accessoryView to work
 - (CGRect)_ra_frameForAccessoryView:(SBIconBadgeView *)accessoryView;
 
 // Added methods
 - (void)_ra_createCustomBadgeViewIfNecessary;
 - (void)_ra_updateCustomBadgeView:(NSInteger)info;
 - (void)_ra_updateCustomBadgeWithExitingInfo;
+
+@end
+
+@interface SBWallpaperPreviewSnapshotCache ()
+// iOS 11
++ (instancetype)sharedInstance;
 
 @end

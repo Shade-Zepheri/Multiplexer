@@ -71,7 +71,6 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 
 	SBIconBadgeView *badgeView = [[%c(SBIconBadgeView) alloc] init];
 	self._ra_badgeView = badgeView;
-	//TODO re-add ColorBadges support
 
 	[self addSubview:badgeView];
 	[self bringSubviewToFront:badgeView];
@@ -95,6 +94,14 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 	}
 
 	[self _ra_createCustomBadgeViewIfNecessary];
+
+  // For ColorBadges
+  // TODO: causes flickering
+  if ([self._ra_badgeView respondsToSelector:@selector(configureForIcon:infoProvider:)]) {
+    [self._ra_badgeView configureForIcon:self.icon infoProvider:self]; // iOS 11; TODO: i think those are the right args
+  } else {
+    [self._ra_badgeView configureForIcon:self.icon location:self.location highlighted:NO];
+  }
 
   NSString *text = stringFromIndicatorInfo(info);
 	[self._ra_badgeView _configureAnimatedForText:text highlighted:NO withPreparation:nil animation:^{
