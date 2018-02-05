@@ -184,7 +184,13 @@
 
 		ON_MAIN_THREAD(^{
 			//apparently SB has native caching since iOS 7
-			SBWallpaperPreviewSnapshotCache *previewCache = [[%c(SBWallpaperController) sharedInstance] valueForKey:@"_previewCache"];
+      SBWallpaperPreviewSnapshotCache *previewCache;
+      if ([%c(SBWallpaperPreviewSnapshotCache) respondsToSelector:@selector(sharedInstance)]) {
+        previewCache = [%c(SBWallpaperPreviewSnapshotCache) sharedInstance]; //iOS 11
+      } else {
+        previewCache = [[%c(SBWallpaperController) sharedInstance] valueForKey:@"_previewCache"];
+      }
+
 			UIImage *homeScreenSnapshot = [previewCache homeScreenSnapshot];
 			UIImage *image = [RAResourceImageProvider imageWithImage:homeScreenSnapshot scaledToSize:[UIScreen mainScreen].bounds.size];
 			CGRect imageFrame = CGRectMake(0, 0, image.size.width, image.size.height);
