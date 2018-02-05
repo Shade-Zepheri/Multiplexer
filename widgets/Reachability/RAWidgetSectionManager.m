@@ -72,8 +72,9 @@ static CGFloat const RAWidgetVerticalPadding = 5.0;
 		if (!section.enabled) {
 			continue;
 		}
+
 		@try {
-			UIView *sectionView = [section viewForFrame:CGRectMake(0, currentY, view.frame.size.width, iconSize.height + RAWidgetVerticalPadding) preferredIconSize:iconSize iconsThatFitPerLine:iconsPerLine spacing:spacing];
+			UIView *sectionView = [section viewForFrame:CGRectMake(0, currentY, CGRectGetWidth(view.frame), iconSize.height + RAWidgetVerticalPadding) preferredIconSize:iconSize iconsThatFitPerLine:iconsPerLine spacing:spacing];
 			if (sectionView) {
 				if (section.showTitle) {
 					CGFloat x = [section respondsToSelector:@selector(titleOffset)] ? section.titleOffset : 10;
@@ -83,7 +84,7 @@ static CGFloat const RAWidgetVerticalPadding = 5.0;
 					titleView.font = [UIFont fontWithName:@"HelveticaNeue" size:16];
 					[titleView sizeToFit];
 					[view addSubview:titleView];
-					currentY += titleView.frame.size.height + RAWidgetVerticalPadding;
+					currentY += CGRectGetHeight(titleView.frame) + RAWidgetVerticalPadding;
 				}
 
 				//sectionView.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
@@ -94,12 +95,13 @@ static CGFloat const RAWidgetVerticalPadding = 5.0;
 				//frame.origin.x = 0;
 				frame.origin.y = currentY;
 				sectionView.frame = frame;
-				currentY += frame.size.height + RAWidgetVerticalPadding;
+				currentY += CGRectGetHeight(frame) + RAWidgetVerticalPadding;
 
 				sectionView.backgroundColor = [[UIColor whiteColor] colorWithAlphaComponent:0.1];
 				[view addSubview:sectionView];
 			}
 		}
+
 		@catch (NSException *ex) {
 			LogError(@"[ReachApp] an error occurred creating the view for section '%@': %@", section.identifier, ex);
 		}

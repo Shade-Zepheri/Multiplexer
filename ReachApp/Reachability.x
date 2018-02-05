@@ -122,10 +122,10 @@ BOOL wasEnabled = NO;
 }
 
 - (void)deactivateReachabilityModeForObserver:(id)observer {
-  //Disable for keyboard here (keyboardsupport's fault since broken)
   if (overrideDisableForStatusBar) {
     return;
   }
+
   %orig;
 
   if (wasEnabled) {
@@ -285,7 +285,6 @@ BOOL wasEnabled = NO;
 }
 
 - (void)_disableReachabilityImmediately:(BOOL)immediately {
-  //Disable for keyboard here
   if (overrideDisableForStatusBar) {
     return;
   }
@@ -327,17 +326,16 @@ BOOL wasEnabled = NO;
 
 - (void)handleReachabilityModeActivated {
   %orig;
+
   if (![[RASettings sharedInstance] reachabilityEnabled]) {
     return;
   }
+
   wasEnabled = YES;
 
   CGFloat knobWidth = 60;
   CGFloat knobHeight = 25;
-  draggerView = [[UIView alloc] initWithFrame:CGRectMake(
-      ([UIScreen mainScreen].bounds.size.width / 2) - (knobWidth / 2),
-      [UIScreen mainScreen].bounds.size.height * .3,
-      knobWidth, knobHeight)];
+  draggerView = [[UIView alloc] initWithFrame:CGRectMake((CGRectGetWidth([UIScreen mainScreen].bounds) / 2) - (knobWidth / 2), CGRectGetHeight([UIScreen mainScreen].bounds) * .3, knobWidth, knobHeight)];
   draggerView.alpha = 0.3;
   draggerView.layer.cornerRadius = 10;
   grabberCenter_X = draggerView.center.x;
@@ -404,7 +402,7 @@ BOOL wasEnabled = NO;
     grabberCenter_Y = w.frame.size.height - (knobHeight / 2);
   }
   if (grabberCenter_Y < 0) {
-    grabberCenter_Y = [UIScreen mainScreen].bounds.size.height * 0.3;
+    grabberCenter_Y = CGRectGetHeight([UIScreen mainScreen].bounds) * 0.3;
   }
   draggerView.center = CGPointMake(grabberCenter_X, grabberCenter_Y);
   recognizer.delegate = (id<UIGestureRecognizerDelegate>)self;
@@ -422,10 +420,7 @@ BOOL wasEnabled = NO;
   [w addSubview:draggerView];
 
   if ([[RASettings sharedInstance] showBottomGrabber]) {
-    bottomDraggerView = [[UIView alloc] initWithFrame:CGRectMake(
-        ([UIScreen mainScreen].bounds.size.width / 2) - (knobWidth / 2),
-        -(knobHeight / 2),
-        knobWidth, knobHeight)];
+    bottomDraggerView = [[UIView alloc] initWithFrame:CGRectMake((CGRectGetWidth([UIScreen mainScreen].bounds) / 2) - (knobWidth / 2), -(knobHeight / 2), knobWidth, knobHeight)];
     bottomDraggerView.alpha = 0.3;
     bottomDraggerView.layer.cornerRadius = 10;
     bottomDraggerView.backgroundColor = UIColor.lightGrayColor;
@@ -442,7 +437,7 @@ BOOL wasEnabled = NO;
     [self RA_closeCurrentView];
   }
 
-  UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
+  UIWindow *effectWindow = [self valueForKey:@"_reachabilityEffectWindow"];
   //CGSize iconSize = [%c(SBIconView) defaultIconImageSize];
   CGSize fullSize = [%c(SBIconView) defaultIconSize];
   fullSize.height = fullSize.width; // otherwise it often looks like {60, 74}
@@ -450,27 +445,27 @@ BOOL wasEnabled = NO;
 
   NSInteger numIconsPerLine = 0;
   CGFloat tmpWidth = 10;
-  while (tmpWidth + fullSize.width <= w.frame.size.width) {
+  while (tmpWidth + fullSize.width <= CGRectGetWidth(effectWindow.frame)) {
     numIconsPerLine++;
     tmpWidth += fullSize.width + 20;
   }
-  padding = (w.frame.size.width - (numIconsPerLine * fullSize.width)) / numIconsPerLine;
+  padding = (CGRectGetWidth(effectWindow.frame) - (numIconsPerLine * fullSize.width)) / numIconsPerLine;
 
-  UIView *widgetSelectorView = [[RAWidgetSectionManager sharedInstance] createViewForEnabledSectionsWithBaseFrame:w.frame preferredIconSize:fullSize iconsThatFitPerLine:numIconsPerLine spacing:padding];
+  UIView *widgetSelectorView = [[RAWidgetSectionManager sharedInstance] createViewForEnabledSectionsWithBaseFrame:effectWindow.frame preferredIconSize:fullSize iconsThatFitPerLine:numIconsPerLine spacing:padding];
   widgetSelectorView.frame = (CGRect){ { 0, 0 }, widgetSelectorView.frame.size };
   //widgetSelectorView.frame = w.frame;
 
   if (draggerView) {
-    [w insertSubview:widgetSelectorView belowSubview:draggerView];
+    [effectWindow insertSubview:widgetSelectorView belowSubview:draggerView];
   } else {
-    [w addSubview:widgetSelectorView];
+    [effectWindow addSubview:widgetSelectorView];
   }
   view = widgetSelectorView;
 
   if ([[RASettings sharedInstance] autoSizeWidgetSelector]) {
-    CGFloat moddedHeight = widgetSelectorView.frame.size.height;
+    CGFloat moddedHeight = CGRectGetHeight(widgetSelectorView.frame);
     if (old_grabberCenterY == -1) {
-      old_grabberCenterY = [UIScreen mainScreen].bounds.size.height * 0.3;
+      old_grabberCenterY = CGRectGetHeight([UIScreen mainScreen].bounds) * 0.3;
     }
     old_grabberCenterY = grabberCenter_Y;
     grabberCenter_Y = moddedHeight;
@@ -498,9 +493,9 @@ CGFloat startingY = -1;
     if (firstLocation.y + translation.y < 50) {
       view.center = CGPointMake(grabberCenter_X, 50);
       grabberCenter_Y = 50;
-    } else if (firstLocation.y + translation.y > [UIScreen mainScreen].bounds.size.height - 30) {
-      view.center = CGPointMake(grabberCenter_X, [UIScreen mainScreen].bounds.size.height - 30);
-      grabberCenter_Y = [UIScreen mainScreen].bounds.size.height - 30;
+    } else if (firstLocation.y + translation.y > CGRectGetHeight([UIScreen mainScreen].bounds) - 30) {
+      view.center = CGPointMake(grabberCenter_X, CGRectGetHeight([UIScreen mainScreen].bounds) - 30);
+      grabberCenter_Y = CGRectGetHeight([UIScreen mainScreen].bounds) - 30;
     } else {
       view.center = CGPointMake(grabberCenter_X, firstLocation.y + translation.y);
       grabberCenter_Y = [sender locationInView:view.superview].y;
@@ -573,12 +568,12 @@ CGFloat startingY = -1;
   UIWindow *topWindow = [self valueForKey:@"_reachabilityEffectWindow"];
   UIWindow *bottomWindow = [self valueForKey:@"_reachabilityWindow"];
 
-  CGRect topFrame = CGRectMake(topWindow.frame.origin.x, topWindow.frame.origin.y, topWindow.frame.size.width, center.y);
-  CGRect bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, [UIScreen mainScreen]._referenceBounds.size.height - center.y);
+  CGRect topFrame = CGRectMake(CGRectGetMinX(topWindow.frame), CGRectGetMinY(topWindow.frame), CGRectGetWidth(topWindow.frame), center.y);
+  CGRect bottomFrame = CGRectMake(CGRectGetMinX(bottomWindow.frame), center.y, CGRectGetWidth(bottomWindow.frame), CGRectGetHeight([UIScreen mainScreen]._referenceBounds) - center.y);
 
   if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-    topFrame = CGRectMake(topWindow.frame.origin.x, 0, topWindow.frame.size.width, center.y);
-    bottomFrame = CGRectMake(bottomWindow.frame.origin.x, center.y, bottomWindow.frame.size.width, [UIScreen mainScreen]._referenceBounds.size.height - center.y);
+    topFrame = CGRectMake(CGRectGetMinX(topWindow.frame), 0, CGRectGetWidth(topWindow.frame), center.y);
+    bottomFrame = CGRectMake(CGRectGetMinX(bottomWindow.frame), center.y, CGRectGetWidth(bottomWindow.frame), CGRectGetHeight([UIScreen mainScreen]._referenceBounds) - center.y);
   }
 
   if ([view isKindOfClass:[RAAppSliderProviderView class]]) {
@@ -610,7 +605,7 @@ CGFloat startingY = -1;
   }
 
   if ([[RASettings sharedInstance] showNCInstead] && ncViewController) {
-    ncViewController.view.frame = CGRectMake(0, 0, topFrame.size.width, topFrame.size.height);;
+    ncViewController.view.frame = CGRectMake(0, 0, CGRectGetWidth(topFrame), CGRectGetHeight(topFrame));;
   } else if (lastBundleIdentifier || [view isKindOfClass:[RAAppSliderProviderView class]]) {
     // Notify clients
 
@@ -624,25 +619,25 @@ CGFloat startingY = -1;
 
       if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
         width = center.y;
-        height = topWindow.frame.size.width;
+        height = CGRectGetWidth(topWindow.frame);
       } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
         //width = topWindow.frame.size.height;
-        width = bottomWindow.frame.origin.y;
-        height = topWindow.frame.size.width;
+        width = CGRectGetMinY(bottomWindow.frame);
+        height = CGRectGetWidth(topWindow.frame);
       } else {
-        width = sliderView.clientFrame.size.width;
-        height = sliderView.clientFrame.size.height;
+        width = CGRectGetWidth(sliderView.clientFrame);
+        height = CGRectGetHeight(sliderView.clientFrame);
       }
     } else {
       if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
         width = center.y;
-        height = topWindow.frame.size.width;
+        height = CGRectGetWidth(topWindow.frame);
       } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-        width = bottomWindow.frame.origin.y;
-        height = topWindow.frame.size.width;
+        width = CGRectGetMinY(bottomWindow.frame);
+        height = CGRectGetWidth(topWindow.frame);
       } else {
-        width = topWindow.frame.size.width;
-        height = topWindow.frame.size.height;
+        width = CGRectGetWidth(topWindow.frame);
+        height = CGRectGetHeight(topWindow.frame);
       }
     }
 
@@ -652,7 +647,7 @@ CGFloat startingY = -1;
     }
 
     if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
-      [[RAMessagingServer mainMessagingServer] moveApp:targetIdentifier toOrigin:CGPointMake(bottomWindow.frame.size.height, 0) completion:nil];
+      [[RAMessagingServer mainMessagingServer] moveApp:targetIdentifier toOrigin:CGPointMake(CGRectGetHeight(bottomWindow.frame), 0) completion:nil];
     }
 
     [[RAMessagingServer mainMessagingServer] resizeApp:targetIdentifier toSize:CGSizeMake(width, height) completion:nil];
@@ -667,23 +662,22 @@ CGFloat startingY = -1;
   }
 
   [[RAMessagingServer mainMessagingServer] setHosted:YES forIdentifier:currentBundleIdentifier completion:nil];
-
   [[RAMessagingServer mainMessagingServer] rotateApp:lastBundleIdentifier toOrientation:[UIApplication sharedApplication].statusBarOrientation completion:nil];
 
   CGFloat width = -1, height = -1;
 
   if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeRight) {
-    width = bottomWindow.frame.size.height;
-    height = bottomWindow.frame.size.width;
+    width = CGRectGetHeight(bottomWindow.frame);
+    height = CGRectGetWidth(bottomWindow.frame);
   } else if ([UIApplication sharedApplication].statusBarOrientation == UIInterfaceOrientationLandscapeLeft) {
     //width = center.y;
-    width = bottomWindow.frame.size.height;
-    height = bottomWindow.frame.size.width;
+    width = CGRectGetHeight(bottomWindow.frame);
+    height = CGRectGetWidth(bottomWindow.frame);
 
     [[RAMessagingServer mainMessagingServer] moveApp:currentBundleIdentifier toOrigin:CGPointMake(bottomWindow.frame.origin.y, 0) completion:nil];
   } else {
-    width = bottomWindow.frame.size.width;
-    height = bottomWindow.frame.size.height;
+    width = CGRectGetWidth(bottomWindow.frame);
+    height = CGRectGetHeight(bottomWindow.frame);
   }
   [[RAMessagingServer mainMessagingServer] resizeApp:currentBundleIdentifier toSize:CGSizeMake(width, height) completion:nil];
   [[RAMessagingServer mainMessagingServer] setShouldUseExternalKeyboard:YES forApp:currentBundleIdentifier completion:nil];
@@ -835,7 +829,7 @@ CGFloat startingY = -1;
 
       if ([[RASettings sharedInstance] autoSizeWidgetSelector]) {
         if (old_grabberCenterY == -1) {
-          old_grabberCenterY = [UIScreen mainScreen].bounds.size.height * 0.3;
+          old_grabberCenterY = CGRectGetHeight([UIScreen mainScreen].bounds) * 0.3;
         }
         grabberCenter_Y = old_grabberCenterY;
         draggerView.center = CGPointMake(grabberCenter_X, grabberCenter_Y);
