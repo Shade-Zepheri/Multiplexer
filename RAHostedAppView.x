@@ -13,7 +13,7 @@ NSMutableDictionary *appsBeingHosted;
 @interface RAHostedAppView () {
     //NSTimer *verifyTimer;
     BOOL isPreloading;
-    FBWindowContextHostManager *contextHostManager;
+    FBSceneHostManager *hostManager;
 
     UIActivityIndicatorView *activityView;
     UIImageView *splashScreenImageView;
@@ -48,18 +48,18 @@ NSMutableDictionary *appsBeingHosted;
 }
 
 - (void)_preloadOrAttemptToUpdateReachabilityCounterpart {
-  if (!app) {
+  if (!_app) {
     return;
   }
 
-  if ([app mainScene]) {
+  if ([_app mainScene]) {
     isPreloading = NO;
     if (((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive && [GET_SBWORKSPACE respondsToSelector:@selector(RA_updateViewSizes)]) {
       dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
         [GET_SBWORKSPACE RA_updateViewSizes]; // App is launched using ReachApp - animations commence. We have to wait for those animations to finish or this won't work.
       });
     }
-  } else if (![app mainScene]) {
+  } else if (![_app mainScene]) {
     if (disablePreload) {
       disablePreload = NO;
     } else {
@@ -71,7 +71,7 @@ NSMutableDictionary *appsBeingHosted;
 - (void)setBundleIdentifier:(NSString *)value {
   _orientation = UIInterfaceOrientationPortrait;
   _bundleIdentifier = value;
-  app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:value];
+  _app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:value];
 }
 
 - (void)setShouldUseExternalKeyboard:(BOOL)value {
@@ -83,21 +83,21 @@ NSMutableDictionary *appsBeingHosted;
   startTries++;
   if (startTries > 5) {
     isPreloading = NO;
-    LogError(@"[ReachApp] maxed out preload attempts for app %@", app.bundleIdentifier);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer" message:[NSString stringWithFormat:@"Unable to start app %@", app.displayName] preferredStyle:UIAlertControllerStyleAlert];
+    LogError(@"[ReachApp] maxed out preload attempts for app %@", _app.bundleIdentifier);
+    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer" message:[NSString stringWithFormat:@"Unable to start app %@", _app.displayName] preferredStyle:UIAlertControllerStyleAlert];
     UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
     [alert addAction:defaultAction];
     [alert show];
     return;
   }
 
-  if (!app || _isCurrentlyHosting) {
+  if (!_app || _isCurrentlyHosting) {
     return;
   }
 
   isPreloading = YES;
-  FBScene *scene = [app mainScene];
-  if (![app pid] || !scene) {
+  FBScene *scene = [_app mainScene];
+  if (!_app.pid || !scene) {
     [[FBSSystemService sharedService] openApplication:self.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:nil];
   }
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -121,18 +121,18 @@ NSMutableDictionary *appsBeingHosted;
 
   _isCurrentlyHosting = YES;
 
-  appsBeingHosted[app.bundleIdentifier] = [appsBeingHosted objectForKey:app.bundleIdentifier] ? @([appsBeingHosted[app.bundleIdentifier] intValue] + 1) : @1;
-  view = (FBWindowContextHostWrapperView *)[RAHostManager enabledHostViewForApplication:app];
-  contextHostManager = (FBWindowContextHostManager *)[RAHostManager hostManagerForApp:app];
-  view.backgroundColorWhileNotHosting = [UIColor clearColor];
-  view.backgroundColorWhileHosting = [UIColor clearColor];
+  appsBeingHosted[_app.bundleIdentifier] = [appsBeingHosted objectForKey:_app.bundleIdentifier] ? @([appsBeingHosted[_app.bundleIdentifier] intValue] + 1) : @1;
+  _hostWrapperView = [RAHostManager enabledHostViewForApplication:_app];
+  hostManager = [RAHostManager hostManagerForApp:_app];
+  _hostWrapperView.backgroundColorWhileNotHosting = [UIColor clearColor];
+  _hostWrapperView.backgroundColorWhileHosting = [UIColor clearColor];
 
-  view.frame = CGRectMake(0, 0, self.bounds.size.width, self.bounds.size.height);
+  _hostWrapperView.frame = CGRectMake(0, 0, CGRectGetWidth(self.bounds), CGRectGetHeight(self.bounds));
   //view.autoresizingMask = UIViewAutoresizingFlexibleWidth | UIViewAutoresizingFlexibleHeight;
 
-  [self addSubview:view];
+  [self addSubview:_hostWrapperView];
 
-  [[RAMessagingServer mainMessagingServer] setHosted:YES forIdentifier:app.bundleIdentifier completion:nil];
+  [[RAMessagingServer mainMessagingServer] setHosted:YES forIdentifier:_app.bundleIdentifier completion:nil];
   if (IS_IPAD) {
     [RAHostedAppView iPad_iOS83_fixHosting];
   }
@@ -147,11 +147,11 @@ NSMutableDictionary *appsBeingHosted;
   startTries = 0;
   disablePreload = NO;
   [self preloadApp];
-  if (!app || _isCurrentlyHosting) {
+  if (!_app || _isCurrentlyHosting) {
     return;
   }
 
-  if ([[UIApplication sharedApplication]._accessibilityFrontMostApplication isEqual:app]) {
+  if ([[UIApplication sharedApplication]._accessibilityFrontMostApplication isEqual:_app]) {
     isForemostAppLabel = [[UILabel alloc] initWithFrame:self.bounds];
     isForemostAppLabel.backgroundColor = [[UIColor blackColor] colorWithAlphaComponent:0.8];
     isForemostAppLabel.textColor = [UIColor whiteColor];
@@ -184,7 +184,7 @@ NSMutableDictionary *appsBeingHosted;
       }
     };
 
-    BIOLOCKDOWN_AUTHENTICATE_APP(app.bundleIdentifier, ^{
+    BIOLOCKDOWN_AUTHENTICATE_APP(_app.bundleIdentifier, ^{
       [self _actualLoadApp];
     }, failedBlock /* stupid commas */);
   } else IF_ASPHALEIA {
@@ -207,7 +207,7 @@ NSMutableDictionary *appsBeingHosted;
       }
     };
 
-    ASPHALEIA_AUTHENTICATE_APP(app.bundleIdentifier, ^{
+    ASPHALEIA_AUTHENTICATE_APP(_app.bundleIdentifier, ^{
       [self _actualLoadApp];
     }, failedBlock);
   } else {
@@ -237,7 +237,7 @@ NSMutableDictionary *appsBeingHosted;
 }
 
 - (void)verifyHostingAndRehostIfNecessary {
-  if (!isPreloading && _isCurrentlyHosting && (!app.isRunning || !view.contextHosted)) { // && (app.pid == 0 || view == nil || view.manager == nil)) // || view._isReallyHosting == NO))
+  if (!isPreloading && _isCurrentlyHosting && (!_app.isRunning || ![_hostWrapperView isHosting])) { // && (app.pid == 0 || view == nil || view.manager == nil)) // || view._isReallyHosting == NO))
     //[activityView startAnimating];
     [self unloadApp];
     [self loadApp];
@@ -274,7 +274,7 @@ NSMutableDictionary *appsBeingHosted;
 
 - (void)setFrame:(CGRect)frame {
   [super setFrame:frame];
-  [view setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
+  [_hostWrapperView setFrame:CGRectMake(0, 0, frame.size.width, frame.size.height)];
 
   if (self.autosizesApp) {
     RAMessageAppData data = [[RAMessagingServer mainMessagingServer] getDataForIdentifier:self.bundleIdentifier];
@@ -322,7 +322,7 @@ NSMutableDictionary *appsBeingHosted;
 
   _isCurrentlyHosting = NO;
 
-  FBScene *scene = [app mainScene];
+  FBScene *scene = [_app mainScene];
 
   if (authenticationDidFailLabel) {
     [authenticationDidFailLabel removeFromSuperview];
@@ -341,9 +341,9 @@ NSMutableDictionary *appsBeingHosted;
     [[RASpringBoardKeyboardActivation sharedInstance] hideKeyboard];
   }
 
-  if (contextHostManager) {
-    [contextHostManager disableHostingForRequester:@"reachapp"];
-    contextHostManager = nil;
+  if (hostManager) {
+    [hostManager disableHostingForRequester:@"reachapp"];
+    hostManager = nil;
   }
 
   //if ([UIApplication.sharedApplication._accessibilityFrontMostApplication isEqual:app])
@@ -359,9 +359,9 @@ NSMutableDictionary *appsBeingHosted;
       return;
     }
 
-    appsBeingHosted[app.bundleIdentifier] = [appsBeingHosted objectForKey:app.bundleIdentifier] ? @([appsBeingHosted[app.bundleIdentifier] intValue] - 1) : @0;
+    appsBeingHosted[_app.bundleIdentifier] = [appsBeingHosted objectForKey:_app.bundleIdentifier] ? @([appsBeingHosted[_app.bundleIdentifier] intValue] - 1) : @0;
 
-    if ([appsBeingHosted[app.bundleIdentifier] intValue] > 0) {
+    if ([appsBeingHosted[_app.bundleIdentifier] intValue] > 0) {
       return;
     }
 
@@ -372,7 +372,7 @@ NSMutableDictionary *appsBeingHosted;
     didRun = YES;
   };
 
-  [[RAMessagingServer mainMessagingServer] setHosted:NO forIdentifier:app.bundleIdentifier completion:nil];
+  [[RAMessagingServer mainMessagingServer] setHosted:NO forIdentifier:_app.bundleIdentifier completion:nil];
   [[RAMessagingServer mainMessagingServer] unforceStatusBarVisibilityForApp:self.bundleIdentifier completion:nil];
   [[RAMessagingServer mainMessagingServer] unRotateApp:self.bundleIdentifier completion:nil];
   if (forceImmediate) {
@@ -400,8 +400,8 @@ NSMutableDictionary *appsBeingHosted;
   for (NSString *bundleIdentifier in appsBeingHosted.allKeys) {
     NSNumber *num = appsBeingHosted[bundleIdentifier];
     if (num.intValue > 0) {
-      SBApplication *app_ = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
-      FBWindowContextHostManager *manager = (FBWindowContextHostManager *)[RAHostManager hostManagerForApp:app_];
+      SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:bundleIdentifier];
+      FBSceneHostManager *manager = [RAHostManager hostManagerForApp:app];
       if (manager) {
         LogInfo(@"[ReachApp] rehosting for iPad: %@", bundleIdentifier);
         [manager enableHostingForRequester:@"reachapp" priority:1];
@@ -422,11 +422,11 @@ NSMutableDictionary *appsBeingHosted;
 }
 
 - (SBApplication *)app {
-  return app;
+  return _app;
 }
 
 - (NSString *)displayName {
-  return app.displayName;
+  return _app.displayName;
 }
 
 @end

@@ -8,7 +8,9 @@
 #import <FrontBoard/FBProcessManager.h>
 #import <FrontBoard/FBProcessState.h>
 #import <FrontBoard/FBScene.h>
+#import <FrontBoard/FBSceneHostManager.h>
 #import <FrontBoard/FBSceneManager.h>
+#import <FrontBoard/FBSceneHostWrapperView.h>
 #import <FrontBoard/FBWorkspaceEvent.h>
 #import <FrontBoardServices/FBSDisplay.h>
 #import <FrontBoardServices/FBSMutableSceneSettings.h>
@@ -912,5 +914,31 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @interface SBWallpaperPreviewSnapshotCache ()
 // iOS 11
 + (instancetype)sharedInstance;
+
+@end
+
+@interface FBSceneHostWrapperView ()
+@property (nonatomic, retain) UIColor *backgroundColorWhileHosting;
+@property (nonatomic, retain) UIColor *backgroundColorWhileNotHosting;
+
+- (BOOL)isHosting;
+
+@end
+
+@interface FBSceneHostManager ()
+
+- (void)enableHostingForRequester:(NSString *)requester priority:(NSInteger)priority;
+
+- (FBSceneHostWrapperView *)hostViewForRequester:(NSString *)requester appearanceStyle:(NSUInteger)style;
+
+@end
+
+@interface FBScene ()
+
+@property (nonatomic, retain, readonly) FBSceneHostManager *hostManager;
+
+@end
+
+@interface FBSceneLayerHostContainerView : UIView
 
 @end

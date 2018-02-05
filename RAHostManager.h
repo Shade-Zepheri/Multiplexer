@@ -1,7 +1,7 @@
 #import "headers.h"
 
 @interface RAHostManager : NSObject
-+ (UIView *)systemHostViewForApplication:(SBApplication *)app;
-+ (UIView *)enabledHostViewForApplication:(SBApplication *)app;
-+ (NSObject *)hostManagerForApp:(SBApplication *)app;
++ (FBSceneLayerHostContainerView *)systemHostViewForApplication:(SBApplication *)app;
++ (FBSceneHostWrapperView *)enabledHostViewForApplication:(SBApplication *)app;
++ (FBSceneHostManager *)hostManagerForApp:(SBApplication *)app;
 @end

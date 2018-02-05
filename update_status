@@ -15,9 +15,6 @@ fake phone mode: working (hacky tho)
 
 iOS 11: (Oh boy)
 - Fix / rework IntroTutorial
-- Figure out SBAppView(Controller) and use those
-  - Remove RAHostedAppView and Manager cuz methods dont exist
-    - Update client / server accordingly
 - Remove / update unneeded classes
   - RASBWorkspaceFetcher
   - RAOrientationLocker

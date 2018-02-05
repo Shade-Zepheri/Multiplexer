@@ -2,15 +2,15 @@
 #import "RACompatibilitySystem.h"
 
 @implementation RAHostManager
-+ (UIView *)systemHostViewForApplication:(SBApplication *)app {
++ (FBSceneLayerHostContainerView *)systemHostViewForApplication:(SBApplication *)app {
 	if (!app) {
 		return nil;
 	}
 
-	return [[app mainScene].contextHostManager valueForKey:@"_hostView"];
+	return [app.mainScene.hostManager valueForKey:@"_hostView"];
 }
 
-+ (UIView *)enabledHostViewForApplication:(SBApplication *)app {
++ (FBSceneHostWrapperView *)enabledHostViewForApplication:(SBApplication *)app {
 	if (!app) {
 		return nil;
 	}
@@ -24,17 +24,18 @@
 	settings.backgrounded = NO;
 	[scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
 
-	FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
-	[contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
-	return [contextHostManager hostViewForRequester:@"reachapp" appearanceStyle:2];
+	FBSceneHostManager *hostManager = scene.hostManager;
+	[hostManager enableHostingForRequester:@"reachapp" orderFront:YES];
+	return [hostManager hostViewForRequester:@"reachapp" appearanceStyle:2];
 }
 
-+ (NSObject *)hostManagerForApp:(SBApplication *)app {
++ (FBSceneHostManager *)hostManagerForApp:(SBApplication *)app {
 	if (!app) {
 		return nil;
 	}
 
-	FBScene *scene = [app mainScene];
-	return (NSObject *)scene.contextHostManager;
+	FBScene *scene = app.mainScene;
+  // Because FBWindowContextHostManager is gone on iOS 11 and its been FBSceneHostManager since iOS 9
+  return scene.hostManager;
 }
 @end

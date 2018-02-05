@@ -4,8 +4,8 @@
 @class RAAppSliderProvider;
 
 @interface RAHostedAppView : UIView <RARunningAppsStateObserver> {
-	SBApplication *app;
-	FBWindowContextHostWrapperView *view;
+	SBApplication *_app;
+	FBSceneHostWrapperView *_hostWrapperView;
 }
 
 + (void)iPad_iOS83_fixHosting;
