@@ -97,7 +97,15 @@ NSMutableDictionary *appsBeingHosted;
 
   isPreloading = YES;
   FBScene *scene = [_app mainScene];
-  if (!_app.pid || !scene) {
+
+  pid_t appPid;
+  if (%c(SBApplicationProcessState)) {
+    appPid = self.app.processState.pid;
+  } else {
+    appPid = self.app.pid;
+  }
+
+  if (!appPid || !scene) {
     [[FBSSystemService sharedService] openApplication:self.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:nil];
   }
   dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 0.5 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
@@ -237,7 +245,14 @@ NSMutableDictionary *appsBeingHosted;
 }
 
 - (void)verifyHostingAndRehostIfNecessary {
-  if (!isPreloading && _isCurrentlyHosting && (!_app.isRunning || ![_hostWrapperView isHosting])) { // && (app.pid == 0 || view == nil || view.manager == nil)) // || view._isReallyHosting == NO))
+  BOOL isRunning;
+  if (%c(SBApplicationProcessState)) {
+    isRunning = self.app.processState.running;
+  } else {
+    isRunning = [self.app isRunning];
+  }
+
+  if (!isPreloading && _isCurrentlyHosting && (!isRunning || ![_hostWrapperView isHosting])) { // && (app.pid == 0 || view == nil || view.manager == nil)) // || view._isReallyHosting == NO))
     //[activityView startAnimating];
     [self unloadApp];
     [self loadApp];

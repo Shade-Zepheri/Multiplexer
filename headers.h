@@ -942,3 +942,14 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @interface FBSceneLayerHostContainerView : UIView
 
 @end
+
+@interface SBApplicationProcessState : NSObject
+@property (nonatomic, readonly) pid_t pid;
+@property (getter=isRunning, nonatomic, readonly) BOOL running;
+
+@end
+
+@interface SBApplication (iOS11)
+@property (nonatomic, readonly) SBApplicationProcessState *processState;
+
+@end
