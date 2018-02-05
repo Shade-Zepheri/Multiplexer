@@ -1,5 +1,4 @@
 #import "headers.h"
-#import "RAWidgetSectionManager.h"
 #import "RASettings.h"
 #import "RAMessagingClient.h"
 #import "RAFakePhoneMode.h"

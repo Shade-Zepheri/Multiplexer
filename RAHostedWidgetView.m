@@ -1,3 +1,4 @@
+/* Not sure what this was mean to be
 #import "RAHostedWidgetView.h"
 #import "RAWidgetBase.h"
 #import "RAWidgetHostManager.h"
@@ -39,3 +40,4 @@
 }
 
 @end
+*/

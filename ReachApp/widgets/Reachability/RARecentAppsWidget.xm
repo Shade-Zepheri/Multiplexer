@@ -1,6 +1,6 @@
 #import "headers.h"
 #import "RARecentAppsWidget.h"
-#import "RAReachabilityManager.h"
+#import "../../RAReachabilityManager.h"
 #import "RAWidgetSectionManager.h"
 #import "RASettings.h"
 #import "RAAppSliderProvider.h"
@@ -126,7 +126,7 @@
 		view.swipeProvider = provider;
 		view.isSwipeable = YES;
 
-		[[%c(RAReachabilityManager) sharedInstance] showAppWithSliderProvider:view];
+		[[RAReachabilityManager sharedInstance] showAppWithSliderProvider:view];
 	}
 }
 @end

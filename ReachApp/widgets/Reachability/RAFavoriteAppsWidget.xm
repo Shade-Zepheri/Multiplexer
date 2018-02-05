@@ -1,29 +1,29 @@
 #import "headers.h"
-#import "RAAllAppsWidget.h"
-#import "RAReachabilityManager.h"
+#import "RAFavoriteAppsWidget.h"
+#import "../../RAReachabilityManager.h"
 #import "RAWidgetSectionManager.h"
 #import "RASettings.h"
 
-@interface RAAllAppsWidget () {
+@interface RAFavoriteAppsWidget () {
 	CGFloat savedX;
 }
 @end
 
-@implementation RAAllAppsWidget
+@implementation RAFavoriteAppsWidget
 - (BOOL)enabled {
-	return [[RASettings sharedInstance] showAllAppsInWidgetSelector];
+	return [[RASettings sharedInstance] showFavorites];
 }
 
 - (NSInteger)sortOrder {
-	return 3;
+	return 2;
 }
 
 - (NSString *)displayName {
-	return LOCALIZE(@"ALL_APPS", @"Localizable");
+	return LOCALIZE(@"FAVORITES", @"Localizable");
 }
 
 - (NSString *)identifier {
-	return @"com.efrederickson.reachapp.widgets.sections.allapps";
+	return @"com.efrederickson.reachapp.widgets.sections.favoriteapps";
 }
 
 - (CGFloat)titleOffset {
@@ -31,44 +31,38 @@
 }
 
 - (UIView *)viewForFrame:(CGRect)frame preferredIconSize:(CGSize)size_ iconsThatFitPerLine:(NSInteger)iconsPerLine spacing:(CGFloat)spacing {
-	UIScrollView *allAppsView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 200)];
-
 	CGSize size = [%c(SBIconView) defaultIconSize];
-	spacing = (CGRectGetWidth(frame) - (iconsPerLine * size.width)) / (iconsPerLine + 0);
-	//NSString *currentBundleIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
-	//if (!currentBundleIdentifier)
-	//	return nil;
+	spacing = (CGRectGetWidth(frame) - (iconsPerLine * size.width)) / iconsPerLine;
+	NSString *currentBundleIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
+	if (!currentBundleIdentifier) {
+		return nil;
+	}
+
 	CGSize contentSize = CGSizeMake((spacing / 2.0), 10);
-	CGFloat interval = ((size.width + spacing) * iconsPerLine);
+	CGFloat interval = (size.width + spacing) * iconsPerLine;
 	NSInteger intervalCount = 1;
 	BOOL isTop = YES;
 	BOOL hasSecondRow = NO;
 	CGFloat width = interval;
 	savedX = spacing / 2.0;
 
-	allAppsView.backgroundColor = [UIColor clearColor];
-	allAppsView.pagingEnabled = [[RASettings sharedInstance] pagingEnabled];
-
-	SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
-
-	static NSMutableArray *allApps = nil;
-	if (!allApps) {
-		allApps = [iconModel.visibleIconIdentifiers mutableCopy];
-		[allApps sortUsingComparator: ^(NSString* a, NSString* b) {
-			NSString *a_ = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:a].displayName;
-			NSString *b_ = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:b].displayName;
-			return [a_ caseInsensitiveCompare:b_];
-		}];
-		//[allApps removeObject:currentBundleIdentifier];
+	NSMutableArray *favorites = [[RASettings sharedInstance] favoriteApps];
+	[favorites removeObject:currentBundleIdentifier];
+	if (favorites.count == 0) {
+		return nil;
 	}
 
-	for (NSString *str in allApps) {
+	UIScrollView *favoritesView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, CGRectGetWidth(frame), 200)];
+	favoritesView.backgroundColor = [UIColor clearColor];
+	favoritesView.pagingEnabled = [[RASettings sharedInstance] pagingEnabled];
+	for (NSString *identifier in favorites) {
 		@autoreleasepool {
-			SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
+			SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
+			SBIconModel *iconModel = [[%c(SBIconController) sharedInstance] valueForKey:@"_iconModel"];
 			SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 			SBIconView *iconView = nil;
 
-			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
+      if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
 				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 			} else {
 				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
@@ -97,7 +91,8 @@
 			UITapGestureRecognizer *iconViewTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(appViewItemTap:)];
 			[iconView addGestureRecognizer:iconViewTapGestureRecognizer];
 
-			[allAppsView addSubview:iconView];
+      LogDebug(@"iconView: %@", iconView);
+			[favoritesView addSubview:iconView];
 
 			contentSize.width += CGRectGetWidth(iconView.frame) + spacing;
 		}
@@ -105,11 +100,11 @@
 
 	contentSize.width = width;
 	contentSize.height = 10 + ((size.height + 10) * (hasSecondRow ? 2 : 1));
-	frame = allAppsView.frame;
+	frame = favoritesView.frame;
 	frame.size.height = contentSize.height;
-	allAppsView.frame = frame;
-	allAppsView.contentSize = contentSize;
-	return allAppsView;
+	favoritesView.frame = frame;
+	favoritesView.contentSize = contentSize;
+	return favoritesView;
 }
 
 - (void)appViewItemTap:(UIGestureRecognizer *)gesture {
@@ -119,6 +114,6 @@
 @end
 
 %ctor {
-	static id _widget = [[RAAllAppsWidget alloc] init];
+	static id _widget = [[RAFavoriteAppsWidget alloc] init];
 	[[RAWidgetSectionManager sharedInstance] registerSection:_widget];
 }

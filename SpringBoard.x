@@ -1,9 +1,8 @@
-#import "RACompatibilitySystem.h"
 #import "headers.h"
-#import "RAWidgetSectionManager.h"
+#import "RACompatibilitySystem.h"
 #import "RASettings.h"
-#import "Asphaleia.h"
 #import "RASnapshotProvider.h"
+#import "Asphaleia.h"
 
 BOOL overrideDisableForStatusBar = NO;
 
@@ -50,7 +49,7 @@ BOOL overrideDisableForStatusBar = NO;
 %end
 
 %hook SBApplication
-
+// Not in iOS 11
 - (void)didActivateForScene:(FBScene *)scene transactionID:(NSUInteger)transactionID {
   dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
     [[RASnapshotProvider sharedInstance] forceReloadOfSnapshotForIdentifier:self.bundleIdentifier];
@@ -62,7 +61,7 @@ BOOL overrideDisableForStatusBar = NO;
 %end
 
 static void respring_notification(CFNotificationCenterRef center, void *observer, CFStringRef name, const void *object, CFDictionaryRef userInfo) {
-  if (IS_IOS_OR_NEWER(iOS_9_3)) {
+  if (%c(SBSRelaunchAction)) {
     SBSRelaunchAction *restartAction = [%c(SBSRelaunchAction) actionWithReason:@"RestartRenderServer" options:SBSRelaunchActionOptionsFadeToBlack targetURL:nil];
     [[FBSSystemService sharedService] sendActions:[NSSet setWithObject:restartAction] withResult:nil];
   } else {
