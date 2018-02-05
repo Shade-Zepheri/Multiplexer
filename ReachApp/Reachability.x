@@ -8,9 +8,10 @@
 #import "RAMessagingServer.h"
 #import "RAAppSwitcherModelWrapper.h"
 #import "RAKeyboardStateListener.h"
+#import "RAHostManager.h"
 #import "Multiplexer.h"
 
-/*FBWindowContextHostWrapperView*/ UIView *view = nil;
+UIView *view = nil;
 NSString *lastBundleIdentifier = @"";
 NSString *currentBundleIdentifier = @"";
 SBNotificationCenterViewController *ncViewController = nil;
@@ -254,7 +255,7 @@ BOOL wasEnabled = NO;
       if (lastBundleIdentifier && lastBundleIdentifier.length > 0) {
         if (app && app.pid && [app mainScene]) {
           FBScene *scene = [app mainScene];
-          FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
+          FBSMutableSceneSettings *settings = scene.mutableSettings;
           settings.backgrounded = YES;
           [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
           //MSHookIvar<FBWindowContextHostView*>([app mainScene].contextHostManager, "_hostView").frame = pre_topAppFrame;
@@ -266,8 +267,8 @@ BOOL wasEnabled = NO;
             //MSHookIvar<FBWindowContextHostView*>([currentApp mainScene].contextHostManager, "_hostView").transform = pre_topAppTransform;
           }
 
-          FBWindowContextHostManager *contextHostManager = [scene contextHostManager];
-          [contextHostManager disableHostingForRequester:@"reachapp"];
+          FBSceneHostManager *hostManager = scene.hostManager;
+          [hostManager disableHostingForRequester:@"reachapp"];
         }
       }
       view = nil;
@@ -688,9 +689,8 @@ CGFloat startingY = -1;
 }
 
 %new - (void)RA_launchTopAppWithIdentifier:(NSString *)bundleIdentifier {
-  UIWindow *w = [self valueForKey:@"_reachabilityEffectWindow"];
+  UIWindow *effectWindow = [self valueForKey:@"_reachabilityEffectWindow"];
   SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:lastBundleIdentifier];
-  FBScene *scene = [app mainScene];
   if (!app) {
     return;
   }
@@ -703,8 +703,7 @@ CGFloat startingY = -1;
   if (!app.pid || ![app mainScene]) {
     LogWarn(@"No pid or mainScene; trying again");
     overrideDisableForStatusBar = YES;
-    [(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:bundleIdentifier suspended:YES];
-    [[%c(FBProcessManager) sharedInstance] createApplicationProcessForBundleID:bundleIdentifier];
+    [[FBSSystemService sharedService] openApplication:app.bundleIdentifier options:@{ FBSOpenApplicationOptionKeyActivateSuspended : @YES } withResult:nil];
 
     dispatch_after(dispatch_time(DISPATCH_TIME_NOW, 1 * NSEC_PER_SEC), dispatch_get_main_queue(), ^{
       [self RA_launchTopAppWithIdentifier:bundleIdentifier];
@@ -715,19 +714,12 @@ CGFloat startingY = -1;
 
   [RAAppSwitcherModelWrapper addIdentifierToFront:bundleIdentifier];
 
-  FBWindowContextHostManager *contextHostManager = scene.contextHostManager;
+  view = [RAHostManager enabledHostViewForApplication:app];
 
-  FBSMutableSceneSettings *settings = [[scene mutableSettings] mutableCopy];
-  settings.backgrounded = NO;
-  [scene _applyMutableSettings:settings withTransitionContext:nil completion:nil];
-
-  [contextHostManager enableHostingForRequester:@"reachapp" orderFront:YES];
-  view = [contextHostManager hostViewForRequester:@"reachapp" enableAndOrderFront:YES];
-
-  if (draggerView && draggerView.superview == w) {
-    [w insertSubview:view belowSubview:draggerView];
+  if (draggerView && draggerView.superview == effectWindow) {
+    [effectWindow insertSubview:view belowSubview:draggerView];
   } else {
-    [w addSubview:view];
+    [effectWindow addSubview:view];
   }
 
   //if ([[RASettings sharedInstance] enableRotation] && ![[RASettings sharedInstance] scalingRotationMode])

@@ -91,7 +91,6 @@
 			UITapGestureRecognizer *iconViewTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(appViewItemTap:)];
 			[iconView addGestureRecognizer:iconViewTapGestureRecognizer];
 
-      LogDebug(@"iconView: %@", iconView);
 			[favoritesView addSubview:iconView];
 
 			contentSize.width += CGRectGetWidth(iconView.frame) + spacing;

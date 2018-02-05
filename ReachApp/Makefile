@@ -14,6 +14,7 @@ include $(THEOS)/makefiles/common.mk
 TWEAK_NAME = ReachApp
 ReachApp_FILES = $(wildcard *.x) $(wildcard *.m) $(wildcard widgets/Core/*.m) $(wildcard widgets/Reachability/*.xm) $(wildcard widgets/Reachability/*.m)
 ReachApp_FRAMEWORKS = UIKit CoreGraphics
+ReachApp_PRIVATE_FRAMEWORKS = FrontBoardServices
 ReachApp_EXTRA_FRAMEWORKS = MultiplexerCore
 
 include $(THEOS_MAKE_PATH)/tweak.mk
