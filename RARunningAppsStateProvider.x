@@ -9,7 +9,7 @@
 - (instancetype)init {
 	self = [super init];
 	if (self) {
-		//This whole class is rather overkill but hey
+		//This whole class is rather overkill but hey (Pretty much copies FBProcessManager)
 		_observers = [[NSHashTable alloc] initWithOptions:(NSHashTableObjectPointerPersonality | NSHashTableWeakMemory) capacity:1];
 
 		//create queues
@@ -30,17 +30,21 @@
 
 - (void)addObserver:(id<RARunningAppsStateObserver>)observer {
 	dispatch_sync(_queue, ^{
-		if (![_observers containsObject:observer]) {
-		  [_observers addObject:observer];
+		if ([_observers containsObject:observer]) {
+		  return;
 		}
+
+    [_observers addObject:observer];
 	});
 }
 
 - (void)removeObserver:(id<RARunningAppsStateObserver>)observer {
 	dispatch_sync(_queue, ^{
-		if ([_observers containsObject:observer]) {
-			[_observers removeObject:observer];
+		if (![_observers containsObject:observer]) {
+			return;
 		}
+
+    [_observers removeObject:observer];
 	});
 }
 
@@ -65,39 +69,23 @@
 
 %hook SBMainWorkspace
 
-//Could've done this in process:updateFromState:toState but thats no fun
-- (void)applicationProcessDidExit:(FBApplicationProcess *)process withContext:(id)context  {
-	%orig;
+- (void)process:(FBProcess *)process stateDidChangeFromState:(FBProcessState *)fromState toState:(FBProcessState *)toState {
+  %orig;
 
-	RARunningAppsStateObserverHandler appKilledBlock = ^(id<RARunningAppsStateObserver> observer) {
-		NSString *bundleIdentifier = process.bundleIdentifier;
-		if (![observer respondsToSelector:@selector(applicationDidExit:)]) {
-			return;
-		}
+  BOOL isRunning = toState.running;
+  NSString *bundleIdentifier = process.bundleIdentifier;
 
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[observer applicationDidExit:bundleIdentifier];
-		});
-	};
+  RARunningAppsStateObserverHandler handlerBlock = ^(id<RARunningAppsStateObserver> observer) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      if (isRunning && [observer respondsToSelector:@selector(applicationDidLaunch:)]) {
+        [observer applicationDidLaunch:bundleIdentifier];
+      } else if (!isRunning && [observer respondsToSelector:@selector(applicationDidExit:)]) {
+        [observer applicationDidExit:bundleIdentifier];
+      }
+    });
+  };
 
-	[[RARunningAppsStateProvider defaultStateProvider] notifyObserversUsingBlock:appKilledBlock];
-}
-
-- (void)applicationProcessDidLaunch:(FBApplicationProcess *)process {
-	%orig;
-
-	RARunningAppsStateObserverHandler appStartedBlock = ^(id<RARunningAppsStateObserver> observer) {
-		NSString *bundleIdentifier = process.bundleIdentifier;
-		if (![observer respondsToSelector:@selector(applicationDidLaunch:)]) {
-			return;
-		}
-
-		dispatch_async(dispatch_get_main_queue(), ^{
-			[observer applicationDidLaunch:bundleIdentifier];
-		});
-	};
-
-	[[RARunningAppsStateProvider defaultStateProvider] notifyObserversUsingBlock:appStartedBlock];
+  [[RARunningAppsStateProvider defaultStateProvider] notifyObserversUsingBlock:handlerBlock];
 }
 
 %end
