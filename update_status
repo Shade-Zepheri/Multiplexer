@@ -52,6 +52,7 @@ Bugs:
   - See method
 
 Minor Things/Bugs to note:
+- Really need to rewrite ReachApp
 - Optimize FakePhoneMode (use Classic Modes)
 - FF broken with camera app (Out of aura's scope. Because of AppDelegate)
 - Really need to clean headers

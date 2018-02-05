@@ -34,7 +34,7 @@
 	UIScrollView *allAppsView = [[UIScrollView alloc] initWithFrame:CGRectMake(0, 0, frame.size.width, 200)];
 
 	CGSize size = [%c(SBIconView) defaultIconSize];
-	spacing = (frame.size.width - (iconsPerLine * size.width)) / (iconsPerLine + 0);
+	spacing = (CGRectGetWidth(frame) - (iconsPerLine * size.width)) / (iconsPerLine + 0);
 	//NSString *currentBundleIdentifier = [[UIApplication sharedApplication] _accessibilityFrontMostApplication].bundleIdentifier;
 	//if (!currentBundleIdentifier)
 	//	return nil;
@@ -43,7 +43,6 @@
 	NSInteger intervalCount = 1;
 	BOOL isTop = YES;
 	BOOL hasSecondRow = NO;
-	SBApplication *app = nil;
 	CGFloat width = interval;
 	savedX = spacing / 2.0;
 
@@ -63,26 +62,23 @@
 		//[allApps removeObject:currentBundleIdentifier];
 	}
 
-	isTop = YES;
-	intervalCount = 1;
-	hasSecondRow = NO;
 	for (NSString *str in allApps) {
 		@autoreleasepool {
-			app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
+			SBApplication *app = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:str];
 			SBApplicationIcon *icon = [iconModel applicationIconForBundleIdentifier:app.bundleIdentifier];
 			SBIconView *iconView = nil;
 
 			if ([%c(SBIconViewMap) respondsToSelector:@selector(homescreenMap)]) {
-				iconView = [[%c(SBIconViewMap) homescreenMap] iconViewForIcon:icon];
+				iconView = [[%c(SBIconViewMap) homescreenMap] _iconViewForIcon:icon];
 			} else {
-				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconViewForIcon:icon];
+				iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] _iconViewForIcon:icon];
 			}
 
 			if (!iconView || ![icon isKindOfClass:%c(SBApplicationIcon)]) {
 				continue;
 			}
 
-			if (interval != 0 && contentSize.width + iconView.frame.size.width > interval * intervalCount) {
+			if (interval != 0 && contentSize.width + CGRectGetWidth(iconView.frame) > interval * intervalCount) {
 				if (isTop) {
 					contentSize.height += size.height + 10;
 					contentSize.width -= interval;
@@ -95,7 +91,7 @@
 				isTop = !isTop;
 			}
 
-			iconView.frame = CGRectMake(contentSize.width, contentSize.height, iconView.frame.size.width, iconView.frame.size.height);
+			iconView.frame = CGRectMake(contentSize.width, contentSize.height, CGRectGetWidth(iconView.frame), CGRectGetHeight(iconView.frame));
 			iconView.tag = app.pid;
 			iconView.restorationIdentifier = app.bundleIdentifier;
 			UITapGestureRecognizer *iconViewTapGestureRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(appViewItemTap:)];
@@ -103,9 +99,10 @@
 
 			[allAppsView addSubview:iconView];
 
-			contentSize.width += iconView.frame.size.width + spacing;
+			contentSize.width += CGRectGetWidth(iconView.frame) + spacing;
 		}
 	}
+
 	contentSize.width = width;
 	contentSize.height = 10 + ((size.height + 10) * (hasSecondRow ? 2 : 1));
 	frame = allAppsView.frame;

@@ -890,6 +890,8 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (assign, nonatomic) NSInteger location;
 @property (nonatomic, retain) SBIcon *icon;
 
++ (CGSize)defaultIconSize;
+
 - (CGRect)_frameForAccessoryView;
 
 @end
