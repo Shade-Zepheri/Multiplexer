@@ -1,6 +1,6 @@
 #import "headers.h"
 
 @interface RAOrientationLocker : NSObject
-+ (void)lockOrientation;
-+ (void)unlockOrientation;
+@property (class, assign, nonatomic) BOOL orientationLocked;
+
 @end

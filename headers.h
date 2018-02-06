@@ -43,6 +43,7 @@
 #import <SpringBoard/SBMainSwitcherGestureCoordinator.h>
 #import <SpringBoard/SBMainWorkspace.h>
 #import <SpringBoard/SBMainWorkspaceTransitionRequest.h>
+#import <SpringBoard/SBOrientationLockManager.h>
 #import <SpringBoard/SBUIController.h>
 #import <SpringBoard/SpringBoard.h>
 #import <SpringBoard/SBWallpaperController.h>
@@ -951,5 +952,11 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @interface SBApplication (iOS11)
 @property (nonatomic, readonly) SBApplicationProcessState *processState;
+
+@end
+
+@interface SBOrientationLockManager ()
+
+- (void)setLockOverrideEnabled:(BOOL)overrideEnabled forReason:(NSString *)reason;
 
 @end

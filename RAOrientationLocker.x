@@ -1,13 +1,16 @@
 #import "RAOrientationLocker.h"
 
+static BOOL _orientationLocked = NO;
+
 @implementation RAOrientationLocker
 
-+ (void)lockOrientation {
-	[[%c(SBMainSwitcherGestureCoordinator) sharedInstance] _lockOrientation];
++ (void)setOrientationLocked:(BOOL)locked {
+	_orientationLocked = locked;
+	[[%c(SBOrientationLockManager) sharedInstance] setLockOverrideEnabled:locked forReason:@"Multiplexer"];
 }
 
-+ (void)unlockOrientation {
-	[[%c(SBMainSwitcherGestureCoordinator) sharedInstance] _releaseOrientationLock];
++ (BOOL)orientationLocked {
+	return _orientationLocked;
 }
 
 @end

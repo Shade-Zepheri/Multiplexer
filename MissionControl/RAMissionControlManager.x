@@ -108,7 +108,7 @@ CGRect swappedForOrientation(CGRect input) {
 	[[RAGestureManager sharedInstance] addGestureRecognizerWithTarget:self forEdge:UIRectEdgeBottom identifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture" priority:RAGesturePriorityHigh];
 	[[RAGestureManager sharedInstance] ignoreSwipesBeginningInRect:[UIScreen mainScreen].bounds forIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
 	[[RARunningAppsStateProvider defaultStateProvider] addObserver:window];
-	[RAOrientationLocker lockOrientation];
+  RAOrientationLocker.orientationLocked = YES;
 	if (!IS_IOS_OR_NEWER(iOS_10_0)) { //Not required on 10.x, not sure about other versions
 		[[%c(SBWallpaperController) sharedInstance] beginRequiringWithReason:@"RAMissionControlManager"];
 	}
@@ -216,7 +216,7 @@ CGRect swappedForOrientation(CGRect input) {
 	[[[%c(RADesktopManager) sharedInstance] currentDesktop] loadApps];
 	[[RAGestureManager sharedInstance] removeGestureWithIdentifier:@"com.efrederickson.reachapp.missioncontrol.dismissgesture"];
 	[[RAGestureManager sharedInstance] stopIgnoringSwipesForIdentifier:@"com.efrederickson.reachapp.windowedmultitasking.systemgesture"];
-	[RAOrientationLocker unlockOrientation];
+  RAOrientationLocker.orientationLocked = NO;
 	RASystemGesturesInhibitor.gesturesInhibited = NO;
 
 	//if (lastOpenedApp && lastOpenedApp.isRunning && [UIApplication sharedApplication]._accessibilityFrontMostApplication != lastOpenedApp)

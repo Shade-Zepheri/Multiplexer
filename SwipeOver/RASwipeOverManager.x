@@ -27,35 +27,35 @@ extern int rotationDegsForOrientation(int o);
 
 @implementation RASwipeOverManager
 + (instancetype)sharedInstance {
-	SHARED_INSTANCE(RASwipeOverManager);
+  SHARED_INSTANCE(RASwipeOverManager);
 }
 
 - (void)showAppSelector {
-	[self.overlayWindow showAppSelector];
+  [self.overlayWindow showAppSelector];
 }
 
 - (BOOL)isEdgeViewShowing {
-	return CGRectGetMinX(self.overlayWindow.frame) < SCREEN_WIDTH;
+  return CGRectGetMinX(self.overlayWindow.frame) < SCREEN_WIDTH;
 }
 
 - (void)startUsingSwipeOver {
-	start = 0;
-	_usingSwipeOver = YES;
-	currentAppIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
+  start = 0;
+  _usingSwipeOver = YES;
+  currentAppIdentifier = [UIApplication sharedApplication]._accessibilityFrontMostApplication.bundleIdentifier;
 
-	[self createEdgeView];
+  [self createEdgeView];
 
-	[RAOrientationLocker lockOrientation];
+  RAOrientationLocker.orientationLocked = YES;
 }
 
 - (void)stopUsingSwipeOver {
-	[self.overlayWindow removeOverlayFromUnderlyingAppImmediately];
-	if (currentAppIdentifier) {
-		[[RAMessagingServer mainMessagingServer] endResizingApp:currentAppIdentifier completion:nil];
-		[[RAMessagingServer mainMessagingServer] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
-	}
+  [self.overlayWindow removeOverlayFromUnderlyingAppImmediately];
+  if (currentAppIdentifier) {
+    [[RAMessagingServer mainMessagingServer] endResizingApp:currentAppIdentifier completion:nil];
+    [[RAMessagingServer mainMessagingServer] setShouldUseExternalKeyboard:YES forApp:currentAppIdentifier completion:nil];
+  }
 
-	[RAOrientationLocker unlockOrientation];
+  RAOrientationLocker.orientationLocked = NO;
 
 	_usingSwipeOver = NO;
 	currentAppIdentifier = nil;

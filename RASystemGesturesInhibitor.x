@@ -3,7 +3,7 @@
 
 static BOOL _gesturesInhibited = NO;
 
-@implementation RASystemGesturesInhibitor : NSObject
+@implementation RASystemGesturesInhibitor
 
 + (void)setGesturesInhibited:(BOOL)value {
 	_gesturesInhibited = value;
