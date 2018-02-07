@@ -1,5 +1,4 @@
 #import "RAMessagingClient.h"
-#import "UIAlertController+Window.h"
 
 BOOL allowClosingReachabilityNatively = NO;;
 
@@ -61,7 +60,7 @@ BOOL allowClosingReachabilityNatively = NO;;
 #if DEBUG
 	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
 	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-	[alert show];
+  [[UIWindow keyWindow].rootViewController presentViewController:alert animated:YES completion:nil];
 #endif
 }
 

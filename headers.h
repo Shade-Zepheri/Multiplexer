@@ -960,3 +960,21 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)setLockOverrideEnabled:(BOOL)overrideEnabled forReason:(NSString *)reason;
 
 @end
+
+@class SBAlertItem;
+
+@interface _SBAlertController : UIAlertController
+@property (weak, nonatomic) SBAlertItem * alertItem;
+
+@end
+
+@interface SBAlertItem : NSObject
+
++ (void)activateAlertItem:(SBAlertItem *)alertItem;
+
+- (_SBAlertController *)alertController;
+
+- (BOOL)dismissOnLock;
+- (void)configure:(BOOL)animated requirePasscodeForActions:(BOOL)requirePasscode;
+
+@end

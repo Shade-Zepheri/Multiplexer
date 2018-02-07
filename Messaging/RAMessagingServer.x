@@ -13,7 +13,7 @@
 #import "RAWindowSnapDataProvider.h"
 #import "RAHostManager.h"
 #import "Multiplexer.h"
-#import "UIAlertController+Window.h"
+#import "RAWarningAlertItem.h"
 
 BOOL launchNextOpenIntoWindow = NO;
 
@@ -223,9 +223,8 @@ RAWindowSnapLocation RAWindowSnapLocationGetRightOfScreen() {
 		return;
 	}
 
-	UIAlertController *alert = [UIAlertController alertControllerWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") message:description preferredStyle:UIAlertControllerStyleAlert];
-	[alert addAction:[UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil]];
-	[alert show];
+  RAWarningAlertItem *alertItem = [%c(RAWarningAlertItem) alertItemWithTitle:LOCALIZE(@"MULTIPLEXER", @"Localizable") andMessage:description];
+  [alertItem.class activateAlertItem:alertItem];
 #endif
 }
 

@@ -17,7 +17,6 @@ iOS 11: (Oh boy)
 - Fix / rework IntroTutorial
 - Remove / update unneeded classes
   - RASBWorkspaceFetcher
-  - RAOrientationLocker
   - RAAppSwitcherModelWrapper
   - RASnapshotProvider
 - iX and Gestures (just figure that out)

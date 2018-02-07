@@ -6,7 +6,7 @@
 #import "RASpringBoardKeyboardActivation.h"
 #import "Asphaleia.h"
 #import "dispatch_after_cancel.h"
-#import "UIAlertController+Window.h"
+#import "RAWarningAlertItem.h"
 
 NSMutableDictionary *appsBeingHosted;
 
@@ -84,10 +84,9 @@ NSMutableDictionary *appsBeingHosted;
   if (startTries > 5) {
     isPreloading = NO;
     LogError(@"[ReachApp] maxed out preload attempts for app %@", _app.bundleIdentifier);
-    UIAlertController *alert = [UIAlertController alertControllerWithTitle:@"Multiplexer" message:[NSString stringWithFormat:@"Unable to start app %@", _app.displayName] preferredStyle:UIAlertControllerStyleAlert];
-    UIAlertAction *defaultAction = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
-    [alert addAction:defaultAction];
-    [alert show];
+    NSString *message = [NSString stringWithFormat:@"Unable to start app %@", _app.displayName];
+    RAWarningAlertItem *alertItem = [%c(RAWarningAlertItem) alertItemWithTitle:@"Multiplexer" andMessage:message];
+    [alertItem.class activateAlertItem:alertItem];
     return;
   }
 
