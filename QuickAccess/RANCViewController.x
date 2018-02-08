@@ -52,7 +52,10 @@
 
 	_appViewController.automatesLifecycle = NO;
 	_appViewController.ignoresOcclusions = YES;
-	_appViewController.options = 65537;
+  if ([_appViewController respondsToSelector:@selector(options)]) {
+    _appViewController.options = 65537;
+  }
+
 
 	[self bs_addChildViewController:_appViewController animated:NO transitionBlock:^{
 		[self.view addSubview:_appViewController.view];
@@ -97,6 +100,8 @@
 	}
 
 	_appViewController.requestedMode = 2;
+
+  // Works cuz Both SBAppView (iOS 9-10) and SBDeviceApplicationSceneView (iOS 11+) luckily share the same method
 	[_appViewController.appView setForcesStatusBarHidden:YES];
 
 	UIView *contentView = _appViewController.view;
@@ -112,7 +117,7 @@
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 
-	_appViewController.requestedMode = 1;
+	_appViewController.requestedMode = 0;
 }
 
 //TODO: See if iOS 9 needs these methods
