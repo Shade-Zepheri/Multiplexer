@@ -37,7 +37,7 @@
     <key>APP</key>
     <string>App</string>
     <key>UNLOCK_FOR_NCAPP</key>
-    <string>Unlock to use\nQuick Access</string>
+    <string>Unlock to use Quick Access</string>
 
     <key>ALL_APPS</key>
     <string>All Apps</string>
@@ -52,6 +52,6 @@
     <string>%@\n is currently open</string>
 
     <key>ASPHALEIA_AUTH_FAILED</key>
-    <string>Asphaleia \n authentication failed for\n %@.\nTap to try again.</string>
+    <string>Asphaleia authentication failed for %@. Tap to try again.</string>
 </dict>
 </plist>

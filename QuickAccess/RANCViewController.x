@@ -3,7 +3,6 @@
 #import "RASettings.h"
 
 @interface RANCViewController ()
-@property (strong, nonatomic) RAHostedAppView *appView;
 @property (strong, nonatomic)	UILabel *isLockedLabel;
 @end
 
@@ -14,25 +13,7 @@
 }
 
 - (void)forceReloadAppLikelyBecauseTheSettingChanged {
-
-}
-
-
-int patchOrientation(int in) {
-	if (in == 3) {
-		return 1;
-	}
-
-	return in;
-}
-
-int rotationDegsForOrientation(int o) {
-	if (o == UIInterfaceOrientationLandscapeRight) {
-		return 270;
-	} else if (o == UIInterfaceOrientationLandscapeLeft) {
-		return 90;
-	}
-	return 0;
+  //Reload app when settings change (Maybe not necessary cuz prompts respring anyways)
 }
 
 - (void)insertAppropriateViewWithContent {
@@ -58,11 +39,17 @@ int rotationDegsForOrientation(int o) {
 - (void)loadView {
 	[super loadView];
 
-  //Major changes in iOS 11 so gotta account for that
 	NSString *identifier = [[RASettings sharedInstance] NCApp];
-	SBApplication *application = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
-	SBWorkspaceApplication *workspaceApplication = [%c(SBWorkspaceApplication) entityForApplication:application];
-	_appViewController = [[%c(SBAppViewController) alloc] initWithIdentifier:identifier andApplication:workspaceApplication];
+  SBApplication *application = [[%c(SBApplicationController) sharedInstance] applicationWithBundleIdentifier:identifier];
+
+  if ([%c(SBAppViewController) instancesRespondToSelector:@selector(initWithIdentifier:andApplicationSceneEntity:)]) {
+    SBDeviceApplicationSceneEntity *applicationSceneEntity = [[%c(SBDeviceApplicationSceneEntity) alloc] initWithApplicationForMainDisplay:application];
+    _appViewController = [[%c(SBAppViewController) alloc] initWithIdentifier:identifier andApplicationSceneEntity:applicationSceneEntity];
+  } else {
+    SBWorkspaceApplication *workspaceApplication = [%c(SBWorkspaceApplication) entityForApplication:application];
+    _appViewController = [[%c(SBAppViewController) alloc] initWithIdentifier:identifier andApplication:workspaceApplication];
+  }
+
 	_appViewController.automatesLifecycle = NO;
 	_appViewController.ignoresOcclusions = YES;
 	_appViewController.options = 65537;

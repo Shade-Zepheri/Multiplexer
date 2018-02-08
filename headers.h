@@ -819,6 +819,17 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @end
 
+@interface SBApplicationSceneEntity : SBWorkspaceEntity
+@property (nonatomic, readonly) SBApplication * application;
+
+@end
+
+@interface SBDeviceApplicationSceneEntity : SBApplicationSceneEntity
+
+- (instancetype)initWithApplicationForMainDisplay:(SBApplication *)application;
+
+@end
+
 @interface SBAppViewController : UIViewController <SBApplicationHosting>
 @property (nonatomic,copy,readonly) NSString *bundleIdentifier;
 @property (assign,nonatomic) BOOL automatesLifecycle;
@@ -829,6 +840,7 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (assign,nonatomic) BOOL ignoresOcclusions;
 
 - (instancetype)initWithIdentifier:(NSString *)identifier andApplication:(SBWorkspaceApplication *)application;
+- (instancetype)initWithIdentifier:(NSString *)identifier andApplicationSceneEntity:(SBApplicationSceneEntity *)applicationSceneEntity;
 
 - (SBApplication *)hostedApp;
 - (BOOL)isHostingAnApp;
