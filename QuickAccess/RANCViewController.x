@@ -82,6 +82,7 @@ int rotationDegsForOrientation(int o) {
 - (void)viewWillAppear:(BOOL)animated {
 	[super viewWillAppear:animated];
 
+  _appViewController.requestedMode = 2;
 	if (_appViewController.requestedMode != 2) {
 		_appViewController.requestedMode = 1;
 	}
@@ -90,21 +91,7 @@ int rotationDegsForOrientation(int o) {
 - (void)viewDidAppear:(BOOL)animated {
 	[super viewDidAppear:animated];
 
-	_appViewController.requestedMode = 2;
-	[_appViewController.appView setForcesStatusBarHidden:YES];
-
-	UIView *contentView = _appViewController.view;
-
-  //TODO: find a way so I dont have to reset the transfrom everytime
-  contentView.transform = CGAffineTransformIdentity;
-  contentView.frame = [UIScreen mainScreen].bounds;
-
-	CGFloat scale = CGRectGetHeight(self.view.frame) / CGRectGetHeight([UIScreen mainScreen].bounds);
-	contentView.transform = CGAffineTransformMakeScale(scale, scale);
-  contentView.center = self.view.center;
-
-/*
-	if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
+  if ([[%c(SBLockScreenManager) sharedInstance] isUILocked]) {
 		if (!self.isLockedLabel) {
 			self.isLockedLabel = [[UILabel alloc] initWithFrame:CGRectMake(0, 0, 320, 400)];
 			self.isLockedLabel.numberOfLines = 2;
@@ -114,21 +101,31 @@ int rotationDegsForOrientation(int o) {
 			[self.view addSubview:self.isLockedLabel];
 		}
 
-		self.isLockedLabel.frame = CGRectMake((self.view.frame.size.width - self.isLockedLabel.frame.size.width) / 2, (self.view.frame.size.height - self.isLockedLabel.frame.size.height) / 2, self.isLockedLabel.frame.size.width, self.isLockedLabel.frame.size.height);
-
+		self.isLockedLabel.center = self.view.center;
 		self.isLockedLabel.text = LOCALIZE(@"UNLOCK_FOR_NCAPP", @"Localizable");
 		return;
 	} else if (self.isLockedLabel) {
 		[self.isLockedLabel removeFromSuperview];
 		self.isLockedLabel = nil;
 	}
-*/
+
+	_appViewController.requestedMode = 2;
+	[_appViewController.appView setForcesStatusBarHidden:YES];
+
+	UIView *contentView = _appViewController.view;
+
+  contentView.transform = CGAffineTransformIdentity;
+  contentView.frame = [UIScreen mainScreen].bounds;
+
+	CGFloat scale = CGRectGetHeight(self.view.frame) / CGRectGetHeight([UIScreen mainScreen].bounds);
+	contentView.transform = CGAffineTransformMakeScale(scale, scale);
+  contentView.center = self.view.center;
 }
 
 - (void)viewDidDisappear:(BOOL)animated {
 	[super viewDidDisappear:animated];
 
-	_appViewController.requestedMode = 0;
+	_appViewController.requestedMode = 1;
 }
 
 //TODO: See if iOS 9 needs these methods
