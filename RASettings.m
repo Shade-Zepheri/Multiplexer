@@ -148,11 +148,11 @@
 		}
 
 		if (![previousNCAppSetting isEqualToString:self.NCApp]) {
-			[[objc_getClass("RANCViewController") sharedViewController] forceReloadAppLikelyBecauseTheSettingChanged]; // using objc_getClass allows RASettings to be used in reachappsettings and other places
+			[[NSClassFromString(@"RANCViewController") defaultViewController] forceReloadAppLikelyBecauseTheSettingChanged]; // using objc_getClass allows RASettings to be used in reachappsettings and other places
 		}
 
-		if (![self shouldShowStatusBarIcons] && [objc_getClass("SBApplication") respondsToSelector:@selector(RA_clearAllStatusBarIcons)]) {
-			[objc_getClass("SBApplication") performSelector:@selector(RA_clearAllStatusBarIcons)];
+		if (![self shouldShowStatusBarIcons] && [NSClassFromString(@"SBApplication") respondsToSelector:@selector(RA_clearAllStatusBarIcons)]) {
+			[NSClassFromString(@"SBApplication") performSelector:@selector(RA_clearAllStatusBarIcons)];
 		}
 
 		[[RAThemeManager sharedInstance] invalidateCurrentThemeAndReload:[self currentThemeIdentifier]];
@@ -204,10 +204,6 @@
 
 - (BOOL)showNCInstead {
 	return BOOL(@"showNCInstead", NO);
-}
-
-- (BOOL)homeButtonClosesReachability {
-	return BOOL(@"homeButtonClosesReachability", YES);
 }
 
 - (BOOL)showBottomGrabber {

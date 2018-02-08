@@ -20,6 +20,7 @@ iOS 11: (Oh boy)
   - RAAppSwitcherModelWrapper
   - RASnapshotProvider
 - iX and Gestures (just figure that out)
+  - Figure out better alternative for GestureSupport
 - Extensions
   - Verify everything works
 
@@ -48,6 +49,7 @@ Bugs:
   - See method
 
 Minor Things/Bugs to note:
+- Relook settings
 - Really need to rewrite ReachApp
 - Optimize FakePhoneMode (use Classic Modes)
 - FF broken with camera app (Out of aura's scope. Because of AppDelegate)

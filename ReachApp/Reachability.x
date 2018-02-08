@@ -30,30 +30,6 @@ CGFloat old_grabberCenterY = -1;
 
 BOOL wasEnabled = NO;
 
-%hook SBUIController
-
-- (BOOL)clickedMenuButton {
-	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
-		overrideDisableForStatusBar = NO;
-		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
-		return YES;
-	}
-
-	return %orig;
-}
-
-- (BOOL)handleHomeButtonSinglePressUp {
-	if ([[RASettings sharedInstance] homeButtonClosesReachability] && [GET_SBWORKSPACE isUsingReachApp] && ((SBReachabilityManager *)[%c(SBReachabilityManager) sharedInstance]).reachabilityModeActive) {
-		overrideDisableForStatusBar = NO;
-		[[%c(SBReachabilityManager) sharedInstance] _handleReachabilityDeactivated];
-		return YES;
-	}
-
-	return %orig;
-}
-
-%end
-
 %hook SBReachabilityManager
 
 + (BOOL)reachabilitySupported {

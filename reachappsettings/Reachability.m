@@ -79,18 +79,7 @@
       @"label": @"Enable Rotation",
       @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
     },
-*/
 
-    @{ @"footerText": LOCALIZE(@"HOME_CLOSE_REACH_FOOTER", @"ReachApp") },
-    @{
-      @"cell": @"PSSwitchCell",
-      @"default": @YES,
-      @"defaults": @"com.efrederickson.reachapp.settings",
-      @"key": @"homeButtonClosesReachability",
-      @"label": LOCALIZE(@"HOME_CLOSE_REACH", @"ReachApp"),
-      @"PostNotification": @"com.efrederickson.reachapp.settings/reloadSettings",
-    },
-/*
     @{ @"footerText": @"Shows the bottom half of the resizing grabber" },
     @{
       @"cell": @"PSSwitchCell",
@@ -153,7 +142,7 @@
 
 @implementation RAAppChooserOptionsListController
 - (BOOL)showHeartImage {
-        return NO;
+  return NO;
 }
 
 - (NSArray *)customSpecifiers {

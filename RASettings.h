@@ -36,7 +36,6 @@ typedef NS_ENUM(NSInteger, RAGrabArea) {
 - (BOOL)disableAutoDismiss;
 - (BOOL)enableRotation;
 - (BOOL)showNCInstead;
-- (BOOL)homeButtonClosesReachability;
 - (BOOL)showBottomGrabber;
 - (BOOL)showWidgetSelector;
 - (BOOL)scalingRotationMode;
