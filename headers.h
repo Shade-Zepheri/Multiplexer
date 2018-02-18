@@ -992,3 +992,9 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (void)deactivateForButton;
 
 @end
+
+@interface SBRecentAppLayouts : NSObject
+
+- (NSArray *)recents;
+
+@end
