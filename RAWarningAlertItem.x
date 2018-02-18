@@ -29,7 +29,9 @@
   NSString *message = self.message;
   alertController.message = message;
 
-  UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:nil];
+  UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+    [self deactivateForButton];
+  }];
   [alertController addAction:action];
   alertController.preferredAction = action;
 }

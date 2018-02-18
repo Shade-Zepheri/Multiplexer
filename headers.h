@@ -989,4 +989,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 - (BOOL)dismissOnLock;
 - (void)configure:(BOOL)animated requirePasscodeForActions:(BOOL)requirePasscode;
 
+- (void)deactivateForButton;
+
 @end
