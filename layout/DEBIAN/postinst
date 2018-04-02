@@ -1,8 +1,7 @@
 #!/bin/bash
 
-chgrp wheel /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
-chown root /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
-launchctl load -w /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
+chown root:wheel /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
+launchctl load /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist || true
 
 #echo "The best multitasker you've never used... Until now."
 echo "Thanks for using Multiplexer!"
