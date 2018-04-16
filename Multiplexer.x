@@ -15,7 +15,7 @@
 }
 
 - (BOOL)isOnSupportedOS {
-	return IS_IOS_BETWEEN(iOS_9_0, iOS_10_2);
+	return IS_IOS_BETWEEN(iOS_9_0, iOS_11_2);
 }
 
 - (void)registerExtension:(NSString *)name forMultiplexerVersion:(NSString *)version {

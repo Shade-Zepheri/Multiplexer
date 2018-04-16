@@ -4,6 +4,7 @@
 #import "RAResourceImageProvider.h"
 
 @implementation RASnapshotProvider
+
 + (instancetype)sharedInstance {
 	SHARED_INSTANCE2(RASnapshotProvider, sharedInstance->imageCache = [[NSCache alloc] init]);
 }
@@ -25,51 +26,41 @@
 		}
 
 		UIImage *image = nil;
-
 		SBDisplayItem *item = [%c(SBDisplayItem) displayItemWithType:@"App" displayIdentifier:identifier];
-		__block SBAppSwitcherSnapshotView *view = nil;
 
-		ON_MAIN_THREAD(^{
-			view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:NO withQueue:nil];
-		});
+		if (%c(SBAppSwitcherSnapshotCacheEntry)) {
+			// iOS 11
 
-		if (view) {
-			// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
-			_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:nil preferringDownscaled:NO defaultImageOnly:NO];
-			image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
-		}
+			// Get snapshot cache
+			SBMainSwitcherViewController *mainSwitcherViewController = [%c(SBMainSwitcherViewController) sharedInstance];
+			SBFluidSwitcherViewController *fluidSwitcherViewController = mainSwitcherViewController.contentViewController;
+			SBAppSwitcherSnapshotImageCache *snapshotCache = [fluidSwitcherViewController valueForKey:@"_snapshotCache"];
+			NSMutableDictionary <SBDisplayItem *, SBAppSwitcherSnapshotCacheEntry *> *cachedSnapshots = [snapshotCache valueForKey:@"_cachedSnapshots"];
 
-		if (!image) {
-			/* Find adequate replacement for iOS 9+
-			LogWarn(@"Couldn't Get Switcher Image; Using SplashScreen");
-			SBApplication *app = [[%c(SBApplicationController) sharedInstance] RA_applicationWithBundleIdentifier:identifier];
-
-			if (app && app.mainSceneID) {
-				@try {
-					CGRect frame = CGRectMake(0, 0, 0, 0);
-					UIView *view = [%c(SBUIController) _zoomViewWithSplashboardLaunchImageForApplication:app sceneID:app.mainSceneID screen:UIScreen.mainScreen interfaceOrientation:0 includeStatusBar:YES snapshotFrame:&frame];
-
-					if (view) { //renderInContext appears to actually be faster
-						UIGraphicsBeginImageContextWithOptions([UIScreen mainScreen].bounds.size, YES, 0);
-
-						ON_MAIN_THREAD(^{
-							[view.layer renderInContext:UIGraphicsGetCurrentContext()];
-						});
-
-						image = UIGraphicsGetImageFromCurrentImageContext();
-						UIGraphicsEndImageContext();
-					}
-				}
-				@catch (NSException *ex) {
-					LogError(@"[ReachApp] error generating snapshot: %@", ex);
-				}
+			// Check if snapshot exists and load if not
+			if (!cachedSnapshots[item]) {
+				[snapshotCache _updateCacheForDisplayItem:item];
 			}
 
-			if (!image) { // we can only hope it does not reach this point of desperation
-				image = [UIImage imageWithContentsOfFile:[NSString stringWithFormat:@"%@/Default.png", app.path]];
+			// Get snapshot
+			SBAppSwitcherSnapshotCacheEntry *cacheEntry = cachedSnapshots[item];
+			image = cacheEntry.snapshotImage;
+		} else {
+			// iOS 10 >
+
+			__block SBAppSwitcherSnapshotView *view = nil;
+			ON_MAIN_THREAD(^{
+				view = [%c(SBAppSwitcherSnapshotView) appSwitcherSnapshotViewForDisplayItem:item orientation:orientation preferringDownscaledSnapshot:NO loadAsync:NO withQueue:nil];
+			});
+
+			if (view) {
+				// prettry much implementing _loadSnapshotSyncPreferringDownscaled since the image isnt saved anywhere
+				_SBAppSwitcherSnapshotContext *snapshotContext = [view _contextForAvailableSnapshotWithLayoutState:nil preferringDownscaled:NO defaultImageOnly:NO];
+				image = [view _syncImageFromSnapshot:snapshotContext.snapshot];
 			}
-			*/
 		}
+
+		// TODO: find fallback methods
 
 		if (image) {
 			[imageCache setObject:image forKey:identifier];
@@ -184,12 +175,12 @@
 
 		ON_MAIN_THREAD(^{
 			//apparently SB has native caching since iOS 7
-      SBWallpaperPreviewSnapshotCache *previewCache;
-      if ([%c(SBWallpaperPreviewSnapshotCache) respondsToSelector:@selector(sharedInstance)]) {
-        previewCache = [%c(SBWallpaperPreviewSnapshotCache) sharedInstance]; //iOS 11
-      } else {
-        previewCache = [[%c(SBWallpaperController) sharedInstance] valueForKey:@"_previewCache"];
-      }
+			SBWallpaperPreviewSnapshotCache *previewCache;
+			if ([%c(SBWallpaperPreviewSnapshotCache) respondsToSelector:@selector(sharedInstance)]) {
+				previewCache = [%c(SBWallpaperPreviewSnapshotCache) sharedInstance]; //iOS 11
+			} else {
+				previewCache = [[%c(SBWallpaperController) sharedInstance] valueForKey:@"_previewCache"];
+			}
 
 			UIImage *homeScreenSnapshot = [previewCache homeScreenSnapshot];
 			UIImage *image = [RAResourceImageProvider imageWithImage:homeScreenSnapshot scaledToSize:[UIScreen mainScreen].bounds.size];
@@ -215,7 +206,7 @@
 			UIImage *image = [self snapshotForIdentifier:hostedView.bundleIdentifier orientation:hostedView.orientation];
 			CIImage *coreImage = image.CIImage;
 			if (!coreImage) {
-				coreImage = [CIImage imageWithCGImage:image.CGImage];
+			coreImage = [CIImage imageWithCGImage:image.CGImage];
 			}
 			//coreImage = [coreImage imageByApplyingTransform:view.transform];
 			CGFloat rotation = atan2(hostedView.transform.b, hostedView.transform.a);
@@ -285,4 +276,5 @@
 - (void)forceReloadEverything {
 	[imageCache removeAllObjects];
 }
+
 @end

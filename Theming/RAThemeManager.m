@@ -49,7 +49,7 @@
 	}
 
 #if DEBUG
-	LogDebug(@"[ReachApp] loaded %zd themes in %f seconds.", allThemes.count, fabs([startTime timeIntervalSinceNow]));
+	LogDebug(@"[ReachApp] loaded %tu themes in %f seconds.", allThemes.count, fabs([startTime timeIntervalSinceNow]));
 #endif
 }
 @end

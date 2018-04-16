@@ -731,11 +731,35 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 @property (nonatomic,retain) XBApplicationSnapshot *snapshot;
 @end
 
+@interface SBAppSwitcherSnapshotCacheEntry : NSObject
+@property (nonatomic, retain) SBDisplayItem *displayItem;
+@property (nonatomic, retain) UIImage *snapshotImage;
+
+@end
+
+@interface SBAppSwitcherSnapshotImageCache : NSObject {
+    NSMutableDictionary <SBDisplayItem *, SBAppSwitcherSnapshotCacheEntry *> *_cachedSnapshots;
+}
+
+- (void)_updateCacheForDisplayItem:(SBDisplayItem *)displayItem;
+
+@end
+
+@interface SBFluidSwitcherViewController : UIViewController {
+    SBAppSwitcherSnapshotImageCache* _snapshotCache;    
+}
+
+@end
+
 @interface SBMainSwitcherViewController : UIViewController
 + (instancetype)sharedInstance;
 - (BOOL)dismissSwitcherNoninteractively;
 - (BOOL)isVisible;
 - (BOOL)activateSwitcherNoninteractively;
+
+// iOS 11
+@property (nonatomic, readonly) SBFluidSwitcherViewController *contentViewController;
+
 @end
 
 @interface SBSwitcherContainerView : UIView
