@@ -1,6 +1,7 @@
 #import "RABackgrounder.h"
 #import "RASettings.h"
 #import "Multiplexer.h"
+#import "SBIconView+Aura.h"
 
 NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 	switch (mode) {
@@ -205,7 +206,7 @@ NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode) {
 		iconView = [[[%c(SBIconController) sharedInstance] homescreenIconViewMap] iconViewForIcon:icon];
 	}
 
-	[iconView _ra_updateCustomBadgeView:info];
+	[iconView _ra_updateCustomBadgeWithInfo:info];
 }
 
 - (BOOL)shouldShowIndicatorForIdentifier:(NSString *)identifier {

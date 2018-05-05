@@ -1,21 +1,21 @@
 #import "headers.h"
 
 typedef NS_ENUM(NSInteger, RABackgroundMode) {
-  RABackgroundModeNative,
-  RABackgroundModeForcedForeground,
-  RABackgroundModeForceNone,
-  RABackgroundModeSuspendImmediately,
-  RABackgroundModeUnlimitedBackgroundingTime,
+    RABackgroundModeNative,
+    RABackgroundModeForcedForeground,
+    RABackgroundModeForceNone,
+    RABackgroundModeSuspendImmediately,
+    RABackgroundModeUnlimitedBackgroundingTime,
 };
 
 typedef NS_OPTIONS(NSInteger, RAIconIndicatorViewInfo) {
-  RAIconIndicatorViewInfoNone                    = 0,
-  RAIconIndicatorViewInfoNative                  = 1 << 0,
-  RAIconIndicatorViewInfoForced                  = 1 << 1,
-  RAIconIndicatorViewInfoSuspendImmediately      = 1 << 2,
-  RAIconIndicatorViewInfoUnkillable              = 1 << 3,
-  RAIconIndicatorViewInfoForceDeath              = 1 << 4,
-  RAIconIndicatorViewInfoUnlimitedBackgroundTime = 1 << 5,
+    RAIconIndicatorViewInfoNone                    = 0,
+    RAIconIndicatorViewInfoNative                  = 1 << 0,
+    RAIconIndicatorViewInfoForced                  = 1 << 1,
+    RAIconIndicatorViewInfoSuspendImmediately      = 1 << 2,
+    RAIconIndicatorViewInfoUnkillable              = 1 << 3,
+    RAIconIndicatorViewInfoForceDeath              = 1 << 4,
+    RAIconIndicatorViewInfoUnlimitedBackgroundTime = 1 << 5,
 };
 
 NSString *FriendlyNameForBackgroundMode(RABackgroundMode mode);

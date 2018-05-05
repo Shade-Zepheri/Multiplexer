@@ -6,7 +6,7 @@ endif
 CFLAGS = -I../ -I../Theming/
 # Cuz ARC breaks all the things
 CFLAGS += -fobjc-arc -Wno-deprecated-declarations
-TARGET = iphone:10.1
+TARGET = iphone:11.2:9.0
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 

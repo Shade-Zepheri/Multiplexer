@@ -935,19 +935,6 @@ typedef NS_ENUM(NSInteger, UIScreenEdgePanRecognizerType) {
 
 @end
 
-@interface SBIconView (Aura)
-@property (strong, nonatomic) SBIconBadgeView *_ra_badgeView;
-
-// Cuz _frameForAccessoryView needs an accessoryView to work
-- (CGRect)_ra_frameForAccessoryView:(SBIconBadgeView *)accessoryView;
-
-// Added methods
-- (void)_ra_createCustomBadgeViewIfNecessary;
-- (void)_ra_updateCustomBadgeView:(NSInteger)info;
-- (void)_ra_updateCustomBadgeWithExitingInfo;
-
-@end
-
 @interface SBWallpaperPreviewSnapshotCache ()
 // iOS 11
 + (instancetype)sharedInstance;

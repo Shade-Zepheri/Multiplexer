@@ -2,16 +2,10 @@
 #import "RABackgrounder.h"
 #import "RASettings.h"
 #import "RAAppIconStatusBarIconView.h"
+#import "SBApplication+Aura.h"
+#import "SBIconView+Aura.h"
 #import <libstatusbar/LSStatusBarItem.h>
 #import <libstatusbar/UIStatusBarCustomItem.h>
-
-//TODO: Better method of doing this
-NSMutableDictionary *indicatorStateDict;
-#define SET_INFO_(x, y)    indicatorStateDict[x] = @(y)
-#define GET_INFO_(x)       [indicatorStateDict[x] intValue]
-#define SET_INFO(y)        if (self.icon && self.icon.application) SET_INFO_(self.icon.application.bundleIdentifier, y);
-#define GET_INFO           (self.icon && self.icon.application ? GET_INFO_(self.icon.application.bundleIdentifier) : RAIconIndicatorViewInfoNone)
-
 
 NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 	NSString *ret = @"";
@@ -50,95 +44,105 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 %property (retain, nonatomic) SBIconBadgeView *_ra_badgeView;
 
 %new - (CGRect)_ra_frameForAccessoryView:(SBIconBadgeView *)accessoryView {
-	if ([self valueForKey:@"_accessoryView"]) {
-		return [self _frameForAccessoryView];
-	}
+    if ([self valueForKey:@"_accessoryView"]) {
+        return [self _frameForAccessoryView];
+    }
 
-	//implement _frameForAccessoryView manually
-	SBIconImageView *imageView = [self valueForKey:@"_iconImageView"];
-	CGRect visibleBounds = [imageView visibleBounds];
-	CGPoint origin = [accessoryView accessoryOriginForIconBounds:visibleBounds];
+    //implement _frameForAccessoryView manually
+    SBIconImageView *imageView = [self valueForKey:@"_iconImageView"];
+    CGRect visibleBounds = [imageView visibleBounds];
+    CGPoint origin = [accessoryView accessoryOriginForIconBounds:visibleBounds];
 
-	CGPoint actualOrigin = [self convertPoint:origin fromView:imageView];
-	return CGRectMake(actualOrigin.x, actualOrigin.y, CGRectGetWidth(accessoryView.frame), CGRectGetHeight(accessoryView.frame));
+    CGPoint actualOrigin = [self convertPoint:origin fromView:imageView];
+    return CGRectMake(actualOrigin.x, actualOrigin.y, CGRectGetWidth(accessoryView.frame), CGRectGetHeight(accessoryView.frame));
 }
 
 %new - (void)_ra_createCustomBadgeViewIfNecessary {
-	if (self._ra_badgeView) {
-		//Find way to recycle view?
-		return;
-	}
-
-	SBIconBadgeView *badgeView = [[%c(SBIconBadgeView) alloc] init];
-	self._ra_badgeView = badgeView;
-
-	[self addSubview:badgeView];
-	[self bringSubviewToFront:badgeView];
-
-	CGAffineTransform transform = CGAffineTransformMakeScale(-1,1);
-	badgeView.transform = transform;
-}
-
-%new - (void)_ra_updateCustomBadgeView:(RAIconIndicatorViewInfo)info {
-	if (![[RASettings sharedInstance] backgrounderEnabled] || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) {
-		return;
-	}
-
-	if (info == RAIconIndicatorViewInfoNone) {
     if (self._ra_badgeView) {
-      [self._ra_badgeView removeFromSuperview];
-      self._ra_badgeView = nil;
+        //Find way to recycle view?
+        return;
     }
 
-    return;
-	}
+    SBIconBadgeView *badgeView = [[%c(SBIconBadgeView) alloc] init];
+    self._ra_badgeView = badgeView;
 
-	[self _ra_createCustomBadgeViewIfNecessary];
+    [self addSubview:badgeView];
+    [self bringSubviewToFront:badgeView];
 
-  // For ColorBadges
-  // TODO: causes flickering
-  if ([self._ra_badgeView respondsToSelector:@selector(configureForIcon:infoProvider:)]) {
-    [self._ra_badgeView configureForIcon:self.icon infoProvider:self]; // iOS 11; TODO: i think those are the right args
-  } else {
-    [self._ra_badgeView configureForIcon:self.icon location:self.location highlighted:NO];
-  }
-
-  NSString *text = stringFromIndicatorInfo(info);
-	[self._ra_badgeView _configureAnimatedForText:text highlighted:NO withPreparation:nil animation:^{
-		CGRect frame = [self _ra_frameForAccessoryView:self._ra_badgeView];
-		CGFloat width = CGRectGetWidth(self.frame);
-
-		self._ra_badgeView.frame = CGRectMake(CGRectGetMinX(frame) - width, CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame));
-	} completion:nil];
-
-	SET_INFO(info);
+    CGAffineTransform transform = CGAffineTransformMakeScale(-1,1);
+    badgeView.transform = transform;
 }
 
-%new - (void)_ra_updateCustomBadgeWithExitingInfo {
-	[self _ra_updateCustomBadgeView:GET_INFO];
+%new - (void)_ra_updateCustomBadgeWithInfo:(RAIconIndicatorViewInfo)info {
+    if (![[RASettings sharedInstance] backgrounderEnabled] || ![[RABackgrounder sharedInstance] shouldShowIndicatorForIdentifier:self.icon.application.bundleIdentifier]) {
+        return;
+    }
+
+    if (info == RAIconIndicatorViewInfoNone) {
+        if (self._ra_badgeView) {
+            [self._ra_badgeView removeFromSuperview];
+            self._ra_badgeView = nil;
+        }
+
+        return;
+    }
+
+    [self _ra_createCustomBadgeViewIfNecessary];
+
+    // For ColorBadges
+    /* TODO: causes flickering
+    if ([self._ra_badgeView respondsToSelector:@selector(configureForIcon:infoProvider:)]) {
+        [self._ra_badgeView configureForIcon:self.icon infoProvider:self]; // iOS 11; TODO: i think those are the right args
+    } else {
+        [self._ra_badgeView configureForIcon:self.icon location:self.location highlighted:NO];
+    }
+    */
+
+    NSString *text = stringFromIndicatorInfo(info);
+    [self._ra_badgeView _configureAnimatedForText:text highlighted:NO withPreparation:nil animation:^{
+        CGRect frame = [self _ra_frameForAccessoryView:self._ra_badgeView];
+        CGFloat width = CGRectGetWidth(self.frame);
+
+        self._ra_badgeView.frame = CGRectMake(CGRectGetMinX(frame) - width, CGRectGetMinY(frame), CGRectGetWidth(frame), CGRectGetHeight(frame));
+    } completion:nil];
+}
+
+%new - (void)_ra_updateCustomBadge {
+    if (![self.icon isApplicationIcon]) {
+        return;
+    }
+
+    RAIconIndicatorViewInfo info = [[self.icon application] _ra_iconIndicatorInfo];
+	[self _ra_updateCustomBadgeWithInfo:info];
+}
+
+- (void)_updateAccessoryViewWithAnimation:(BOOL)animated {
+    %orig;
+
+    [self _ra_updateCustomBadge];
 }
 
 - (void)_updateBrightness {
-	%orig;
+    %orig;
 
-  // Dim badge when tapped
-	SBIconImageView *imageView = [self valueForKey:@"_iconImageView"];
-	CGFloat brightness = imageView.brightness;
-	[self._ra_badgeView setAccessoryBrightness:brightness];
+    // Dim badge when tapped
+    SBIconImageView *imageView = [self valueForKey:@"_iconImageView"];
+    CGFloat brightness = imageView.brightness;
+    [self._ra_badgeView setAccessoryBrightness:brightness];
 }
 
 - (void)_applyIconAccessoryAlpha:(CGFloat)alpha {
-  %orig;
+    %orig;
 
-  //So it disappears when app launched
-  self._ra_badgeView.alpha = alpha;
+    //So it disappears when app launched
+    self._ra_badgeView.alpha = alpha;
 }
 
 - (void)setIsEditing:(BOOL)editing animated:(BOOL)animated {
-	%orig;
+    %orig;
 
-	// Hide icon when editing
-	self._ra_badgeView.hidden = editing;
+    // Hide icon when editing
+    self._ra_badgeView.hidden = editing;
 }
 
 %end
@@ -146,6 +150,8 @@ NSString *stringFromIndicatorInfo(RAIconIndicatorViewInfo info) {
 NSMutableDictionary *lsbitems;
 
 %hook SBApplication
+%property (retain, nonatomic) NSMutableDictionary *_ra_indicatorInfo;
+
 %new - (void)_ra_addStatusBarIconIfNecessary {
 #if DEBUG
 	if (![lsbitems respondsToSelector:@selector(objectForKey:)]) {
@@ -176,35 +182,36 @@ NSMutableDictionary *lsbitems;
 
 // Gone in iOS 11
 - (void)setApplicationState:(NSUInteger)state {
-	%orig;
+    %orig;
 
-	if (!self.isRunning) {
-		[[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:self.bundleIdentifier withInfo:RAIconIndicatorViewInfoNone];
-		//SET_INFO_(self.bundleIdentifier, RAIconIndicatorViewInfoNone);
-		[lsbitems removeObjectForKey:self.bundleIdentifier];
-	} else {
-		if ([self respondsToSelector:@selector(_ra_addStatusBarIconIfNecessary)]) {
-			[self performSelector:@selector(_ra_addStatusBarIconIfNecessary)];
-		}
+    if (!self.isRunning) {
+        //[[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:self.bundleIdentifier withInfo:RAIconIndicatorViewInfoNone];
+        //SET_INFO_(self.bundleIdentifier, RAIconIndicatorViewInfoNone);
+        [lsbitems removeObjectForKey:self.bundleIdentifier];
+    } else {
+        if ([self respondsToSelector:@selector(_ra_addStatusBarIconIfNecessary)]) {
+            [self _ra_addStatusBarIconIfNecessary];
+        }
 
-		[[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:self.bundleIdentifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier]];
-		SET_INFO_(self.bundleIdentifier, [[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier]);
-	}
+        //[[RABackgrounder sharedInstance] updateIconIndicatorForIdentifier:self.bundleIdentifier withInfo:[[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier]];
+        RAIconIndicatorViewInfo info = [[RABackgrounder sharedInstance] allAggregatedIndicatorInfoForIdentifier:self.bundleIdentifier];
+        [self _ra_setIconIndicatorInfo:info];
+    }
+}
+
+//-(void)_noteProcess:(id)arg1 didChangeToState:(id)arg2
+
+%new - (RAIconIndicatorViewInfo)_ra_iconIndicatorInfo {
+    NSMutableDictionary *indicatorInfo = self._ra_indicatorInfo;
+    return [indicatorInfo[@"RAIconIndicatorInfo"] intValue];
+}
+
+%new - (void)_ra_setIconIndicatorInfo:(RAIconIndicatorViewInfo)info {
+    self._ra_indicatorInfo[@"RAIconIndicatorInfo"] = @(info);
 }
 
 %new + (void)RA_clearAllStatusBarIcons {
 	[lsbitems removeAllObjects];
-}
-
-%end
-
-%hook SBIconViewMap
-//Not sure why we have this hook but ok
-- (SBIconView *)_iconViewForIcon:(SBIcon *)icon {
-	SBIconView *iconView = %orig;
-
-	[iconView _ra_updateCustomBadgeWithExitingInfo];
-	return iconView;
 }
 
 %end
@@ -235,7 +242,6 @@ NSMutableDictionary *lsbitems;
 	dlopen("/Library/MobileSubstrate/DynamicLibraries/libstatusbar.dylib", RTLD_LAZY);
 
 	lsbitems = [NSMutableDictionary dictionary];
-	indicatorStateDict = [NSMutableDictionary dictionary];
 
 	%init;
 
