@@ -3,33 +3,45 @@
 #include <sys/utsname.h>
 #import <UIKit/UIKit.h>
 #import "headers.h"
-#import "RAWarningAlertItem.h"
+#import "RAAlertItem.h"
 
 @implementation RACompatibilitySystem
 + (NSString *)aggregateSystemInfo {
-	NSMutableString *ret = [[NSMutableString alloc] init];
+    NSMutableString *ret = [NSMutableString string];
 
-	struct utsname systemInfo;
-	uname(&systemInfo);
-	NSString *sysInfo = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
+    struct utsname systemInfo;
+    uname(&systemInfo);
+    NSString *sysInfo = [NSString stringWithCString:systemInfo.machine encoding:NSUTF8StringEncoding];
 
-	[ret appendString:[NSString stringWithFormat:@"%@, %@ %@\n", sysInfo, [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion]];
+    [ret appendString:[NSString stringWithFormat:@"%@, %@ %@\n", sysInfo, [UIDevice currentDevice].systemName, [UIDevice currentDevice].systemVersion]];
 
-	return ret;
+    return ret;
 }
 
 + (void)showWarning:(NSString *)info {
-	NSString *message = [NSString stringWithFormat:@"System info: %@\n\nWARNING: POTENTIAL INCOMPATIBILITY DETECTED\n%@", [self aggregateSystemInfo], info];
+    NSString *message = [NSString stringWithFormat:@"System info: %@\n\nWARNING: POTENTIAL INCOMPATIBILITY DETECTED\n%@", [self aggregateSystemInfo], info];
 
-  RAWarningAlertItem *alertItem = [%c(RAWarningAlertItem) alertItemWithTitle:@"Multiplexer Compatibility" andMessage:message];
-  [alertItem.class activateAlertItem:alertItem];
+    RAAlertItem *alertItem = [%c(RAAlertItem) alertItemWithTitle:@"Multiplexer Compatibility" andMessage:message];
+
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alertItem deactivateForButton];
+    }];
+    alertItem.alertActions = @[action];
+
+    [alertItem.class activateAlertItem:alertItem];
 }
 
 + (void)showError:(NSString *)info {
-	NSString *message = [NSString stringWithFormat:@"System info: %@\n\n***ERROR***: POTENTIAL INCOMPATIBILITY DETECTED\n%@", [self aggregateSystemInfo], info];
+    NSString *message = [NSString stringWithFormat:@"System info: %@\n\n***ERROR***: POTENTIAL INCOMPATIBILITY DETECTED\n%@", [self aggregateSystemInfo], info];
 
-  RAWarningAlertItem *alertItem = [%c(RAWarningAlertItem) alertItemWithTitle:@"Multiplexer Compatibility" andMessage:message];
-  [alertItem.class activateAlertItem:alertItem];
+    RAAlertItem *alertItem = [%c(RAAlertItem) alertItemWithTitle:@"Multiplexer Compatibility" andMessage:message];
+
+    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
+        [alertItem deactivateForButton];
+    }];
+    alertItem.alertActions = @[action];
+
+    [alertItem.class activateAlertItem:alertItem];
 }
 
 @end

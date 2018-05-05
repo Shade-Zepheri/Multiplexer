@@ -1,6 +1,7 @@
 #import "headers.h"
 
-@interface RAWarningAlertItem : SBAlertItem
+@interface RAAlertItem : SBAlertItem
+@property (copy, nonatomic) NSArray<UIAlertAction *> *alertActions;
 @property (copy, nonatomic) NSString *title;
 @property (copy, nonatomic) NSString *message;
 

@@ -1,6 +1,7 @@
-#import "RAWarningAlertItem.h"
+#import "RAAlertItem.h"
 
-%subclass RAWarningAlertItem : SBAlertItem
+%subclass RAAlertItem : SBAlertItem
+%property (copy, nonatomic) NSArray *alertActions;
 %property (copy, nonatomic) NSString *title;
 %property (copy, nonatomic) NSString *message;
 
@@ -21,6 +22,8 @@
 }
 
 - (void)configure:(BOOL)animated requirePasscodeForActions:(BOOL)requirePasscode {
+    %orig;
+
     _SBAlertController *alertController = [self alertController];
 
     NSString *title = self.title;
@@ -29,11 +32,9 @@
     NSString *message = self.message;
     alertController.message = message;
 
-    UIAlertAction *action = [UIAlertAction actionWithTitle:@"OK" style:UIAlertActionStyleDefault handler:^(UIAlertAction *action) {
-        [self deactivateForButton];
-    }];
-    [alertController addAction:action];
-    alertController.preferredAction = action;
+    for (UIAlertAction *alertAction in self.alertActions) {
+        [alertController addAction:alertAction];
+    }
 }
 
 - (BOOL)dismissOnLock {

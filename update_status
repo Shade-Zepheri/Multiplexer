@@ -13,6 +13,8 @@ assertiond hooks: working
 backboardd hooks: working
 fake phone mode: working (hacky tho)
 
+Priority: FIX HEADERS SUCH MESS
+
 iOS 11: (Oh boy)
 - Fix / rework IntroTutorial
 - Remove / update unneeded classes
