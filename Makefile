@@ -5,13 +5,12 @@ export THEOS_DEVICE_IP=192.168.254.7
 export THEOS_DEVICE_PORT=22
 endif
 
-CFLAGS = -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IQuickAccess/ -IReachApp/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
-CFLAGS += -fobjc-arc
+export ADDITIONAL_CFLAGS = -fobjc-arc -I./ -Iwidgets/ -Iwidgets/Core/ -Iwidgets/Reachability/ -IAura/ -IEmpoleon/ -IQuickAccess/ -IReachApp/ -IGestureSupport/ -IKeyboardSupport/ -IIntroTutorial/ -IMessaging/ -ITheming/
 
 INSTALL_TARGET_PROCESSES = Preferences
 
 ifneq ($(RESPRING),0)
-INSTALL_TARGET_PROCESSES += SpringBoard
+    INSTALL_TARGET_PROCESSES += SpringBoard
 endif
 
 include $(THEOS)/makefiles/common.mk
@@ -40,8 +39,13 @@ include $(THEOS_MAKE_PATH)/aggregate.mk
 after-MultiplexerCore-stage::
 	@# create directory
 	$(ECHO_NOTHING)mkdir -p \
+		$(THEOS_STAGING_DIR)/DEBIAN \
 		$(THEOS_STAGING_DIR)/Library/Frameworks \
+		$(THEOS_STAGING_DIR)/Library/LaunchDaemons \
 		$(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries$(ECHO_END)
+
+	@# Install scripts
+	$(ECHO_NOTHING)cp postinst prerm $(THEOS_STAGING_DIR)/DEBIAN$(ECHO_END)
 
 	@# Link to Frameworks
 	$(ECHO_NOTHING)ln -s /usr/lib/MultiplexerCore.framework $(THEOS_STAGING_DIR)/Library/Frameworks/MultiplexerCore.framework$(ECHO_END)
@@ -51,3 +55,6 @@ after-MultiplexerCore-stage::
 
 	@# move Filter Plist
 	$(ECHO_NOTHING)cp MultiplexerCore.plist $(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries$(ECHO_END)
+
+	@# Move daemon plist
+	$(ECHO_NOTHING)cp reachappfsdaemon/com.efrederickson.reachapp.fsdaemon.plist $(THEOS_STAGING_DIR)/Library/LaunchDaemons$(ECHO_END)

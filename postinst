@@ -1,0 +1,13 @@
+#!/bin/bash
+
+#chown root:wheel /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
+launchctl load -w /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
+
+#echo "The best multitasker you've never used... Until now."
+echo "Thanks for using Multiplexer!"
+
+# iOS 11 weirdness
+if [[ -d /Library/Frameworks/MultiplexerCore.framework ]]; then
+	rm -r /Library/Frameworks/MultiplexerCore.framework
+	ln -s /usr/lib/MultiplexerCore.framework /Library/Frameworks/MultiplexerCore.framework
+fi

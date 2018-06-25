@@ -1,7 +1,0 @@
-#!/bin/bash
-
-chown root:wheel /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist
-launchctl load /Library/LaunchDaemons/com.efrederickson.reachapp.fsdaemon.plist || true
-
-#echo "The best multitasker you've never used... Until now."
-echo "Thanks for using Multiplexer!"
