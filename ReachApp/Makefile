@@ -5,7 +5,7 @@ endif
 
 CFLAGS = -I../ -I../Aura/ -I../Empoleon/ -Iwidgets/Reachability/ -I../Theming/ -I../Messaging/ -I../GestureSupport/ -I../KeyboardSupport/
 CFLAGS += -fobjc-arc
-TARGET = iphone:10.1
+TARGET = iphone:11.2:9.0
 
 INSTALL_TARGET_PROCESSES = SpringBoard
 

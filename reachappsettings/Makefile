@@ -1,5 +1,3 @@
-CFLAGS = -fobjc-arc -I../ -I../Aura/ -I../Theming/ -I../QuickAccess -Wno-deprecated-declarations
-
 include $(THEOS)/makefiles/common.mk
 
 BUNDLE_NAME = ReachAppSettings
@@ -9,6 +7,7 @@ ReachAppSettings_FRAMEWORKS = UIKit MessageUI Social QuartzCore CoreGraphics
 ReachAppSettings_PRIVATE_FRAMEWORKS = Preferences
 ReachAppSettings_EXTRA_FRAMEWORKS = CydiaSubstrate
 ReachAppSettings_LIBRARIES = applist
+ReachAppSettings_CFLAGS = -I../ -I../Aura/ -I../Theming/ -I../QuickAccess -Wno-deprecated-declarations
 
 include $(THEOS_MAKE_PATH)/bundle.mk
 
