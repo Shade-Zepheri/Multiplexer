@@ -1,6 +1,7 @@
 #import "ReachAppSettings.h"
 
 @implementation ReachAppSettingsListController
+
 - (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 95)];
   header.colors = @[
@@ -275,4 +276,5 @@
 - (void)showTutorial {
   [(SpringBoard *)[UIApplication sharedApplication] launchApplicationWithIdentifier:@"com.andrewabosh.Multiplexer" suspended:NO];
 }
+
 @end

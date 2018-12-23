@@ -1,6 +1,7 @@
 #import "RAListItemsController.h"
 
 @implementation RAListItemsController
+
 - (UIColor *)navigationTintColor {
   return [UIColor blackColor];
 }
@@ -44,9 +45,11 @@
     [self openThemingDocumentation];
   }
 }
+
 @end
 
 @implementation RABackgroundingListItemsController
+
 - (UIColor *)navigationTintColor {
   return [UIColor colorWithRed:248/255.0f green:73/255.0f blue:88/255.0f alpha:1.0f];
 }
@@ -64,4 +67,5 @@
   [UIWindow keyWindow].tintColor = nil;
   self.navigationController.navigationBar.tintColor = nil;
 }
+
 @end

@@ -1,6 +1,7 @@
 #import "RASupportController.h"
 
 @implementation RAMakersController
+
 - (BOOL)showHeartImage {
   return NO;
 }
@@ -152,46 +153,61 @@
 - (void)openElijahTwitter {
   [SKSharedHelper openTwitter:@"daementor"];
 }
+
 - (void)openAndrewTwitter {
   [SKSharedHelper openTwitter:@"drewplex"];
 }
+
 - (void)openShadeTwitter {
   [SKSharedHelper openTwitter:@"ShadeZepheri"];
 }
+
 - (void)openAndiTwitter {
   [SKSharedHelper openTwitter:@"Nexuist"];
 }
+
 - (void)openBetaPage {
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.reddit.com/user/beta382"]];
 }
+
 - (void)openChonTwitter {
   [SKSharedHelper openTwitter:@"HikoMitsuketa"];
 }
+
 - (void)openDavidTwitter {
   [SKSharedHelper openTwitter:@"djaovx"];
 }
+
 - (void)openJackTwitter {
   [SKSharedHelper openTwitter:@"JackHaal"];
 }
+
 - (void)openMosheTwitter {
   [SKSharedHelper openTwitter:@"oniconpack"];
 }
+
 - (void)openBindersPAge {
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://www.reddit.com/user/_BindersFullOfWomen_"]];
 }
+
 - (void)openWilsonTwitter {
   [SKSharedHelper openTwitter:@"xTM3x"];
 }
+
 - (void)openZiph0nTwitter {
   [SKSharedHelper openTwitter:@"ziph0n"];
 }
+
 - (void)openSharedRoutineTwitter {
   [SKSharedHelper openTwitter:@"sharedRoutine"];
 }
+
 - (void)openEthanTwitter {
   [SKSharedHelper openTwitter:@"its_not_herpes"];
 }
+
 - (void)openSite {
   [[UIApplication sharedApplication] openURL:[NSURL URLWithString:@"https://elijahandandrew.com"]];
 }
+
 @end

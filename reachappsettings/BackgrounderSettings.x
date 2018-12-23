@@ -33,11 +33,6 @@
   return NO;
 }
 
-- (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
-  [super setupHeader];
-}
-
 - (NSArray *)customSpecifiers {
   return @[
     @{ @"footerText": LOCALIZE(@"ENABLED_FOOTER", @"Aura") },

@@ -1,6 +1,7 @@
 #import "SwipeOver.h"
 
 @implementation ReachAppSwipeOverSettingsListController
+
 - (UIView *)headerView {
   RAHeaderView *header = [[RAHeaderView alloc] initWithFrame:CGRectMake(0, 0, [self table].bounds.size.width, 50)];
   header.colors = @[
@@ -30,11 +31,6 @@
 
 - (BOOL)showHeartImage {
   return NO;
-}
-
-- (void)viewDidAppear:(BOOL)animated {
-  [super viewDidAppear:animated];
-  [super setupHeader];
 }
 
 - (NSArray *)customSpecifiers {

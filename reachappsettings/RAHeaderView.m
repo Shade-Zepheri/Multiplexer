@@ -1,6 +1,7 @@
 #import "RAHeaderView.h"
 
 @implementation UIImage (ext)
+
 - (UIImage *)tintedImageWithColor:(UIColor *)tintColor blendingMode:(CGBlendMode)blendMode {
   UIGraphicsBeginImageContextWithOptions(self.size, NO, 0.0f);
   [tintColor setFill];
@@ -17,9 +18,11 @@
 
   return tintedImage;
 }
+
 @end
 
 @implementation RAHeaderView
+
 + (Class)layerClass {
   return [CAGradientLayer class];
 }
@@ -77,4 +80,5 @@
   }
   imageView.image = image;
 }
+
 @end
