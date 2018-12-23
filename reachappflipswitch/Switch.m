@@ -1,9 +1,5 @@
-#import "FSSwitchDataSource.h"
-#import "FSSwitchPanel.h"
+#import "Switch.h"
 #import <notify.h>
-
-@interface ReachAppFlipswitchSwitch : NSObject <FSSwitchDataSource>
-@end
 
 @implementation ReachAppFlipswitchSwitch
 
